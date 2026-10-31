@@ -1,0 +1,776 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Μάθημα 2 · Τι είναι αλγόριθμος</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
+<style>
+/* Layout: one A4-like sheet centred on a cool ground; coloured callouts by role (ορισμός, ήξερες ότι, παγίδα, παράδειγμα) */
+:root{
+  --ground:#e9edf4; --paper:#ffffff; --ink:#172036; --muted:#5a6377; --line:#d9dfea; --soft:#f3f5f9;
+  --blue:#2457d6; --blue-bg:#e9efff; --teal:#0b7f72; --teal-bg:#e2f4f1;
+  --amber:#a65400; --amber-bg:#fff3df; --amber-line:#e2ad62;
+  --coral:#b93b12; --coral-bg:#fcebe4; --violet:#6534c9; --violet-bg:#efe8fd;
+  --s-blue:#2457d6; --s-teal:#0b8174; --s-violet:#6534c9; --s-ink:#172036; --on-solid:#ffffff; --on-solid-2:#d8e1ff;
+  --hero:#172036; --hero-fg:#ffffff; --hero-sub:#c4cef0; --hero-kick:#a9bcff;
+  --mark:#ffe28a;
+  --display:"Commissioner","Noto Sans",system-ui,sans-serif;
+  --body:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0 0 8px}
+
+/* Toolbar */
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:10px 0;background:var(--ground)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:3px}
+.seg button,.btn{font:600 13px/1 var(--body);border:0;background:none;color:var(--muted);padding:8px 13px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid)}
+.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.spacer{flex:1}
+#status{font-size:12.5px;color:var(--muted)}
+.edit-only{display:none}
+body.editing .edit-only{display:inline-block}
+body.editing .view-only{display:none}
+body.editing #doc{outline:2px dashed var(--blue);outline-offset:6px}
+body.editing #doc [contenteditable="false"]{cursor:default}
+
+/* Sheet */
+#doc{max-width:860px;margin:0 auto;background:var(--paper);border-radius:14px;padding:clamp(18px,4vw,44px);box-shadow:0 1px 2px rgba(10,20,40,.06),0 8px 30px rgba(10,20,40,.06)}
+body.student .teacher{display:none}
+
+.hero{background:var(--hero);color:var(--hero-fg);border-radius:14px;padding:22px 24px 24px;position:relative;overflow:hidden}
+.hero .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--hero-kick);font-weight:700}
+.hero h1{font-size:clamp(28px,5vw,40px);font-weight:800;margin:6px 0 8px;letter-spacing:-.01em}
+.hero .sub{color:var(--hero-sub);max-width:34em}
+.hero .sub b{color:var(--hero-fg)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.12);color:var(--hero-fg)}
+.hero .deco{position:absolute;right:-10px;top:-6px;opacity:.16;width:220px;height:auto}
+.hero .deco *{stroke:var(--hero-fg)}
+
+.goals{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 18px;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px}
+.goals h3{grid-column:1/-1;font-size:13px;color:var(--blue);text-transform:uppercase;letter-spacing:.08em}
+.goals div{padding-left:20px;position:relative;font-size:14px}
+.goals div::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:800}
+
+.glance{margin-top:14px;background:var(--soft);border-radius:12px;padding:14px 16px}
+.glance h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.figure{overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:520px;height:auto;font-family:var(--body)}
+
+.sec{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:5px;margin:30px 0 12px;break-after:avoid}
+.sec .num{font-family:var(--display);font-weight:800;font-size:22px;color:var(--blue);font-variant-numeric:tabular-nums}
+.sec h2{font-size:22px;font-weight:800}
+.sec .ref{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;break-inside:avoid}
+.tag{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.def{background:var(--blue-bg);border-left:4px solid var(--blue)} .def .tag{color:var(--blue)}
+.src{font-size:12px;color:var(--muted);margin:2px 0 0}
+.trivia{background:var(--amber-bg);border:1.5px dashed var(--amber-line)} .trivia .tag{color:var(--amber)}
+.talk{margin-top:6px;font-size:14px;color:var(--amber);font-weight:600}
+.talk span{font-weight:400}
+.trap{background:var(--coral-bg);border-left:4px solid var(--coral)} .trap .tag{color:var(--coral)}
+.ex{background:var(--teal-bg);border-left:4px solid var(--teal)} .ex .tag{color:var(--teal)}
+.plain{background:var(--soft)} .plain .tag{color:var(--ink)}
+.hl{background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 1px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:10px 0}
+.grid .box{margin:0}
+ul.tight{margin:4px 0 8px;padding-left:20px} ul.tight li{margin:3px 0}
+.small{font-size:13px;color:var(--muted)}
+.cap{font-size:13.5px;font-weight:700;margin-bottom:6px}
+
+.tablewrap{overflow-x:auto;margin:10px 0}
+table.t{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
+table.t th{background:var(--s-ink);color:var(--paper);text-align:left;padding:7px 10px;font-weight:600}
+table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:top}
+
+.exhead{display:flex;align-items:center;gap:10px;margin:22px 0 8px}
+.lvl{display:inline-flex;gap:4px}
+.lvl i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}
+.lvl i.on{background:var(--violet)}
+.exhead h3{font-size:17px}
+.q{margin:10px 0 14px;break-inside:avoid}
+.qn{display:inline-block;min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:7px;background:var(--violet-bg);color:var(--violet);font-weight:800;font-size:13px;margin-right:8px}
+.theme{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-left:6px}
+table.tf{width:100%;border-collapse:collapse;margin-top:6px;font-size:14.5px}
+table.tf td{padding:6px 8px;border-bottom:1px solid var(--line)}
+table.tf td.b{width:70px;text-align:center;color:var(--muted)}
+.lines{height:var(--h,44px);background:repeating-linear-gradient(transparent 0 27px,var(--line) 27px 28px);margin-top:6px}
+.drawbox{height:180px;border:1.5px dashed var(--line);border-radius:10px;margin-top:8px}
+.indent{margin-left:34px}
+.sol{color:var(--teal);font-weight:700}
+.ans .q{margin:8px 0}
+.teacher .sec{border-color:var(--teal)} .teacher .sec .num{color:var(--teal)}
+
+/* SVG roles */
+.f-blue{fill:var(--s-blue)} .f-teal{fill:var(--s-teal)} .f-violet{fill:var(--s-violet)} .f-ink{fill:var(--s-ink)}
+.f-paper{fill:var(--paper)} .f-on{fill:var(--on-solid)} .f-on2{fill:var(--on-solid-2)} .f-text{fill:var(--ink)} .f-muted{fill:var(--muted)} .f-onink{fill:var(--paper)}
+.st-ink{stroke:var(--ink)} .st-blue{stroke:var(--blue)} .st-teal{stroke:var(--teal)} .st-violet{stroke:var(--violet)}
+.f-arrow{fill:var(--ink)}
+
+
+/* v2 additions: code, narrow flowcharts, legends */
+:root{--mono:ui-monospace,"Cascadia Mono","Consolas","DejaVu Sans Mono",monospace}
+pre.code{font-family:var(--mono);font-size:14px;line-height:1.55;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:6px 0 8px;overflow-x:auto;white-space:pre}
+.figure.narrow svg{min-width:0;max-width:250px;margin:4px auto}
+.grid.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+ul.legend{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0 2px}
+ul.legend li{font-size:14px}
+ul.legend b{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:6px;background:var(--violet-bg);color:var(--violet);margin-right:4px}
+
+
+/* v3 additions: solved examples step by step, blank value tables */
+.solved{border:1.5px solid var(--teal);background:var(--paper)} .solved .tag{color:var(--teal)}
+.steps{display:grid;gap:14px;margin-top:10px}
+.step{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.stepn{width:30px;height:30px;border-radius:50%;background:var(--s-teal);color:var(--on-solid);font:800 14px/30px var(--display);text-align:center}
+table.t.blank td{height:34px;border:1px solid var(--line)}
+
+/* homework vs self-check */
+.q.hw::before{content:"Για το σπίτι";display:block;width:max-content;font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:99px;padding:4px 9px;margin-bottom:6px}
+body.editing .q.hw::before{display:none}
+.hwtoggle{display:block;margin-bottom:6px;font:600 12px/1 var(--body);padding:6px 10px;border-radius:99px;border:1.5px dashed var(--line);background:var(--paper);color:var(--muted);cursor:pointer}
+.hwtoggle[aria-pressed="true"]{border-style:solid;border-color:var(--amber-line);color:var(--amber);background:var(--amber-bg)}
+.hwnote{font-size:13px;color:var(--amber);font-weight:600}
+
+@media (max-width:520px){ .indent{margin-left:0} .hero .deco{display:none} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* student additions */
+#doc{margin-top:0}
+#nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ground);max-width:860px;margin:0 auto;padding-block:10px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.navin{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.navin::-webkit-scrollbar{display:none}
+#nav a{flex:none;font:600 13px/1 var(--body);color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
+#nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
+.btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.quiz{display:grid;gap:10px;margin-top:10px}
+.qi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:8px}
+.qi .qs{margin:0}
+.qb{display:flex;gap:8px;flex-wrap:wrap}
+.qb button{font:600 14px/1 var(--body);padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;min-width:96px}
+.qb button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.qi.ok{border-color:var(--teal);background:var(--teal-bg)}
+.qi.no{border-color:var(--coral);background:var(--coral-bg)}
+.qi .qb button.pick{border-color:currentColor}
+.qi.ok .qb button.pick{background:var(--s-teal);border-color:var(--s-teal);color:var(--on-solid)}
+.qi.no .qb button.pick{background:var(--coral);border-color:var(--coral);color:var(--paper)}
+.qi.no .qb button.right{border-color:var(--teal);color:var(--teal)}
+.fb{font-size:13px;font-weight:700}
+.qi.ok .fb{color:var(--teal)} .qi.no .fb{color:var(--coral)}
+.score{font:700 15px/1.4 var(--display);padding:10px 14px;border-radius:10px;background:var(--violet-bg);color:var(--violet);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.score .btn{font-size:13px;padding:8px 12px}
+
+details.reveal{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+details.reveal summary{cursor:pointer;font-weight:700;color:var(--teal);padding:10px 14px;list-style:none}
+details.reveal summary::-webkit-details-marker{display:none}
+details.reveal summary::before{content:"▸ ";}
+details.reveal[open] summary::before{content:"▾ ";}
+details.reveal .rv{padding:0 14px 12px}
+
+.deck{display:grid;gap:12px;margin-top:10px}
+.card{position:relative;display:block;width:100%;min-height:220px;border:0;padding:0;background:none;cursor:pointer;perspective:1200px;font:inherit;color:inherit;text-align:left}
+.card .face{position:absolute;inset:0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;backface-visibility:hidden;transition:transform .45s ease}
+.card .front{background:var(--hero);color:var(--hero-fg);justify-content:center}
+.card .back{background:var(--blue-bg);color:var(--ink);border:1.5px solid var(--blue);transform:rotateY(180deg);overflow:auto}
+.card.flipped .front{transform:rotateY(-180deg)}
+.card.flipped .back{transform:rotateY(0)}
+.card:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:14px}
+.ck{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.term{font:800 clamp(24px,6vw,34px)/1.15 var(--display)}
+.cdef{font-size:15.5px;line-height:1.55}
+.tap{font-size:12.5px;opacity:.7;margin-top:auto}
+.deckbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.count{font:700 14px var(--display);min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.card .face{transition:none}}
+@media (max-width:520px){ #doc{border-radius:12px} .card{min-height:260px} }
+</style>
+<style id="synapsi-brand">
+:root{--ground:#F7F6F0;--ink:#2B3722;--muted:#5E6253;--line:#E1E1D7;--soft:#F3F2EA;--blue:#4F6230;--blue-bg:#EEF0E2;--s-blue:#4F6230;--s-ink:#2B3722;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D;--on-solid-2:#E6E0CC}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}}
+:root[data-theme="dark"]{--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}
+body::before{background:var(--ground)}
+.syn-bar{max-width:860px;margin:0 auto;padding-top:12px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
+.syn-bar a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--hero);color:#fff;text-decoration:none}
+.syn-bar span{color:var(--muted)}
+.syn-foot{max-width:860px;margin:18px auto 0;display:flex;flex-direction:column;gap:12px}
+.syn-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.syn-nav a,.syn-nav span{min-height:52px;padding:8px 14px;border-radius:12px;display:flex;flex-direction:column;justify-content:center;gap:2px;text-decoration:none;font:700 14px/1.3 var(--display);background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.syn-nav small{font:600 11.5px var(--body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.syn-nav .next{text-align:right;background:var(--hero);color:#fff;border-color:var(--hero)}
+.syn-nav .next small{color:var(--hero-kick)}
+.syn-nav .off{opacity:.6}
+.syn-note{font-size:13px;color:var(--muted);padding:12px 14px;border-radius:10px;background:var(--soft)}
+.syn-copy{font-size:12px;color:var(--muted)}
+</style>
+<script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<div class="syn-bar"><a href="../index.html">&#8592; Διαδρομή</a><span>Μάθημα 2 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-2-1">2.1</a><a href="#s-2-2">2.2</a><a href="#s-2-3">2.3</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a></div></nav>
+<main id="doc" lang="el">
+<section class="hero">
+<svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
+<ellipse cx="150" cy="18" rx="36" ry="14"></ellipse>
+<path d="M150 32v14"></path>
+<path d="M124 46h62l-10 26h-62z"></path>
+<path d="M150 72v14"></path>
+<rect height="24" rx="3" width="72" x="114" y="86"></rect>
+<path d="M150 110v10"></path>
+<path d="M150 120l26 18-26 18-26-18z"></path>
+<path d="M176 138h30"></path>
+</svg>
+<div class="kicker">Κεφάλαιο 2 · Βασικές έννοιες αλγορίθμων</div>
+<h1>Τι είναι αλγόριθμος</h1>
+<p class="sub">Η συνταγή που ακολουθεί ο υπολογιστής. Πρέπει να είναι τόσο <b>ακριβής</b>, ώστε να την εκτελεί κάποιος που δεν σκέφτεται καθόλου.</p>
+<div class="chips"><span class="chip">Βιβλίο §2.1 – §2.3</span><span class="chip">3 διδακτικές ώρες</span><span class="chip">Θεωρία · Θέμα Α</span></div>
+</section>
+<div class="goals">
+<h3>Στο τέλος του μαθήματος θα μπορείς να…</h3>
+<div>διατυπώνεις τον <b>ορισμό</b> του αλγορίθμου</div>
+<div>περιγράφεις τα <b>5 κριτήρια</b> που πρέπει να ικανοποιεί</div>
+<div>εξηγείς γιατί οι αλγόριθμοι είναι <b>σημαντικοί</b></div>
+<div>αναφέρεις τις <b>4 σκοπιές</b> από τις οποίες τους μελετά η Πληροφορική</div>
+<div>περιγράφεις τους <b>4 τρόπους</b> αναπαράστασης ενός αλγορίθμου</div>
+<div>χρησιμοποιείς τα <b>σχήματα</b> του διαγράμματος ροής</div>
+</div>
+<div class="glance">
+<h3>Όλο το μάθημα με μια ματιά</h3>
+<div class="figure">
+<svg aria-label="Ο αλγόριθμος έχει 5 κριτήρια και περιγράφεται με 4 τρόπους." font-size="10.5" role="img" viewbox="0 0 640 166">
+<rect class="f-ink" height="34" rx="8" width="180" x="230" y="6"></rect>
+<text class="f-onink" font-size="13" font-weight="800" text-anchor="middle" x="320" y="28">ΑΛΓΟΡΙΘΜΟΣ</text>
+<text class="f-muted" font-weight="700" x="8" y="64">ΠΡΕΠΕΙ ΝΑ ΙΚΑΝΟΠΟΙΕΙ 5 ΚΡΙΤΗΡΙΑ</text>
+<g font-weight="700" text-anchor="middle">
+<rect class="f-blue" height="30" rx="15" width="122" x="8" y="72"></rect><text class="f-on" x="69" y="91">Είσοδος</text>
+<rect class="f-blue" height="30" rx="15" width="122" x="134" y="72"></rect><text class="f-on" x="195" y="91">Έξοδος</text>
+<rect class="f-blue" height="30" rx="15" width="122" x="260" y="72"></rect><text class="f-on" x="321" y="91">Καθοριστικότητα</text>
+<rect class="f-blue" height="30" rx="15" width="122" x="386" y="72"></rect><text class="f-on" x="447" y="91">Περατότητα</text>
+<rect class="f-blue" height="30" rx="15" width="122" x="512" y="72"></rect><text class="f-on" x="573" y="91">Αποτελεσματικότητα</text>
+</g>
+<text class="f-muted" font-weight="700" x="8" y="124">ΠΕΡΙΓΡΑΦΕΤΑΙ ΜΕ 4 ΤΡΟΠΟΥΣ</text>
+<g font-weight="700" text-anchor="middle">
+<rect class="f-violet" height="28" rx="6" width="136" x="8" y="132"></rect><text class="f-on" x="76" y="150">Ελεύθερο κείμενο</text>
+<rect class="f-violet" height="28" rx="6" width="170" x="150" y="132"></rect><text class="f-on" x="235" y="150">Διαγραμματικές τεχνικές</text>
+<rect class="f-violet" height="28" rx="6" width="190" x="326" y="132"></rect><text class="f-on" x="421" y="150">Φυσική γλώσσα κατά βήματα</text>
+<rect class="f-violet" height="28" rx="6" width="112" x="522" y="132"></rect><text class="f-on" x="578" y="150">Κωδικοποίηση</text>
+</g>
+</svg>
+</div>
+</div>
+<div class="sec" id="s-2-1"><span class="num">2.1</span><h2>Τι είναι αλγόριθμος</h2><span class="ref">Βιβλίο σελ. 33–34</span></div>
+<p>Οι αλγόριθμοι είναι πολύ πιο παλιοί από τους υπολογιστές. Ο <b>αλγόριθμος του Ευκλείδη</b> για τον μέγιστο κοινό διαιρέτη δύο αριθμών γράφτηκε πριν από περίπου 2.300 χρόνια, και χρησιμοποιείται ακόμα και σήμερα, για παράδειγμα στην κρυπτογραφία που προστατεύει τις συναλλαγές στο διαδίκτυο. Το <b>κόσκινο του Ερατοσθένη</b> βρίσκει τους πρώτους αριθμούς από το 1 μέχρι το n.</p>
+<p>Με απλά λόγια, αλγόριθμος είναι μια <b>μέθοδος για να λύσουμε ένα πρόβλημα</b>. Ο αυστηρός ορισμός είναι:</p>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση</div>
+<p><b>Αλγόριθμος</b> είναι μια πεπερασμένη σειρά ενεργειών, αυστηρά καθορισμένων και εκτελέσιμων σε πεπερασμένο χρόνο, που στοχεύουν στην επίλυση ενός προβλήματος.</p>
+<p class="src">Σχολικό βιβλίο, §2.1</p>
+</div>
+<p>Κάθε αλγόριθμος πρέπει <b>απαραίτητα</b> να ικανοποιεί πέντε κριτήρια. Για να τα θυμάσαι, σκέψου τι θα πήγαινε στραβά αν έλειπε το καθένα:</p>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th>Κριτήριο</th><th>Τι σημαίνει</th><th>Αν λείπει…</th></tr>
+<tr><td><b>1. Είσοδος</b><br/><span class="small">input</span></td><td>Δίνονται <b>καμία, μία ή περισσότερες</b> τιμές. Καμία, όταν ο αλγόριθμος φτιάχνει μόνος του τις τιμές του, π.χ. ρίχνει ένα «ψηφιακό ζάρι».</td><td>Δεν «λείπει» ποτέ, αφού επιτρέπεται και η καμία είσοδος.</td></tr>
+<tr><td><b>2. Έξοδος</b><br/><span class="small">output</span></td><td>Βγάζει <b>τουλάχιστον μία</b> τιμή ως αποτέλεσμα, προς τον χρήστη ή προς άλλον αλγόριθμο.</td><td>Ένα πρόγραμμα που υπολογίζει τον μέσο όρο σου και δεν τον δείχνει πουθενά.</td></tr>
+<tr><td><b>3. Καθοριστικότητα</b><br/><span class="small">definiteness</span></td><td>Κάθε εντολή καθορίζεται <b>χωρίς καμία αμφιβολία</b> για το πώς εκτελείται.</td><td>«Ρίξε λίγο αλάτι». Πόσο είναι το λίγο; Ή μια διαίρεση που δεν προβλέπει διαιρέτη μηδέν.</td></tr>
+<tr><td><b>4. Περατότητα</b><br/><span class="small">finiteness</span></td><td>Ο αλγόριθμος <b>τελειώνει</b> μετά από πεπερασμένα βήματα.</td><td>«Λούσου, ξέβγαλε, επανάλαβε» στο μπουκάλι του σαμπουάν. Αν το ακολουθήσεις κατά γράμμα, δεν τελειώνεις ποτέ.</td></tr>
+<tr><td><b>5. Αποτελεσματικότητα</b><br/><span class="small">effectiveness</span></td><td>Κάθε εντολή είναι <b>απλή</b>: δεν αρκεί να έχει οριστεί, πρέπει να είναι και <b>εκτελέσιμη</b>.</td><td>«Βρες τον αριθμό που σκέφτεται ο φίλος σου χωρίς να τον ρωτήσεις». Είναι σαφές τι ζητάει, αλλά δεν γίνεται.</td></tr>
+</tbody></table></div>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση</div>
+<p>Μία διαδικασία που δεν τελειώνει μετά από ένα συγκεκριμένο αριθμό βημάτων δεν αποτελεί αλγόριθμο, αλλά λέγεται απλά <b>υπολογιστική διαδικασία</b> (computational procedure).</p>
+<p class="src">Σχολικό βιβλίο, §2.1 (περατότητα)</p>
+</div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Τον Σεπτέμβριο του 1997 το πολεμικό πλοίο <b>USS Yorktown</b> του αμερικανικού ναυτικού, ένα από τα πρώτα «έξυπνα» πλοία με υπολογιστές, έμεινε <b>ακινητοποιημένο στη θάλασσα</b> για σχεδόν τρεις ώρες. Ένας χειριστής πληκτρολόγησε <b>μηδέν</b> σε ένα πεδίο μιας βάσης δεδομένων, το πρόγραμμα επιχείρησε <b>διαίρεση με το μηδέν</b> και έπεσε όλο το δίκτυο που έλεγχε τις μηχανές.</p>
+<p class="talk">Σκέψου: Ποιο κριτήριο αλγορίθμου δεν τηρήθηκε; Τι θα έπρεπε να είχε προβλέψει ο προγραμματιστής;</p>
+</div>
+<div class="box plain">
+<div class="tag">Παράδειγμα · Οι οδηγίες της IKEA</div>
+<p>Οι οδηγίες συναρμολόγησης ενός επίπλου είναι αλγόριθμος χωρίς ούτε μία λέξη: <b>διακριτά βήματα</b> με συγκεκριμένη σειρά. Έχουν είσοδο (τα κομμάτια και τις βίδες), έξοδο (τη βιβλιοθήκη), και κάθε βήμα είναι αρκετά απλό για να το κάνει ο καθένας.</p>
+<p>Η σειρά δεν είναι πάντα μοναδική: μπορείς να βιδώσεις πρώτα το αριστερό ή πρώτα το δεξί πλαϊνό. Η ιδέα όμως μένει ίδια: ένα σύνθετο πρόβλημα λύνεται με <span class="hl">απλά βήματα που εκτελούνται το ένα μετά το άλλο</span>.</p>
+</div>
+<div class="sec" id="s-2-2"><span class="num">2.2</span><h2>Σπουδαιότητα αλγορίθμων</h2><span class="ref">Βιβλίο σελ. 34–35</span></div>
+<p>Η έννοια του αλγορίθμου είναι <b>θεμελιώδης</b> για την Πληροφορική. Μάλιστα, η Πληροφορική μπορεί να οριστεί ως η επιστήμη που μελετά τους αλγορίθμους από τέσσερις σκοπιές:</p>
+<div class="grid g2">
+<div class="box ex"><div class="tag">Υλικού · hardware</div><p>Η <b>ταχύτητα</b> εκτέλεσης εξαρτάται από τον υπολογιστή: κρυφή μνήμη, ταχύτητα κύριας και δευτερεύουσας μνήμης. Το ίδιο παιχνίδι τρέχει πιο ομαλά σε νεότερη κονσόλα.</p></div>
+<div class="box ex"><div class="tag">Γλωσσών προγραμματισμού</div><p>Η γλώσσα αλλάζει τη <b>δομή και τον αριθμό των εντολών</b>. Γλώσσες χαμηλότερου επιπέδου (assembly, C) είναι γενικά ταχύτερες από υψηλότερου (Basic, Pascal).</p></div>
+<div class="box ex"><div class="tag">Θεωρητική</div><p>Υπάρχει ή όχι <b>αποδοτικός αλγόριθμος</b> για ένα πρόβλημα; Η απάντηση δείχνει τα όρια της λύσης που μπορούμε να βρούμε.</p></div>
+<div class="box ex"><div class="tag">Αναλυτική</div><p>Πόσους <b>υπολογιστικούς πόρους</b> χρειάζεται: κύρια και δευτερεύουσα μνήμη, χρόνο επεξεργαστή, χρόνο εισόδου/εξόδου.</p></div>
+</div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Το 1956 ο Ολλανδός <b>Edsger Dijkstra</b> καθόταν με την αρραβωνιαστικιά του σε ένα καφέ στο Άμστερνταμ μετά από ψώνια. Μέσα σε περίπου <b>είκοσι λεπτά</b>, χωρίς χαρτί και μολύβι, σκέφτηκε τον αλγόριθμο που βρίσκει τη <b>συντομότερη διαδρομή</b> ανάμεσα σε δύο σημεία. Παραλλαγές του χρησιμοποιούνται μέχρι σήμερα σε εφαρμογές πλοήγησης και στη δρομολόγηση δεδομένων στο διαδίκτυο.</p>
+<p class="talk">Σκέψου: Από ποια σκοπιά της Πληροφορικής θα εξετάζαμε πόσο γρήγορα βρίσκει τη διαδρομή το κινητό σου σε σχέση με έναν παλιό υπολογιστή;</p>
+</div>
+<div class="sec" id="s-2-3"><span class="num">2.3</span><h2>Περιγραφή και αναπαράσταση αλγορίθμων</h2><span class="ref">Βιβλίο σελ. 35–36</span></div>
+<p>Τον ίδιο αλγόριθμο μπορούμε να τον γράψουμε με <b>τέσσερις τρόπους</b>. Κάθε τρόπος έχει τον δικό του κίνδυνο:</p>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th>Τρόπος</th><th>Χαρακτηριστικό</th><th>Κίνδυνος</th></tr>
+<tr><td><b>Ελεύθερο κείμενο</b><br/><span class="small">free text</span></td><td>Ο πιο ανεπεξέργαστος και αδόμητος τρόπος.</td><td>Μπορεί να γίνει <b>μη εκτελέσιμος</b>: παραβιάζει την <b>αποτελεσματικότητα</b>.</td></tr>
+<tr><td><b>Διαγραμματικές τεχνικές</b><br/><span class="small">diagramming techniques</span></td><td>Γραφικός τρόπος. Η πιο γνωστή τεχνική είναι το <b>διάγραμμα ροής</b> (flow chart).</td><td><b>Δεν</b> είναι η καλύτερη λύση, γι' αυτό εμφανίζεται όλο και σπανιότερα.</td></tr>
+<tr><td><b>Φυσική γλώσσα κατά βήματα</b><br/><span class="small">natural language</span></td><td>Αριθμημένα βήματα σε απλά ελληνικά.</td><td>Μπορεί να παραβιαστεί η <b>καθοριστικότητα</b>.</td></tr>
+<tr><td><b>Κωδικοποίηση</b><br/><span class="small">coding</span></td><td>Πρόγραμμα σε <b>ψευδογλώσσα</b> ή σε γλώσσα προγραμματισμού, που δίνει τα ίδια αποτελέσματα με τον αλγόριθμο.</td><td>Ο πιο αυστηρός τρόπος. Αυτόν θα χρησιμοποιούμε στη συνέχεια.</td></tr>
+</tbody></table></div>
+<p class="cap"><span class="ln li">Παράδειγμα</span><span class="ln li">Οι πόντοι ενός παίκτη μπάσκετ, με τους 4 τρόπους</span></p>
+<div class="grid g2">
+<div class="box plain"><div class="tag">Ελεύθερο κείμενο</div><p>Βρες πόσους πόντους έβαλε ο παίκτης στον αγώνα, ξέροντας τα καλάθια του.</p><p class="small">Ποια καλάθια; Πόσο μετράει το καθένα; Δεν εκτελείται έτσι.</p></div>
+<div class="box plain"><div class="tag">Φυσική γλώσσα κατά βήματα</div><p>1. Διάβασε πόσα δίποντα, τρίποντα και βολές έβαλε.<br/>2. Πολλαπλασίασε τα δίποντα με 2 και τα τρίποντα με 3.<br/>3. Πρόσθεσε τα δύο γινόμενα και τις βολές.<br/>4. Εμφάνισε το σύνολο.</p></div>
+<div class="box plain"><div class="tag">Διάγραμμα ροής</div>
+<div class="figure narrow">
+<svg aria-label="Διάγραμμα ροής: Αρχή, Διάβασε δ, τ, β, σ ← 2·δ + 3·τ + β, Εκτύπωσε σ, Τέλος." font-size="11" role="img" viewbox="0 0 240 300">
+<defs><marker id="ar2" markerheight="7" markerwidth="7" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="f-arrow" d="M0 0L10 5L0 10z"></path></marker></defs>
+<g class="st-ink" stroke-width="1.6">
+<ellipse class="f-paper" cx="120" cy="24" rx="50" ry="18"></ellipse>
+<polygon class="f-paper" points="62,72 198,72 178,112 42,112"></polygon>
+<rect class="f-paper" height="40" rx="2" width="160" x="40" y="140"></rect>
+<polygon class="f-paper" points="62,208 198,208 178,248 42,248"></polygon>
+</g>
+<g class="st-ink" fill="none" stroke-width="1.6">
+<path d="M120 42V70" marker-end="url(#ar2)"></path>
+<path d="M120 112V138" marker-end="url(#ar2)"></path>
+<path d="M120 180V206" marker-end="url(#ar2)"></path>
+<path d="M120 248V262" marker-end="url(#ar2)"></path>
+</g>
+<ellipse class="f-paper st-ink" cx="120" cy="280" rx="50" ry="17" stroke-width="1.6"></ellipse>
+<g class="f-text" text-anchor="middle">
+<text font-weight="700" x="120" y="28">Αρχή</text>
+<text x="120" y="96">Διάβασε δ, τ, β</text>
+<text x="120" y="164">σ ← 2·δ + 3·τ + β</text>
+<text x="120" y="232">Εκτύπωσε σ</text>
+<text font-weight="700" x="120" y="284">Τέλος</text>
+</g>
+</svg>
+</div>
+</div>
+<div class="box plain"><div class="tag">Κωδικοποίηση σε ψευδογλώσσα</div>
+<pre class="code">Αλγόριθμος Πόντοι
+Διάβασε δ, τ, β
+σ ← 2 * δ + 3 * τ + β
+Εκτύπωσε σ
+Τέλος Πόντοι</pre>
+<p class="small">Ένας αλγόριθμος σε ψευδογλώσσα αρχίζει με τη λέξη <b>Αλγόριθμος</b> και το όνομά του, και τελειώνει με <b>Τέλος</b> και το ίδιο όνομα.</p></div>
+</div>
+<p>Στο <b>διάγραμμα ροής</b> κάθε γεωμετρικό σχήμα δηλώνει ένα είδος ενέργειας, και τα <b>βέλη</b> δείχνουν τη σειρά εκτέλεσης:</p>
+<div class="figure">
+<svg aria-label="Σύμβολα διαγράμματος ροής: έλλειψη, πλάγιο παραλληλόγραμμο, ορθογώνιο, ρόμβος." font-size="11" role="img" viewbox="0 0 640 126">
+<g stroke-width="1.8">
+<ellipse class="f-paper st-blue" cx="80" cy="40" rx="62" ry="24"></ellipse>
+<polygon class="f-paper st-teal" points="200,16 322,16 302,64 180,64"></polygon>
+<rect class="f-paper st-violet" height="48" rx="2" width="130" x="350" y="16"></rect>
+<polygon class="f-paper st-ink" points="568,10 628,40 568,70 508,40"></polygon>
+</g>
+<g class="f-text" font-weight="700" text-anchor="middle">
+<text x="80" y="44">Αρχή / Τέλος</text>
+<text x="251" y="44">Διάβασε / Εκτύπωσε</text>
+<text x="415" y="44">x ← x + 1</text>
+<text x="568" y="44">Συνθήκη;</text>
+</g>
+<g class="f-muted" font-size="10.5" text-anchor="middle">
+<text font-weight="700" x="80" y="94">Έλλειψη</text><text x="80" y="110">αρχή και τέλος</text>
+<text font-weight="700" x="251" y="94">Πλάγιο παραλληλόγραμμο</text><text x="251" y="110">είσοδος ή έξοδος</text>
+<text font-weight="700" x="415" y="94">Ορθογώνιο</text><text x="415" y="110">εκτέλεση πράξεων</text>
+<text font-weight="700" x="568" y="94">Ρόμβος</text><text x="568" y="110">ερώτηση, 2+ έξοδοι</text>
+</g>
+</svg>
+</div>
+<div class="box def">
+<div class="tag">Σύμβολα διαγράμματος ροής · απομνημόνευση</div>
+<p><b>έλλειψη</b>, που δηλώνει την αρχή και το τέλος του κάθε αλγορίθμου,</p>
+<p><b>ρόμβος</b>, που δηλώνει μία ερώτηση με δύο ή περισσότερες εξόδους για απάντηση,</p>
+<p><b>ορθογώνιο</b>, που δηλώνει την εκτέλεση μίας ή περισσότερων πράξεων, και</p>
+<p><b>πλάγιο παραλληλόγραμμο</b>, που δηλώνει είσοδο ή έξοδο στοιχείων.</p>
+<p class="src">Σχολικό βιβλίο, §2.4 (εισαγωγή), σελ. 36</p>
+</div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Το διάγραμμα ροής το εισήγαγαν οι μηχανικοί <b>Frank και Lillian Gilbreth</b> το 1921, για να καταγράφουν τα βήματα μιας εργασίας σε ένα εργοστάσιο. Είχαν <b>δώδεκα παιδιά</b>, και δύο από αυτά έγραψαν για την οικογένεια το βιβλίο «Cheaper by the Dozen», που έγινε ταινία του Hollywood το 1950.</p>
+<p class="talk">Σκέψου: Πώς θα έμοιαζε το διάγραμμα ροής για το πρωινό ξύπνημα 14 ανθρώπων με ένα μπάνιο;</p>
+</div>
+<div class="box trap">
+<div class="tag">Παγίδες που κοστίζουν μονάδες</div>
+<ul class="tight">
+<li>Η είσοδος μπορεί να είναι <b>καμία</b>. Η έξοδος πρέπει να είναι <b>τουλάχιστον μία</b>. Μην τα μπερδεύεις.</li>
+<li>Διαδικασία που δεν τελειώνει = <b>υπολογιστική διαδικασία</b>, όχι αλγόριθμος.</li>
+<li>Καθοριστικότητα = <b>χωρίς αμφιβολία</b>. Αποτελεσματικότητα = <b>απλή και εκτελέσιμη</b>. Είναι το πιο συχνό μπέρδεμα.</li>
+<li><span class="ln">Το ελεύθερο κείμενο βάζει σε κίνδυνο την <b>αποτελεσματικότητα</b>.</span><span class="ln">Η φυσική γλώσσα βάζει σε κίνδυνο την <b>καθοριστικότητα</b>.</span></li>
+<li>Το διάγραμμα ροής είναι ο πιο γνωστός διαγραμματικός τρόπος, αλλά <b>όχι ο καλύτερος</b>.</li>
+<li>Ρόμβος = <b>ερώτηση</b>. Είσοδος και έξοδος μπαίνουν σε <b>πλάγιο παραλληλόγραμμο</b>, ποτέ σε ορθογώνιο.</li>
+</ul>
+</div>
+<div class="box def">
+<div class="tag">Σύνοψη</div>
+<p><b>Αλγόριθμος</b>: πεπερασμένη σειρά ενεργειών, αυστηρά καθορισμένων και εκτελέσιμων σε πεπερασμένο χρόνο, για την επίλυση ενός προβλήματος.</p>
+<p><b>5 κριτήρια</b>: είσοδος, έξοδος, καθοριστικότητα, περατότητα, αποτελεσματικότητα.</p>
+<p><b>4 σκοπιές</b>: υλικού, γλωσσών προγραμματισμού, θεωρητική, αναλυτική.</p>
+<p><b>4 τρόποι αναπαράστασης</b>: ελεύθερο κείμενο, διαγραμματικές τεχνικές, φυσική γλώσσα κατά βήματα, κωδικοποίηση.</p>
+<p class="src">Σχολικό βιβλίο, §2.1 – §2.3</p>
+</div>
+<section class="solved-wrap">
+<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένο παράδειγμα βήμα-βήμα</h2><span class="ref">Έτσι σκεφτόμαστε</span></div>
+<div class="box solved">
+<div class="tag">Πρόβλημα · Βραδιά σινεμά</div>
+<p>Σε έναν κινηματογράφο το κανονικό εισιτήριο κοστίζει <b>9 €</b>, το φοιτητικό <b>6 €</b> και κάθε ποπ κορν <b>4,50 €</b>. Να γραφτεί αλγόριθμος σε ψευδογλώσσα που διαβάζει πόσα κανονικά εισιτήρια, πόσα φοιτητικά και πόσα ποπ κορν αγόρασε μια παρέα, και εμφανίζει το συνολικό ποσό που πλήρωσε.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><span class="ln"><b>Κατανοώ.</b> Υπογραμμίζω τα ρήματα της εκφώνησης:</span><span class="ln li">«<b>διαβάζει</b>» σημαίνει είσοδο,</span><span class="ln li">«<b>εμφανίζει</b>» σημαίνει έξοδο.</span><span class="ln">Οι τιμές 9, 6 και 4,50 είναι <b>σταθερές</b>: δεν τις διαβάζω, τις γράφω μέσα στον υπολογισμό.</span>
+<ul class="tight"><li><b>Δεδομένα:</b> πλήθος κανονικών (κ), φοιτητικών (φ), ποπ κορν (π).</li><li><b>Ζητούμενο:</b> το συνολικό ποσό.</li></ul></div></div>
+<div class="step"><span class="stepn">2</span><div><span class="ln"><b>Αναλύω.</b> Το πρόβλημα σπάει σε τρία κομμάτια, με αυτή τη σειρά:</span><span class="ln li"><b>είσοδος</b>: διάβασε κ, φ, π,</span><span class="ln li"><b>επεξεργασία</b>: κάθε πλήθος επί την τιμή του, και άθροισμα,</span><span class="ln li"><b>έξοδος</b>: εμφάνισε το σύνολο.</span><span class="ln">Χρειάζομαι μία ακόμα μεταβλητή για το αποτέλεσμα: <b>σύνολο</b>.</span></div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b> Κάθε κομμάτι γίνεται μία εντολή:
+<pre class="code">Αλγόριθμος Σινεμά
+Διάβασε κ, φ, π
+σύνολο ← 9 * κ + 6 * φ + 4.5 * π
+Εκτύπωσε σύνολο
+Τέλος Σινεμά</pre>
+<p class="small">Στον κώδικα ο δεκαδικός γράφεται με <b>τελεία</b> (4.5), όπως και στη ΓΛΩΣΣΑ. Το κόμμα χρησιμοποιείται μόνο για να χωρίζουμε μεταβλητές (Διάβασε κ, φ, π).</p></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Δοκιμάζω με αριθμούς που μπορώ να υπολογίσω με το μυαλό: 2 κανονικά, 1 φοιτητικό, 3 ποπ κορν. Περιμένω <span class="nw">18 + 6 + 13,50</span> = <b>37,50 €</b>.
+      <div class="tablewrap"><table class="t">
+<tbody><tr><th>Εντολή</th><th>κ</th><th>φ</th><th>π</th><th>σύνολο</th><th>Έξοδος</th></tr>
+<tr><td>Διάβασε κ, φ, π</td><td>2</td><td>1</td><td>3</td><td></td><td></td></tr>
+<tr><td>σύνολο ← …</td><td>2</td><td>1</td><td>3</td><td>37.5</td><td></td></tr>
+<tr><td>Εκτύπωσε σύνολο</td><td>2</td><td>1</td><td>3</td><td>37.5</td><td>37.5</td></tr>
+</tbody></table></div>
+<p>Ελέγχω και τα 5 κριτήρια: έχει είσοδο και έξοδο, κάθε εντολή είναι σαφής και απλή, και τελειώνει μετά από 3 εντολές. ✓</p></div></div>
+</div>
+</div>
+</section>
+
+<section class="cards" id="s-cards">
+<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2><span class="ref">Ορισμοί για απομνημόνευση</span></div>
+<p class="small">Διάβασε τον όρο, πες τον ορισμό από μέσα σου και πάτα την κάρτα για να τον δεις.</p>
+<div class="deck">
+<button aria-live="polite" class="card" id="card" type="button">
+<span class="face front"><span class="ck">Όρος</span><span class="term" id="c-term"></span><span class="tap">Πάτα για τον ορισμό</span></span>
+<span class="face back"><span class="ck">Ορισμός</span><span class="cdef" id="c-def"></span><span class="tap" id="c-ref"></span></span>
+</button>
+<div class="deckbar">
+<button aria-label="Προηγούμενη κάρτα" class="btn" id="c-prev" type="button">←</button>
+<span class="count" id="c-count"></span>
+<button aria-label="Επόμενη κάρτα" class="btn" id="c-next" type="button">→</button>
+<button class="btn" id="c-shuf" type="button">Ανακάτεμα</button>
+</div>
+</div>
+</section><section class="exercises">
+<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2><span class="ref">Από τα εύκολα στα δύσκολα</span></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div>
+<div class="q"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Γράψε Σ ή Λ.
+<table class="tf">
+<tbody><tr><td>α. Ένας αλγόριθμος πρέπει υποχρεωτικά να δέχεται τουλάχιστον μία τιμή εισόδου.</td><td class="b">____</td></tr>
+<tr><td>β. Ένας αλγόριθμος πρέπει να δίνει τουλάχιστον μία τιμή ως αποτέλεσμα.</td><td class="b">____</td></tr>
+<tr><td>γ. Μια διαδικασία που δεν τελειώνει μετά από συγκεκριμένο αριθμό βημάτων λέγεται υπολογιστική διαδικασία.</td><td class="b">____</td></tr>
+<tr><td>δ. Το διάγραμμα ροής είναι ο καλύτερος τρόπος αναπαράστασης ενός αλγορίθμου.</td><td class="b">____</td></tr>
+<tr><td>ε. Ο ρόμβος σε ένα διάγραμμα ροής δηλώνει είσοδο ή έξοδο στοιχείων.</td><td class="b">____</td></tr>
+<tr><td>στ. Η περιγραφή με ελεύθερο κείμενο μπορεί να παραβιάσει την αποτελεσματικότητα.</td><td class="b">____</td></tr>
+<tr><td>ζ. Η έννοια του αλγορίθμου συνδέεται αποκλειστικά με προβλήματα της Πληροφορικής.</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Λ, β Σ, γ Σ, δ Λ, ε Λ, στ Σ, ζ Λ</span>
+<p class="small">α: η είσοδος μπορεί να είναι και καμία. δ: το βιβλίο λέει ότι δεν είναι η καλύτερη λύση. ε: ο ρόμβος δηλώνει ερώτηση. ζ: π.χ. το γεύμα, η συνταγή μαγειρικής.</p></div></details></div>
+<div class="q"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
+<p>α) Να δώσετε τον ορισμό του αλγορίθμου.<br/>β) Να αναφέρετε και να περιγράψετε σύντομα τα κριτήρια που πρέπει να ικανοποιεί κάθε αλγόριθμος.<br/>γ) Ποια η διαφορά ενός αλγορίθμου από μια υπολογιστική διαδικασία;<br/>δ) Ποιοι είναι οι τρόποι αναπαράστασης ενός αλγορίθμου; Ποιο κριτήριο κινδυνεύει να παραβιαστεί με την περιγραφή σε φυσική γλώσσα κατά βήματα;<br/>ε) Να αναφέρετε τις σκοπιές από τις οποίες η Πληροφορική μελετά τους αλγορίθμους και να εξηγήσετε σύντομα την αναλυτική.</p>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p>α) Αλγόριθμος είναι μια πεπερασμένη σειρά ενεργειών, αυστηρά καθορισμένων και εκτελέσιμων σε πεπερασμένο χρόνο, που στοχεύουν στην επίλυση ενός προβλήματος.</p>
+<p>β) Είσοδος: καμία, μία ή περισσότερες τιμές. Έξοδος: τουλάχιστον μία τιμή. Καθοριστικότητα: κάθε εντολή χωρίς αμφιβολία για τον τρόπο εκτέλεσης. Περατότητα: τελειώνει μετά από πεπερασμένα βήματα. Αποτελεσματικότητα: κάθε εντολή απλή και εκτελέσιμη.</p>
+<p>γ) Η υπολογιστική διαδικασία δεν τελειώνει μετά από συγκεκριμένο αριθμό βημάτων, δηλαδή δεν ικανοποιεί την περατότητα.</p>
+<p>δ) Ελεύθερο κείμενο, διαγραμματικές τεχνικές, φυσική γλώσσα κατά βήματα, κωδικοποίηση. Με τη φυσική γλώσσα κινδυνεύει η καθοριστικότητα.</p>
+<p>ε) Υλικού, γλωσσών προγραμματισμού, θεωρητική, αναλυτική. Αναλυτική: μελετώνται οι υπολογιστικοί πόροι που απαιτεί ένας αλγόριθμος, όπως το μέγεθος της κύριας και της δευτερεύουσας μνήμης, ο χρόνος για λειτουργίες CPU και για λειτουργίες εισόδου/εξόδου.</p></div></details></div>
+<div class="q"><span class="qn">3</span><b>Τι δηλώνει κάθε σχήμα;</b> Δίπλα σε κάθε σχήμα γράψε το γράμμα της σωστής λειτουργίας.
+<ul class="legend tight">
+<li data-v="Α"><b>Α</b> αρχή ή τέλος</li>
+<li data-v="Β"><b>Β</b> ερώτηση</li>
+<li data-v="Γ"><b>Γ</b> εκτέλεση πράξεων</li>
+<li data-v="Δ"><b>Δ</b> είσοδος ή έξοδος</li>
+</ul>
+<table class="tf">
+<tbody><tr><td>α. Ρόμβος</td><td class="b">____</td></tr>
+<tr><td>β. Έλλειψη</td><td class="b">____</td></tr>
+<tr><td>γ. Πλάγιο παραλληλόγραμμο</td><td class="b">____</td></tr>
+<tr><td>δ. Ορθογώνιο</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Β, β Α, γ Δ, δ Γ</span></div></details></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div>
+<div class="q"><span class="qn">4</span><b>Ποιο κριτήριο παραβιάζεται;</b> Για κάθε οδηγία γράψε το γράμμα του κριτηρίου.<span class="theme">Καθημερινότητα</span>
+<ul class="legend tight">
+<li data-v="Α"><b>Α</b> Είσοδος</li>
+<li data-v="Β"><b>Β</b> Έξοδος</li>
+<li data-v="Γ"><b>Γ</b> Καθοριστικότητα</li>
+<li data-v="Δ"><b>Δ</b> Περατότητα</li>
+<li data-v="Ε"><b>Ε</b> Αποτελεσματικότητα</li>
+</ul>
+<table class="tf">
+<tbody><tr><td>α. «Βάλε λίγη ζάχαρη στον καφέ.»</td><td class="b">____</td></tr>
+<tr><td>β. «1. Γράψε τον αριθμό 1. 2. Πρόσθεσε 1 και γράψε τον νέο αριθμό. 3. Πήγαινε στο βήμα 2.»</td><td class="b">____</td></tr>
+<tr><td>γ. «Μάντεψε σωστά την επόμενη κάρτα της τράπουλας.»</td><td class="b">____</td></tr>
+<tr><td>δ. Ένα πρόγραμμα υπολογίζει την τελική τιμή ενός προϊόντος με τον ΦΠΑ, αλλά δεν τη δείχνει πουθενά και δεν τη δίνει σε κανέναν.</td><td class="b">____</td></tr>
+<tr><td>ε. «Μοίρασε τα χρήματα του κουμπαρά σε όσους φίλους έρθουν στο πάρτι.» (Κι αν δεν έρθει κανείς;)</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Γ, β Δ, γ Ε, δ Β, ε Γ</span>
+<p class="small">α: το «λίγη» δεν είναι σαφές. β: δεν σταματά ποτέ. γ: η οδηγία είναι σαφής αλλά δεν εκτελείται. δ: καμία έξοδος. ε: δεν προβλέπεται η διαίρεση με το μηδέν, όπως στο Yorktown. Η «Είσοδος» δεν είναι σωστή απάντηση σε καμία περίπτωση, αφού επιτρέπεται και μηδενική είσοδος.</p></div></details></div>
+<div class="q hw"><span class="qn">5</span><b>Βρες τα λάθη και μετάτρεψε.</b><span class="theme">Πόλη, Μετακινήσεις</span>
+<p>Σε μια πόλη, μια διαδρομή με ταξί κοστίζει 3,50 € σημαία και 0,90 € για κάθε χιλιόμετρο. Ο Νίκος σχεδίασε το παρακάτω διάγραμμα ροής, αλλά έκανε <b>δύο λάθη στα σχήματα</b>.</p>
+<p>α) Ποια είναι τα λάθη και ποιο σχήμα έπρεπε να χρησιμοποιήσει σε καθένα;<br/>β) Να μετατρέψετε το (διορθωμένο) διάγραμμα ροής σε αλγόριθμο σε ψευδογλώσσα.</p>
+<div class="figure narrow">
+<svg aria-label="Διάγραμμα ροής του Νίκου με αριθμημένα σχήματα 1 έως 5." font-size="11" role="img" viewbox="0 0 260 300">
+<defs><marker id="ar3" markerheight="7" markerwidth="7" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="f-arrow" d="M0 0L10 5L0 10z"></path></marker></defs>
+<g class="st-ink" stroke-width="1.6">
+<ellipse class="f-paper" cx="130" cy="24" rx="50" ry="18"></ellipse>
+<rect class="f-paper" height="40" rx="2" width="150" x="55" y="70"></rect>
+<rect class="f-paper" height="40" rx="2" width="180" x="40" y="138"></rect>
+<polygon class="f-paper" points="130,198 210,228 130,258 50,228"></polygon>
+</g>
+<g class="st-ink" fill="none" stroke-width="1.6">
+<path d="M130 42V68" marker-end="url(#ar3)"></path>
+<path d="M130 110V136" marker-end="url(#ar3)"></path>
+<path d="M130 178V196" marker-end="url(#ar3)"></path>
+<path d="M130 258V266" marker-end="url(#ar3)"></path>
+</g>
+<ellipse class="f-paper st-ink" cx="130" cy="284" rx="46" ry="15" stroke-width="1.6"></ellipse>
+<g class="f-text" text-anchor="middle">
+<text font-weight="700" x="130" y="28">Αρχή</text>
+<text x="130" y="94">Διάβασε χλμ</text>
+<text x="130" y="162">κόστος ← 3.5 + 0.9 * χλμ</text>
+<text x="130" y="232">Εκτύπωσε κόστος</text>
+<text font-weight="700" x="130" y="288">Τέλος</text>
+</g>
+<g class="f-violet" font-size="12" font-weight="800">
+<text x="196" y="22">①</text><text x="214" y="94">②</text><text x="228" y="162">③</text><text x="218" y="232">④</text><text x="184" y="288">⑤</text>
+</g>
+</svg>
+</div>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q"><span class="qn">6</span><b>Ποιος τρόπος αναπαράστασης;</b> Για κάθε περιγραφή γράψε το γράμμα του τρόπου αναπαράστασης.
+<ul class="legend tight">
+<li data-v="Α"><b>Α</b> Ελεύθερο κείμενο</li>
+<li data-v="Β"><b>Β</b> Διαγραμματική τεχνική</li>
+<li data-v="Γ"><b>Γ</b> Φυσική γλώσσα κατά βήματα</li>
+<li data-v="Δ"><b>Δ</b> Κωδικοποίηση</li>
+</ul>
+<table class="tf">
+<tbody><tr><td>α. «Βήμα 1: Διάβασε τους βαθμούς. Βήμα 2: Πρόσθεσέ τους. Βήμα 3: Διαίρεσε με το πλήθος.»</td><td class="b">____</td></tr>
+<tr><td>β. «Αλγόριθμος Εμβαδόν … Τέλος Εμβαδόν»</td><td class="b">____</td></tr>
+<tr><td>γ. «Πάρε τους βαθμούς και βγάλε τον μέσο όρο τους.»</td><td class="b">____</td></tr>
+<tr><td>δ. Σχήματα που ενώνονται με βέλη</td><td class="b">____</td></tr>
+<tr><td>ε. Ένα πρόγραμμα γραμμένο σε Python</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Γ, β Δ, γ Α, δ Β, ε Δ</span>
+<p class="small">ε: η κωδικοποίηση γίνεται σε ψευδογλώσσα ή σε γλώσσα προγραμματισμού.</p></div></details></div>
+<div class="q hw"><span class="qn">7</span><b>Από ποια σκοπιά;</b> Για κάθε φράση γράψε το γράμμα της σκοπιάς από την οποία μελετάται ο αλγόριθμος.
+<ul class="legend tight">
+<li data-v="Α"><b>Α</b> Υλικού</li>
+<li data-v="Β"><b>Β</b> Γλωσσών προγραμματισμού</li>
+<li data-v="Γ"><b>Γ</b> Θεωρητική</li>
+<li data-v="Δ"><b>Δ</b> Αναλυτική</li>
+</ul>
+<table class="tf">
+<tbody><tr><td>α. «Το ίδιο πρόγραμμα τρέχει τρεις φορές πιο γρήγορα σε υπολογιστή με περισσότερη κρυφή μνήμη.»</td><td class="b">____</td></tr>
+<tr><td>β. «Ο αλγόριθμος χρειάζεται 2 GB κύριας μνήμης και 5 δευτερόλεπτα επεξεργαστή.»</td><td class="b">____</td></tr>
+<tr><td>γ. «Υπάρχει αποδοτικός αλγόριθμος για το πρόβλημα του περιοδεύοντα πωλητή;»</td><td class="b">____</td></tr>
+<tr><td>δ. «Σε assembly το πρόγραμμα έχει 300 εντολές, ενώ σε Pascal 40.»</td><td class="b">____</td></tr>
+</tbody></table><p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">8</span><b>Έλεγχος κριτηρίων.</b><span class="theme">Αγορές με δόσεις</span>
+<pre class="code">Αλγόριθμος Δόσεις
+Διάβασε ποσό, μήνες
+δόση ← ποσό / μήνες
+Εμφάνισε δόση
+Τέλος Δόσεις</pre>
+<p>α) Να ελέγξετε ένα-ένα τα πέντε κριτήρια του αλγορίθμου για τον παραπάνω αλγόριθμο.<br/>β) Ποιο κριτήριο κινδυνεύει να παραβιαστεί και για ποια τιμή εισόδου;<br/>γ) Να σχεδιάσετε το διάγραμμα ροής.<br/>δ) Να περιγράψετε τον αλγόριθμο σε φυσική γλώσσα κατά βήματα.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Μεγάλες ασκήσεις</h3></div>
+<div class="q hw"><span class="qn">9</span><b>Ένας αλγόριθμος, τρεις τρόποι.</b><span class="theme">Γεωγραφία, Ταξίδια</span>
+<p>Πας εκδρομή στη <b>Νέα Υόρκη</b> και η πρόγνωση δίνει θερμοκρασίες σε βαθμούς <b>Φαρενάιτ</b>. Ο τύπος για να μετατρέψεις από Κελσίου είναι <b><span class="nw">F = 1,8 · C + 32</span></b>. Γράψε τον αλγόριθμο που διαβάζει μια θερμοκρασία σε °C και εμφανίζει την αντίστοιχη σε °F:</p>
+<p>α) σε φυσική γλώσσα κατά βήματα, β) με διάγραμμα ροής, γ) σε ψευδογλώσσα.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">10</span><b>Στο ανταλλακτήριο.</b><span class="theme">Ταξίδια, Οικονομικά</span>
+<p>Σε ένα ταξίδι στο <b>Λονδίνο</b> θέλεις να αλλάξεις ευρώ σε λίρες. Το ανταλλακτήριο κρατά <b>προμήθεια 2%</b> επί του ποσού <b>συν 3 € πάγιο</b>. Το υπόλοιπο ποσό μετατρέπεται σε λίρες με την ισοτιμία της ημέρας (λίρες ανά 1 €).</p>
+<p>α) Να γράψετε τα δεδομένα και τα ζητούμενα, αν ο αλγόριθμος πρέπει να εμφανίζει τις λίρες που θα πάρεις και την προμήθεια που πλήρωσες.<br/>β) Να γράψετε τον αλγόριθμο σε φυσική γλώσσα κατά βήματα.<br/>γ) Να σχεδιάσετε το διάγραμμα ροής.<br/>δ) Να γράψετε τον αλγόριθμο σε ψευδογλώσσα.<br/>ε) Να συμπληρώσετε τον παρακάτω πίνακα με τις τιμές των μεταβλητών μετά από κάθε εντολή, για είσοδο 100 € και ισοτιμία 0,85.<br/>στ) Τι θα συμβεί αν κάποιος θέλει να αλλάξει μόνο 2 €; Ποιο κριτήριο αλγορίθμου αφορά αυτό το πρόβλημα;</p>
+<div class="tablewrap"><table class="t blank">
+<tbody><tr><th>Εντολή</th><th>ευρώ</th><th>ισοτιμία</th><th>προμήθεια</th><th>λίρες</th><th>Έξοδος</th></tr>
+<tr><td>1η</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>2η</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>3η</td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>4η</td><td></td><td></td><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+</section>
+
+</main><div class="syn-foot"><div class="syn-nav"><a href="01.html"><small>&#8592; Μάθημα 1</small>Η έννοια του προβλήματος</a><a class="next" href="03.html"><small>Μάθημα 3 &#8594;</small>Από την εκφώνηση στον αλγόριθμο</a></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
+<script>
+(function(){
+  var CARDS = [{"term": "Αλγόριθμος", "def": "Αλγόριθμος είναι μια πεπερασμένη σειρά ενεργειών, αυστηρά καθορισμένων και εκτελέσιμων σε πεπερασμένο χρόνο, που στοχεύουν στην επίλυση ενός προβλήματος.", "ref": "Σχολικό βιβλίο, §2.1"}, {"term": "υπολογιστική διαδικασία", "def": "Μία διαδικασία που δεν τελειώνει μετά από ένα συγκεκριμένο αριθμό βημάτων δεν αποτελεί αλγόριθμο, αλλά λέγεται απλά υπολογιστική διαδικασία (computational procedure).", "ref": "Σχολικό βιβλίο, §2.1 (περατότητα)"}, {"term": "έλλειψη", "def": "έλλειψη , που δηλώνει την αρχή και το τέλος του κάθε αλγορίθμου,", "ref": "Σχολικό βιβλίο, §2.4 (εισαγωγή), σελ. 36"}, {"term": "ρόμβος", "def": "ρόμβος , που δηλώνει μία ερώτηση με δύο ή περισσότερες εξόδους για απάντηση,", "ref": "Σχολικό βιβλίο, §2.4 (εισαγωγή), σελ. 36"}, {"term": "ορθογώνιο", "def": "ορθογώνιο , που δηλώνει την εκτέλεση μίας ή περισσότερων πράξεων, και", "ref": "Σχολικό βιβλίο, §2.4 (εισαγωγή), σελ. 36"}, {"term": "πλάγιο παραλληλόγραμμο", "def": "πλάγιο παραλληλόγραμμο , που δηλώνει είσοδο ή έξοδο στοιχείων.", "ref": "Σχολικό βιβλίο, §2.4 (εισαγωγή), σελ. 36"}, {"term": "5 κριτήρια", "def": "5 κριτήρια : είσοδος, έξοδος, καθοριστικότητα, περατότητα, αποτελεσματικότητα.", "ref": "Σύνοψη"}, {"term": "4 σκοπιές", "def": "4 σκοπιές : υλικού, γλωσσών προγραμματισμού, θεωρητική, αναλυτική.", "ref": "Σύνοψη"}, {"term": "4 τρόποι αναπαράστασης", "def": "4 τρόποι αναπαράστασης : ελεύθερο κείμενο, διαγραμματικές τεχνικές, φυσική γλώσσα κατά βήματα, κωδικοποίηση.", "ref": "Σύνοψη"}];
+  // ---- quiz ----
+  document.querySelectorAll('.quiz').forEach(function(quiz){
+    var items = quiz.querySelectorAll('.qi');
+    var score = quiz.querySelector('.score');
+    function update(){
+      var done = quiz.querySelectorAll('.qi.ok, .qi.no').length;
+      if (done < items.length){ score.hidden = true; return; }
+      var ok = quiz.querySelectorAll('.qi.ok').length;
+      score.hidden = false;
+      score.innerHTML = '';
+      var t = document.createElement('span');
+      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? ' · Τέλεια!' : ok >= items.length * 0.7 ? ' · Πολύ καλά' : ' · Ξαναδιάβασε τη θεωρία');
+      var r = document.createElement('button'); r.type = 'button'; r.className = 'btn'; r.textContent = 'Ξανά από την αρχή';
+      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); }); update(); };
+      score.append(t, r);
+    }
+    items.forEach(function(it){
+      var ans = it.getAttribute('data-ans');
+      it.querySelectorAll('.qb button').forEach(function(b){
+        b.addEventListener('click', function(){
+          var v = b.getAttribute('data-v');
+          it.querySelectorAll('.qb button').forEach(function(x){ x.disabled = true; if (x.getAttribute('data-v') === ans) x.classList.add('right'); });
+          b.classList.add('pick');
+          it.classList.add(v === ans ? 'ok' : 'no');
+          var f = document.createElement('span'); f.className = 'fb';
+          f.textContent = v === ans ? '✓ Σωστά' : '✗ Η σωστή απάντηση είναι: ' + (it.querySelector('.qb button[data-v="' + ans + '"]') || {}).textContent;
+          it.appendChild(f);
+          update();
+        });
+      });
+    });
+  });
+  // ---- flashcards ----
+  var order = CARDS.map(function(_, i){ return i; }), pos = 0;
+  var card = document.getElementById('card');
+  if (!card || !CARDS.length) return;
+  function show(){
+    var c = CARDS[order[pos]];
+    card.classList.remove('flipped');
+    document.getElementById('c-term').textContent = c.term;
+    document.getElementById('c-def').textContent = c.def;
+    document.getElementById('c-ref').textContent = c.ref;
+    document.getElementById('c-count').textContent = (pos + 1) + ' / ' + CARDS.length;
+  }
+  card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+  document.getElementById('c-next').onclick = function(){ pos = (pos + 1) % CARDS.length; show(); };
+  document.getElementById('c-prev').onclick = function(){ pos = (pos - 1 + CARDS.length) % CARDS.length; show(); };
+  document.getElementById('c-shuf').onclick = function(){
+    for (var i = order.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+    pos = 0; show();
+  };
+  show();
+})();
+</script>
+<style id="kitcss">/*KIT>*//* ==== kit: θέμα, προβολή, «Δείξε λύση» ==== */
+body{font-size:16px}
+.kit-btn{font:600 13px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 12px;border-radius:999px;cursor:pointer}
+.kit-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.kit-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#kitfloat{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:30;display:flex;gap:6px;padding:5px;border-radius:999px;background:var(--ground);border:1px solid var(--line);box-shadow:0 4px 16px rgba(10,20,40,.12)}
+.rt-ans{margin:-2px 0 14px}
+.rt-show{font:600 13.5px/1 var(--body);border:1.5px solid var(--s-teal);background:var(--teal-bg);color:var(--teal);padding:9px 14px;border-radius:999px;cursor:pointer}
+.rt-show:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.rt-body{display:none;margin-top:10px;border-left:4px solid var(--s-teal);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 16px}
+.rt-body .q{margin:0;border:0;padding:0;background:none}
+.rt-open > .rt-body, body.rt-all .rt-body{display:block}
+.rt-open > .rt-show{background:var(--paper)}
+body:not(.rt-all):not(.editing) .solved:not(.rt-open) .rt-hide{display:none}
+body.rt-all .rt-showstep{display:none}
+.solved.rt-open .rt-showstep{display:none}
+.rt-showstep{margin:4px 0 6px}
+body.student .rt-ans{display:none}
+body.editing .rt, body.editing .rt-showstep{display:none}
+/* Λειτουργία προβολής */
+body.proj #bar,body.proj #nav{zoom:1.25}
+body.proj{--muted:#3a4254;--line:#b5bfd2}
+:root[data-theme="dark"] body.proj{--muted:#b9c1d4;--line:#3b465e}
+@media print{#kitfloat,.rt,.rt-showstep,.kit-btn{display:none!important}.rt-hide{display:grid!important}}
+/* Καθαρές γραμμές */
+body{font-size:17px;line-height:1.68}
+.ln{display:block;margin:.22em 0}
+.ln.li{position:relative;padding-left:1.25em}
+.ln.li::before{content:"•";position:absolute;left:.35em;color:var(--muted)}
+.kvs{display:inline-flex;flex-wrap:wrap;gap:.2em 1.2em;vertical-align:top}
+.kv,.nw{white-space:nowrap}
+p,li,td{text-wrap:pretty}
+.ln.cd{font-family:var(--mono);font-size:.92em}
+.cdcols{display:inline-flex;flex-wrap:wrap;gap:4px 28px;vertical-align:top}
+.cdcol{display:inline-block;padding-left:10px;border-left:2px solid var(--line)}/*<KIT*/</style>
+<script id="kitjs">/*KITJS>*/(function(){
+  /* kit: θέμα (φωτεινό/σκοτεινό), προβολή, «Δείξε λύση» */
+  var root = document.documentElement, body = document.body, doc = document.getElementById('doc');
+  if (!doc || body.getAttribute('data-kit')) return;
+  body.setAttribute('data-kit', '1');
+  function get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function put(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+  var theme = get('synapsi-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  var proj = get('aepp-proj') === '1';
+  function mk(id, txt){ var b = document.createElement('button'); b.type = 'button'; b.id = id; b.className = 'kit-btn'; b.textContent = txt; return b; }
+  var bTheme = mk('k-theme', ''), bProj = mk('k-proj', 'Προβολή'), bAll = null;
+  function applyTheme(){ root.setAttribute('data-theme', theme); bTheme.textContent = theme === 'dark' ? '☀ Φωτεινό' : '☾ Σκοτεινό'; bTheme.setAttribute('aria-label', theme === 'dark' ? 'Φωτεινό θέμα' : 'Σκοτεινό θέμα'); }
+  function fit(){
+    if (!proj){ doc.style.zoom = ''; doc.style.maxWidth = ''; return; }
+    var W = window.innerWidth, z = W < 700 ? 1.12 : 1.38;
+    doc.style.zoom = z; doc.style.maxWidth = Math.max(300, Math.min(900, (W - 36) / z)) + 'px';
+  }
+  function applyProj(){ body.classList.toggle('proj', proj); bProj.setAttribute('aria-pressed', String(proj)); fit(); }
+  window.addEventListener('resize', fit);
+  bTheme.onclick = function(){ theme = theme === 'dark' ? 'light' : 'dark'; put('synapsi-theme', theme); applyTheme(); };
+  bProj.onclick = function(){ proj = !proj; put('aepp-proj', proj ? '1' : '0'); applyProj(); };
+  applyTheme(); applyProj();
+
+  var bar = document.getElementById('bar');
+  var teacherSec = doc.querySelector('section.teacher');
+  if (bar){
+    var anchor = document.getElementById('status') || null;
+    if (teacherSec){ bAll = mk('k-all', 'Όλες οι λύσεις'); bar.insertBefore(bAll, anchor); }
+    bar.insertBefore(bProj, anchor); bar.insertBefore(bTheme, anchor);
+  } else {
+    var f = document.createElement('div'); f.id = 'kitfloat';
+    f.appendChild(bTheme); body.appendChild(f); proj = false; applyProj();
+  }
+  if (bAll){
+    bAll.onclick = function(){ var on = !body.classList.contains('rt-all'); body.classList.toggle('rt-all', on); bAll.setAttribute('aria-pressed', String(on)); };
+  }
+
+  /* λυμένα: φαίνεται η εκφώνηση και το «Κατανοώ», τα υπόλοιπα με κουμπί */
+  doc.querySelectorAll('.box.solved').forEach(function(box){
+    var steps = box.querySelector('.steps');
+    if (!steps) return;
+    var st = steps.querySelectorAll(':scope > .step');
+    if (st.length < 2) return;
+    box.classList.add('rt-closed');
+    for (var i = 1; i < st.length; i++) st[i].classList.add('rt-hide');
+    var w = document.createElement('div'); w.className = 'rt-showstep'; w.contentEditable = 'false';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε τη λύση';
+    b.onclick = function(){ box.classList.add('rt-open'); };
+    w.appendChild(b); st[0].after(w);
+  });
+
+  /* ασκήσεις: η απάντηση από τη σελίδα καθηγητή, κρυμμένη κάτω από την εκφώνηση */
+  if (teacherSec){
+    var ans = {};
+    teacherSec.querySelectorAll('.ans .q').forEach(function(q){ var n = q.querySelector('.qn'); if (n) ans[n.textContent.trim()] = q; });
+    doc.querySelectorAll('.exercises .q').forEach(function(q){
+      var n = q.querySelector(':scope > .qn'); if (!n) return;
+      var a = ans[n.textContent.trim()]; if (!a) return;
+      var w = document.createElement('div'); w.className = 'rt rt-ans'; w.contentEditable = 'false';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε λύση';
+      var bodyEl = document.createElement('div'); bodyEl.className = 'rt-body ans';
+      var c = a.cloneNode(true); var qn = c.querySelector('.qn'); if (qn) qn.remove();
+      bodyEl.appendChild(c);
+      b.onclick = function(){ var on = !w.classList.contains('rt-open'); w.classList.toggle('rt-open', on); b.textContent = on ? 'Κρύψε λύση' : 'Δείξε λύση'; };
+      w.appendChild(b); w.appendChild(bodyEl);
+      q.after(w);
+    });
+  }
+})();/*<KITJS*/</script>
+
+</body></html>

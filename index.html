@@ -1,0 +1,675 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>ΣΥΝΑΨΗ Πληροφορική</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;600;700;800&family=Noto+Sans:wght@400;600;700&display=swap">
+<style>
+/* Layout: one mobile-first column (max 560px) — a path of lessons like stations on a route, olive sign colours from the ΣΥΝΑΨΗ storefront */
+:root{
+  --bg:#F7F6F0; --surface:#FFFFFF; --ink:#2B3722; --body:#30342A; --muted:#5E6253; --line:#E1E1D7;
+  --header:#2B3722; --header-2:#3C4A30; --on-header:#FFFFFF; --header-muted:#D9C7AE; --gold:#C9AD8D;
+  --accent:#4F6230; --accent-soft:#EEF0E2; --ring:#DCE2C6;
+  --locked-bg:#EFEFE8; --locked-node:#E8E8E0; --locked-line:#CBCBBF; --locked-ink:#42463A;
+  --sos-bg:#FDF1E7; --sos-line:#E8B48A; --sos-ink:#8A3F0B; --new:#B4530F; --scrim:rgba(30,34,24,.55);
+  --display:"Commissioner","Noto Sans",system-ui,sans-serif;
+  --text:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141810; --surface:#1E2317; --ink:#EEEDE4; --body:#DADBCD; --muted:#B5B6A6; --line:#353B2A;
+  --header:#2B3722; --header-2:#3C4A30; --on-header:#FFFFFF; --header-muted:#D9C7AE; --gold:#C9AD8D;
+  --accent:#647A3E; --accent-soft:#283019; --ring:#3E4A2C;
+  --locked-bg:#191D13; --locked-node:#262B1D; --locked-line:#464C38; --locked-ink:#C5C6B6;
+  --sos-bg:#33241A; --sos-line:#7A4F2E; --sos-ink:#F2B98A; --new:#C4621A; --scrim:rgba(0,0,0,.6);
+  color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141810; --surface:#1E2317; --ink:#EEEDE4; --body:#DADBCD; --muted:#B5B6A6; --line:#353B2A;
+  --header:#2B3722; --header-2:#3C4A30; --on-header:#FFFFFF; --header-muted:#D9C7AE; --gold:#C9AD8D;
+  --accent:#647A3E; --accent-soft:#283019; --ring:#3E4A2C;
+  --locked-bg:#191D13; --locked-node:#262B1D; --locked-line:#464C38; --locked-ink:#C5C6B6;
+  --sos-bg:#33241A; --sos-line:#7A4F2E; --sos-ink:#F2B98A; --new:#C4621A; --scrim:rgba(0,0,0,.6);
+  color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--text);font-size:15px;line-height:1.55}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--header)}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.2;text-wrap:balance}
+p{margin:0}
+a{color:var(--accent)}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* header */
+.top{background:var(--header);color:var(--on-header)}
+.top .wrap{padding-block:16px 22px;display:flex;flex-direction:column;gap:16px}
+.bar{display:flex;justify-content:space-between;align-items:center}
+.ibtn{width:44px;height:44px;border-radius:12px;border:0;background:var(--header-2);color:var(--on-header);display:flex;align-items:center;justify-content:center;cursor:pointer}
+.logo{width:220px;max-width:100%;height:auto;display:block}
+.course{font:800 23px/1.2 var(--display);letter-spacing:-.01em}
+.teacher-card{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;background:var(--header-2)}
+.av{flex:none;width:40px;height:40px;border-radius:50%;background:var(--gold);color:#2B3722;display:flex;align-items:center;justify-content:center;font:800 14px var(--display)}
+.teacher-card b{display:block;font:700 14px/1.3 var(--display)}
+.teacher-card small{display:block;font-size:12px;line-height:1.4;color:var(--header-muted)}
+.intro{color:#EFE7DA;font-size:15px}
+.prog{display:flex;flex-direction:column;gap:8px}
+.prog-row{display:flex;justify-content:space-between;font:600 13px var(--display);font-variant-numeric:tabular-nums}
+.prog-row span:last-child{color:var(--header-muted)}
+.track{height:8px;border-radius:4px;background:var(--header-2)}
+.track i{display:block;height:8px;border-radius:4px;background:var(--gold)}
+
+/* path */
+main{padding-block:8px 8px}
+.group{margin-top:22px}
+.group-h{display:flex;flex-direction:column;gap:2px;margin:0 0 12px 50px}
+.group-h small{font:700 11.5px var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.group-h h2{font-size:17px}
+.st{display:flex;gap:14px;text-decoration:none;color:var(--ink)}
+.rail{display:flex;flex-direction:column;align-items:center;width:36px;flex:none}
+.node{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font:800 13px var(--display);font-variant-numeric:tabular-nums}
+.line{width:3px;flex:1;min-height:14px}
+.card{flex:1;min-width:0;margin-bottom:12px;padding:12px 14px;border-radius:14px;display:flex;flex-direction:column;gap:2px}
+.card .n{font:600 12px var(--display);color:var(--muted)}
+.card .t{font:700 15.5px/1.3 var(--display)}
+.st.open .node{background:var(--ink);color:var(--bg)}
+.st.open .line{background:var(--ink)}
+.st.open .card{background:var(--surface);border:1px solid var(--line)}
+.st.new .node{background:var(--accent);color:#fff;box-shadow:0 0 0 5px var(--ring)}
+.st.new .card{border:2px solid var(--accent)}
+.st.locked .node{background:var(--locked-node);border:1.5px solid var(--locked-line);color:var(--muted)}
+.st.locked .line,.st.open.last-open .line{background:var(--locked-line)}
+.st.locked .card{background:var(--locked-bg);border:1px solid transparent}
+.st.locked .t{color:var(--locked-ink)}
+.st.test .node{width:36px;height:36px;border-radius:10px;background:var(--surface);border:2px dashed var(--accent);color:var(--accent)}
+.st.test .line{background:var(--locked-line)}
+.st.test .card{background:transparent;border:2px dashed var(--accent)}
+.st.test .n{display:flex;align-items:center;gap:6px;color:var(--accent);font:800 11px var(--display);letter-spacing:.08em}
+.st.test .t{color:var(--ink)}
+.st.final .node{border-radius:10px;background:var(--accent);color:#fff;box-shadow:4px 4px 0 -2px var(--bg),4px 4px 0 0 var(--accent),8px 8px 0 -2px var(--bg),8px 8px 0 0 var(--accent)}
+.st.final .card{background:var(--accent-soft);border:2px dashed var(--accent);gap:6px;margin:0 10px 22px 0;box-shadow:5px 5px 0 -2px var(--bg),5px 5px 0 0 var(--accent),10px 10px 0 -2px var(--bg),10px 10px 0 0 var(--accent)}
+.st.final .n{display:flex;align-items:center;gap:6px;color:var(--accent);font:800 11px var(--display);letter-spacing:.08em}
+.st.final .t{font-size:17.5px;color:var(--ink)}
+.st.final .d{font-size:13.5px;line-height:1.45;color:var(--muted)}
+.st.final .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:2px}
+.st.final .tags span{font:700 11.5px var(--display);padding:4px 9px;border-radius:999px;background:var(--surface);color:var(--accent);border:1px solid var(--accent)}
+.badge{align-self:flex-start;font:800 10.5px var(--display);letter-spacing:.08em;padding:3px 8px;border-radius:6px;background:var(--new);color:#fff;margin-bottom:2px}
+.badge.soon{background:var(--accent-soft);color:var(--accent)}
+.st.open:hover .card{border-color:var(--accent)}
+
+/* panels */
+.panel{margin:20px 0;padding:18px;border-radius:16px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:12px}
+.panel h3{font-size:17px}
+.panel p{color:var(--muted);font-size:14.5px}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 16px;border-radius:14px;border:0;background:var(--accent);color:#fff;font:700 15.5px var(--display);text-decoration:none;cursor:pointer;text-align:center}
+.btn.ghost{background:transparent;border:1.5px solid var(--ink);color:var(--ink)}
+.btn.gold{background:var(--gold);color:#2B3722}
+.btn[disabled]{opacity:.55;cursor:not-allowed}
+.foot{border-top:1px solid var(--line);margin-top:8px}
+.foot .wrap{padding-block:18px 28px;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--muted)}
+.foot b{font-weight:700}
+.beta{display:inline-block;font:800 10.5px var(--display);letter-spacing:.08em;padding:3px 8px;border-radius:6px;background:var(--new);color:#fff;width:max-content}
+
+/* subpages */
+.sub-top{background:var(--surface);border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.sub-top .wrap{padding-block:12px;display:flex;align-items:center;gap:12px}
+.sub-top .ibtn{background:var(--locked-bg);color:var(--ink)}
+.sub-top h1{font-size:18px}
+.page{padding-block:20px 32px;display:flex;flex-direction:column;gap:16px}
+.hero-box{padding:20px;border-radius:18px;background:var(--header);color:#fff;display:flex;flex-direction:column;gap:8px}
+.hero-box h2{font-size:23px}
+.hero-box p{color:#EFE7DA}
+.item{padding:16px;border-radius:14px;background:var(--surface);border:1px solid var(--line);display:flex;gap:14px;align-items:flex-start}
+.item .k{flex:none;width:40px;height:40px;border-radius:12px;background:var(--accent-soft);color:var(--accent);display:flex;align-items:center;justify-content:center;font:800 15px var(--display)}
+.item b{display:block;font:700 15.5px/1.3 var(--display);margin-bottom:3px}
+.item span{font-size:14px;color:var(--muted)}
+.opt{padding:16px;border-radius:14px;display:flex;flex-direction:column;gap:6px}
+.opt.light{background:var(--surface);border:1px solid var(--line)}
+.opt.dark{background:var(--header);color:#fff}
+.opt.dark p{color:#EFE7DA}
+.opt-h{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.opt-h b{font:800 16px var(--display)}
+.chip{font:700 11px var(--display);letter-spacing:.05em;padding:4px 8px;border-radius:6px;background:var(--accent-soft);color:var(--accent)}
+.opt.dark .chip{background:var(--gold);color:#2B3722}
+.note{padding:12px 14px;border-radius:12px;background:var(--locked-bg);color:var(--locked-ink);font-size:13.5px}
+.photo{width:100%;max-width:100%;aspect-ratio:4/3;object-fit:cover;object-position:center 40%;border-radius:16px;display:block}
+.team{display:flex;flex-direction:column;gap:10px}
+.person{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.person .av{width:52px;height:52px;background:var(--header);color:var(--gold);font-size:16px}
+.person b{display:block;font:700 16px var(--display)}
+.person span{font-size:14px;color:var(--muted)}
+.contact{display:flex;flex-direction:column;gap:10px}
+.crow{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:14px;background:var(--surface);border:1px solid var(--line)}
+.crow svg{flex:none;color:var(--accent)}
+.crow .v{flex:1;min-width:0;font-weight:600;user-select:all;overflow-wrap:anywhere}
+.mini{min-height:36px;padding:0 12px;border-radius:10px;border:1.5px solid var(--accent);background:transparent;color:var(--accent);font:700 13px var(--display);cursor:pointer;text-decoration:none;display:inline-flex;align-items:center}
+.seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.seg button{min-height:80px;padding:12px;border-radius:14px;border:1px solid var(--locked-line);background:var(--surface);text-align:left;display:flex;flex-direction:column;gap:4px;cursor:pointer}
+.seg button[aria-pressed="true"]{border:2px solid var(--accent);background:var(--accent-soft)}
+.seg b{font:700 15px var(--display)}
+.seg small{font-size:12px;color:var(--muted)}
+fieldset{border:1px solid var(--line);border-radius:16px;padding:16px;margin:0;display:flex;flex-direction:column;gap:12px;background:var(--surface)}
+legend{font:700 14px var(--display);padding:0 6px}
+label{font-size:14px;font-weight:600;display:flex;flex-direction:column;gap:6px}
+input,select,textarea{min-height:44px;padding:0 12px;border-radius:10px;border:1px solid var(--locked-line);background:var(--bg);color:var(--ink);font:15px var(--text)}
+textarea{padding:10px 12px;resize:none}
+.soon-box{padding:18px;border-radius:16px;border:1.5px dashed var(--locked-line);display:flex;flex-direction:column;gap:10px}
+.soon-box ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;color:var(--body)}
+.preview{display:flex;flex-direction:column;gap:8px;opacity:.6;pointer-events:none}
+.pv{padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:6px}
+.pv .r{display:flex;justify-content:space-between;font-weight:700;font-size:14px}
+.pv .tr{height:7px;border-radius:4px;background:var(--locked-node)}
+.pv .tr i{display:block;height:7px;border-radius:4px;background:var(--accent)}
+
+
+/* demos */
+.soon-head{display:flex;flex-direction:column;gap:6px}
+.soon-head h2{font-size:21px}
+.soon-head p{color:var(--muted);font-size:14.5px}
+.demo{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:18px;border:1.5px dashed var(--locked-line);background:var(--bg)}
+.demo-note{margin-top:-8px;font-size:12px;color:var(--muted);text-align:center}
+.pv{padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:6px;min-width:0}
+.pv .r{display:flex;justify-content:space-between;gap:8px;font:700 14px/1.3 var(--display)}
+.pv small,.stu small{font-size:12.5px;color:var(--muted)}
+.tr{display:block;height:7px;border-radius:4px;background:var(--locked-node)}
+.tr i{display:block;height:7px;border-radius:4px;background:var(--accent)}
+.tr i.good{background:var(--ink)} .tr i.low{background:#D98A47} .tr i.past{background:var(--locked-line)}
+.lv{font:700 13px var(--display)} .lv.good{color:#3E6B26} .lv.ok{color:var(--accent)} .lv.low{color:var(--sos-ink)}
+:root[data-theme="dark"] .lv.good{color:#9CC27A}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .lv.good{color:#9CC27A}}
+.est{padding:18px;border-radius:16px;background:var(--header);color:#fff;display:flex;flex-direction:column;gap:8px}
+.est small{color:var(--header-muted);font-size:12.5px}
+.est div:not(.track){display:flex;align-items:baseline;gap:10px}
+.est b{font:800 40px/1 var(--display);letter-spacing:-1px}
+.est span{font:700 15px var(--display);color:var(--gold)}
+.nextstep{padding:14px;border-radius:12px;background:var(--sos-bg);border:1.5px solid var(--sos-line);display:flex;flex-direction:column;gap:4px;color:var(--ink)}
+.nextstep small{font:800 12px var(--display);letter-spacing:.06em;color:var(--sos-ink)}
+.r-h{display:flex;align-items:center;gap:8px;margin-top:4px;color:var(--ink)} .r-h b{font:700 14px var(--display)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.pv.lockd{background:var(--locked-bg);border-color:transparent;font:700 13.5px var(--display);color:var(--locked-ink);min-height:70px;justify-content:space-between}
+.pv.lockd .tr{width:60%}
+.pv.warn{background:var(--sos-bg);border-color:var(--sos-line)} .pv.warn .big,.pv.warn small{color:var(--sos-ink)}
+.big{font:800 22px var(--display)}
+.kv{display:flex;justify-content:space-between;gap:8px;font-size:13.5px} .kv span{color:var(--muted)}
+.fake-in{display:block;min-height:40px;padding:9px 12px;border-radius:9px;border:1px solid var(--locked-line);background:var(--bg);font-size:14px;font-weight:600;color:var(--ink)}
+.fake-in.tall{min-height:64px;font-weight:400;line-height:1.5}
+.fake-btn{display:flex;align-items:center;justify-content:center;min-height:40px;border-radius:10px;border:1.5px dashed var(--accent);color:var(--accent);font:700 13.5px var(--display)}
+.fake-btn.solid{border-style:solid;background:var(--accent);color:#fff}
+.btn[aria-disabled="true"]{cursor:default}
+.tbh{display:flex;align-items:center;gap:10px;padding:12px;border-radius:14px;background:var(--header);color:#fff} .tbh b{font:700 15px var(--display)}
+.tabs{display:flex;gap:8px}
+.tab{min-height:38px;min-width:52px;padding:0 14px;border-radius:19px;border:1px solid var(--line);background:var(--surface);font:700 14px var(--display);cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
+.tab[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#2B3722}
+.tab.add{border-style:dashed;color:var(--muted);cursor:default}
+.code{font:800 14px var(--display);letter-spacing:.08em;color:var(--accent)}
+.stu{position:relative;display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);text-decoration:none;color:var(--ink)}
+.stu:hover{border-color:var(--accent)}
+.stu svg{flex:none;color:var(--muted)}
+.stu-b{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.stu-b .r{display:flex;justify-content:space-between;gap:8px;font:700 14.5px var(--display)}
+.av.sm{width:34px;height:34px;font-size:12px;background:var(--accent-soft);color:var(--accent)}
+.hint{position:absolute;top:-10px;right:12px;font:800 10.5px var(--display);letter-spacing:.04em;padding:3px 8px;border-radius:6px;background:var(--new);color:#fff}
+.stu:first-of-type{margin-top:8px}
+.where{padding:12px 14px;border-radius:12px;background:var(--header);color:#fff;display:flex;flex-direction:column;gap:3px}
+.where small{font:700 11.5px var(--display);letter-spacing:.08em;color:var(--gold)} .where b{font:700 14.5px/1.4 var(--display)}
+.log{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px} .log:last-child{border-bottom:0}
+.log b{flex:none;width:44px;color:var(--accent);font:800 13px var(--display)} .log span{display:flex;flex-direction:column;gap:2px}
+.cmp{display:flex;align-items:center;gap:8px;font:700 13px var(--display)} .cmp span:first-child{width:46px} .cmp .tr{flex:1}
+.invite{flex-direction:row;align-items:center;gap:12px;background:var(--accent-soft);border-color:transparent} .invite b{display:block;font:700 14px var(--display)}
+.invite small{font:700 11.5px var(--display);letter-spacing:.06em;color:var(--accent)}
+.chips{display:flex;flex-wrap:wrap;gap:6px} .chips .chip{background:var(--locked-bg);color:var(--locked-ink)} .chips .chip.on{background:var(--accent);color:#fff}
+.dl .dh{margin-bottom:2px}
+
+
+/* teacher sales page */
+.wl{padding:20px 16px;border-radius:20px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:12px}
+.eyebrow{font:700 11.5px var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.wl h2{font-size:26px;letter-spacing:-.01em}
+.wl p{color:var(--body);font-size:15px}
+.phones{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:4px}
+.phones figure{margin:0;display:flex;flex-direction:column;gap:6px;align-items:stretch}
+figcaption{text-align:center;font:700 13px var(--display);color:var(--muted)}
+.ph{border-radius:20px;overflow:hidden;border:5px solid var(--ink);background:#F7F6F0;box-shadow:0 6px 20px rgba(20,24,16,.12)}
+.ph-top{background:var(--pb);color:#fff;padding:10px 9px 12px;display:flex;flex-direction:column;gap:7px;transition:background .25s}
+.ph-logo{display:flex;align-items:center;gap:6px;min-height:28px}
+.mono{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font:800 12px var(--display)}
+.mono-t{font:700 9.5px/1.15 var(--display)}
+.ph-course{font:800 12px/1.2 var(--display)}
+.ph-t{display:flex;gap:6px;align-items:center;background:var(--pb2);border-radius:8px;padding:5px}
+.ph-av{flex:none;width:20px;height:20px;border-radius:50%;background:var(--pa);color:var(--pb);font:800 8px var(--display);display:flex;align-items:center;justify-content:center}
+.ph-t b{display:block;font:700 8.5px/1.2 var(--display)} .ph-t small{display:block;font-size:7px;line-height:1.25;opacity:.8}
+.ph-tr{display:block;height:4px;border-radius:2px;background:var(--pb2)} .ph-tr i{display:block;width:56%;height:4px;border-radius:2px;background:var(--pa)}
+.ph-body{padding:9px;display:flex;flex-direction:column;gap:6px}
+.ph-row{display:flex;gap:6px;align-items:center}
+.ph-n{flex:none;width:16px;height:16px;border-radius:50%;background:var(--pb);color:#fff;font:800 8px var(--display);display:flex;align-items:center;justify-content:center}
+.ph-n.lk{background:#E8E8E0;color:#5E6253} .ph-n.lk svg{width:8px;height:8px}
+.ph-l{flex:1;height:18px;border-radius:5px;background:#fff;border:1px solid #E1E1D7} .ph-l.lk{background:#EFEFE8;border-color:transparent}
+.sw-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;font:600 13.5px var(--display);color:var(--muted)}
+.sw{width:40px;height:40px;border-radius:50%;border:3px solid transparent;position:relative;cursor:pointer;padding:0}
+.sw i{position:absolute;right:3px;bottom:3px;width:12px;height:12px;border-radius:50%}
+.sw[aria-pressed="true"]{border-color:var(--ink);outline:2px solid var(--bg);outline-offset:-5px}
+.feat{padding:16px;border-radius:16px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:8px}
+.feat h3{font-size:17px}
+.feat p{color:var(--muted);font-size:14.5px}
+.feat-v{display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:12px;background:var(--bg)}
+.chip.on2{background:var(--accent-soft);color:var(--accent);font-size:12px;padding:6px 10px}
+.lvls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.lvls span{text-align:center;padding:8px 4px;border-radius:9px;font:700 12.5px var(--display);border:1px solid var(--line);background:var(--surface)}
+.lvls .lvl2{border:2px solid var(--accent);background:var(--accent-soft)}
+.mini-doc{padding:10px 12px;border-radius:10px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.mini-doc b{font:700 14px var(--display)} .mini-doc small{font-size:12.5px;color:var(--muted)}
+.mbar{display:grid;grid-template-columns:88px minmax(0,1fr) 38px;gap:8px;align-items:center;font-size:13px}
+.mbar b{text-align:right;font-variant-numeric:tabular-nums}
+.link{font:700 13.5px var(--display);text-decoration:none}
+.steps-mini{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px}
+.steps-mini span{display:flex;flex-direction:column;align-items:center;gap:4px;font:600 12px var(--display);text-align:center}
+.steps-mini b{width:28px;height:28px;border-radius:50%;background:#0B8174;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px}
+.cta{border-radius:18px;background:var(--header);color:#fff;border:2px solid var(--gold);box-shadow:0 8px 24px rgba(20,24,16,.18)}
+.cta summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:14px;padding:18px;min-height:76px}
+.cta summary::-webkit-details-marker{display:none}
+.cta summary b{display:block;font:800 19px/1.25 var(--display)}
+.cta summary small{display:block;margin-top:3px;font-size:13.5px;color:var(--gold)}
+.cta-arrow{margin-left:auto;flex:none;width:44px;height:44px;border-radius:50%;background:var(--gold);color:#2B3722;display:flex;align-items:center;justify-content:center;font:800 20px var(--display);transition:transform .2s}
+.cta[open] .cta-arrow{transform:rotate(90deg)}
+.cta summary:hover .cta-arrow{transform:translateX(3px)}
+.cta-body{padding:0 18px 18px;display:flex;flex-direction:column;gap:10px}
+.chip.deluxe{background:linear-gradient(135deg,#FFF8E6,#F3E2B8);color:#6B4E12;border:1.5px solid #C9A23F;font-size:12px;padding:5px 10px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.6)}
+.cta p{color:#EFE7DA;font-size:14.5px}
+.cta .crow{background:var(--header-2);border-color:transparent;color:#fff} .cta .crow svg{color:var(--gold)}
+.cta .mini{border-color:var(--gold);color:var(--gold)}
+@media (prefers-reduced-motion:reduce){.ph-top{transition:none}}
+
+
+.fmts{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px}
+.fmts li{position:relative;padding-left:26px;font-size:14.5px;color:var(--ink)}
+.fmts li::before{content:"";position:absolute;left:4px;top:.45em;width:9px;height:9px;border-radius:50%;background:var(--accent)}
+.fmts li.deluxe{font-weight:700;color:#8A6416;padding:6px 10px 6px 30px;border:1.5px solid #C9A23F;border-radius:8px;width:max-content;max-width:100%}
+.fmts li.deluxe::before{content:"★";background:none;width:auto;height:auto;left:10px;top:5px;color:#C9A23F;font-size:14px}
+:root[data-theme="dark"] .fmts li.deluxe{color:#E3C46F}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .fmts li.deluxe{color:#E3C46F}}
+.lvls button{text-align:center;min-height:44px;padding:8px 4px;border-radius:10px;font:700 13px var(--display);border:1.5px solid var(--locked-line);background:var(--surface);cursor:pointer}
+.lvls button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:#fff}
+.mini-doc.row{flex-direction:row;align-items:center;gap:8px}
+.md-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.md-ic{flex:none;width:40px;height:40px;border-radius:10px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);opacity:.6;cursor:not-allowed}
+.btn.sm{min-height:44px;font-size:14px}
+.cta{padding:18px;border-radius:18px;background:var(--header);color:#fff;border:2px solid var(--gold);display:flex;flex-direction:column;gap:10px}
+.cta h3{font-size:19px}
+.rep-h{display:flex;justify-content:space-between;align-items:center}
+.lv.na{color:var(--muted)}
+
+/* drawer + sheet */
+.scrim{position:fixed;inset:0;background:var(--scrim);z-index:20}
+.drawer{position:fixed;top:0;bottom:0;left:0;width:min(320px,86vw);background:var(--surface);z-index:21;overflow-y:auto;
+  padding:calc(20px + env(safe-area-inset-top,0px)) 14px calc(20px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:18px}
+.dh{font:700 11.5px var(--display);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);padding:0 8px}
+.dl{display:flex;flex-direction:column;gap:2px}
+.di{min-height:48px;padding:0 10px;border-radius:12px;display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);font:600 15px var(--display);border:0;background:none;cursor:pointer;text-align:left;width:100%}
+.di:hover{background:var(--locked-bg)}
+.di.cur{background:var(--accent-soft);font-weight:700}
+.di.off{color:var(--muted)}
+.di .r{margin-left:auto;display:flex;align-items:center;gap:6px}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:21;background:var(--surface);border-radius:22px 22px 0 0;max-height:85vh;overflow-y:auto}
+.sheet .wrap{padding-block:14px calc(24px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:16px}
+.grab{align-self:center;width:40px;height:5px;border-radius:3px;background:var(--locked-line)}
+.sheet ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font:600 14px var(--display);z-index:30}
+@media (prefers-reduced-motion:no-preference){.drawer{animation:in .2s ease-out}.sheet{animation:up .2s ease-out}}
+@keyframes in{from{transform:translateX(-100%)}}
+@keyframes up{from{transform:translateY(100%)}}
+</style>
+
+<div id="app"></div>
+<div id="layer"></div>
+
+<script>
+/* ---------- ρυθμίσεις πιλότου ---------- */
+const OPEN_UP_TO = 20;          // ανοιχτά μαθήματα 1..OPEN_UP_TO
+const NEW_LESSONS = [18,19,20]; // σήμα «ΝΕΑ»
+const SHARE_URL = "https://konstantinost-kt.github.io/aepp/";
+const ORG = { phone:"2310 306051", email:"sinapsi.edu@gmail.com", address:"Ι. Πανταζίδου 36, 54352 Πυλαία Θεσσαλονίκης",
+  maps:"https://www.google.com/maps/search/?api=1&query=%CE%99.+%CE%A0%CE%B1%CE%BD%CF%84%CE%B1%CE%B6%CE%AF%CE%B4%CE%BF%CF%85+36+%CE%A0%CF%85%CE%BB%CE%B1%CE%AF%CE%B1" };
+const GROUPS = [
+  {from:1,to:5,kicker:"Μέρος Α",title:"Από το πρόβλημα στον αλγόριθμο"},
+  {from:6,to:9,kicker:"Μέρος Β",title:"Η ΓΛΩΣΣΑ και το πρώτο πρόγραμμα"},
+  {from:10,to:17,kicker:"Μέρος Γ",title:"Επιλογή και επανάληψη"},
+  {from:18,to:29,kicker:"Μέρος Δ",title:"Δομές δεδομένων και πίνακες"},
+  {from:30,to:35,kicker:"Μέρος Ε",title:"Υποπρογράμματα"},
+  {from:36,to:38,kicker:"Μέρος ΣΤ",title:"Δυναμικές δομές δεδομένων"},
+  {from:39,to:41,kicker:"Μέρος Ζ",title:"Αντικειμενοστραφής προγραμματισμός"}
+];
+const TEST_AFTER = {5:"1–5", 9:"6–9", 11:"10–11", 17:"12–17", 23:"18–23", 29:"24–29", 35:"30–35", 38:"36–38", 41:"39–41"}; // μετά από ποιο μάθημα μπαίνει διαγώνισμα
+const LESSONS = [{"n": 1, "title": "Η έννοια του προβλήματος", "goals": ["περιγράφεις τι είναι <b>πρόβλημα</b>", "εντοπίζεις <b>ασάφειες</b> σε μια διατύπωση", "ξεχωρίζεις <b>δεδομένα</b> από <b>πληροφορίες</b>", "<b>αναλύεις</b> ένα πρόβλημα σε απλούστερα, με διάγραμμα", "βρίσκεις τα <b>δεδομένα</b> και τα <b>ζητούμενα</b>", "αναφέρεις τα <b>3 στάδια</b> αντιμετώπισης"]}, {"n": 2, "title": "Τι είναι αλγόριθμος", "goals": ["διατυπώνεις τον <b>ορισμό</b> του αλγορίθμου", "περιγράφεις τα <b>5 κριτήρια</b> που πρέπει να ικανοποιεί", "εξηγείς γιατί οι αλγόριθμοι είναι <b>σημαντικοί</b>", "αναφέρεις τις <b>4 σκοπιές</b> από τις οποίες τους μελετά η Πληροφορική", "περιγράφεις τους <b>4 τρόπους</b> αναπαράστασης ενός αλγορίθμου", "χρησιμοποιείς τα <b>σχήματα</b> του διαγράμματος ροής"]}, {"n": 3, "title": "Από την εκφώνηση στον αλγόριθμο", "goals": ["γράφεις αλγόριθμο σε <b>ψευδογλώσσα</b> και <b>διάγραμμα ροής</b>", "υπολογίζεις εκφράσεις με τη σωστή <b>ιεραρχία πράξεων</b>", "χρησιμοποιείς <b>div</b> και <b>mod</b>, και βγάζεις τα <b>ψηφία</b> ενός αριθμού", "χρησιμοποιείς <b>έτοιμες συναρτήσεις</b> και κάνεις <b>στρογγυλοποίηση</b>", "λύνεις προβλήματα με <b>ποσοστά, ΦΠΑ, τόκο</b> και <b>μονάδες χρόνου</b>", "υπολογίζεις <b>λογικές εκφράσεις</b> με και, ή, όχι"]}, {"n": 4, "title": "Ανάλυση προβλημάτων", "goals": ["εξηγείς <b>γιατί</b> χρειάζεται ανάλυση πριν από τον αλγόριθμο", "αναφέρεις τι <b>περιλαμβάνει</b> η ανάλυση ενός προβλήματος", "απαντάς στις <b>5 ερωτήσεις</b> της ανάλυσης για ένα πρόβλημα", "συγκρίνεις <b>δύο διαφορετικές αναλύσεις</b> του ίδιου προβλήματος", "αναφέρεις γιατί μας ενδιαφέρουν οι <b>μέθοδοι</b> ανάλυσης", "καταλαβαίνεις γιατί το <b>μέγεθος</b> ενός προβλήματος μετράει"]}, {"n": 5, "title": "Το πρόγραμμα και η σχεδίασή του", "goals": ["αναφέρεις τα <b>3 στάδια</b> επίλυσης ενός προβλήματος με υπολογιστή", "εξηγείς τι είναι <b>πρόγραμμα</b> και γιατί ο υπολογιστής δεν είναι «έξυπνος»", "περιγράφεις την <b>ιεραρχική σχεδίαση</b> και σχεδιάζεις ιεραρχικό διάγραμμα", "εξηγείς τι προσφέρει ο <b>τμηματικός προγραμματισμός</b>", "αναφέρεις τις <b>3 δομές</b> του δομημένου προγραμματισμού", "απαριθμείς τα <b>6 πλεονεκτήματα</b> του δομημένου προγραμματισμού και γιατί αποφεύγουμε το GOTO"]}, {"n": 6, "title": "Γλώσσες και προγραμματιστικά περιβάλλοντα", "goals": ["αναφέρεις από τι <b>προσδιορίζεται</b> μια γλώσσα", "συγκρίνεις <b>φυσικές</b> και <b>τεχνητές</b> γλώσσες", "εξηγείς τι κάνουν ο <b>μεταγλωττιστής</b> και ο <b>διερμηνευτής</b>", "περιγράφεις τα στάδια από το <b>πηγαίο</b> στο <b>εκτελέσιμο</b> πρόγραμμα", "ξεχωρίζεις <b>συντακτικά</b> από <b>λογικά</b> λάθη", "αναφέρεις τα εργαλεία ενός <b>προγραμματιστικού περιβάλλοντος</b>"]}, {"n": 7, "title": "Το αλφάβητο της ΓΛΩΣΣΑΣ, τύποι, σταθερές, μεταβλητές", "goals": ["αναφέρεις από τι αποτελείται το <b>αλφάβητο</b> της ΓΛΩΣΣΑΣ", "βρίσκεις τον <b>τύπο</b> κάθε τιμής: ακέραια, πραγματική, χαρακτήρας, λογική", "κρίνεις αν ένα <b>όνομα</b> είναι αποδεκτό και εξηγείς γιατί", "ξεχωρίζεις τη <b>σταθερά</b> από τη <b>μεταβλητή</b> και δηλώνεις συμβολικές σταθερές", "γράφεις το <b>τμήμα δηλώσεων</b> για ένα πρόγραμμα ή μια εκφώνηση", "περιγράφεις τη <b>δομή ενός προγράμματος</b> σε ΓΛΩΣΣΑ"]}, {"n": 8, "title": "Τελεστές, συναρτήσεις, εκφράσεις", "goals": ["χρησιμοποιείς τους <b>αριθμητικούς τελεστές</b> και ξέρεις τη διαφορά <b>/</b> και <b>div</b>", "βρίσκεις τον <b>τύπο του αποτελέσματος</b> μιας πράξης", "χρησιμοποιείς τις <b>συναρτήσεις</b> της ΓΛΩΣΣΑΣ, και την Α_Μ με <b>αρνητικούς</b>", "μετατρέπεις έναν <b>μαθηματικό τύπο</b> σε έκφραση της ΓΛΩΣΣΑΣ και αντίστροφα", "υπολογίζεις εκφράσεις με τη σωστή <b>ιεραρχία</b> πράξεων", "γράφεις και υπολογίζεις <b>λογικές εκφράσεις</b> με ΚΑΙ, Η, ΟΧΙ"]}, {"n": 9, "title": "Το πρώτο σου πρόγραμμα: εκχώρηση, είσοδος, έξοδος", "goals": ["χρησιμοποιείς σωστά την <b>εντολή εκχώρησης</b> και ελέγχεις τον <b>τύπο</b>", "διαβάζεις δεδομένα με <b>ΔΙΑΒΑΣΕ</b> και εμφανίζεις μηνύματα και αποτελέσματα με <b>ΓΡΑΨΕ</b>", "γράφεις <b>πλήρες πρόγραμμα</b> σε ΓΛΩΣΣΑ, με δηλώσεις και σχόλια", "μετατρέπεις <b>αλγόριθμο</b> ή <b>διάγραμμα ροής</b> σε πρόγραμμα και αντίστροφα", "κάνεις <b>πίνακα τιμών</b> και γράφεις τι θα εμφανιστεί στην <b>οθόνη</b>", "βρίσκεις και διορθώνεις <b>λάθη</b> σε έτοιμα προγράμματα"]}, {"n": 10, "title": "Δομή επιλογής: ΑΝ … ΤΟΤΕ … ΑΛΛΙΩΣ", "goals": ["γράφεις <b>απλή</b> και <b>σύνθετη επιλογή</b> σε ψευδογλώσσα, διάγραμμα ροής και ΓΛΩΣΣΑ", "διατυπώνεις <b>συνθήκες</b> με συγκρίσεις αριθμών και <b>χαρακτήρων</b> και με ΚΑΙ, Η, ΟΧΙ", "προστατεύεις το πρόγραμμα από <b>λάθος δεδομένα</b> και διαίρεση με το μηδέν", "βρίσκεις τον <b>μεγαλύτερο</b> από δύο ή τρεις τιμές και βάζεις δύο τιμές σε <b>σειρά</b>", "ξεχωρίζεις <b>διαδοχικά ΑΝ</b> από ένα <b>ΑΝ … ΑΛΛΙΩΣ</b>", "κάνεις <b>πίνακα τιμών</b> με συνθήκες"]}, {"n": 11, "title": "Πολλαπλή επιλογή: ΑΛΛΙΩΣ_ΑΝ, εμφωλευμένα ΑΝ, ΕΠΙΛΕΞΕ", "goals": ["γράφεις πολλαπλή επιλογή με <b>ΑΝ … ΑΛΛΙΩΣ_ΑΝ</b> σε ψευδογλώσσα, διάγραμμα ροής και ΓΛΩΣΣΑ", "χρησιμοποιείς <b>ΕΠΙΛΕΞΕ</b> με τιμές, περιοχές τιμών και συνθήκες", "γράφεις και διαβάζεις <b>εμφωλευμένα ΑΝ</b>", "κάνεις <b>μετατροπές</b> ανάμεσα σε εμφωλευμένα ΑΝ, ΑΛΛΙΩΣ_ΑΝ και ΕΠΙΛΕΞΕ", "ξεχωρίζεις <b>κλίμακα</b> από <b>κλιμακωτή χρέωση</b> και τις προγραμματίζεις σωστά", "αποφεύγεις <b>περιττούς ελέγχους</b> και λάθος σειρά συνθηκών"]}, {"n": 12, "title": "Δομή επανάληψης: ΟΣΟ … ΕΠΑΝΑΛΑΒΕ", "goals": ["εξηγείς τι είναι <b>βρόχος</b> και <b>ατέρμων βρόχος</b>", "γράφεις <b>ΟΣΟ … ΕΠΑΝΑΛΑΒΕ</b> σε ψευδογλώσσα, διάγραμμα ροής και ΓΛΩΣΣΑ", "χρησιμοποιείς <b>μετρητή</b>, <b>αθροιστή</b> και <b>μέσο όρο</b> σε επανάληψη", "διαβάζεις δεδομένα μέχρι μια <b>τιμή φρουρό</b>", "βρίσκεις <b>μέγιστο</b> και <b>ελάχιστο</b> από πολλές τιμές", "κάνεις <b>πίνακα τιμών</b> σε βρόχο και μετράς πόσες φορές εκτελείται"]}, {"n": 13, "title": "Δομή επανάληψης: ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ … ΜΕΧΡΙΣ_ΟΤΟΥ", "goals": ["γράφεις <b>ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ … ΜΕΧΡΙΣ_ΟΤΟΥ</b> σε ψευδογλώσσα, διάγραμμα ροής και ΓΛΩΣΣΑ", "εξηγείς τις <b>ομοιότητες και διαφορές</b> με το ΟΣΟ … ΕΠΑΝΑΛΑΒΕ", "κάνεις <b>έλεγχο εγκυρότητας</b> δεδομένων με ή χωρίς μήνυμα λάθους", "φτιάχνεις <b>μενού επιλογών</b> και ερώτηση «Συνέχεια (Ν/Ο);»", "γράφεις βρόχο με <b>δύο λόγους τερματισμού</b> και βρίσκεις μετά ποιος ίσχυσε", "κάνεις <b>πίνακα τιμών</b> και μετράς πόσες φορές εκτελείται ο βρόχος"]}, {"n": 14, "title": "Δομή επανάληψης: ΓΙΑ … ΑΠΟ … ΜΕΧΡΙ", "goals": ["γράφεις <b>ΓΙΑ … ΑΠΟ … ΜΕΧΡΙ … ΜΕ_ΒΗΜΑ</b> σε ψευδογλώσσα, διάγραμμα ροής και ΓΛΩΣΣΑ", "βρίσκεις <b>πόσες φορές</b> εκτελείται ένας βρόχος και την <b>τελική τιμή</b> της μεταβλητής", "χειρίζεσαι <b>θετικό, αρνητικό, πραγματικό ή μηδενικό</b> βήμα", "βρίσκεις μέγιστο, άθροισμα και μέσο όρο από <b>γνωστό πλήθος</b> τιμών", "γράφεις <b>εμφωλευμένους βρόχους</b> και τηρείς τους τρεις κανόνες τους", "επιλέγεις ανάμεσα σε <b>ΟΣΟ, ΜΕΧΡΙΣ_ΟΤΟΥ και ΓΙΑ</b>"]}, {"n": 15, "title": "Λάθη και εκσφαλμάτωση", "goals": ["διακρίνεις <b>συντακτικά</b> λάθη, λάθη <b>κατά την εκτέλεση</b> και <b>λογικά</b> λάθη", "διορθώνεις συντακτικά λάθη διαβάζοντας το <b>μήνυμα</b> του μεταφραστή", "προλαμβάνεις τον <b>αντικανονικό τερματισμό</b> (διαίρεση με 0, ρίζα αρνητικού)", "φτιάχνεις <b>σενάρια ελέγχου</b> με τιμές κάτω, πάνω και ακριβώς στα όρια", "εκσφαλματώνεις <b>δομές επιλογής και επανάληψης</b> με πίνακα τιμών και εντολές ελέγχου", "βλέπεις το λάθος ως <b>πληροφορία</b>, όχι ως αποτυχία"]}, {"n": 16, "title": "Μετατροπές μεταξύ δομών επανάληψης", "goals": ["θυμάσαι τις <b>ομοιότητες και διαφορές</b> των τριών δομών και πότε ταιριάζει η καθεμία", "γράφεις την <b>άρνηση</b> μιας συνθήκης χωρίς λάθος", "μετατρέπεις <b>ΜΕΧΡΙΣ_ΟΤΟΥ ↔ ΟΣΟ</b> με τους δύο κανόνες των Οδηγιών", "μετατρέπεις <b>ΓΙΑ → ΟΣΟ / ΜΕΧΡΙΣ_ΟΤΟΥ</b> με θετικό, αρνητικό ή πραγματικό βήμα", "αναγνωρίζεις πότε ένα ΟΣΟ <b>μπορεί</b> να γίνει ΓΙΑ και πότε όχι", "ελέγχεις ότι δύο μορφές είναι <b>ισοδύναμες</b> με ακραία σενάρια"]}, {"n": 17, "title": "Γενικές ασκήσεις: όλα μαζί", "goals": ["«μεταφράζεις» τις φράσεις μιας εκφώνησης σε <b>μοτίβα</b> που ήδη ξέρεις", "οργανώνεις ένα μεγάλο πρόγραμμα με τη μέθοδο <b>Κατανοώ → Αναλύω → Γράφω → Ελέγχω</b>", "συνδυάζεις <b>βρόχο μέσα σε βρόχο</b> και επιλογή μέσα σε βρόχο χωρίς να χαθείς", "χειρίζεσαι <b>ακραίες περιπτώσεις</b>: κανένα δεδομένο, ισοβαθμίες, διαίρεση με 0", "φτιάχνεις μόνος σου <b>σενάρια ελέγχου</b> για το πρόγραμμά σου", "γράφεις λύσεις <b>Θέματος Γ και Δ</b> μέσα σε περιορισμένο χρόνο"]}, {"n": 18, "title": "Διαίρει και βασίλευε", "goals": ["περιγράφεις τη μέθοδο <b>«Διαίρει και βασίλευε»</b> και τα τέσσερα βήματά της", "εφαρμόζεις τη <b>δυαδική αναζήτηση</b> σε ένα ταξινομημένο διάστημα αριθμών", "υπολογίζεις τον <b>μέγιστο αριθμό</b> επαναλήψεων με τον τύπο [log2(n) + 1]", "γράφεις τον βρόχο με τις μεταβλητές <b>κάτω, πάνω, μέση</b> χωρίς να «χάνεις» στοιχεία", "λύνεις με διχοτόμηση προβλήματα όπως <b>ακέραια ρίζα</b> ή ρίζα εξίσωσης", "συγκρίνεις τη μέθοδο με τη <b>σειριακή</b> δοκιμή όλων των περιπτώσεων"]}, {"n": 19, "title": "Δομές δεδομένων και πίνακες", "goals": ["διακρίνεις <b>δεδομένα</b> από <b>πληροφορία</b> και τις τέσσερις σκοπιές μελέτης των δεδομένων", "ορίζεις τη <b>δομή δεδομένων</b> και τις οκτώ βασικές λειτουργίες της", "εξηγείς τη σχέση <b>Αλγόριθμοι + Δομές Δεδομένων = Προγράμματα</b>", "συγκρίνεις <b>στατικές</b> και <b>δυναμικές</b> δομές ως προς τη μνήμη", "δηλώνεις και χρησιμοποιείς <b>μονοδιάστατους</b> και <b>δισδιάστατους</b> πίνακες", "αναγνωρίζεις πότε ένα πρόβλημα <b>χρειάζεται</b> πίνακα"]}, {"n": 20, "title": "Μονοδιάστατοι πίνακες", "goals": ["εξηγείς <b>πότε</b> χρειάζεται πίνακας και πότε αρκεί μία μεταβλητή", "γεμίζεις πίνακα από το πληκτρολόγιο, με <b>έλεγχο</b> και με <b>μεταβλητό πλήθος</b>", "βρίσκεις μέγιστο και ελάχιστο, τη <b>θέση</b> τους και <b>όλες</b> τις θέσεις τους", "χρησιμοποιείς <b>παράλληλους πίνακες</b> (όνομα και τιμή)", "<b>διαχωρίζεις</b> έναν πίνακα σε δύο και <b>συγχωνεύεις</b> δύο σε έναν", "εκσφαλματώνεις προγράμματα με πίνακες: <b>μέγεθος</b>, <b>δείκτες</b>, <b>όρια</b>"]}, {"n": 21, "title": "Σειριακή αναζήτηση", "goals": ["περιγράφεις και εκτελείς τον αλγόριθμο <b>σειριακής αναζήτησης</b> του βιβλίου", "εξηγείς τον ρόλο της σημαίας <b>done</b> και γιατί χρειάζεται ΟΣΟ και όχι ΓΙΑ", "προσαρμόζεις την αναζήτηση όταν το στοιχείο υπάρχει <b>πολλές φορές</b> ή ο πίνακας είναι <b>ταξινομημένος</b>", "αποφεύγεις την <b>παραβίαση των ορίων</b> του πίνακα στη συνθήκη της επανάληψης", "μετράς <b>προσπελάσεις</b> και ξέρεις πότε δικαιολογείται η σειριακή μέθοδος", "χρησιμοποιείς την αναζήτηση σε <b>παράλληλους πίνακες</b> και σε επαναλαμβανόμενα ερωτήματα"]}, {"n": 22, "title": "Δυαδική αναζήτηση", "goals": ["περιγράφεις τη <b>δυαδική αναζήτηση</b> και την προϋπόθεσή της (ταξινομημένος πίνακας)", "συνδέεις τη δυαδική αναζήτηση με τη μέθοδο <b>«Διαίρει και βασίλευε»</b>", "γράφεις και εκτελείς με <b>πίνακα τιμών</b> το πρόγραμμα των οδηγιών", "υπολογίζεις τον <b>μέγιστο αριθμό βημάτων</b> και συγκρίνεις με τη σειριακή", "προσαρμόζεις τον αλγόριθμο για <b>φθίνουσα</b> σειρά, <b>διπλότυπα</b> και <b>θέση εισαγωγής</b>", "εντοπίζεις τα συνηθισμένα λάθη: <b>Left ← M</b>, <b>Left &lt; Right</b>, <b>/</b> αντί για div"]}, {"n": 23, "title": "Ταξινόμηση", "goals": ["δίνεις τον ορισμό της <b>ταξινόμησης</b> και εξηγείς γιατί χρειάζεται", "εκτελείς με πίνακα τιμών την <b>ταξινόμηση ευθείας ανταλλαγής</b> (φυσαλίδας)", "γράφεις την ταξινόμηση σε ΓΛΩΣΣΑ, σε <b>αύξουσα</b> ή <b>φθίνουσα</b> σειρά, με ανταλλαγή μέσω βοηθητικής μεταβλητής", "ταξινομείς <b>παράλληλους πίνακες</b> και με <b>δύο κριτήρια</b>", "βελτιώνεις τη φυσαλίδα με <b>σημαία</b> που σταματά όταν ο πίνακας ταξινομηθεί", "υλοποιείς την <b>ταξινόμηση με επιλογή</b> από την περιγραφή της"]}, {"n": 24, "title": "Πότε χρησιμοποιούμε πίνακες", "goals": ["αναφέρεις τα <b>πλεονεκτήματα</b> και τα δύο <b>μειονεκτήματα</b> των πινάκων", "αποφασίζεις αν ένα πρόβλημα <b>χρειάζεται</b> πίνακα, με ένα κριτήριο", "λύνεις <b>χωρίς πίνακα</b> όσα προβλήματα λύνονται με ένα πέρασμα", "εκσφαλματώνεις προγράμματα με <b>δισδιάστατους</b> πίνακες", "εξηγείς γιατί κάποια λάθη έχουν <b>διαφορετική κατηγορία</b> σε διαφορετικά περιβάλλοντα"]}, {"n": 25, "title": "Δισδιάστατοι πίνακες", "goals": ["δηλώνεις δισδιάστατο πίνακα και εξηγείς <b>τι εκφράζει</b> κάθε διάσταση", "γεμίζεις και εμφανίζεις πίνακα <b>ανά γραμμή</b> ή <b>ανά στήλη</b>", "υπολογίζεις αθροίσματα, μέσους όρους, μέγιστα και ελάχιστα <b>ανά γραμμή, ανά στήλη και συνολικά</b>, με θέση (i, j)", "<b>αναζητάς</b> στοιχείο με σημαία και <b>ταξινομείς</b> κάθε γραμμή ή κάθε στήλη", "αντιγράφεις στοιχεία από δισδιάστατο σε <b>μονοδιάστατο</b> πίνακα και ανάποδα", "χειρίζεσαι <b>τετραγωνικούς</b> πίνακες (διαγώνιοι) και αναγνωρίζεις πότε χρειάζεται <b>τρισδιάστατος</b>"]}, {"n": 26, "title": "Τυπικές επεξεργασίες πινάκων", "goals": ["αναφέρεις τις <b>πέντε τυπικές επεξεργασίες</b> πινάκων του βιβλίου", "επιλέγεις τον κατάλληλο αλγόριθμο <b>αναζήτησης</b> και <b>ταξινόμησης</b> και το αιτιολογείς", "ορίζεις τους <b>παράλληλους πίνακες</b> και τους χρησιμοποιείς για εγγραφές με πεδία διαφορετικού τύπου", "ταξινομείς, ψάχνεις και συγχωνεύεις παράλληλους πίνακες χωρίς να «ξεκολλήσουν» τα δεδομένα", "<b>εισάγεις</b> και <b>διαγράφεις</b> στοιχεία σε πίνακα με ολίσθηση", "απαντάς σε θεωρητικές ερωτήσεις (Σωστό-Λάθος, ανάπτυξης) για τους πίνακες"]}, {"n": 27, "title": "Στοίβα", "goals": ["δίνεις τον <b>ορισμό</b> της στοίβας και εξηγείς τη μέθοδο <b>LIFO</b>", "περιγράφεις την <b>ώθηση</b> και την <b>απώθηση</b>, την <b>υπερχείλιση</b> και την <b>υποχείλιση</b>", "σχεδιάζεις μια στοίβα και βρίσκεις την τιμή του <b>top</b> μετά από μια σειρά λειτουργιών", "γράφεις σε ΓΛΩΣΣΑ ώθηση και απώθηση σε στοίβα που υλοποιείται με <b>μονοδιάστατο πίνακα</b>", "αναγνωρίζεις σε ένα πρόβλημα <b>πότε</b> χρειάζεται στοίβα και την εφαρμόζεις"]}, {"n": 28, "title": "Ουρά", "goals": ["δίνεις τον <b>ορισμό</b> της ουράς και εξηγείς τη μέθοδο <b>FIFO</b>", "περιγράφεις την <b>εισαγωγή</b> και την <b>εξαγωγή</b> και τον ρόλο των δεικτών <b>front</b> και <b>rear</b>", "σχεδιάζεις μια ουρά και βρίσκεις τις τιμές των δεικτών μετά από μια σειρά λειτουργιών", "γράφεις σε ΓΛΩΣΣΑ εισαγωγή και εξαγωγή σε ουρά που υλοποιείται με <b>μονοδιάστατο πίνακα</b>", "εφαρμόζεις <b>ολίσθηση</b> όταν το πρόβλημα ζητά να αξιοποιούνται όλες οι θέσεις", "διακρίνεις <b>πότε</b> ένα πρόβλημα θέλει ουρά και πότε στοίβα"]}, {"n": 29, "title": "Γενικές ασκήσεις με πίνακες", "goals": ["αναλύεις μια εκφώνηση με πίνακες σε <b>διακριτά ερωτήματα</b>", "αντιστοιχίζεις κάθε ερώτημα σε ένα <b>μοτίβο</b> από τις εργαλειοθήκες του Μέρους Δ", "επιλέγεις <b>διαστάσεις, τύπους</b> και <b>παράλληλους πίνακες</b> σωστά", "προσέχεις τη <b>σειρά</b> των ερωτημάτων, τις <b>ισοπαλίες</b> και τις <b>αρχικές τιμές</b>", "ελέγχεις το πρόγραμμά σου με <b>μικρά δεδομένα</b>, αλλάζοντας μόνο τις σταθερές"]}, {"n": 30, "title": "Τμηματικός προγραμματισμός", "goals": ["ορίζεις τον <b>τμηματικό προγραμματισμό</b>, το <b>υποπρόγραμμα</b> και την <b>παράμετρο</b>", "αναλύεις ένα πρόβλημα σε υποπροβλήματα και το σχεδιάζεις σε <b>ιεραρχικό διάγραμμα</b>", "αναφέρεις τις <b>τρεις ιδιότητες</b> των υποπρογραμμάτων και τα <b>τέσσερα πλεονεκτήματα</b> του τμηματικού προγραμματισμού", "διαβάζεις ένα πρόγραμμα με υποπρογράμματα και ακολουθείς τη <b>σειρά εκτέλεσης</b> των εντολών", "διακρίνεις, σε πρώτη προσέγγιση, πότε ένα υποπρόγραμμα γίνεται <b>συνάρτηση</b> και πότε <b>διαδικασία</b>"]}, {"n": 31, "title": "Συναρτήσεις", "goals": ["γράφεις τη <b>μορφή</b> μιας συνάρτησης στη ΓΛΩΣΣΑ και δηλώνεις σωστά τον <b>τύπο</b> της", "εξηγείς τους <b>δύο ρόλους</b> του ονόματος της συνάρτησης", "<b>καλείς</b> μια συνάρτηση μέσα σε εκχώρηση, ΓΡΑΨΕ ή συνθήκη και ακολουθείς την εκτέλεση σε πίνακα τιμών", "γράφεις συναρτήσεις κάθε τύπου: ΑΚΕΡΑΙΑ, ΠΡΑΓΜΑΤΙΚΗ, ΧΑΡΑΚΤΗΡΑΣ, <b>ΛΟΓΙΚΗ</b>, και με <b>πίνακα</b> ως παράμετρο", "γνωρίζεις τι <b>δεν</b> επιτρέπεται σε μια συνάρτηση"]}, {"n": 32, "title": "Διαδικασίες και παράμετροι", "goals": ["γράφεις τη <b>μορφή</b> μιας διαδικασίας και την καλείς με την <b>ΚΑΛΕΣΕ</b>", "ορίζεις τις <b>πραγματικές</b> και τις <b>τυπικές</b> παραμέτρους και εφαρμόζεις τους <b>τρεις κανόνες</b> αντιστοίχισης", "εξηγείς βήμα-βήμα το <b>πέρασμα τιμών</b> στην κλήση και την <b>επιστροφή</b> τους στο τέλος της διαδικασίας", "περνάς <b>πίνακες</b> ως παραμέτρους και καλείς διαδικασία από διαδικασία", "αποφασίζεις αν ένα υποπρόγραμμα γίνεται <b>συνάρτηση</b> ή <b>διαδικασία</b> και μετατρέπεις το ένα στο άλλο"]}, {"n": 33, "title": "Εμβέλεια και εκσφαλμάτωση", "goals": ["ορίζεις την <b>εμβέλεια</b> και περιγράφεις τα τρία είδη της", "εξηγείς γιατί στη ΓΛΩΣΣΑ <b>όλες</b> οι μεταβλητές και σταθερές είναι <b>τοπικές</b> και ποιες είναι οι συνέπειες", "βρίσκεις σε έναν σκελετό προγράμματος <b>ποια μεταβλητή είναι γνωστή πού</b>", "εντοπίζεις <b>λογικά λάθη</b> στην κλήση υποπρογραμμάτων και στο πέρασμα παραμέτρων με πίνακα τιμών", "αναγνωρίζεις λάθη με <b>αμφίσημη κατηγοριοποίηση</b> ανάλογα με το περιβάλλον"]}, {"n": 34, "title": "Γενικές ασκήσεις με υποπρογράμματα", "goals": ["<b>χωρίζεις</b> ένα πρόβλημα σε υποπρογράμματα και να αποφασίζεις για καθένα αν θα είναι <b>συνάρτηση ή διαδικασία</b>", "γράφεις σωστές <b>επικεφαλίδες</b>: όνομα, παράμετροι με τη σωστή σειρά, τύπος επιστροφής", "περνάς <b>πίνακες</b> (μονοδιάστατους και δισδιάστατους) σε υποπρογράμματα, με τις ίδιες σταθερές παντού", "οργανώνεις ένα πρόγραμμα με <b>μενού επιλογών</b>, όπου κάθε επιλογή είναι υποπρόγραμμα", "λύνεις ένα <b>Θέμα Δ</b> με υποπρογράμματα και να το ελέγχεις με μικρά δεδομένα"]}, {"n": 35, "title": "Μαύρο κουτί: έλεγχος με σενάρια", "goals": ["ορίζεις την <b>εκσφαλμάτωση</b>, το <b>σενάριο ελέγχου</b> και τον <b>έλεγχο μαύρου κουτιού</b>", "χωρίζεις τις τιμές εισόδου σε <b>ισοδύναμα διαστήματα</b>, έγκυρα και μη έγκυρα", "βρίσκεις τις <b>ακραίες τιμές</b> κάθε διαστήματος, για ακέραιους και για πραγματικούς με δοσμένη ακρίβεια", "γράφεις τον <b>πίνακα σεναρίων</b>: είσοδος, αναμενόμενο αποτέλεσμα, περίπτωση που ελέγχεται", "ελέγχεις ένα <b>υποπρόγραμμα</b> με σενάρια, με τη βοήθεια ενός οδηγού"]}, {"n": 36, "title": "Λίστες: δεδομένα σκόρπια στη μνήμη", "goals": ["εξηγείς τη διαφορά <b>στατικής</b> και <b>δυναμικής</b> δομής δεδομένων", "περιγράφεις τον <b>κόμβο</b>, τον <b>δείκτη</b>, την <b>κεφαλή</b> και το <b>NULL</b>", "σχεδιάζεις μια λίστα μετά από <b>εισαγωγή</b> ή <b>διαγραφή</b> κόμβου και λες ποιοι δείκτες αλλάζουν", "ξεχωρίζεις <b>απλά</b> από <b>διπλά</b> συνδεδεμένη λίστα", "συγκρίνεις <b>λίστα και πίνακα</b> και επιλέγεις την κατάλληλη δομή για ένα πρόβλημα"]}, {"n": 37, "title": "Δένδρα", "goals": ["δίνεις τον <b>ορισμό</b> του δένδρου και αναγνωρίζεις δομές που <b>δεν</b> είναι δένδρα", "βρίσκεις σε ένα δένδρο <b>ρίζα, γονείς, παιδιά, αδέλφια, φύλλα, υποδένδρα</b>", "εξηγείς <b>γιατί</b> τα δένδρα είναι ισχυρά και δίνεις εφαρμογές τους", "ξεχωρίζεις <b>δυαδικό</b> δένδρο και <b>δυαδικό δένδρο αναζήτησης</b>", "<b>κατασκευάζεις</b> δυαδικό δένδρο αναζήτησης από μια σειρά αριθμών και κάνεις <b>αναζήτηση</b> σε αυτό"]}, {"n": 38, "title": "Γράφοι και η «οικογένεια» των δυναμικών δομών", "goals": ["δίνεις τον <b>ορισμό</b> του γράφου και εξηγείς γιατί είναι η <b>γενικότερη</b> δομή δεδομένων", "ξεχωρίζεις <b>δένδρο</b> από <b>γράφο</b> και εξηγείς ότι κάθε δένδρο είναι γράφος", "αναγνωρίζεις <b>κατευθυνόμενες</b> και <b>μη κατευθυνόμενες</b> ακμές και γράφους σε καθημερινά παραδείγματα", "μοντελοποιείς ένα πρόβλημα με γράφο (γέφυρες του Königsberg, δίκτυα, δρόμοι)", "επιλέγεις την κατάλληλη δομή (πίνακας, στοίβα, ουρά, λίστα, δένδρο, γράφος) για ένα πρόβλημα"]}, {"n": 39, "title": "Αντικείμενα: ένας φυσικός τρόπος επίλυσης προβλημάτων", "goals": ["εξηγείς τη διαφορά <b>διαδικαστικής</b> και <b>αντικειμενοστραφούς</b> προσέγγισης ενός προβλήματος", "δίνεις τον ορισμό του <b>αντικειμενοστραφούς προγραμματισμού</b>, του <b>αντικειμένου</b>, των <b>ιδιοτήτων</b> και των <b>μεθόδων</b>", "εντοπίζεις σε ένα σενάριο τα <b>αντικείμενα</b> με τον <b>ρόλο</b> τους, τις <b>ιδιότητες</b> και τις <b>μεθόδους</b> τους", "περιγράφεις τα <b>μηνύματα</b> και τις <b>συνεργασίες</b> ανάμεσα στα αντικείμενα", "σχεδιάζεις τη <b>διαγραμματική αναπαράσταση</b> ενός σεναρίου"]}, {"n": 40, "title": "Κλάσεις: αφαιρετικότητα και ενθυλάκωση", "goals": ["δίνεις τον ορισμό της <b>ενθυλάκωσης</b> και της <b>κλάσης</b>", "ξεχωρίζεις την <b>κλάση</b> (καλούπι, σχέδιο) από τα <b>αντικείμενά</b> της", "εξηγείς τι σημαίνει ότι η κλάση είναι <b>αφαιρετικό</b> στοιχείο", "<b>ομαδοποιείς</b> τα αντικείμενα ενός σεναρίου σε κλάσεις, ξεκινώντας από τους <b>ρόλους</b> τους", "σχεδιάζεις <b>διάγραμμα κλάσεων</b> με τις συνεργασίες τους"]}, {"n": 41, "title": "Κληρονομικότητα και πολυμορφισμός", "goals": ["δίνεις τον ορισμό της <b>κληρονομικότητας</b> και ξεχωρίζεις <b>υπερκλάση</b> (πρόγονο) και <b>υποκλάση</b> (απόγονο)", "ελέγχεις μια ιεραρχία με τον κανόνα <b>«είναι ένα» (is_a)</b>", "οργανώνεις κλάσεις σε <b>ιεραρχία</b> μεταφέροντας τα κοινά στην υπερκλάση, και τη σχεδιάζεις", "δίνεις τον ορισμό του <b>πολυμορφισμού</b> και εντοπίζεις <b>πολυμορφικές</b> μεθόδους", "εξηγείς πώς θα έγραφες μια πολυμορφική μέθοδο, <b>αν</b> η ΓΛΩΣΣΑ το υποστήριζε"]}];
+
+/* ---------- εικονίδια ---------- */
+const I = {
+  menu:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>',
+  moon:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>',
+  sun:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+  back:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 5 8 12 15 19"/></svg>',
+  lock:'<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',
+  cap:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10l9-5 9 5-9 5-9-5z"/><path d="M7 12v4c2 2 8 2 10 0v-4"/></svg>',
+  share:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 13.5l6.8 4M15.4 6.5l-6.8 4"/></svg>',
+  phone:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>',
+  mail:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
+  pin:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
+  chart:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 20V12M12 20V6M19 20v-9"/></svg>',
+  chat:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.5 7.2L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>',
+  people:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c3 0 6 2 6 5.5"/></svg>',
+  board:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M7 9h6M7 13h10"/></svg>',
+  key:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3"/></svg>',
+  clip:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1M9 12l2 2 4-4"/></svg>',
+  stack:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="5" width="12" height="16" rx="2"/><path d="M4.5 17V6a2 2 0 0 1 2-2h8"/><path d="M11 12l2 2 4-4"/></svg>',
+  pc:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>',
+  book:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h11a3 3 0 0 1 3 3v12H7a3 3 0 0 1-3-3z"/></svg>',
+  plus:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg>',
+  eye:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg>',
+  pdf:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M12 11v6M9.5 14.5 12 17l2.5-2.5"/></svg>',
+  sigma:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 5H6l6.5 7L6 19h12"/></svg>',
+  trend:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 9 11 13 14 20 6"/></svg>'
+};
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- θέμα ---------- */
+function curTheme(){ const a=document.documentElement.getAttribute('data-theme'); if(a) return a; return matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'; }
+function setTheme(t){ document.documentElement.setAttribute('data-theme',t); try{localStorage.setItem('synapsi-theme',t)}catch(e){} render(); }
+try{ const t=localStorage.getItem('synapsi-theme'); if(t) document.documentElement.setAttribute('data-theme',t); }catch(e){}
+
+/* ---------- κοινά ---------- */
+const isOpen = n => n <= OPEN_UP_TO;
+function subTop(title, back){ return `<header class="sub-top"><div class="wrap"><a class="ibtn" href="#${back||''}" aria-label="Πίσω">${I.back}</a><h1>${esc(title)}</h1></div></header>`; }
+function footer(){ return `<footer class="foot"><div class="wrap">
+  <span class="beta">BETA</span>
+  <b>© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου</b>
+  <span>Απαγορεύεται η αναδημοσίευση, αναπαραγωγή ή χρήση του υλικού με οποιονδήποτε τρόπο χωρίς γραπτή συμφωνία. Οι παραβάτες διώκονται σύμφωνα με τον Ν. 2121/1993 περί πνευματικής ιδιοκτησίας.</span></div></footer>`; }
+function _unusedSoonBox(title, intro, bullets){ return `<div class="soon-box"><span class="badge soon">ΣΥΝΤΟΜΑ</span><h3>${esc(title)}</h3><p style="color:var(--muted)">${esc(intro)}</p><ul>${bullets.map(b=>`<li>${esc(b)}</li>`).join('')}</ul></div>`; }
+
+/* ---------- αρχική ---------- */
+function home(){
+  const openCount = LESSONS.filter(l=>isOpen(l.n)).length, pct = Math.round(openCount/LESSONS.length*100);
+  let path='';
+  for(const g of GROUPS){
+    const ls = LESSONS.filter(l=>l.n>=g.from && l.n<=g.to);
+    const items = [];
+    ls.forEach(l=>{ items.push({kind:'lesson', l}); if(TEST_AFTER[l.n]) items.push({kind:'test', n:l.n}); });
+    path += `<section class="group"><div class="group-h"><small>${esc(g.kicker)}</small><h2>${esc(g.title)}</h2></div>`;
+    items.forEach((it,i)=>{
+      const end = (i===items.length-1) ? '' : '<span class="line"></span>';
+      if(it.kind==='test'){
+        path += `<a href="#" data-testsoon="${it.n}" class="st test"><span class="rail"><span class="node">${I.clip}</span>${end}</span>
+        <span class="card"><span class="n">ΜΑΘΗΜΑ-ΔΙΑΓΩΝΙΣΜΑ · ${I.lock}</span><span class="t">Διαγώνισμα: μαθήματα ${TEST_AFTER[it.n]}</span></span></a>`;
+        return;
+      }
+      const l = it.l;
+      const open=isOpen(l.n), nw=open&&NEW_LESSONS.includes(l.n);
+      const cls = open ? ('open'+(nw?' new':'')+(l.n===OPEN_UP_TO?' last-open':'')) : 'locked';
+      const tag = open ? `a href="lessons/${String(l.n).padStart(2,'0')}.html"` : `a href="#" data-locked="${l.n}"`;
+      path += `<${tag} class="st ${cls}"><span class="rail"><span class="node">${open?l.n:I.lock}</span>${end}</span>
+        <span class="card">${nw?'<span class="badge">ΝΕΑ</span>':''}<span class="n">ΜΑΘΗΜΑ ${l.n}</span><span class="t">${esc(l.title)}</span></span></a>`;
+    });
+    path += `</section>`;
+  }
+  path += `<section class="group"><a href="#" data-soon="final" class="st final"><span class="rail"><span class="node">${I.stack}</span></span>
+    <span class="card"><span class="n">ΤΕΛΙΚΟ ΜΑΘΗΜΑ-ΔΙΑΓΩΝΙΣΜΑ · ${I.lock}</span><span class="t">Θέματα Πανελλαδικών &amp; επαναληπτικά</span>
+    <span class="d">Θέματα Πανελλαδικών προηγούμενων ετών και επαναληπτικά διαγωνίσματα σε όλη την ύλη, με αναλυτική επεξήγηση κάθε λύσης.</span>
+    <span class="tags"><span>Πανελλαδικές</span><span>Επαναληπτικά</span><span>Λύσεις με επεξήγηση</span></span></span></a></section>`;
+  const dark = curTheme()==='dark';
+  return `<header class="top"><div class="wrap">
+    <div class="bar"><button class="ibtn" data-act="menu" aria-label="Μενού">${I.menu}</button>
+      <button class="ibtn" data-act="theme" aria-label="${dark?'Φωτεινό θέμα':'Σκοτεινό θέμα'}">${dark?I.sun:I.moon}</button></div>
+    <img class="logo" src="assets/logo.png" alt="ΣΥΝΑΨΗ εκπαιδευτική ομάδα">
+    <div class="course">Πληροφορική Γ' Λυκείου</div>
+    <div class="teacher-card"><span class="av">ΚΘ</span><span><b>Καθηγητής: Κωνσταντίνος Θεοφίλου</b><small>Συγγραφή &amp; επιστημονική επιμέλεια υλικού: Κωνσταντίνος Θεοφίλου, MSc in ICT</small></span></div>
+    <p class="intro">Η διαδρομή σου μέχρι τις Πανελλαδικές. Κάθε νέο μάθημα ανοίγει μόλις το δουλέψουμε στην τάξη.</p>
+    <div class="prog"><div class="prog-row"><span>${openCount} από ${LESSONS.length} μαθήματα ανοιχτά</span><span>${pct}%</span></div><div class="track"><i style="width:${pct}%"></i></div></div>
+  </div></header>
+  <main class="wrap">${path}
+    <div class="panel"><h3>Θέλεις επιπλέον καθοδήγηση;</h3><p>Δωρεάν δοκιμαστικό μάθημα σε μικρό τμήμα, διά ζώσης στον χώρο μας στην Πυλαία ή online από το σπίτι σου.</p>
+      <a class="btn" href="#guidance">Θέλω να μάθω περισσότερα</a>
+      <button class="btn ghost" data-act="share">${I.share} Στείλ' το σε φίλο</button></div>
+  </main>${footer()}`;
+}
+
+/* ---------- σελίδες ---------- */
+function contactRows(){ return `<div class="contact">
+  <div class="crow">${I.phone}<span class="v">${ORG.phone}</span><button class="mini" data-copy="${ORG.phone}">Αντιγραφή</button></div>
+  <div class="crow">${I.mail}<span class="v">${ORG.email}</span><button class="mini" data-copy="${ORG.email}">Αντιγραφή</button></div>
+  <div class="crow">${I.pin}<span class="v">${ORG.address}</span><a class="mini" href="${ORG.maps}" target="_blank" rel="noopener">Χάρτης</a></div></div>`; }
+
+let mode='live';
+function guidance(){ return subTop('Επιπλέον καθοδήγηση') + `<main class="wrap page">
+  <h2 style="font-size:24px">Θέλεις να δουλέψουμε μαζί;</h2>
+  <p style="color:var(--body)">Μικρά τμήματα ή ιδιαίτερα, με τις ίδιες σημειώσεις και αναφορά προόδου κάθε μήνα. Το πρώτο μάθημα είναι δωρεάν.</p>
+  <div class="seg" role="group" aria-label="Τρόπος μαθήματος">
+    <button data-mode="live" aria-pressed="${mode==='live'}">${I.pin}<b>Διά ζώσης</b><small>στον χώρο μας στην Πυλαία</small></button>
+    <button data-mode="online" aria-pressed="${mode==='online'}">${I.pc}<b>Online</b><small>από όπου κι αν είσαι</small></button></div>
+  <p class="note">${mode==='live'?'Σε περιμένουμε στην Ι. Πανταζίδου 36, Πυλαία. Πάρε μας τηλέφωνο να κλείσουμε μέρα και ώρα.':'Μάθημα με βιντεοκλήση και κοινό πίνακα, από υπολογιστή ή tablet. Πάρε μας τηλέφωνο ή στείλε email να κανονίσουμε.'}</p>
+  <h3 style="font-size:16px">Επικοινώνησε μαζί μας</h3>${contactRows()}
+  <form id="lead-form"><fieldset disabled><legend>Φόρμα επικοινωνίας · σύντομα</legend>
+    <label for="f-name">Όνομα μαθητή<input id="f-name" type="text" placeholder="π.χ. Νίκος"></label>
+    <label for="f-phone">Τηλέφωνο γονέα ή κηδεμόνα<input id="f-phone" type="tel" placeholder="69xx xxx xxx"></label>
+    <label for="f-class">Τάξη<select id="f-class"><option>Γ' Λυκείου</option><option>Β' Λυκείου</option><option>Α' Λυκείου</option></select></label>
+    <button class="btn" type="submit" disabled>Θέλω να με καλέσετε</button>
+    <p class="note" style="margin:0">Μέχρι να ενεργοποιηθεί η φόρμα, χρησιμοποίησε το τηλέφωνο ή το email παραπάνω.</p></fieldset></form>
+  </main>${footer()}`; }
+
+function about(){ return subTop('Ποιοι είμαστε') + `<main class="wrap page">
+  <img class="photo" src="assets/storefront.jpg" alt="Η πρόσοψη της ΣΥΝΑΨΗΣ στην Πυλαία Θεσσαλονίκης">
+  <span class="beta">BETA ΕΚΔΟΣΗ</span>
+  <h2 style="font-size:24px">Φτιαγμένο με μεράκι, για τον δικό σου στόχο</h2>
+  <p style="color:var(--body)">Η εφαρμογή γεννήθηκε μέσα από χρόνια διδασκαλίας και αγάπης για αυτό που κάνουμε. Ξέρουμε πόσο απαιτητική είναι η χρονιά της προετοιμασίας, γιατί τη ζούμε κάθε χρόνο δίπλα στους μαθητές μας.</p>
+  <p style="color:var(--body)">Γι' αυτό φτιάξαμε κάτι που σε συνοδεύει και εκτός τάξης: καθαρή θεωρία, ασκήσεις που σε προετοιμάζουν πραγματικά, και μια εικόνα για το πού βρίσκεσαι. Ο στόχος μας είναι ένας, να φτάσεις εκεί που ονειρεύεσαι.</p>
+  <p class="note">Η εφαρμογή βρίσκεται σε δοκιμαστική (beta) έκδοση. Αν βρεις κάποιο λάθος ή έχεις μια ιδέα, πες το μας. Μας βοηθάς να την κάνουμε καλύτερη.</p>
+  <h3 style="font-size:16px">Η ομάδα μας</h3>
+  <div class="team"><div class="person"><span class="av">ΜΜ</span><span><b>Μανάσης Μπατσιούλας</b><span>Μαθηματικά · MSc in Math</span></span></div>
+    <div class="person"><span class="av">ΚΘ</span><span><b>Κωνσταντίνος Θεοφίλου</b><span>Πληροφορική · MSc in ICT</span></span></div></div>
+  <h3 style="font-size:16px">Θα μας βρεις εδώ</h3>${contactRows()}
+  <a class="btn" href="#guidance">Έλα για ένα δοκιμαστικό μάθημα</a></main>${footer()}`; }
+
+const BRANDS=[
+  {id:'navy',bg:'#1E3A5F',bg2:'#2C4C75',accent:'#E0A458',soft:'#F4E6D2',name:'Μπλε'},
+  {id:'wine',bg:'#5E2233',bg2:'#763246',accent:'#E8C6A0',soft:'#F6E9DD',name:'Μπορντό'}];
+let brand=0, testLvl=1;
+const TESTS=[['Βασικό','4 θέματα · 2 ώρες · με λύσεις'],['Μέτριο','4 θέματα · 2,5 ώρες · με λύσεις'],['Απαιτητικό','4 θέματα · 3+ ώρες · με λύσεις']];
+function phone(o){
+  return `<div class="ph" style="--pb:${o.bg};--pb2:${o.bg2};--pa:${o.accent};--ps:${o.soft}">
+    <div class="ph-top">
+      <div class="ph-logo">${o.logo}</div>
+      <b class="ph-course">Πληροφορική Γ' Λυκείου</b>
+      <div class="ph-t"><span class="ph-av">${o.ini}</span><span><b>${o.teacher}</b><small>Συγγραφή &amp; επιμέλεια υλικού: Κ. Θεοφίλου, MSc in ICT</small></span></div>
+      <span class="ph-tr"><i></i></span></div>
+    <div class="ph-body">${[1,2,3].map(n=>`<div class="ph-row"><span class="ph-n">${n}</span><span class="ph-l"></span></div>`).join('')}
+      <div class="ph-row"><span class="ph-n lk">${I.lock}</span><span class="ph-l lk"></span></div></div></div>`;
+}
+function teacher(){
+  const b=BRANDS[brand];
+  const ours=phone({bg:'#2B3722',bg2:'#3C4A30',accent:'#C9AD8D',soft:'#EEF0E2',ini:'ΚΘ',teacher:'Καθηγητής: Κωνσταντίνος Θεοφίλου',
+    logo:'<img src="assets/logo.png" alt="ΣΥΝΑΨΗ" style="height:26px;width:auto;display:block">'});
+  const yours=phone({...b,ini:'ΜΠ',teacher:'Καθηγήτρια: Μαρία Παπαδοπούλου',
+    logo:`<span class="mono" style="background:${b.accent};color:${b.bg}">ΜΠ</span><span class="mono-t">Φροντιστήριο<br>Παπαδοπούλου</span>`});
+  const sw=BRANDS.map((x,i)=>`<button class="sw" data-brand="${i}" aria-pressed="${i===brand}" aria-label="${x.name}" style="background:${x.bg}"><i style="background:${x.accent}"></i></button>`).join('');
+  const feats=[
+    {k:'fmt',t:'PDF και διαφάνειες για την τάξη',d:'Κάθε μάθημα προσφέρεται σε πολλές μορφές, για κάθε ανάγκη του διδάσκοντα: σημειώσεις για διανομή ή προβολή στην τάξη.',
+     v:`<ul class="fmts">${['Σημειώσεις PDF για διανομή','Διαφάνειες για προβολή στην τάξη','Φύλλο ασκήσεων','Online στο κινητό'].map(x=>`<li>${x}</li>`).join('')}<li class="deluxe">Deluxe εκτύπωση</li></ul>`},
+    {k:'test',t:'Έτοιμα διαγωνίσματα με λύσεις',d:'Μετά από κάθε ενότητα, σε διαβαθμισμένη δυσκολία. Επιλέγεις ένα έτοιμο ή φτιάχνεις αυτό που σου ταιριάζει με λίγα κλικ.',
+     v:`<div class="lvls" role="group" aria-label="Δυσκολία">${TESTS.map((x,i)=>`<button data-test="${i}" aria-pressed="${i===testLvl}">${x[0]}</button>`).join('')}</div>
+        <div class="mini-doc row"><span class="md-t"><b>Διαγώνισμα · Δομές επανάληψης · ${TESTS[testLvl][0]}</b><small>${TESTS[testLvl][1]}</small></span>
+          <span class="md-ic" title="Προεπισκόπηση · σύντομα" aria-label="Προεπισκόπηση, σύντομα">${I.eye}</span><span class="md-ic" title="Λήψη PDF · σύντομα" aria-label="Λήψη PDF, σύντομα">${I.pdf}</span></div>`},
+    {k:'track',t:'Εύκολη παρακολούθηση προόδου',d:'Δες γρήγορα ποιος μαθητής κολλάει και σε ποιο μάθημα, από τις απαντήσεις του στην εφαρμογή, τους βαθμούς σου στα διαγωνίσματα και τις παρατηρήσεις σου.',
+     v:`${[['Μαρία Κ.',88,'good'],['Νίκος Π.',72,'ok'],['Γιώργος Α.',41,'low']].map(r=>`<div class="mbar"><span>${r[0]}</span><span class="tr"><i class="${r[2]}" style="width:${r[1]}%"></i></span><b class="lv ${r[2]}">${r[1]}%</b></div>`).join('')}
+        <a class="btn ghost sm" href="#teacher-board">Δες τον πίνακα καθηγητή →</a>`},
+    {k:'rep',t:'Αναφορές για γονείς με ένα κλικ',d:'Στείλε αναφορά προόδου αμέσως σε γονείς και κηδεμόνες, όποτε χρειαστεί.',
+     v:`<div class="mini-doc"><b>Αναφορά προόδου · Οκτώβριος</b><small>Νίκος Π. · Εκτιμώμενος βαθμός 14–16 ↑</small><button class="btn sm" data-act="report" style="margin-top:8px">Δες την αναφορά και στείλ' την →</button></div>`},
+    {k:'sol',t:'Λυμένες ασκήσεις',d:'Πάνω από 190 λυμένα παραδείγματα βήμα-βήμα σε 41 μαθήματα, με πλήρεις λύσεις και σχόλια για τα συνηθισμένα λάθη των μαθητών.',
+     v:`<div class="steps-mini">${['Κατανοώ','Αναλύω','Γράφω','Ελέγχω'].map((x,i)=>`<span><b>${i+1}</b>${x}</span>`).join('')}</div>`}];
+  return subTop('Είσαι καθηγητής;') + `<main class="wrap page">
+  <section class="wl">
+    <span class="eyebrow">Για καθηγητές και εκπαιδευτικούς ομίλους</span>
+    <h2>Η εφαρμογή, με το δικό σου όνομα</h2>
+    <p>Προσκαλείς τους μαθητές σου με το email τους και βλέπουν <b>εσένα</b> ως καθηγητή τους, με το δικό σου όνομα, avatar, λογότυπο και χρώματα. Βλέπεις μόνο τους δικούς σου μαθητές.</p>
+    <div class="phones"><figure>${ours}<figcaption>Η δική μας</figcaption></figure><figure>${yours}<figcaption>Η δική σου</figcaption></figure></div>
+    <div class="sw-row"><span>Δοκίμασε χρώματα:</span>${sw}</div>
+  </section>
+  ${feats.map(f=>`<section class="feat"><h3>${f.t}</h3><p>${f.d}</p><div class="feat-v">${f.v}</div></section>`).join('')}
+  <h3 style="font-size:17px;margin-top:6px">Δύο τρόποι συνεργασίας</h3>
+  <div class="opt light"><div class="opt-h"><b>Ετήσια συνδρομή</b><span class="chip">ΓΙΑ ΚΑΘΗΓΗΤΕΣ</span></div><p style="color:var(--muted);font-size:14px">Όλο το υλικό, τα PDF και οι διαφάνειες, τα διαγωνίσματα, οι λύσεις και η παρακολούθηση προόδου, με το δικό σου όνομα, για έναν χρόνο.</p></div>
+  <div class="opt dark"><div class="opt-h"><b>Η εφαρμογή για τον όμιλό σου</b><span class="chip">ΓΙΑ ΕΚΠΑΙΔΕΥΤΙΚΟΥΣ ΟΜΙΛΟΥΣ</span></div><p style="font-size:14px">Ολόκληρη η εφαρμογή με το λογότυπο, τα χρώματα και τα στοιχεία επικοινωνίας του ομίλου σου, για όλους τους καθηγητές και τους μαθητές σου.</p></div>
+  <div class="cta"><h3>Θέλεις να τη δοκιμάσεις;</h3><p>Επικοινώνησε μαζί μας και θα σου στείλουμε πρόσβαση για να τη δοκιμάσεις με τους μαθητές σου.</p>${contactRows()}</div>
+  </main>${footer()}`; }
+
+function soonHead(title){ return `<div class="soon-head"><span class="badge soon">ΣΥΝΤΟΜΑ</span><h2>${esc(title)}</h2><p>Η λειτουργία θα είναι σύντομα διαθέσιμη. Δες ένα δείγμα:</p></div>`; }
+const DEMO_UNITS=[['Η έννοια του προβλήματος',90,'9 από 10 σωστές'],['Τι είναι αλγόριθμος',73,'8 από 11 σωστές'],['Δομή επιλογής: ΑΝ … ΤΟΤΕ … ΑΛΛΙΩΣ',35,'4 από 6 σωστές · 2 από 6 ασκήσεις']];
+function lvl(p){ return p>=75?['Πολύ καλά','good']:p>=50?['Καλά','ok']:['Σε εξέλιξη','low']; }
+function demoProgress(teacherView){
+  const units=DEMO_UNITS.map(u=>{const l=lvl(u[1]);return `<div class="pv"><div class="r"><span>${esc(u[0])}</span><span class="lv ${l[1]}">${l[0]}</span></div><div class="tr"><i class="${l[1]}" style="width:${u[1]}%"></i></div><small>${esc(u[2])}</small></div>`}).join('');
+  const est=`<div class="est"><small>Εκτίμηση κατανόησης</small><div><b>72%</b><span>Καλή πορεία</span></div><div class="track"><i style="width:72%"></i></div><small>Από τις απαντήσεις στις ασκήσεις των ανοιχτών μαθημάτων · 21 από 27 σωστές</small></div>`;
+  const tail = teacherView ? `
+    <div class="pv"><div class="r"><span>Διαγωνίσματα</span></div>
+      <div class="kv"><span>04/10 · Η έννοια του προβλήματος</span><b>17/20</b></div><div class="kv"><span>25/10 · Τι είναι αλγόριθμος</span><b>15/20</b></div>
+      <span class="fake-btn">+ Προσθήκη διαγωνίσματος</span></div>
+    <div class="grid2">${[['Εργασίες σπιτιού','6 / 8'],['Παρουσίες','8 / 8'],['Συμμετοχή','Πολύ καλή'],['Εκτίμηση βαθμού','14–16']].map(x=>`<div class="pv"><small>${x[0]}</small><span class="fake-in">${x[1]}</span></div>`).join('')}</div>
+    <div class="pv"><small>Σχόλιο για την αναφορά του μήνα</small><span class="fake-in tall">Καταλαβαίνει γρήγορα τη λογική. Στις επαναλήψεις κάνει λάθη στη συνθήκη τερματισμού.</span>
+      <small>Στόχος επόμενου μήνα</small><span class="fake-in">2 επιπλέον ασκήσεις επανάληψης την εβδομάδα</span></div>
+    <div class="grid2"><span class="btn" aria-disabled="true">Αποθήκευση</span><span class="btn ghost" aria-disabled="true">Αναφορά γονέα</span></div>`
+  : `<div class="nextstep"><small>ΕΠΟΜΕΝΟ ΒΗΜΑ</small><span>Ολοκλήρωσε τις 4 ασκήσεις που απομένουν στη Δομή επιλογής.</span></div>
+    <div class="r-h">${I.lock}<b>Από τον καθηγητή σου</b></div>
+    <div class="grid2">${['Διαγωνίσματα','Εργασίες σπιτιού','Συμμετοχή','Εκτίμηση βαθμού'].map(x=>`<div class="pv lockd"><span>${x}</span><span class="tr"></span></div>`).join('')}</div>`;
+  return `<div class="demo" aria-label="Δείγμα με παραδειγματικά στοιχεία">${est}<div class="r-h"><b>Ανά μάθημα</b></div>${units}${tail}</div><p class="demo-note">Δείγμα με παραδειγματικά στοιχεία</p>`;
+}
+function progress(){ return subTop('Η πρόοδός μου') + `<main class="wrap page">${soonHead('Η πρόοδός σου, μάθημα με μάθημα')}${demoProgress(false)}</main>${footer()}`; }
+function studentDemo(){ return subTop('Νίκος Π. · Γ1','teacher-board') + `<main class="wrap page"><div class="soon-head"><span class="badge soon">ΣΥΝΤΟΜΑ · ΔΕΙΓΜΑ</span><p>Η πρόοδος του μαθητή όπως τη βλέπει ο καθηγητής. Τα πεδία κάτω από τα μαθήματα τα συμπληρώνει ο καθηγητής.</p></div>${demoProgress(true)}</main>${footer()}`; }
+
+let cls=0;
+const CLASSES=[
+  {name:'Γ1',code:'7K4Q-Γ1',meta:'Τρίτη & Πέμπτη · 23 από 41 μαθήματα',avg:'68%',alerts:1,where:'Μάθημα 23 · Ταξινόμηση, άσκηση 4',
+   st:[['Νίκος Π.',72,'Τελευταία δραστηριότητα: σήμερα'],['Μαρία Κ.',88,'Ολοκλήρωσε την Ταξινόμηση'],['Γιώργος Α.',41,'Δεν έχει μπει εδώ και 6 ημέρες'],['Ελένη Σ.',65,'4 από 6 ασκήσεις στο Μάθημα 22'],['Δημήτρης Λ.',79,'Τελευταία δραστηριότητα: χθες']],
+   log:[['28/10','Ταξινόμηση: θεωρία και ασκήσεις 1–3',0],['21/10','Ολοκληρώθηκε η Δυαδική αναζήτηση',1],['14/10','Σειριακή αναζήτηση: άσκηση 6',0]],now:56,last:61,cmp:'Πέρσι στις 30/10 είχατε φτάσει στο Μάθημα 25. Είστε περίπου μία εβδομάδα πίσω.'},
+  {name:'Γ2',code:'M2XR-Γ2',meta:'Δευτέρα & Τετάρτη · 20 από 41 μαθήματα',avg:'74%',alerts:0,where:'Μάθημα 20 · Μονοδιάστατοι πίνακες, άσκηση 2',
+   st:[['Άννα Μ.',81,'Τελευταία δραστηριότητα: σήμερα'],['Πέτρος Ν.',67,'Ολοκλήρωσε το Μάθημα 19'],['Σοφία Τ.',74,'Τελευταία δραστηριότητα: χθες']],
+   log:[['27/10','Μονοδιάστατοι πίνακες: ασκήσεις 1–2',0],['20/10','Ολοκληρώθηκαν οι Δομές δεδομένων',1]],now:49,last:49,cmp:'Πέρσι στις 30/10 είχατε φτάσει στο ίδιο σημείο. Είστε εντός προγράμματος.'}];
+function teacherBoard(){
+  const c=CLASSES[cls];
+  const tabs=CLASSES.map((x,i)=>`<button class="tab" data-cls="${i}" aria-pressed="${i===cls}">${x.name}</button>`).join('')+`<span class="tab add" aria-hidden="true">+</span>`;
+  const st=c.st.map((s,i)=>{const l=lvl(s[1]);return `<a class="stu" href="#student-demo">${i===0?'<span class="hint">Πάτησε για να δεις την πρόοδο</span>':''}<span class="av sm">${s[0].split(' ').map(w=>w[0]).join('')}</span>
+    <span class="stu-b"><span class="r"><b>${esc(s[0])}</b><b class="lv ${l[1]}">${s[1]}%</b></span><span class="tr"><i class="${l[1]}" style="width:${s[1]}%"></i></span><small>${esc(s[2])}</small></span>${I.back.replace('15 5 8 12 15 19','9 5 16 12 9 19')}</a>`}).join('');
+  const log=c.log.map(e=>`<div class="log"><b>${e[0]}</b><span>${esc(e[1])}${e[2]?'<small class="lv good">Ολοκληρώθηκε</small>':''}</span></div>`).join('');
+  return subTop('Πίνακας καθηγητή') + `<main class="wrap page">${soonHead('Τα τμήματά σου σε μία οθόνη')}
+  <div class="demo">
+    <div class="tbh"><span class="av">ΚΘ</span><b>Κωνσταντίνος Θεοφίλου</b></div>
+    <div class="tabs">${tabs}</div>
+    <div class="pv"><div class="r"><span>${c.name} · Πληροφορική</span><span class="code">${c.code}</span></div><small>${c.meta}</small>
+      <span class="fake-in tall">nikos.p@gmail.com<br>maria.k@gmail.com</span><span class="fake-btn solid">Στείλε προσκλήσεις</span></div>
+    <div class="grid3"><div class="pv"><b class="big">${c.st.length}</b><small>μαθητές</small></div><div class="pv"><b class="big">${c.avg}</b><small>μέση κατανόηση</small></div><div class="pv warn"><b class="big">${c.alerts}</b><small>θέλουν προσοχή</small></div></div>
+    <div class="r-h"><b>Μαθητές</b></div>${st}
+    <div class="r-h"><b>Ημερολόγιο ύλης</b></div>
+    <div class="where"><small>ΠΟΥ ΣΤΑΜΑΤΗΣΑΜΕ</small><b>${esc(c.where)}</b></div>
+    <div class="pv">${log}</div>
+    <div class="pv"><b style="font-size:14px">Σύγκριση με πέρσι</b>
+      <div class="cmp"><span>Φέτος</span><span class="tr"><i style="width:${c.now}%"></i></span></div><div class="cmp"><span>Πέρσι</span><span class="tr"><i class="past" style="width:${c.last}%"></i></span></div><small>${esc(c.cmp)}</small></div>
+  </div><p class="demo-note">Δείγμα με παραδειγματικά στοιχεία</p>
+  <a class="btn ghost" href="#teacher">Μάθε περισσότερα για καθηγητές</a></main>${footer()}`; }
+
+function join(){ return subTop('Σύνδεση') + `<main class="wrap page">${soonHead('Σύνδεση με πρόσκληση από τον καθηγητή σου')}
+  <div class="demo">
+    <div class="pv invite"><span class="av">ΚΘ</span><span><small>ΠΡΟΣΚΛΗΣΗ</small><b>Κωνσταντίνος Θεοφίλου · Γ1 Πληροφορική</b></span></div>
+    <div class="pv"><small>Email</small><span class="fake-in">nikos.p@gmail.com</span><small>Συμπληρώθηκε από την πρόσκληση</small></div>
+    <div class="grid2"><div class="pv"><small>Όνομα</small><span class="fake-in">Νίκος</span></div><div class="pv"><small>Επίθετο</small><span class="fake-in">Π.</span></div></div>
+    <div class="pv"><small>Ομάδα προσανατολισμού</small><span class="fake-in sel">Σπουδών Οικονομίας &amp; Πληροφορικής</span>
+      <div class="chips"><span class="chip on">Πληροφορική</span><span class="chip">Νεοελληνική Γλώσσα</span><span class="chip">Μαθηματικά</span><span class="chip">Οικονομία</span></div></div>
+    <span class="btn" aria-disabled="true">Συνέχεια</span>
+  </div><p class="demo-note">Δείγμα με παραδειγματικά στοιχεία</p></main>${footer()}`; }
+
+/* ---------- μενού, φύλλα ---------- */
+function drawer(){
+  const soon='<span class="badge soon" style="margin:0">ΣΥΝΤΟΜΑ</span>';
+  const dark=curTheme()==='dark';
+  return `<div class="scrim" data-act="close"></div><nav class="drawer" aria-label="Μενού">
+    <img src="assets/logo.png" alt="ΣΥΝΑΨΗ" style="width:170px;height:auto;background:#2B3722;border-radius:12px;padding:8px 10px">
+    <div class="dl"><span class="dh">Τα μαθήματά μου</span>
+      <a class="di cur" href="#">${I.pc}Πληροφορική<span class="r" style="font-size:12px;color:var(--accent)">${OPEN_UP_TO}/${LESSONS.length}</span></a>
+      <div class="di off">${I.book}Νεοελληνική Γλώσσα<span class="r">${I.lock}</span></div><div class="di off">${I.sigma}Μαθηματικά<span class="r">${I.lock}</span></div><div class="di off">${I.trend}Οικονομία<span class="r">${I.lock}</span></div></div>
+    <div class="dl"><span class="dh">Διαθέσιμα</span>
+      <a class="di" href="#guidance">${I.chat}Επιπλέον καθοδήγηση</a>
+      <a class="di" href="#teacher">${I.cap}Είσαι καθηγητής;</a>
+      <a class="di" href="#about">${I.people}Ποιοι είμαστε</a>
+      <button class="di" data-act="theme">${dark?I.sun:I.moon}${dark?'Φωτεινό θέμα':'Σκοτεινό θέμα'}</button></div>
+    <div class="dl"><span class="badge soon" style="margin:0 0 4px 8px">ΣΥΝΤΟΜΑ</span>
+      <a class="di" href="#progress">${I.chart}Η πρόοδός μου</a>
+      <a class="di" href="#teacher-board">${I.board}Πίνακας καθηγητή</a>
+      <a class="di" href="#join">${I.key}Σύνδεση</a></div>
+  </nav>`;
+}
+function lockedSheet(n){
+  const l=LESSONS.find(x=>x.n===n);
+  return `<div class="scrim" data-act="close"></div><div class="sheet" role="dialog" aria-label="${esc(l.title)}"><div class="wrap">
+    <span class="grab"></span>
+    <div style="display:flex;gap:14px;align-items:center"><span class="node" style="flex:none;width:52px;height:52px;border-radius:16px;background:var(--locked-bg)">${I.lock}</span>
+      <div><div class="dh" style="padding:0">Μάθημα ${l.n} · ανοίγει σύντομα</div><h2 style="font-size:21px">${esc(l.title)}</h2></div></div>
+    ${l.goals.length?`<div><b style="font:700 14px var(--display)">Τι θα μάθεις</b><ul style="margin-top:8px">${l.goals.slice(0,4).map(g=>`<li>${g}</li>`).join('')}</ul></div>`:''}
+    <div class="note" style="background:var(--accent-soft);color:var(--ink)"><b>Θέλεις να το δουλέψουμε μαζί;</b><br>Δωρεάν δοκιμαστικό μάθημα σε μικρό τμήμα, διά ζώσης ή online.</div>
+    <a class="btn" href="#guidance" data-act="close">Θέλω να μάθω περισσότερα</a>
+    <button class="btn ghost" data-act="close">Πίσω στη διαδρομή</button></div></div>`;
+}
+function reportSheet(){
+  const rows=[['Η έννοια του προβλήματος','Πολύ καλά','good'],['Τι είναι αλγόριθμος','Καλά','ok'],['Δομή επιλογής','Χρειάζεται εξάσκηση','low'],['Δομές επανάληψης','Δεν έχει διδαχθεί ακόμα','na']];
+  return `<div class="scrim" data-act="close"></div><div class="sheet" role="dialog" aria-label="Αναφορά προόδου"><div class="wrap">
+  <span class="grab"></span>
+  <div class="rep-h"><img src="assets/logo.png" alt="ΣΥΝΑΨΗ" style="height:30px;width:auto;background:#2B3722;border-radius:8px;padding:4px 6px"><span class="badge soon" style="margin:0">ΔΕΙΓΜΑ</span></div>
+  <div><small class="dh" style="padding:0">Αναφορά προόδου · Οκτώβριος 2026</small><h2 style="font-size:21px">Νίκος Π. · Πληροφορική Γ' Λυκείου</h2></div>
+  <div class="est"><small>Εκτιμώμενος βαθμός σήμερα</small><div><b>14–16</b><span>/ 20 ↑</span></div><small>Σεπτέμβριος: 12–14</small></div>
+  <div class="pv">${rows.map(r=>`<div class="kv"><span style="color:var(--ink)">${r[0]}</span><b class="lv ${r[2]}">${r[1]}</b></div>`).join('')}</div>
+  <div class="grid3"><div class="pv"><b class="big">8/8</b><small>παρουσίες</small></div><div class="pv"><b class="big">6/8</b><small>εργασίες</small></div><div class="pv"><b class="big">15</b><small>διαγώνισμα</small></div></div>
+  <label for="r-comment">Σχόλιο καθηγητή<textarea id="r-comment" rows="3">Ο Νίκος καταλαβαίνει γρήγορα τη λογική. Στις επαναλήψεις κάνει λάθη στη συνθήκη τερματισμού, κάτι πολύ συνηθισμένο που διορθώνεται με εξάσκηση.</textarea></label>
+  <label for="r-goal">Στόχος για τον Νοέμβριο<input id="r-goal" type="text" value="Δύο επιπλέον ασκήσεις επανάληψης την εβδομάδα"></label>
+  <label for="r-to">Αποστολή σε<input id="r-to" type="text" value="Κηδεμόνας · g.papadopoulos@gmail.com" readonly></label>
+  <button class="btn" disabled>Αποστολή στον κηδεμόνα · σύντομα</button>
+  <button class="btn ghost" data-act="close">Κλείσιμο</button></div></div>`;
+}
+function testSheet(n){ return `<div class="scrim" data-act="close"></div><div class="sheet" role="dialog" aria-label="Μάθημα-διαγώνισμα"><div class="wrap"><span class="grab"></span>
+  <div style="display:flex;gap:14px;align-items:center"><span class="node" style="flex:none;width:52px;height:52px;border-radius:14px;background:var(--surface);border:2px dashed var(--accent);color:var(--accent)">${I.clip}</span>
+    <div><div class="dh" style="padding:0">Μάθημα-διαγώνισμα · κλειδωμένο</div><h2 style="font-size:21px">Διαγώνισμα: μαθήματα ${TEST_AFTER[n]}</h2></div></div>
+  <p style="color:var(--muted)">Σύντομο διαγώνισμα με λύσεις, σε τρία επίπεδα δυσκολίας. Ανοίγει όταν ολοκληρωθεί η ενότητα.</p>
+  <button class="btn ghost" data-act="close">Πίσω στη διαδρομή</button></div></div>`; }
+function finalSheet(){ return `<div class="scrim" data-act="close"></div><div class="sheet" role="dialog" aria-label="Θέματα Πανελλαδικών και επαναληπτικά"><div class="wrap"><span class="grab"></span>
+  <div style="display:flex;gap:14px;align-items:center"><span class="node" style="flex:none;width:52px;height:52px;border-radius:14px;background:var(--accent);color:#fff">${I.stack}</span>
+    <div><div class="dh" style="padding:0">Τελικό μάθημα-διαγώνισμα · κλειδωμένο</div><h2 style="font-size:21px">Θέματα Πανελλαδικών &amp; επαναληπτικά</h2></div></div>
+  <ul><li>Θέματα Πανελλαδικών προηγούμενων ετών, οργανωμένα ανά κεφάλαιο</li><li>Επαναληπτικά διαγωνίσματα σε όλη την ύλη, σε μορφή εξετάσεων</li><li>Αναλυτικές λύσεις με επεξήγηση για κάθε θέμα</li></ul>
+  <p style="color:var(--muted)">Κλειδωμένο για την ώρα. Ανοίγει στην τελική προετοιμασία πριν από τις εξετάσεις.</p>
+  <button class="btn ghost" data-act="close">Πίσω στη διαδρομή</button></div></div>`; }
+
+/* ---------- δρομολόγηση ---------- */
+const ROUTES={'':home,guidance,about,teacher,progress,'teacher-board':teacherBoard,'student-demo':studentDemo,join};
+function render(){
+  const h=location.hash.replace('#','');
+  const app=document.getElementById('app');
+  app.innerHTML=(ROUTES[h]||home)();
+}
+function layer(html){ document.getElementById('layer').innerHTML=html; }
+function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2200); }
+function copy(text, ok){ const done=()=>toast(ok||'Αντιγράφηκε');
+  try{ navigator.clipboard.writeText(text).then(done,()=>toast(text)); }catch(e){ toast(text); } }
+
+document.addEventListener('click',e=>{
+  const el=e.target.closest('[data-act],[data-locked],[data-soon],[data-copy],[data-mode],[data-cls],[data-brand],[data-test],[data-testsoon]'); if(!el) return;
+  if(el.dataset.cls){ cls=+el.dataset.cls; render(); return; }
+  if(el.dataset.test){ testLvl=+el.dataset.test; const y=scrollY; render(); scrollTo(0,y); return; }
+  if(el.dataset.brand){ brand=+el.dataset.brand; const y=scrollY; render(); scrollTo(0,y); return; }
+  if(el.dataset.locked){ e.preventDefault(); layer(lockedSheet(+el.dataset.locked)); return; }
+  if(el.dataset.testsoon){ e.preventDefault(); layer(testSheet(+el.dataset.testsoon)); return; }
+  if(el.dataset.soon){ e.preventDefault(); layer(finalSheet()); return; }
+  if(el.dataset.copy){ copy(el.dataset.copy); return; }
+  if(el.dataset.mode){ mode=el.dataset.mode; render(); return; }
+  const a=el.dataset.act;
+  if(a==='menu') layer(drawer());
+  if(a==='report') layer(reportSheet());
+  if(a==='close'){ layer(''); }
+  if(a==='theme'){ setTheme(curTheme()==='dark'?'light':'dark'); if(document.querySelector('.drawer')) layer(drawer()); }
+  if(a==='share'){ copy('Δες τις σημειώσεις Πληροφορικής της ΣΥΝΑΨΗΣ: '+SHARE_URL,'Ο σύνδεσμος αντιγράφηκε. Στείλ\' τον σε έναν φίλο!'); }
+});
+document.addEventListener('submit',e=>e.preventDefault());
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') layer(''); });
+window.addEventListener('hashchange',()=>{ layer(''); render(); scrollTo(0,0); });
+window.addEventListener('pageshow',()=>{ try{const t=localStorage.getItem('synapsi-theme'); if(t) document.documentElement.setAttribute('data-theme',t);}catch(e){} render(); });
+window.addEventListener('storage',e=>{ if(e.key==='synapsi-theme'&&e.newValue){ document.documentElement.setAttribute('data-theme',e.newValue); render(); } });
+render();
+</script>
+
+</body></html>

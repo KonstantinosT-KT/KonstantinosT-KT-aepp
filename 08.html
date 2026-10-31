@@ -1,0 +1,859 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Μάθημα 8 · Τελεστές, συναρτήσεις, εκφράσεις</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
+<style>
+/* Layout: one A4-like sheet centred on a cool ground; coloured callouts by role (ορισμός, ήξερες ότι, παγίδα, παράδειγμα) */
+:root{
+  --ground:#e9edf4; --paper:#ffffff; --ink:#172036; --muted:#5a6377; --line:#d9dfea; --soft:#f3f5f9;
+  --blue:#2457d6; --blue-bg:#e9efff; --teal:#0b7f72; --teal-bg:#e2f4f1;
+  --amber:#a65400; --amber-bg:#fff3df; --amber-line:#e2ad62;
+  --coral:#b93b12; --coral-bg:#fcebe4; --violet:#6534c9; --violet-bg:#efe8fd;
+  --s-blue:#2457d6; --s-teal:#0b8174; --s-violet:#6534c9; --s-ink:#172036; --on-solid:#ffffff; --on-solid-2:#d8e1ff;
+  --hero:#172036; --hero-fg:#ffffff; --hero-sub:#c4cef0; --hero-kick:#a9bcff;
+  --mark:#ffe28a;
+  --display:"Commissioner","Noto Sans",system-ui,sans-serif;
+  --body:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0 0 8px}
+
+/* Toolbar */
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:10px 0;background:var(--ground)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:3px}
+.seg button,.btn{font:600 13px/1 var(--body);border:0;background:none;color:var(--muted);padding:8px 13px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid)}
+.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.spacer{flex:1}
+#status{font-size:12.5px;color:var(--muted)}
+.edit-only{display:none}
+body.editing .edit-only{display:inline-block}
+body.editing .view-only{display:none}
+body.editing #doc{outline:2px dashed var(--blue);outline-offset:6px}
+body.editing #doc [contenteditable="false"]{cursor:default}
+
+/* Sheet */
+#doc{max-width:860px;margin:0 auto;background:var(--paper);border-radius:14px;padding:clamp(18px,4vw,44px);box-shadow:0 1px 2px rgba(10,20,40,.06),0 8px 30px rgba(10,20,40,.06)}
+body.student .teacher{display:none}
+
+.hero{background:var(--hero);color:var(--hero-fg);border-radius:14px;padding:22px 24px 24px;position:relative;overflow:hidden}
+.hero .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--hero-kick);font-weight:700}
+.hero h1{font-size:clamp(28px,5vw,40px);font-weight:800;margin:6px 0 8px;letter-spacing:-.01em}
+.hero .sub{color:var(--hero-sub);max-width:34em}
+.hero .sub b{color:var(--hero-fg)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.12);color:var(--hero-fg)}
+.hero .deco{position:absolute;right:-10px;top:-6px;opacity:.16;width:220px;height:auto}
+.hero .deco *{stroke:var(--hero-fg)}
+
+.goals{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 18px;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px}
+.goals h3{grid-column:1/-1;font-size:13px;color:var(--blue);text-transform:uppercase;letter-spacing:.08em}
+.goals div{padding-left:20px;position:relative;font-size:14px}
+.goals div::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:800}
+
+.glance{margin-top:14px;background:var(--soft);border-radius:12px;padding:14px 16px}
+.glance h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.figure{overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:520px;height:auto;font-family:var(--body)}
+
+.sec{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:5px;margin:30px 0 12px;break-after:avoid}
+.sec .num{font-family:var(--display);font-weight:800;font-size:22px;color:var(--blue);font-variant-numeric:tabular-nums}
+.sec h2{font-size:22px;font-weight:800}
+.sec .ref{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;break-inside:avoid}
+.tag{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.def{background:var(--blue-bg);border-left:4px solid var(--blue)} .def .tag{color:var(--blue)}
+.src{font-size:12px;color:var(--muted);margin:2px 0 0}
+.trivia{background:var(--amber-bg);border:1.5px dashed var(--amber-line)} .trivia .tag{color:var(--amber)}
+.talk{margin-top:6px;font-size:14px;color:var(--amber);font-weight:600}
+.talk span{font-weight:400}
+.trap{background:var(--coral-bg);border-left:4px solid var(--coral)} .trap .tag{color:var(--coral)}
+.ex{background:var(--teal-bg);border-left:4px solid var(--teal)} .ex .tag{color:var(--teal)}
+.plain{background:var(--soft)} .plain .tag{color:var(--ink)}
+.hl{background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 1px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:10px 0}
+.grid .box{margin:0}
+ul.tight{margin:4px 0 8px;padding-left:20px} ul.tight li{margin:3px 0}
+.small{font-size:13px;color:var(--muted)}
+.cap{font-size:13.5px;font-weight:700;margin-bottom:6px}
+
+.tablewrap{overflow-x:auto;margin:10px 0}
+table.t{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
+table.t th{background:var(--s-ink);color:var(--paper);text-align:left;padding:7px 10px;font-weight:600}
+table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:top}
+
+.exhead{display:flex;align-items:center;gap:10px;margin:22px 0 8px}
+.lvl{display:inline-flex;gap:4px}
+.lvl i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}
+.lvl i.on{background:var(--violet)}
+.exhead h3{font-size:17px}
+.q{margin:10px 0 14px;break-inside:avoid}
+.qn{display:inline-block;min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:7px;background:var(--violet-bg);color:var(--violet);font-weight:800;font-size:13px;margin-right:8px}
+.theme{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-left:6px}
+table.tf{width:100%;border-collapse:collapse;margin-top:6px;font-size:14.5px}
+table.tf td{padding:6px 8px;border-bottom:1px solid var(--line)}
+table.tf td.b{width:70px;text-align:center;color:var(--muted)}
+.lines{height:var(--h,44px);background:repeating-linear-gradient(transparent 0 27px,var(--line) 27px 28px);margin-top:6px}
+.drawbox{height:180px;border:1.5px dashed var(--line);border-radius:10px;margin-top:8px}
+.indent{margin-left:34px}
+.sol{color:var(--teal);font-weight:700}
+.ans .q{margin:8px 0}
+.teacher .sec{border-color:var(--teal)} .teacher .sec .num{color:var(--teal)}
+
+/* SVG roles */
+.f-blue{fill:var(--s-blue)} .f-teal{fill:var(--s-teal)} .f-violet{fill:var(--s-violet)} .f-ink{fill:var(--s-ink)}
+.f-paper{fill:var(--paper)} .f-on{fill:var(--on-solid)} .f-on2{fill:var(--on-solid-2)} .f-text{fill:var(--ink)} .f-muted{fill:var(--muted)} .f-onink{fill:var(--paper)}
+.st-ink{stroke:var(--ink)} .st-blue{stroke:var(--blue)} .st-teal{stroke:var(--teal)} .st-violet{stroke:var(--violet)}
+.f-arrow{fill:var(--ink)}
+
+
+/* v2 additions: code, narrow flowcharts, legends */
+:root{--mono:ui-monospace,"Cascadia Mono","Consolas","DejaVu Sans Mono",monospace}
+pre.code{font-family:var(--mono);font-size:14px;line-height:1.55;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:6px 0 8px;overflow-x:auto;white-space:pre}
+.figure.narrow svg{min-width:0;max-width:250px;margin:4px auto}
+.grid.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+ul.legend{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0 2px}
+ul.legend li{font-size:14px}
+ul.legend b{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:6px;background:var(--violet-bg);color:var(--violet);margin-right:4px}
+
+
+/* v3 additions: solved examples step by step, blank value tables */
+.solved{border:1.5px solid var(--teal);background:var(--paper)} .solved .tag{color:var(--teal)}
+.steps{display:grid;gap:14px;margin-top:10px}
+.step{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.stepn{width:30px;height:30px;border-radius:50%;background:var(--s-teal);color:var(--on-solid);font:800 14px/30px var(--display);text-align:center}
+table.t.blank td{height:34px;border:1px solid var(--line)}
+
+/* v4: graphs */
+.figure.narrow.graph svg{max-width:380px}
+
+/* v5: toolbox subsections */
+h3.tool{font-size:17px;margin:24px 0 8px;padding-top:4px;border-top:1px solid var(--line)}
+
+/* homework vs self-check */
+.q.hw::before{content:"Για το σπίτι";display:block;width:max-content;font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:99px;padding:4px 9px;margin-bottom:6px}
+body.editing .q.hw::before{display:none}
+.hwtoggle{display:block;margin-bottom:6px;font:600 12px/1 var(--body);padding:6px 10px;border-radius:99px;border:1.5px dashed var(--line);background:var(--paper);color:var(--muted);cursor:pointer}
+.hwtoggle[aria-pressed="true"]{border-style:solid;border-color:var(--amber-line);color:var(--amber);background:var(--amber-bg)}
+.hwnote{font-size:13px;color:var(--amber);font-weight:600}
+
+@media (max-width:520px){ .indent{margin-left:0} .hero .deco{display:none} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* v4: math notation (fractions, roots) */
+.mx{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:1.06em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 2px;line-height:1.25}
+.frac>span{padding:0 4px}
+.frac>span:first-child{border-bottom:1.3px solid currentColor}
+.rt{border-top:1.3px solid currentColor;padding:0 2px 0 1px;margin-left:1px}
+
+/* student additions */
+#doc{margin-top:0}
+#nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ground);max-width:860px;margin:0 auto;padding-block:10px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.navin{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.navin::-webkit-scrollbar{display:none}
+#nav a{flex:none;font:600 13px/1 var(--body);color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
+#nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
+.btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.quiz{display:grid;gap:10px;margin-top:10px}
+.qi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:8px}
+.qi .qs{margin:0}
+.qb{display:flex;gap:8px;flex-wrap:wrap}
+.qb button{font:600 14px/1 var(--body);padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;min-width:96px}
+.qb button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.qi.ok{border-color:var(--teal);background:var(--teal-bg)}
+.qi.no{border-color:var(--coral);background:var(--coral-bg)}
+.qi .qb button.pick{border-color:currentColor}
+.qi.ok .qb button.pick{background:var(--s-teal);border-color:var(--s-teal);color:var(--on-solid)}
+.qi.no .qb button.pick{background:var(--coral);border-color:var(--coral);color:var(--paper)}
+.qi.no .qb button.right{border-color:var(--teal);color:var(--teal)}
+.fb{font-size:13px;font-weight:700}
+.qi.ok .fb{color:var(--teal)} .qi.no .fb{color:var(--coral)}
+.score{font:700 15px/1.4 var(--display);padding:10px 14px;border-radius:10px;background:var(--violet-bg);color:var(--violet);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.score .btn{font-size:13px;padding:8px 12px}
+
+details.reveal{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+details.reveal summary{cursor:pointer;font-weight:700;color:var(--teal);padding:10px 14px;list-style:none}
+details.reveal summary::-webkit-details-marker{display:none}
+details.reveal summary::before{content:"▸ ";}
+details.reveal[open] summary::before{content:"▾ ";}
+details.reveal .rv{padding:0 14px 12px}
+
+.deck{display:grid;gap:12px;margin-top:10px}
+.card{position:relative;display:block;width:100%;min-height:220px;border:0;padding:0;background:none;cursor:pointer;perspective:1200px;font:inherit;color:inherit;text-align:left}
+.card .face{position:absolute;inset:0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;backface-visibility:hidden;transition:transform .45s ease}
+.card .front{background:var(--hero);color:var(--hero-fg);justify-content:center}
+.card .back{background:var(--blue-bg);color:var(--ink);border:1.5px solid var(--blue);transform:rotateY(180deg);overflow:auto}
+.card.flipped .front{transform:rotateY(-180deg)}
+.card.flipped .back{transform:rotateY(0)}
+.card:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:14px}
+.ck{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.term{font:800 clamp(24px,6vw,34px)/1.15 var(--display)}
+.cdef{font-size:15.5px;line-height:1.55}
+.tap{font-size:12.5px;opacity:.7;margin-top:auto}
+.deckbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.count{font:700 14px var(--display);min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.card .face{transition:none}}
+@media (max-width:520px){ #doc{border-radius:12px} .card{min-height:260px} }
+</style>
+<style id="synapsi-brand">
+:root{--ground:#F7F6F0;--ink:#2B3722;--muted:#5E6253;--line:#E1E1D7;--soft:#F3F2EA;--blue:#4F6230;--blue-bg:#EEF0E2;--s-blue:#4F6230;--s-ink:#2B3722;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D;--on-solid-2:#E6E0CC}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}}
+:root[data-theme="dark"]{--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}
+body::before{background:var(--ground)}
+.syn-bar{max-width:860px;margin:0 auto;padding-top:12px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
+.syn-bar a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--hero);color:#fff;text-decoration:none}
+.syn-bar span{color:var(--muted)}
+.syn-foot{max-width:860px;margin:18px auto 0;display:flex;flex-direction:column;gap:12px}
+.syn-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.syn-nav a,.syn-nav span{min-height:52px;padding:8px 14px;border-radius:12px;display:flex;flex-direction:column;justify-content:center;gap:2px;text-decoration:none;font:700 14px/1.3 var(--display);background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.syn-nav small{font:600 11.5px var(--body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.syn-nav .next{text-align:right;background:var(--hero);color:#fff;border-color:var(--hero)}
+.syn-nav .next small{color:var(--hero-kick)}
+.syn-nav .off{opacity:.6}
+.syn-note{font-size:13px;color:var(--muted);padding:12px 14px;border-radius:10px;background:var(--soft)}
+.syn-copy{font-size:12px;color:var(--muted)}
+</style>
+<script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<div class="syn-bar"><a href="../index.html">&#8592; Διαδρομή</a><span>Μάθημα 8 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-7-5">7.5</a><a href="#s-7-6">7.6</a><a href="#s-7-7">7.7</a><a href="#s-3">Συγκρίσεις και λογικές εκφράσεις</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a></div></nav>
+<main id="doc" lang="el">
+<section class="hero">
+<svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
+<path d="M110 30h40M130 10v40"></path>
+<path d="M170 30h40"></path>
+<path d="M110 90l30 30M140 90l-30 30"></path>
+<path d="M170 105h40"></path><circle cx="190" cy="92" r="3"></circle><circle cx="190" cy="118" r="3"></circle>
+<path d="M100 150h120"></path>
+</svg>
+<div class="kicker">Κεφάλαιο 7 · Βασικές έννοιες προγραμματισμού</div>
+<h1>Τελεστές, συναρτήσεις, εκφράσεις</h1>
+<p class="sub">Ο υπολογιστής δεν «βλέπει» κλάσματα, ρίζες και εκθέτες όπως εσύ στο τετράδιο. Θα μάθεις να γράφεις κάθε τύπο <b>σε μία γραμμή</b>, να ξέρεις <b>με ποια σειρά</b> θα γίνουν οι πράξεις και <b>τι τύπο</b> θα έχει το αποτέλεσμα.</p>
+<div class="chips"><span class="chip">Βιβλίο §7.5–7.7 · σελ. 131–132</span><span class="chip">Οδηγίες Μελέτης §1.5</span><span class="chip">2 διδακτικές ώρες</span><span class="chip">Θέμα Α · Θέμα Β</span></div>
+</section>
+<div class="goals">
+<h3>Στο τέλος του μαθήματος θα μπορείς να…</h3>
+<div>χρησιμοποιείς τους <b>αριθμητικούς τελεστές</b> και ξέρεις τη διαφορά <b>/</b> και <b>div</b></div>
+<div>βρίσκεις τον <b>τύπο του αποτελέσματος</b> μιας πράξης</div>
+<div>χρησιμοποιείς τις <b>συναρτήσεις</b> της ΓΛΩΣΣΑΣ, και την Α_Μ με <b>αρνητικούς</b></div>
+<div>μετατρέπεις έναν <b>μαθηματικό τύπο</b> σε έκφραση της ΓΛΩΣΣΑΣ και αντίστροφα</div>
+<div>υπολογίζεις εκφράσεις με τη σωστή <b>ιεραρχία</b> πράξεων</div>
+<div>γράφεις και υπολογίζεις <b>λογικές εκφράσεις</b> με ΚΑΙ, Η, ΟΧΙ</div>
+</div>
+<div class="glance">
+<h3>Όλο το μάθημα με μια ματιά: η σειρά των πράξεων</h3>
+<div class="figure">
+<svg aria-label="Ιεραρχία πράξεων: πρώτα οι παρενθέσεις. Μετά οι αριθμητικοί (^, μετά * / div mod, μετά + −), μετά οι συγκριτικοί (= &lt;&gt; &lt; &lt;= &gt; &gt;=), τέλος οι λογικοί (ΟΧΙ, μετά ΚΑΙ, μετά Η)." font-size="11" role="img" viewbox="0 0 640 196">
+<defs><marker id="arG8" markerheight="7" markerwidth="7" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="f-arrow" d="M0 0L10 5L0 10z"></path></marker></defs>
+<rect class="f-ink" height="26" rx="13" width="620" x="10" y="6"></rect>
+<text class="f-onink" font-size="12" font-weight="700" text-anchor="middle" x="320" y="23">0 · Πρώτα ό,τι είναι μέσα σε παρενθέσεις (με την ίδια σειρά)</text>
+<g stroke-width="1.8">
+<rect class="f-paper st-blue" height="112" rx="8" width="190" x="10" y="46"></rect>
+<rect class="f-paper st-violet" height="112" rx="8" width="190" x="225" y="46"></rect>
+<rect class="f-paper st-teal" height="112" rx="8" width="190" x="440" y="46"></rect>
+</g>
+<g class="st-ink" fill="none" stroke-width="1.6"><path d="M201 102H223" marker-end="url(#arG8)"></path><path d="M416 102H438" marker-end="url(#arG8)"></path></g>
+<g font-size="12.5" font-weight="700"><text class="f-blue" x="22" y="68">1 · Αριθμητικοί</text><text class="f-violet" x="237" y="68">2 · Συγκριτικοί</text><text class="f-teal" x="452" y="68">3 · Λογικοί</text></g>
+<g class="f-text" font-family="ui-monospace,Consolas,monospace" font-size="12.5">
+<text x="22" y="92">α) ^</text><text x="22" y="114">β) *  /  div  mod</text><text x="22" y="136">γ) +  −</text>
+<text x="237" y="98">=   &lt;&gt;</text><text x="237" y="120">&lt;   &lt;=   &gt;   &gt;=</text>
+<text x="452" y="92">α) ΟΧΙ</text><text x="452" y="114">β) ΚΑΙ</text><text x="452" y="136">γ) Η</text>
+</g>
+<g class="f-muted" font-size="10.5"><text x="22" y="152">ίδια σειρά: από αριστερά</text><text x="237" y="152">όλοι ίδια σειρά</text><text x="452" y="152">αποτέλεσμα: ΑΛΗΘΗΣ / ΨΕΥΔΗΣ</text></g>
+<g class="f-text" font-size="11.5"><text x="10" y="184">Παράδειγμα: <tspan font-family="ui-monospace,Consolas,monospace" font-weight="700">x mod 2 = 0 ΚΑΙ x &gt; 10</tspan> → πρώτα το mod (1), μετά οι δύο συγκρίσεις (2), στο τέλος το ΚΑΙ (3).</text></g>
+</svg>
+</div>
+</div>
+<div class="sec" id="s-7-5"><span class="num">7.5</span><h2>Αριθμητικοί τελεστές</h2><span class="ref">Βιβλίο σελ. 131</span></div>
+<p>Τους τελεστές τους γνωρίσαμε στο Μάθημα 3 (Εργαλεία 1–2). Τώρα θα δούμε δύο πράγματα που η ΓΛΩΣΣΑ «κοιτάζει» αυστηρά: <b>με τι αριθμούς</b> δουλεύει κάθε τελεστής και <b>τι τύπο</b> δίνει το αποτέλεσμα.</p>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th>Τελεστής</th><th>Πράξη</th><th>Παράδειγμα</th><th>Τύπος αποτελέσματος</th></tr>
+<tr><td><b>+ − *</b></td><td>πρόσθεση, αφαίρεση, πολλαπλασιασμός</td><td><span class="kvs"><span class="kv">7 * 2 = 14</span><span class="kv">7.0 * 2 = 14.0</span></span></td><td>ακέραιος αν <b>και οι δύο</b> είναι ακέραιοι, αλλιώς πραγματικός</td></tr>
+<tr><td><b>/</b></td><td>διαίρεση</td><td><span class="kvs"><span class="kv">7 / 2 = 3.5</span><span class="kv"><b>8 / 2 = 4.0</b></span></span></td><td><b>πάντα πραγματικός</b></td></tr>
+<tr><td><b>^</b></td><td>ύψωση σε δύναμη</td><td><span class="kvs"><span class="kv">2 ^ 3 = 8</span><span class="kv">9 ^ 0.5 = 3.0</span></span></td><td>ανάλογα με τους αριθμούς</td></tr>
+<tr><td><b>div</b></td><td>πηλίκο ακέραιας διαίρεσης</td><td><span class="nw">7 div 2 = 3</span></td><td>ακέραιος. <b>Μόνο με ακεραίους</b></td></tr>
+<tr><td><b>mod</b></td><td>υπόλοιπο ακέραιας διαίρεσης</td><td><span class="nw">7 mod 2 = 1</span></td><td>ακέραιος. <b>Μόνο με ακεραίους</b></td></tr>
+</tbody></table></div>
+<div class="grid g2">
+<div class="box ex"><div class="tag">/ ή div; η μεγάλη διαφορά</div><p>Η <b>/</b> είναι η διαίρεση των μαθηματικών: κρατά και τα δεκαδικά, και το αποτέλεσμα είναι πάντα πραγματικό. Η <b>div</b> κρατά μόνο το <b>ακέραιο πηλίκο</b> και δουλεύει μόνο με ακεραίους. <span class="nw">9 / 4 = 2.25,</span> ενώ <span class="nw">9 div 4 = 2.</span> Το <span class="nw">9.0 div 4</span> είναι <b>λάθος</b>.</p></div>
+<div class="box trap" style="margin:0"><div class="tag">Γιατί μετράει ο τύπος του αποτελέσματος</div><p>Αν η μ είναι ΑΚΕΡΑΙΑ, η εντολή <b><span class="nw">μ ← 8 / 2</span></b> είναι λάθος, γιατί το <span class="nw">8 / 2</span> δίνει 4.0, πραγματικό. Το βιβλίο ζητά η μεταβλητή και η έκφραση να είναι <b>του ίδιου τύπου</b> (§7.8). Τα περιβάλλοντα της ΓΛΩΣΣΑΣ δέχονται ακέραια τιμή σε πραγματική μεταβλητή <span class="nw">(χ ← 4),</span> αλλά το αντίστροφο <b>ποτέ</b>.</p></div>
+</div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Αν ζητήσεις από σχεδόν οποιαδήποτε γλώσσα προγραμματισμού να υπολογίσει <b><span class="nw">0.1 + 0.2</span></b>, θα πάρεις <b>0.30000000000000004</b>. Ο υπολογιστής αποθηκεύει τους πραγματικούς σε δυαδική μορφή, και το 0.1 δεν γράφεται ακριβώς στο δυαδικό, όπως το 1/3 δεν γράφεται ακριβώς στο δεκαδικό (0.333…). Γι' αυτό οι προγραμματιστές αποφεύγουν να ελέγχουν αν δύο πραγματικοί είναι «ακριβώς ίσοι».</p>
+<p class="talk">Σκέψου: Γιατί οι τράπεζες κρατούν συχνά τα ποσά σε <b>λεπτά</b>, δηλαδή ως ακέραιους, και όχι σε ευρώ με δεκαδικά;</p>
+</div>
+<div class="sec" id="s-7-6"><span class="num">7.6</span><h2>Συναρτήσεις</h2><span class="ref">Βιβλίο σελ. 131</span></div>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th>Συνάρτηση</th><th>Υπολογίζει</th><th>Παράδειγμα</th><th>Προσοχή</th></tr>
+<tr><td><b>Α_Μ(Χ)</b></td><td>ακέραιο μέρος</td><td><span class="nw">Α_Μ(3.597) = 3</span></td><td>Α_Μ(−3.7) = <b>−4</b> (βλ. παρακάτω)</td></tr>
+<tr><td><b>Α_Τ(Χ)</b></td><td>απόλυτη τιμή</td><td>Α_Τ(−<span class="nw">3 + 1) = 2</span></td><td>ακέραιο δίνει ακέραιο, πραγματικό δίνει πραγματικό</td></tr>
+<tr><td><b>Τ_Ρ(Χ)</b></td><td>τετραγωνική ρίζα</td><td><span class="nw">Τ_Ρ(49) = 7</span></td><td>μόνο για <span class="nw">Χ &gt;= 0</span></td></tr>
+<tr><td><b>ΗΜ(Χ), ΣΥΝ(Χ), ΕΦ(Χ)</b></td><td>ημίτονο, συνημίτονο, εφαπτομένη</td><td><span class="nw">ΗΜ(30) = 0.5</span></td><td>η γωνία δίνεται σε <b>μοίρες</b></td></tr>
+<tr><td><b>ΛΟΓ(Χ)</b></td><td>φυσικός λογάριθμος</td><td><span class="nw">ΛΟΓ(1) = 0</span></td><td>μόνο για <span class="nw">Χ &gt; 0</span></td></tr>
+<tr><td><b>Ε(Χ)</b></td><td>e<sup>x</sup></td><td><span class="nw">Ε(0) = 1</span></td><td></td></tr>
+</tbody></table></div>
+<p class="src"><span class="ln li">Σχολικό βιβλίο §7.6</span><span class="ln li">Οι διευκρινίσεις για τις μοίρες, την Α_Μ και την Α_Τ είναι από τις επίσημες οδηγίες διδασκαλίας.</span></p>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση · ακέραιο μέρος</div>
+<p><b>Α_Μ(χ).</b> Το ακέραιο μέρος Α_Μ() ενός αριθμού χ ορίζεται, όπως στα μαθηματικά ο ακέραιος, με την ιδιότητα <span class="nw">Α_Μ(χ) &lt;= χ &lt; Α_Μ(χ) + 1.</span></p>
+<p class="src">Ύλη και οδηγίες διδασκαλίας, ενότητα 9</p>
+</div>
+<div class="grid g2" style="align-items:start">
+<div>
+<p>Το είδαμε στο Μάθημα 3 (Εργαλείο 6): η Α_Μ δίνει τον <b>μεγαλύτερο ακέραιο που δεν ξεπερνά</b> το χ. Στους θετικούς απλώς «κόβει» τα δεκαδικά. Στους <b>αρνητικούς</b> πηγαίνει <b>προς τα κάτω</b>:</p>
+<pre class="code">Α_Μ(3.7)  = 3     ! 3 &lt;= 3.7 &lt; 4
+Α_Μ(-3.7) = -4    ! -4 &lt;= -3.7 &lt; -3
+Α_Μ(-3)   = -3    ! ήδη ακέραιος
+Α_Μ(0.99) = 0</pre>
+</div>
+<div class="figure narrow graph">
+<svg aria-label="Αριθμογραμμή από −5 έως 1: το −3.7 βρίσκεται ανάμεσα στο −4 και το −3· η Α_Μ δίνει το −4, αριστερά του." font-size="11" role="img" viewbox="0 0 300 96">
+<defs><marker id="arA8" markerheight="7" markerwidth="7" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="f-arrow" d="M0 0L10 5L0 10z"></path></marker></defs>
+<path class="st-ink" d="M14 56H290" stroke-width="1.5"></path>
+<g class="st-ink" stroke-width="1.5"><path d="M30 50v12M76 50v12M122 50v12M168 50v12M214 50v12M260 50v12"></path></g>
+<g class="f-text" font-size="11" text-anchor="middle"><text x="30" y="78">−5</text><text font-weight="700" x="76" y="78">−4</text><text x="122" y="78">−3</text><text x="168" y="78">−2</text><text x="214" y="78">−1</text><text x="260" y="78">0</text></g>
+<circle class="f-violet" cx="90" cy="56" r="5"></circle>
+<text class="f-violet" font-weight="700" text-anchor="middle" x="90" y="36">−3.7</text>
+<path class="st-ink" d="M86 26C70 16 64 22 78 46" fill="none" marker-end="url(#arA8)" stroke-width="1.4"></path>
+<text class="f-muted" font-size="10.5" x="150" y="20">η Α_Μ πάει προς τα αριστερά</text>
+</svg>
+</div>
+</div>
+<p>Η στρογγυλοποίηση <b><span class="nw">Α_Μ(χ + 0.5)</span></b> (Μάθημα 3, Εργαλείο 7) δουλεύει σωστά και στους αρνητικούς: για χ = −2.6 δίνει Α_Μ(−2.1) = −3, που είναι ο πλησιέστερος ακέραιος.</p>
+<div class="sec" id="s-7-7"><span class="num">7.7</span><h2>Αριθμητικές εκφράσεις</h2><span class="ref">Βιβλίο σελ. 131–132</span></div>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση</div>
+<p><b>Έκφραση.</b> Όταν μια τιμή προκύπτει από υπολογισμό, τότε αναφερόμαστε σε εκφράσεις (expressions). Για τη σύνταξη μιας αριθμητικής έκφρασης χρησιμοποιούνται αριθμητικές σταθερές, μεταβλητές, συναρτήσεις, αριθμητικοί τελεστές και παρενθέσεις.</p>
+<p><b>Προϋπόθεση.</b> Κάθε έκφραση παριστάνει μια συγκεκριμένη αριθμητική τιμή, η οποία βρίσκεται μετά την εκτέλεση των πράξεων. Γι' αυτό είναι απαραίτητο όλες οι μεταβλητές που εμφανίζονται σε μια έκφραση να έχουν οριστεί προηγούμενα, δηλαδή να έχουν κάποια τιμή.</p>
+<p class="src">Σχολικό βιβλίο, §7.7</p>
+</div>
+<div class="box plain"><div class="tag">Θυμήσου · Μάθημα 3, Εργαλείο 9</div>
+<p><span class="ln">Στη ΓΛΩΣΣΑ, όπως και στον αλγόριθμο, <b>όλα γράφονται σε μία γραμμή</b>:</span><span class="ln li">το κλάσμα γράφεται με <b>/</b> και <b>παρενθέσεις σε αριθμητή και παρονομαστή</b>,</span><span class="ln li">ο πολλαπλασιασμός γράφεται πάντα με <b>*</b>,</span><span class="ln li">ο εκθέτης γράφεται με <b>^</b>,</span><span class="ln li">η ρίζα και η απόλυτη τιμή γράφονται με <b>Τ_Ρ( )</b> και <b>Α_Τ( )</b>.</span></p>
+<p class="mx"><span class="ln li">Το <span class="frac"><span>3x + 2y</span><span>a − b</span></span> γράφεται <code>(3 * x + 2 * y) / (a - b)</code></span><span class="ln li">Το √<span class="rt">a<sup>2</sup> + b<sup>2</sup></span> γράφεται <code>Τ_Ρ(a ^ 2 + b ^ 2)</code></span></p></div>
+<div class="grid g2">
+<div class="box plain"><div class="tag">Ίδια ιεραρχία: από αριστερά προς τα δεξιά</div>
+<pre class="code">20 / 4 / 2   = 5 / 2  = 2.5
+20 / (4 / 2) = 20 / 2 = 10.0
+2 + 3 * 4    = 14
+(2 + 3) * 4  = 20</pre></div>
+<div class="box plain"><div class="tag">Μέτρα τις παρενθέσεις</div><p>Διαφορετικός αριθμός αριστερών και δεξιών παρενθέσεων είναι από τα πιο συνηθισμένα λάθη. Πριν παραδώσεις, μέτρα: <b>κάθε ( έχει το ) της</b>. Περιττές παρενθέσεις δεν είναι λάθος. Αν διστάζεις, βάλε.</p></div>
+</div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Το καλοκαίρι του 2019 η «απλή» πράξη <b>8 ÷ <span class="nw">2(2 + 2)</span></b> έγινε viral στο Twitter και χώρισε το διαδίκτυο στα δύο: άλλοι έβγαζαν <b>16</b> και άλλοι <b>1</b>. Οι πρώτοι έκαναν τη διαίρεση και τον πολλαπλασιασμό από αριστερά προς τα δεξιά. Οι δεύτεροι θεώρησαν ότι το «<span class="nw">2(2 + 2)</span>» είναι ένα «κολλημένο» γινόμενο που γίνεται πρώτο. Η διαφωνία υπάρχει επειδή ο συμβολισμός είναι <b>αμφίσημος</b>.</p>
+<p class="talk">Σκέψου: Γράψε την πράξη σε ΓΛΩΣΣΑ. Μπορεί η ΓΛΩΣΣΑ να έχει τέτοια αμφισημία; Τι σου «επιβάλλει» να γράψεις;</p>
+</div>
+<div class="sec" id="s-3"><span class="num">∧</span><h2>Συγκρίσεις και λογικές εκφράσεις</h2><span class="ref">Οδηγίες Μελέτης §1.5</span></div>
+<p>Τις λογικές πράξεις τις είδαμε στην ψευδογλώσσα (Μάθημα 3, Εργαλείο 8). Στη ΓΛΩΣΣΑ γράφονται με κεφαλαία: <b>ΟΧΙ</b>, <b>ΚΑΙ</b>, <b>Η</b> (ή Ή). Μια σύγκριση ή μια λογική έκφραση δίνει πάντα <b>ΑΛΗΘΗΣ</b> ή <b>ΨΕΥΔΗΣ</b>, άρα μπορεί να εκχωρηθεί σε <b>λογική μεταβλητή</b>:</p>
+<div class="grid g2" style="align-items:start">
+<pre class="code">ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: ηλικία
+  ΛΟΓΙΚΕΣ: ενήλικας, έφηβος
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ ηλικία
+  ενήλικας ← ηλικία &gt;= 18
+  έφηβος ← ηλικία &gt;= 13 ΚΑΙ ηλικία &lt;= 19</pre>
+<div class="tablewrap"><table class="t" style="min-width:0">
+<tbody><tr><th>Α</th><th>Β</th><th>Α ΚΑΙ Β</th><th>Α Η Β</th><th>ΟΧΙ Α</th></tr>
+<tr><td>Α</td><td>Α</td><td>Α</td><td>Α</td><td>Ψ</td></tr>
+<tr><td>Α</td><td>Ψ</td><td>Ψ</td><td>Α</td><td>Ψ</td></tr>
+<tr><td>Ψ</td><td>Α</td><td>Ψ</td><td>Α</td><td>Α</td></tr>
+<tr><td>Ψ</td><td>Ψ</td><td>Ψ</td><td>Ψ</td><td>Α</td></tr>
+</tbody></table></div>
+</div>
+<p class="small">Α = ΑΛΗΘΗΣ, Ψ = ΨΕΥΔΗΣ. Οι χαρακτήρες συγκρίνονται κι αυτοί: <b><span class="nw">όνομα = 'Κώστας'</span></b>, <b><span class="nw">όνομα &lt;&gt; 'Κώστας'</span></b>. Δεν συγκρίνουμε όμως αριθμό με χαρακτήρες (π.χ. <span class="nw">5 = '5').</span></p>
+<div class="box trap">
+<div class="tag">Παγίδες που κοστίζουν μονάδες</div>
+<ul class="tight">
+<li><b>/</b> δίνει <b>πάντα</b> πραγματικό, ακόμα κι όταν «βγαίνει» στρογγυλό <span class="nw">(8 / 2 = 4.0).</span> Δεν εκχωρείται σε ακέραια μεταβλητή.</li>
+<li><b>div</b> και <b>mod</b> μόνο με <b>ακεραίους</b>.</li>
+<li>Α_Μ στους αρνητικούς: Α_Μ(−3.7) = <b>−4</b>, όχι −3.</li>
+<li>Οι γωνίες στις ΗΜ, ΣΥΝ, ΕΦ είναι σε <b>μοίρες</b>.</li>
+<li>Ο πολλαπλασιασμός γράφεται πάντα: <b><span class="nw">2 * x</span></b>, ποτέ 2x. Κλάσμα: <b>παρενθέσεις</b> σε αριθμητή και παρονομαστή.</li>
+<li><b><span class="nw">x ^ 1 / 2</span></b> σημαίνει <span class="nw">(x ^ 1) / 2,</span> δηλαδή <span class="nw">x / 2.</span> Η ρίζα είναι <b>Τ_Ρ(x)</b>.</li>
+<li>Το «<span class="nw">0 &lt; x &lt; 5</span>» γράφεται <b><span class="nw">x &gt; 0</span> ΚΑΙ <span class="nw">x &lt; 5</span></b>. Το «x διάφορο του 5» γράφεται <b><span class="nw">x &lt;&gt; 5</span></b>.</li>
+<li>«Ούτε 'Μαρία' ούτε 'Ελένη'»: <b><span class="nw">όνομα &lt;&gt; 'Μαρία'</span> ΚΑΙ <span class="nw">όνομα &lt;&gt; 'Ελένη'</span></b>, με <b>ΚΑΙ</b>, όχι με Η.</li>
+</ul>
+</div>
+<div class="box def">
+<div class="tag">Σύνοψη</div>
+<p><b>Αριθμητικοί τελεστές:</b> + − * <span class="nw">/ ^ div</span> mod. <span class="nw">Η / δίνει</span> πάντα πραγματικό. <span class="nw">Div, mod μόνο</span> με ακεραίους.</p>
+<p><b>Συναρτήσεις:</b> Α_Μ, Α_Τ, Τ_Ρ, ΗΜ, ΣΥΝ, ΕΦ (μοίρες), ΛΟΓ, Ε.</p>
+<p><span class="ln"><b>Ιεραρχία</b>, από την πρώτη πράξη ως την τελευταία:</span><span class="ln li">παρενθέσεις</span><span class="ln li">^</span><span class="ln li">* <span class="nw">/ div mod</span></span><span class="ln li">+ −</span><span class="ln li">συγκρίσεις</span><span class="ln li">ΟΧΙ, μετά ΚΑΙ, μετά Η</span><span class="ln">Πράξεις με την ίδια ιεραρχία γίνονται από αριστερά προς τα δεξιά.</span></p>
+<p><b>Μετατροπή τύπου:</b> όλα σε μία γραμμή, * παντού, παρενθέσεις σε αριθμητή και παρονομαστή, ρίζα και απόλυτη τιμή ως συναρτήσεις.</p>
+</div>
+
+<section class="solved-wrap">
+<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένα παραδείγματα βήμα-βήμα</h2><span class="ref">Έτσι σκεφτόμαστε</span></div>
+<div class="box solved">
+<div class="tag">Λυμένο 1 · Υπολογισμός βήμα-βήμα και τύπος αποτελέσματος</div>
+<p>Να υπολογιστεί η τιμή της έκφρασης <code>(20 div 3) * 2 ^ 2 / 8 + 17 mod 5</code> και να βρεθεί ο τύπος του αποτελέσματος.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Δύο ερωτήματα: η <b>τιμή</b> και ο <b>τύπος</b>. Για τον τύπο πρέπει να προσέχω <span class="nw">κάθε / που</span> συναντώ.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Η σειρά είναι: πρώτα η παρένθεση, μετά η ^, μετά τα *, /, <span class="nw">div, mod από</span> αριστερά, στο τέλος η +. Υπογραμμίζω την πράξη που γίνεται σε κάθε γραμμή.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">(20 div 3) * 2 ^ 2 / 8 + 17 mod 5
+= 6 * 2 ^ 2 / 8 + 17 mod 5      ! παρένθεση: 20 div 3 = 6
+= 6 * 4 / 8 + 17 mod 5          ! δύναμη
+= 24 / 8 + 17 mod 5             ! * (πρώτη από αριστερά)
+= 3.0 + 17 mod 5                ! /  → πραγματικός!
+= 3.0 + 2                       ! mod
+= 5.0                           ! +</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Η τιμή είναι 5, αλλά ο τύπος είναι <b>πραγματικός</b>, γιατί στη μέση υπάρχει μια /. Αν το αποτέλεσμα πήγαινε σε ακέραια μεταβλητή, θα ήταν λάθος. <span class="nw">Με div στη</span> θέση <span class="nw">της / θα</span> ήταν ακέραιος.</div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 2 · Από τον τύπο της φυσικής στη ΓΛΩΣΣΑ</div>
+<p>Να γραφτούν σε ΓΛΩΣΣΑ οι παρακάτω τύποι:</p>
+<p class="mx"><span class="ln">α) F = <span class="frac"><span>9</span><span>5</span></span><span class="nw">C + 32</span>   </span><span class="ln">β) d = √<span class="rt">(x<sub>2</sub> − x<sub>1</sub>)<sup>2</sup> + (y<sub>2</sub> − y<sub>1</sub>)<sup>2</sup></span>   </span><span class="ln">γ) <span class="nw">Κ = κ</span><span style="font-size:1.3em">(</span>1 + <span class="frac"><span>ε</span><span>100</span></span><span style="font-size:1.3em">)</span><sup>ν</sup>   </span><span class="ln">δ) x = <span class="frac"><span>−β + √<span class="rt">β<sup>2</sup> − 4αγ</span></span><span>2α</span></span></span></p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Ψάχνω τα «κρυφά» σημεία κάθε τύπου: κλάσματα, εκθέτες, ρίζες, πολλαπλασιασμούς χωρίς σύμβολο.</div></div>
+<div class="step"><span class="stepn">2</span><div><span class="ln"><b>Αναλύω.</b> Εφαρμόζω τους 4 κανόνες:</span><span class="ln li">το κλάσμα <span class="nw">γίνεται / με</span> παρενθέσεις,</span><span class="ln li">ο πολλαπλασιασμός <span class="nw">γίνεται * παντού,</span></span><span class="ln li">ο εκθέτης γίνεται ^,</span><span class="ln li">η ρίζα γίνεται Τ_Ρ( ).</span><span class="ln">Οι δείκτες (x<sub>1</sub>, x<sub>2</sub>) γίνονται απλά ονόματα: x1, x2.</span></div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">α) F ← 9 / 5 * C + 32
+β) d ← Τ_Ρ((x2 - x1) ^ 2 + (y2 - y1) ^ 2)
+γ) Κ ← κ * (1 + ε / 100) ^ ν
+δ) x ← (-β + Τ_Ρ(β ^ 2 - 4 * α * γ)) / (2 * α)</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> α) Με <span class="nw">C = 100</span>: <span class="nw">9 / 5 · 100 + 32 = 212</span> ✓. Στο <b><span class="nw">9 / 5</span></b> δεν χρειάζεται παρένθεση, <span class="nw">γιατί / και * γίνονται</span> από αριστερά. Προσοχή: <b><span class="nw">9 div 5</span></b> θα έδινε 1 και λάθος αποτέλεσμα. δ) Χωρίς την παρένθεση <span class="nw">(2 * α),</span> η έκφραση … / <span class="nw">2 * α</span> θα <b>πολλαπλασίαζε</b> με α αντί να διαιρεί. Μετράω παρενθέσεις στο δ: 4 αριστερές, 4 δεξιές ✓.</div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 3 · Η Α_Μ με αρνητικούς</div>
+<p>Να βρεθούν οι τιμές: <code>Α_Μ(7.8)</code>, <code>Α_Μ(-7.8)</code>, <code>Α_Μ(-7)</code>, <code>Α_Μ(-2.6 + 0.5)</code>, <code>Α_Τ(Α_Μ(-0.5))</code></p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Η Α_Μ ορίζεται με την ιδιότητα <span class="nw">Α_Μ(χ) &lt;= χ &lt; Α_Μ(χ) + 1</span>: ψάχνω τον ακέραιο που είναι <b>ίσος ή αμέσως αριστερά</b> του χ στην αριθμογραμμή.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Για κάθε τιμή: είναι ήδη ακέραιος; Αν ναι, μένει ίδιος. Αν όχι, βρίσκω τους δύο ακεραίους ανάμεσα στους οποίους βρίσκεται και κρατάω τον <b>μικρότερο</b>.</div></div>
+<div class="step"><span class="stepn">3</span><div><span class="ln li"><b>Γράφω.</b> Α_Μ(7.8) = <b>7</b> <span class="nw">(7 &lt;= 7.8 &lt; 8)</span></span><span class="ln li">Α_Μ(−7.8) = <b>−8</b> (−8 &lt;= −7.8 &lt; −7)</span><span class="ln li">Α_Μ(−7) = <b>−7</b></span><span class="ln li">Α_Μ(−<span class="nw">2.6 + 0.5) = Α_Μ(</span>−2.1) = <b>−3</b></span><span class="ln li">Α_Τ(Α_Μ(−<span class="nw">0.5)) = Α_Τ(</span>−1) = <b>1</b>.</span></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Επαληθεύω την ιδιότητα σε κάθε αποτέλεσμα: π.χ. −8 &lt;= −7.8 &lt; −7 ✓. Το τέταρτο είναι η στρογγυλοποίηση του −2.6 και δίνει σωστά −3, τον πλησιέστερο ακέραιο.</div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 4 · Δίσεκτο έτος: μια λογική έκφραση</div>
+<p>Ένα έτος είναι δίσεκτο αν διαιρείται με το 4 αλλά όχι με το 100, ή αν διαιρείται με το 400. Να γραφτεί λογική έκφραση σε ΓΛΩΣΣΑ που είναι ΑΛΗΘΗΣ μόνο όταν η ακέραια μεταβλητή έτος είναι δίσεκτο έτος, και να ελεγχθεί για 2024, 1900, 2000 και 2026.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><span class="ln"><b>Κατανοώ.</b></span><span class="ln li">«Διαιρείται με το k» γράφεται <b><span class="nw">έτος mod k = 0</span></b>.</span><span class="ln li">«Όχι με το 100» γράφεται <b><span class="nw">έτος mod 100 &lt;&gt; 0</span></b>.</span><span class="ln">Οι λέξεις «αλλά» και «ή» δείχνουν τους λογικούς τελεστές.</span></div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Η πρόταση έχει δύο «δρόμους» που ενώνονται με <b>ή</b>: (4 και όχι 100) <b>ή</b> (400). Το «αλλά» σημαίνει <b>ΚΑΙ</b>. Βάζω παρενθέσεις για να φαίνεται η δομή, αν και το ΚΑΙ γίνεται έτσι κι αλλιώς πριν από το Η.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">δίσεκτο ← (έτος mod 4 = 0 ΚΑΙ έτος mod 100 &lt;&gt; 0) Η έτος mod 400 = 0</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b>
+<div class="tablewrap"><table class="t"><tbody><tr><th>έτος</th><th>mod <span class="nw">4 = 0</span></th><th>mod <span class="nw">100 &lt;&gt; 0</span></th><th>mod <span class="nw">400 = 0</span></th><th>δίσεκτο</th></tr>
+<tr><td>2024</td><td>Α</td><td>Α</td><td>Ψ</td><td><b>ΑΛΗΘΗΣ</b></td></tr>
+<tr><td>1900</td><td>Α</td><td>Ψ</td><td>Ψ</td><td><b>ΨΕΥΔΗΣ</b></td></tr>
+<tr><td>2000</td><td>Α</td><td>Ψ</td><td>Α</td><td><b>ΑΛΗΘΗΣ</b></td></tr>
+<tr><td>2026</td><td>Ψ</td><td>Α</td><td>Ψ</td><td><b>ΨΕΥΔΗΣ</b></td></tr>
+</tbody></table></div>
+<p>Το 1900 και το 2000 είναι οι «δύσκολες» περιπτώσεις: δοκιμάζουν και τους δύο δρόμους.</p></div></div>
+</div>
+</div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Ο κανόνας «όχι με το 100, εκτός αν διαιρείται με το 400» ήρθε με το <b>Γρηγοριανό ημερολόγιο</b> το 1582, για να διορθωθεί το Ιουλιανό, που «έτρεχε» μπροστά από τις εποχές. Η Ελλάδα το υιοθέτησε μόλις το <b>1923</b>: μετά τις 15 Φεβρουαρίου ακολούθησε κατευθείαν η 1η Μαρτίου, και 13 ημέρες «χάθηκαν».</p>
+<p class="talk">Σκέψου: Αν κάποιος γεννήθηκε στις 20 Φεβρουαρίου 1923, τι πρόβλημα θα είχε; Πόσα «δύσκολα» έτη σαν το 1900 θα δει η δική σας γενιά;</p>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 5 · Ένα πλήρες πρόγραμμα: η ράμπα</div>
+<p>Μια ράμπα για αμαξίδια έχει μήκος L μέτρα και σχηματίζει γωνία θ μοιρών με το έδαφος. Να γραφτεί πρόγραμμα που διαβάζει τα L και θ και εμφανίζει το ύψος στο οποίο ανεβαίνει, την οριζόντια απόσταση που καλύπτει (σε μέτρα, με 2 δεκαδικά), την κλίση της ως ποσοστό (ύψος προς οριζόντια απόσταση επί 100, με 1 δεκαδικό), και αν η κλίση είναι το πολύ 8%.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Δεδομένα: L, θ (πραγματικές). Ζητούμενα: ύψος, οριζόντια, κλίση (πραγματικές) και ένα ναι/όχι (λογική). Η γωνία είναι σε μοίρες, όπως ακριβώς τη θέλουν οι ΗΜ και ΣΥΝ.</div></div>
+<div class="step"><span class="stepn">2</span><div><span class="ln"><b>Αναλύω.</b> Σε ορθογώνιο τρίγωνο με υποτείνουσα L:</span><span class="ln li"><span class="nw">ύψος = L</span></span><span class="ln li">ημθ, <span class="nw">οριζόντια = L</span></span><span class="ln li">συνθ. Στρογγυλοποίηση σε 2 δεκαδικά: <span class="nw">Α_Μ(x * 100 + 0.5) / 100</span></span><span class="ln li">σε 1 δεκαδικό: με 10. Το 8 γίνεται σταθερά.</span></div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ράμπα
+ΣΤΑΘΕΡΕΣ
+  ΜΕΓΙΣΤΗ = 8
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: L, θ, ύψος, οριζόντια, κλίση
+  ΛΟΓΙΚΕΣ: αποδεκτή
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ L, θ
+  ύψος ← L * ΗΜ(θ)
+  οριζόντια ← L * ΣΥΝ(θ)
+  κλίση ← Α_Μ(ύψος / οριζόντια * 100 * 10 + 0.5) / 10
+  αποδεκτή ← κλίση &lt;= ΜΕΓΙΣΤΗ
+  ύψος ← Α_Μ(ύψος * 100 + 0.5) / 100
+  οριζόντια ← Α_Μ(οριζόντια * 100 + 0.5) / 100
+  ΓΡΑΨΕ ύψος, οριζόντια, κλίση, αποδεκτή
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ράμπα</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> Για <span class="nw">L = 6</span> και <span class="nw">θ = 4</span>:</span><span class="ln li"><span class="nw">ύψος = 6 · ημ4</span>° ≈ 0.4185, στρογγυλεμένο <b>0.42</b></span><span class="ln li">οριζόντια ≈ 5.9854, στρογγυλεμένο <b>5.99</b></span><span class="ln li">κλίση ≈ 6.99, στρογγυλεμένο <b>7</b></span><span class="ln li">αποδεκτή <b>ΑΛΗΘΗΣ</b></span><span class="ln">Η κλίση υπολογίζεται <b>πριν</b> στρογγυλέψω ύψος και οριζόντια, για να μη χάσω ακρίβεια.</span></div></div>
+</div>
+</div>
+</section>
+
+<section class="cards" id="s-cards">
+<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2><span class="ref">Ορισμοί για απομνημόνευση</span></div>
+<p class="small">Διάβασε τον όρο, πες τον ορισμό από μέσα σου και πάτα την κάρτα για να τον δεις.</p>
+<div class="deck">
+<button aria-live="polite" class="card" id="card" type="button">
+<span class="face front"><span class="ck">Όρος</span><span class="term" id="c-term"></span><span class="tap">Πάτα για τον ορισμό</span></span>
+<span class="face back"><span class="ck">Ορισμός</span><span class="cdef" id="c-def"></span><span class="tap" id="c-ref"></span></span>
+</button>
+<div class="deckbar">
+<button aria-label="Προηγούμενη κάρτα" class="btn" id="c-prev" type="button">←</button>
+<span class="count" id="c-count"></span>
+<button aria-label="Επόμενη κάρτα" class="btn" id="c-next" type="button">→</button>
+<button class="btn" id="c-shuf" type="button">Ανακάτεμα</button>
+</div>
+</div>
+</section><section class="exercises">
+<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2><span class="ref">Από τα εύκολα στα δύσκολα</span></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div>
+<div class="q"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Γράψε Σ ή Λ.
+<table class="tf">
+<tbody><tr><td>α. Η έκφραση <span class="nw">7 div 2</span> έχει την ίδια τιμή με την <span class="nw">7 / 2.</span></td><td class="b">____</td></tr>
+<tr><td>β. Η έκφραση <span class="nw">8 / 2</span> δίνει πραγματικό αποτέλεσμα.</td><td class="b">____</td></tr>
+<tr><td>γ. Ο <span class="nw">τελεστής mod μπορεί</span> να χρησιμοποιηθεί με πραγματικούς αριθμούς.</td><td class="b">____</td></tr>
+<tr><td>δ. Η τιμή της Α_Μ(−5.2) είναι −5.</td><td class="b">____</td></tr>
+<tr><td>ε. Στη συνάρτηση ΗΜ(Χ) η γωνία Χ δίνεται σε μοίρες.</td><td class="b">____</td></tr>
+<tr><td>στ. Σε μια έκφραση, ο πολλαπλασιασμός εκτελείται πριν από την ύψωση σε δύναμη.</td><td class="b">____</td></tr>
+<tr><td>ζ. Πράξεις της ίδιας ιεραρχίας εκτελούνται από αριστερά προς τα δεξιά.</td><td class="b">____</td></tr>
+<tr><td>η. Όλες οι μεταβλητές μιας έκφρασης πρέπει να έχουν τιμή πριν υπολογιστεί η έκφραση.</td><td class="b">____</td></tr>
+<tr><td>θ. Σε μια λογική έκφραση ο τελεστής Η εκτελείται πριν από τον ΚΑΙ.</td><td class="b">____</td></tr>
+<tr><td>ι. Η τιμή μιας σύγκρισης μπορεί να εκχωρηθεί σε λογική μεταβλητή.</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Λ, β Σ, γ Λ, δ Λ, ε Σ, στ Λ, ζ Σ, η Σ, θ Λ, ι Σ</span>
+<p class="small"><span class="ln li">α: <span class="nw">7 div 2 = 3,</span> ενώ <span class="nw">7 / 2 = 3.5.</span></span><span class="ln li">γ: <span class="nw">τα div και mod δουλεύουν</span> μόνο με ακεραίους.</span><span class="ln li">δ: Α_Μ(−5.2) = −6, γιατί −6 &lt;= −5.2 &lt; −5.</span><span class="ln li">στ: η ύψωση σε δύναμη έχει μεγαλύτερη ιεραρχία.</span><span class="ln li">θ: η σειρά είναι πρώτα ΟΧΙ, μετά ΚΑΙ, στο τέλος Η.</span></p></div></details></div>
+<div class="q"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
+<p>α) Ποιοι είναι οι αριθμητικοί τελεστές της ΓΛΩΣΣΑΣ;<br/>β) Να εξηγήσετε τη διαφορά των <span class="nw">τελεστών / και</span> div, με ένα παράδειγμα.<br/>γ) Να αναφέρετε τις συναρτήσεις της ΓΛΩΣΣΑΣ και τι υπολογίζει η καθεμία.<br/>δ) Τι είναι αριθμητική έκφραση και από τι αποτελείται; Ποια προϋπόθεση πρέπει να ισχύει για να υπολογιστεί;<br/>ε) Να γράψετε την ιεραρχία των πράξεων, όταν σε μια έκφραση υπάρχουν αριθμητικοί, συγκριτικοί και λογικοί τελεστές.</p>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p>α) + πρόσθεση, − αφαίρεση, * πολλαπλασιασμός, / διαίρεση, ^ ύψωση σε <span class="nw">δύναμη, div ακέραια</span> <span class="nw">διαίρεση, mod υπόλοιπο</span> ακέραιας διαίρεσης.</p>
+<p>β) <span class="nw">Η / κάνει</span> την κανονική διαίρεση και δίνει πάντα πραγματικό αποτέλεσμα <span class="nw">(7 / 2 = 3.5).</span> <span class="nw">Η div δίνει</span> το πηλίκο της ακέραιας διαίρεσης και εφαρμόζεται μόνο σε ακεραίους <span class="nw">(7 div 2 = 3).</span></p>
+<p>γ) ΗΜ, ΣΥΝ, ΕΦ: ημίτονο, συνημίτονο, εφαπτομένη (γωνία σε μοίρες). Τ_Ρ: τετραγωνική ρίζα. ΛΟΓ: φυσικός λογάριθμος. Ε: e<sup>x</sup>. Α_Μ: ακέραιο μέρος. Α_Τ: απόλυτη τιμή.</p>
+<p>δ) Όταν μια τιμή προκύπτει από υπολογισμό, αναφερόμαστε σε έκφραση. Αποτελείται από αριθμητικές σταθερές, μεταβλητές, συναρτήσεις, αριθμητικούς τελεστές και παρενθέσεις. Όλες οι μεταβλητές της πρέπει να έχουν οριστεί προηγουμένως, δηλαδή να έχουν τιμή.</p>
+<p><span class="ln">ε) Πρώτα οι αριθμητικοί, μετά οι συγκριτικοί, μετά οι λογικοί.</span><span class="ln li">Στους αριθμητικούς: πρώτα ^, μετά *, /, div, mod, στο τέλος +, −.</span><span class="ln li">Στους λογικούς: πρώτα ΟΧΙ, μετά ΚΑΙ, στο τέλος Η.</span><span class="ln">Οι παρενθέσεις προηγούνται. Πράξεις με ίδια ιεραρχία γίνονται από αριστερά προς τα δεξιά.</span></p></div></details></div>
+<div class="q"><span class="qn">3</span><b>Τι τύπο έχει το αποτέλεσμα;</b> Για κάθε έκφραση γράψε το γράμμα του τύπου του αποτελέσματος, ή Δ αν η έκφραση δεν επιτρέπεται.
+<ul class="legend tight">
+<li data-v="Α"><b>Α</b> Ακέραιος</li>
+<li data-v="Β"><b>Β</b> Πραγματικός</li>
+<li data-v="Γ"><b>Γ</b> Λογικός</li>
+<li data-v="Δ"><b>Δ</b> Δεν επιτρέπεται</li>
+</ul>
+<table class="tf">
+<tbody><tr><td>α. <span class="nw">7 + 2</span></td><td class="b">____</td></tr>
+<tr><td>β. <span class="nw">7 / 2</span></td><td class="b">____</td></tr>
+<tr><td>γ. <span class="nw">8 / 2</span></td><td class="b">____</td></tr>
+<tr><td>δ. <span class="nw">7 div 2</span></td><td class="b">____</td></tr>
+<tr><td>ε. <span class="nw">7.5 div 2</span></td><td class="b">____</td></tr>
+<tr><td>στ. Α_Μ(7.9)</td><td class="b">____</td></tr>
+<tr><td>ζ. Α_Τ(−3.5)</td><td class="b">____</td></tr>
+<tr><td>η. <span class="nw">5 &gt; 3</span></td><td class="b">____</td></tr>
+<tr><td>θ. <span class="nw">'α' + 1</span></td><td class="b">____</td></tr>
+<tr><td>ι. Τ_Ρ(−4)</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Α, β Β, γ Β, δ Α, ε Δ, στ Α, ζ Β, η Γ, θ Δ, ι Δ</span>
+<p class="small">γ: <span class="nw">η / δίνει</span> πάντα πραγματικό (4.0). ε: <span class="nw">η div θέλει</span> ακεραίους. ζ: η Α_Τ πραγματικού είναι πραγματικός. θ: δεν γίνεται πρόσθεση χαρακτήρα με αριθμό. ι: δεν υπάρχει ρίζα αρνητικού. Η εκτέλεση σταματά με σφάλμα.</p></div></details></div>
+<div class="q"><span class="qn">4</span><b>Υπολόγισε τις εκφράσεις.</b> Γράψε την τιμή κάθε έκφρασης, δείχνοντας τη σειρά των πράξεων.
+<p><span class="ln">α) <span class="nw">7 + 3 * 2 ^ 2</span>  </span><span class="ln">β) <span class="nw">(7 + 3) * 2 ^ 2</span>  </span><span class="ln">γ) <span class="nw">20 / 4 / 2</span>  </span><span class="ln">δ) <span class="nw">20 / (4 / 2)</span><br/>ε) <span class="nw">23 div 4 * 4 + 23 mod 4</span>  </span><span class="ln">στ) Α_Μ(−<span class="nw">4.3) + Α_Τ(</span>−4.3)  </span><span class="ln">ζ) <span class="nw">Τ_Ρ(3 ^ 2 + 4 ^ 2)</span>  </span><span class="ln">η) <span class="nw">Α_Μ(17 / 5) * 5</span></span></p>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p><span class="ln li">α) <span class="nw">7 + 3 * 4 = 7 + 12</span> = <b>19</b></span><span class="ln li">β) <span class="nw">10 * 4</span> = <b>40</b></span><span class="ln li">γ) <span class="nw">5 / 2</span> = <b>2.5</b></span><span class="ln li">δ) <span class="nw">20 / 2.0</span> = <b>10.0</b></span><span class="ln li">ε) <span class="nw">5 * 4 + 3</span> = <b>23</b></span><span class="ln li">στ) −<span class="nw">5 + 4.3</span> = <b>−0.7</b></span><span class="ln li">ζ) <span class="nw">Τ_Ρ(9 + 16) = Τ_Ρ(25)</span> = <b>5</b></span><span class="ln li">η) <span class="nw">Α_Μ(3.4) * 5 = 3 * 5</span> = <b>15</b></span></p>
+<p class="small">ε: πάντα ισχύει <span class="nw">(α div β) * β + α mod β = α.</span> στ: η παγίδα της Α_Μ με αρνητικό.</p></div></details></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div>
+<div class="q"><span class="qn">5</span><b>Από τα μαθηματικά στη ΓΛΩΣΣΑ.</b> Γράψε κάθε μαθηματική έκφραση σε ΓΛΩΣΣΑ.
+<p class="mx"><span class="ln">α) <span class="frac"><span>α + β</span><span>2</span></span>   </span><span class="ln">β) 3x<sup>2</sup> − <span class="nw">5x + 2</span>   </span><span class="ln">γ) <span class="frac"><span>x + y</span><span>x − y</span></span>   </span><span class="ln">δ) √<span class="rt">x<sup>2</sup> + y<sup>2</sup></span><br/>ε) <span class="frac"><span>|α − β|</span><span>2</span></span>   </span><span class="ln">στ) 2πr (π ≈ 3.14159)   </span><span class="ln">ζ) <span class="frac"><span>1</span><span>1 + x<sup>2</sup></span></span>   </span><span class="ln">η) <span class="frac"><span>α</span><span>β</span></span> + <span class="frac"><span>γ</span><span>δ</span></span></span></p>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><pre class="code">α) (α + β) / 2              β) 3 * x ^ 2 - 5 * x + 2
+γ) (x + y) / (x - y)         δ) Τ_Ρ(x ^ 2 + y ^ 2)
+ε) Α_Τ(α - β) / 2            στ) 2 * 3.14159 * r
+ζ) 1 / (1 + x ^ 2)           η) α / β + γ / δ</pre>
+<p class="small">στ: καλύτερα με συμβολική σταθερά <span class="nw">ΠΙ = 3.14159.</span> η: δεν χρειάζονται παρενθέσεις, γιατί οι διαιρέσεις γίνονται πριν από την πρόσθεση.</p></div></details></div>
+<div class="q"><span class="qn">6</span><b>Αληθής ή ψευδής;</b> Έστω ότι <span class="nw">x = 5,</span> y = −2, <span class="nw">όνομα = 'Νίκος'</span> και <span class="nw">εντάξει = ΑΛΗΘΗΣ.</span> Γράψε Α αν η έκφραση είναι ΑΛΗΘΗΣ ή Β αν είναι ΨΕΥΔΗΣ.
+<ul class="legend tight">
+<li data-v="Α"><b>Α</b> ΑΛΗΘΗΣ</li>
+<li data-v="Β"><b>Β</b> ΨΕΥΔΗΣ</li>
+</ul>
+<table class="tf">
+<tbody><tr><td>α. <span class="nw">x &gt; y</span> ΚΑΙ <span class="nw">y &gt; 0</span></td><td class="b">____</td></tr>
+<tr><td>β. <span class="nw">x &gt; y</span> Η <span class="nw">y &gt; 0</span></td><td class="b">____</td></tr>
+<tr><td>γ. ΟΧΙ εντάξει Η <span class="nw">x = 5</span></td><td class="b">____</td></tr>
+<tr><td>δ. <span class="nw">όνομα = 'Νίκος'</span> ΚΑΙ ΟΧΙ <span class="nw">(x mod 2 = 0)</span></td><td class="b">____</td></tr>
+<tr><td>ε. <span class="nw">x + y &gt; 3</span> ΚΑΙ εντάξει</td><td class="b">____</td></tr>
+<tr><td>στ. ΟΧΙ <span class="nw">x &gt; 0</span> Η <span class="nw">y &gt; 0</span> ΚΑΙ εντάξει</td><td class="b">____</td></tr>
+<tr><td>ζ. (ΟΧΙ <span class="nw">x &gt; 0</span> Η <span class="nw">y &lt; 0)</span> ΚΑΙ εντάξει</td><td class="b">____</td></tr>
+<tr><td>η. <span class="nw">Α_Τ(y) = 2</span> ΚΑΙ <span class="nw">x div 2 = 2</span></td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Β, β Α, γ Α, δ Α, ε Β, στ Β, ζ Α, η Α</span>
+<p class="small">γ: (ΟΧΙ ΑΛΗΘΗΣ) Η ΑΛΗΘΗΣ = ΑΛΗΘΗΣ. ε: <span class="nw">5 + (</span>−<span class="nw">2) = 3,</span> και <span class="nw">3 &gt; 3</span> είναι ΨΕΥΔΗΣ. στ: πρώτα το ΟΧΙ: ΟΧΙ <span class="nw">(5 &gt; 0) = ΨΕΥΔΗΣ.</span> Μετά το ΚΑΙ: (−<span class="nw">2 &gt; 0)</span> ΚΑΙ ΑΛΗΘΗΣ = ΨΕΥΔΗΣ. Τέλος ΨΕΥΔΗΣ Η ΨΕΥΔΗΣ = ΨΕΥΔΗΣ. ζ: η παρένθεση αλλάζει τη σειρά: (ΨΕΥΔΗΣ Η ΑΛΗΘΗΣ) ΚΑΙ ΑΛΗΘΗΣ = ΑΛΗΘΗΣ. η: Α_Τ(−<span class="nw">2) = 2</span> και <span class="nw">5 div 2 = 2.</span></p></div></details></div>
+<div class="q hw"><span class="qn">7</span><b>Από τη ΓΛΩΣΣΑ στα μαθηματικά.</b>
+<p>α) Να γράψετε κάθε έκφραση ως μαθηματικό τύπο (με κλάσματα, ρίζες, εκθέτες):</p>
+<pre class="code">① α / β * γ          ② α / (β * γ)        ③ α + β / γ + δ
+④ (α + β) / (γ + δ)   ⑤ x ^ (1 / 2)        ⑥ x ^ 1 / 2
+⑦ Τ_Ρ(α) + β         ⑧ Τ_Ρ(α + β)</pre>
+<p>β) Να υπολογίσετε κάθε έκφραση για <span class="nw">α = 8,</span> <span class="nw">β = 4,</span> <span class="nw">γ = 2,</span> <span class="nw">δ = 6</span> και <span class="nw">x = 16.</span><br/>γ) Ποια ζευγάρια μοιάζουν αλλά δίνουν διαφορετικό αποτέλεσμα; Τι κάνει τη διαφορά;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">8</span><b>Βρες τα λάθη.</b> Κάθε γραμμή θέλει να γράψει σε ΓΛΩΣΣΑ αυτό που περιγράφεται δίπλα της, αλλά έχει ένα λάθος. Να το βρείτε, να εξηγήσετε γιατί είναι λάθος και να γράψετε τη σωστή έκφραση.
+<pre class="code">α) 2χ + 3                 ! το διπλάσιο του χ συν 3
+β) (α + β / 2             ! ο μέσος όρος των α, β
+γ) Τ_Ρ α + β              ! η ρίζα του αθροίσματος α + β
+δ) 7.5 div 2              ! το ακέραιο πηλίκο του 7.5 διά 2
+ε) 0 &lt; x &lt; 10             ! ο x ανάμεσα στο 0 και στο 10
+στ) x ^ 1 / 2             ! η τετραγωνική ρίζα του x
+ζ) α ≠ β                  ! τα α και β είναι διαφορετικά
+η) ΗΜ(3.14159 / 6)        ! το ημίτονο των 30 μοιρών</pre>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">9</span><b>Γράψε τη συνθήκη.</b> Να γράψετε λογική έκφραση σε ΓΛΩΣΣΑ που είναι ΑΛΗΘΗΣ όταν:
+<p>α) ο ακέραιος x είναι θετικός διψήφιος.<br/>β) ο βαθμός β είναι εκτός της κλίμακας 0 έως 20.<br/>γ) ο ακέραιος ν είναι πολλαπλάσιο του 3 ή του 5, αλλά όχι του 15.<br/>δ) υπάρχει τρίγωνο με πλευρές α, β, γ (κάθε πλευρά μικρότερη από το άθροισμα των άλλων δύο).<br/>ε) το τρίγωνο με πλευρές α, β, γ είναι ισόπλευρο.<br/>στ) μια ομάδα με γκ1 γκολ νίκησε μια ομάδα με γκ2 γκολ, ή έφεραν ισοπαλία με τουλάχιστον 2 γκολ η καθεμία.<br/>ζ) το όνομα δεν είναι ούτε 'Μαρία' ούτε 'Ελένη'.<br/>η) η πραγματική μεταβλητή x δεν έχει δεκαδικό μέρος (π.χ. 7.0).</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">10</span><b>Πίνακας τιμών.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Αριθμοί
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: α, β, γ
+  ΠΡΑΓΜΑΤΙΚΕΣ: δ
+  ΛΟΓΙΚΕΣ: ε
+ΑΡΧΗ
+  α ← 47
+  β ← α div 10 + α mod 10
+  γ ← Α_Μ(-α / 10)
+  δ ← Α_Τ(γ) / 2 + Τ_Ρ(β + 5)
+  ε ← δ &gt; 5 ΚΑΙ ΟΧΙ (β mod 2 = 0)
+  α ← α - β * 4
+  ΓΡΑΨΕ α, β, γ, δ, ε
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Αριθμοί</pre>
+<div class="tablewrap"><table class="t blank"><tbody><tr><th>Εντολή</th><th>α</th><th>β</th><th>γ</th><th>δ</th><th>ε</th><th>Έξοδος</th></tr>
+<tr><td><span class="nw">α ← 47</span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><span class="nw">β ← α div 10 + α mod 10</span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><span class="nw">γ ← Α_Μ(</span>-<span class="nw">α / 10)</span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><span class="nw">δ ← Α_Τ(γ) / 2 + Τ_Ρ(β + 5)</span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><span class="nw">ε ← δ &gt; 5</span> ΚΑΙ ΟΧΙ <span class="nw">(β mod 2 = 0)</span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><span class="nw">α ← α - β * 4</span></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>ΓΡΑΨΕ α, β, γ, δ, ε</td><td></td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
+<p>Γιατί η δ πρέπει να είναι πραγματική, ενώ η γ μπορεί να είναι ακέραια;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">11</span><b>Συμπλήρωση κενών.</b><span class="theme">Τεχνολογία</span>
+<p>Οι τηλεοράσεις πωλούνται με τη <b>διαγώνιο</b> της οθόνης σε ίντσες (1 <span class="nw">ίντσα = 2,54</span> εκατοστά), και η οθόνη έχει αναλογία πλάτους προς ύψος 16 : 9. Αν δ είναι η διαγώνιος, το πλάτος είναι <span class="mx">δ · <span class="frac"><span>16</span><span>√<span class="rt">16<sup>2</sup> + 9<sup>2</sup></span></span></span></span> και το ύψος <span class="mx">δ · <span class="frac"><span>9</span><span>√<span class="rt">16<sup>2</sup> + 9<sup>2</sup></span></span></span></span>. Να συμπληρώσετε το πρόγραμμα, που διαβάζει τη διαγώνιο και εμφανίζει πλάτος και ύψος σε εκατοστά, στρογγυλεμένα σε ένα δεκαδικό.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Τηλεόραση
+ΣΤΑΘΕΡΕΣ
+  ΙΝΤΣΑ = ____(1)____
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: δ, ρίζα, πλάτος, ύψος
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ δ
+  ρίζα ← ____(2)____
+  πλάτος ← δ * 16 / ρίζα * ____(3)____
+  ύψος ← ____(4)____
+  πλάτος ← Α_Μ(πλάτος * ____(5)____ + 0.5) / 10
+  ύψος ← Α_Μ(ύψος * 10 + 0.5) / ____(6)____
+  ΓΡΑΨΕ πλάτος, ύψος
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Τηλεόραση</pre>
+<p>Τι θα εμφανιστεί για τηλεόραση 55 ιντσών;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">12</span><b>Θερμόμετρο.</b><span class="theme">Επιστήμη</span>
+<p>Να γραφτεί πρόγραμμα που διαβάζει μια θερμοκρασία σε βαθμούς Κελσίου (C) και εμφανίζει τη θερμοκρασία σε Φαρενάιτ, <span class="mx">F = <span class="frac"><span>9</span><span>5</span></span>C + 32</span>, και σε Κέλβιν, <span class="nw">K = C + 273,15,</span> στρογγυλεμένες σε ένα δεκαδικό. Η μετατροπή να δίνει και μια λογική τιμή που είναι ΑΛΗΘΗΣ όταν το νερό, σε κανονική πίεση, είναι πάγος <span class="nw">(C &lt;= 0).</span></p>
+<p>α) Να γράψετε το πρόγραμμα, με το 273.15 ως σταθερά.<br/>β) Ένας συμμαθητής σου έγραψε <b><span class="nw">F ← 9 div 5 * C + 32</span></b>. Τι θα έβγαζε για <span class="nw">C = 37</span> και γιατί;<br/>γ) Να ελέγξετε το πρόγραμμα για <span class="nw">C = 37</span> και C = −40. Τι παρατηρείτε στο −40;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">13</span><b>Η απόσταση στον χάρτη.</b><span class="theme">Γεωγραφία</span>
+<p>Σε έναν ψηφιακό χάρτη κάθε πόλη έχει συντεταγμένες (x, y) σε χιλιόμετρα. Να γραφτεί πρόγραμμα που διαβάζει τα ονόματα και τις συντεταγμένες δύο πόλεων και τη μέση ταχύτητα ενός αυτοκινήτου σε km/h, και εμφανίζει:</p>
+<ul class="tight"><li>την ευθεία απόσταση των δύο πόλεων, με 1 δεκαδικό,</li><li>τον χρόνο του ταξιδιού (σε ευθεία γραμμή) σε <b>ώρες και λεπτά</b>, με τα λεπτά στρογγυλεμένα στο πλησιέστερο ακέραιο,</li><li>αν το ταξίδι κρατά λιγότερο από 3 ώρες.</li></ul>
+<p>Έλεγχος: Πόλη Α (0, 0), Πόλη Β (300, 400), ταχύτητα 90 km/h.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">14</span><b>Πόσο ψηλό είναι το κτίριο;</b><span class="theme">Αρχιτεκτονική</span>
+<p><span class="ln li">Μια μαθήτρια στέκεται σε απόσταση d μέτρων από ένα κτίριο και βλέπει την κορυφή του υπό γωνία θ μοιρών. Τα μάτια της είναι σε ύψος h μέτρων από το έδαφος. Το ύψος του κτιρίου είναι d</span><span class="ln li"><span class="nw">εφθ + h.</span></span></p>
+<p>α) Να γράψετε πρόγραμμα που διαβάζει τα d, θ, h και εμφανίζει το ύψος του κτιρίου με 2 δεκαδικά, καθώς και πόσους ορόφους έχει περίπου, αν κάθε όροφος έχει ύψος 3 μέτρα (ακέραιο πλήθος ολόκληρων ορόφων).<br/>β) Γιατί δεν χρειάζεται να μετατρέψετε τη γωνία σε ακτίνια;<br/>γ) Να ελέγξετε για <span class="nw">d = 50,</span> <span class="nw">θ = 40</span> και <span class="nw">h = 1,6</span> (εφ40° ≈ 0,8391).</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Μεγάλες ασκήσεις</h3></div>
+<div class="q hw"><span class="qn">15</span><b>Ο λογαριασμός του κινητού.</b><span class="theme">Καθημερινότητα, Θέμα Γ</span>
+<p>Μια εταιρεία κινητής χρεώνει: πάγιο 9,90 € τον μήνα, 0,12 € για κάθε λεπτό ομιλίας (κάθε λεπτό που <b>ξεκινά</b> χρεώνεται ολόκληρο), 0,005 € για κάθε MB και 0,08 € για κάθε SMS. Στο τέλος προστίθεται ΦΠΑ 24%. Να γραφτεί πρόγραμμα που διαβάζει το όνομα του συνδρομητή, τη συνολική διάρκεια των κλήσεών του σε <b>δευτερόλεπτα</b>, τα MB και τα SMS του μήνα, και εμφανίζει:</p>
+<ul class="tight">
+<li>τα λεπτά που χρεώνονται και τη διάρκεια ομιλίας σε ώρες και λεπτά,</li>
+<li>πόσα ολόκληρα GB και πόσα MB έκανε (1 <span class="nw">GB = 1024</span> MB),</li>
+<li>το ποσό πριν και μετά τον ΦΠΑ, στρογγυλεμένο σε λεπτά του ευρώ,</li>
+<li>αν ο λογαριασμός ξεπέρασε τα 50 €.</li>
+</ul>
+<p>α) Ποιες τιμές θα γίνουν σταθερές; Να γράψετε το τμήμα δηλώσεων.<br/>β) Πώς υπολογίζονται τα χρεωνόμενα λεπτά από τα δευτερόλεπτα; (Υπόδειξη: Μάθημα 3, Εργαλείο 10.)<br/>γ) Να γράψετε το πρόγραμμα.<br/>δ) Να το ελέγξετε για την Ελένη: 7385 δευτερόλεπτα, 2600 MB, 40 SMS.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">16</span><b>Τρίγωνο στο επίπεδο.</b><span class="theme">Γεωμετρία, Θέμα Δ</span>
+<p>Δίνονται τρία σημεία Α(x1, y1), Β(x2, y2), Γ(x3, y3). Να γραφτεί πρόγραμμα που διαβάζει τις συντεταγμένες τους και:</p>
+<ul class="tight">
+<li>υπολογίζει τα μήκη των πλευρών ΑΒ, ΒΓ, ΓΑ και την περίμετρο,</li>
+<li>υπολογίζει το εμβαδόν με τον <b>τύπο του Ήρωνα</b>: <span class="mx">E<sub>1</sub> = √<span class="rt">τ(τ − α)(τ − β)(τ − γ)</span></span>, όπου τ η ημιπερίμετρος,</li>
+<li>υπολογίζει το εμβαδόν και με τον τύπο <span class="mx">E<sub>2</sub> = <span class="frac"><span>|x<sub>1</sub>(y<sub>2</sub> − y<sub>3</sub>) + x<sub>2</sub>(y<sub>3</sub> − y<sub>1</sub>) + x<sub>3</sub>(y<sub>1</sub> − y<sub>2</sub>)|</span><span>2</span></span></span>,</li>
+<li>εμφανίζει πλευρές, περίμετρο και τα δύο εμβαδά με 2 δεκαδικά, και μια λογική τιμή που είναι ΑΛΗΘΗΣ όταν τα δύο εμβαδά διαφέρουν λιγότερο από 0.001.</li>
+</ul>
+<p>α) Να γράψετε το πρόγραμμα.<br/>β) Γιατί ελέγχουμε αν τα εμβαδά διαφέρουν «λιγότερο από 0.001» και όχι απλώς αν E<sub>1</sub> = E<sub>2</sub>; (Θυμήσου το «Ήξερες ότι;» της §7.5.)<br/>γ) Να ελέγξετε για Α(0, 0), Β(4, 0), Γ(0, 3) και για Α(1, 1), Β(5, 2), Γ(2, 6).<br/>δ) Τι θα συμβεί αν τα τρία σημεία είναι στην ίδια ευθεία, π.χ. (0, 0), (1, 1), (2, 2);</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+</section>
+
+</main><div class="syn-foot"><div class="syn-nav"><a href="07.html"><small>&#8592; Μάθημα 7</small>Το αλφάβητο της ΓΛΩΣΣΑΣ, τύποι, σταθερές, μεταβλητές</a><a class="next" href="09.html"><small>Μάθημα 9 &#8594;</small>Το πρώτο σου πρόγραμμα: εκχώρηση, είσοδος, έξοδος</a></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
+<script>
+(function(){
+  var CARDS = [{"term": "Α_Μ(χ).", "def": "Α_Μ(χ). Το ακέραιο μέρος Α_Μ() ενός αριθμού χ ορίζεται, όπως στα μαθηματικά ο ακέραιος, με την ιδιότητα Α_Μ(χ) <= χ < Α_Μ(χ) + 1.", "ref": "Ύλη και οδηγίες διδασκαλίας, ενότητα 9"}, {"term": "Έκφραση.", "def": "Έκφραση. Όταν μια τιμή προκύπτει από υπολογισμό, τότε αναφερόμαστε σε εκφράσεις (expressions). Για τη σύνταξη μιας αριθμητικής έκφρασης χρησιμοποιούνται αριθμητικές σταθερές, μεταβλητές, συναρτήσεις, αριθμητικοί τελεστές και παρενθέσεις.", "ref": "Σχολικό βιβλίο, §7.7"}, {"term": "Προϋπόθεση.", "def": "Προϋπόθεση. Κάθε έκφραση παριστάνει μια συγκεκριμένη αριθμητική τιμή, η οποία βρίσκεται μετά την εκτέλεση των πράξεων. Γι' αυτό είναι απαραίτητο όλες οι μεταβλητές που εμφανίζονται σε μια έκφραση να έχουν οριστεί προηγούμενα, δηλαδή να έχουν κάποια τιμή.", "ref": "Σχολικό βιβλίο, §7.7"}, {"term": "Αριθμητικοί τελεστές:", "def": "Αριθμητικοί τελεστές: + − * / ^ div mod. Η / δίνει πάντα πραγματικό· div, mod μόνο με ακεραίους.", "ref": "Σύνοψη"}, {"term": "Συναρτήσεις:", "def": "Συναρτήσεις: Α_Μ, Α_Τ, Τ_Ρ, ΗΜ, ΣΥΝ, ΕΦ (μοίρες), ΛΟΓ, Ε.", "ref": "Σύνοψη"}, {"term": "Ιεραρχία:", "def": "Ιεραρχία: παρενθέσεις → ^ → * / div mod → + − → συγκρίσεις → ΟΧΙ → ΚΑΙ → Η. Ίδια σειρά: από αριστερά.", "ref": "Σύνοψη"}, {"term": "Μετατροπή τύπου:", "def": "Μετατροπή τύπου: όλα σε μία γραμμή, * παντού, παρενθέσεις σε αριθμητή και παρονομαστή, ρίζα και απόλυτη τιμή ως συναρτήσεις.", "ref": "Σύνοψη"}, {"term": "/ ή div;", "def": "Η / δίνει πάντα πραγματικό (9 / 4 = 2.25, 8 / 2 = 4.0). Η div δίνει το ακέραιο πηλίκο και δουλεύει μόνο με ακεραίους (9 div 4 = 2).", "ref": "§7.5"}, {"term": "Α_Μ(−3.7)", "def": "−4: ο μεγαλύτερος ακέραιος που δεν ξεπερνά το −3.7.", "ref": "Οδηγίες διδασκαλίας"}, {"term": "ΗΜ, ΣΥΝ, ΕΦ", "def": "Η γωνία δίνεται σε μοίρες: ΗΜ(30) = 0.5.", "ref": "Οδηγίες διδασκαλίας"}, {"term": "Ιεραρχία λογικών τελεστών", "def": "ΟΧΙ → ΚΑΙ → Η. Όλοι μετά τους αριθμητικούς και τους συγκριτικούς.", "ref": "Οδηγίες Μελέτης §1.5"}, {"term": "Κλάσμα σε ΓΛΩΣΣΑ", "def": "Αριθμητής και παρονομαστής σε παρενθέσεις: (3 * x + 2 * y) / (a - b).", "ref": "§7.7"}];
+  // ---- quiz ----
+  document.querySelectorAll('.quiz').forEach(function(quiz){
+    var items = quiz.querySelectorAll('.qi');
+    var score = quiz.querySelector('.score');
+    function update(){
+      var done = quiz.querySelectorAll('.qi.ok, .qi.no').length;
+      if (done < items.length){ score.hidden = true; return; }
+      var ok = quiz.querySelectorAll('.qi.ok').length;
+      score.hidden = false;
+      score.innerHTML = '';
+      var t = document.createElement('span');
+      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? ' · Τέλεια!' : ok >= items.length * 0.7 ? ' · Πολύ καλά' : ' · Ξαναδιάβασε τη θεωρία');
+      var r = document.createElement('button'); r.type = 'button'; r.className = 'btn'; r.textContent = 'Ξανά από την αρχή';
+      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); }); update(); };
+      score.append(t, r);
+    }
+    items.forEach(function(it){
+      var ans = it.getAttribute('data-ans');
+      it.querySelectorAll('.qb button').forEach(function(b){
+        b.addEventListener('click', function(){
+          var v = b.getAttribute('data-v');
+          it.querySelectorAll('.qb button').forEach(function(x){ x.disabled = true; if (x.getAttribute('data-v') === ans) x.classList.add('right'); });
+          b.classList.add('pick');
+          it.classList.add(v === ans ? 'ok' : 'no');
+          var f = document.createElement('span'); f.className = 'fb';
+          f.textContent = v === ans ? '✓ Σωστά' : '✗ Η σωστή απάντηση είναι: ' + (it.querySelector('.qb button[data-v="' + ans + '"]') || {}).textContent;
+          it.appendChild(f);
+          update();
+        });
+      });
+    });
+  });
+  // ---- flashcards ----
+  var order = CARDS.map(function(_, i){ return i; }), pos = 0;
+  var card = document.getElementById('card');
+  if (!card || !CARDS.length) return;
+  function show(){
+    var c = CARDS[order[pos]];
+    card.classList.remove('flipped');
+    document.getElementById('c-term').textContent = c.term;
+    document.getElementById('c-def').textContent = c.def;
+    document.getElementById('c-ref').textContent = c.ref;
+    document.getElementById('c-count').textContent = (pos + 1) + ' / ' + CARDS.length;
+  }
+  card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+  document.getElementById('c-next').onclick = function(){ pos = (pos + 1) % CARDS.length; show(); };
+  document.getElementById('c-prev').onclick = function(){ pos = (pos - 1 + CARDS.length) % CARDS.length; show(); };
+  document.getElementById('c-shuf').onclick = function(){
+    for (var i = order.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+    pos = 0; show();
+  };
+  show();
+})();
+</script>
+<style id="kitcss">/*KIT>*//* ==== kit: θέμα, προβολή, «Δείξε λύση» ==== */
+body{font-size:16px}
+.kit-btn{font:600 13px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 12px;border-radius:999px;cursor:pointer}
+.kit-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.kit-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#kitfloat{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:30;display:flex;gap:6px;padding:5px;border-radius:999px;background:var(--ground);border:1px solid var(--line);box-shadow:0 4px 16px rgba(10,20,40,.12)}
+.rt-ans{margin:-2px 0 14px}
+.rt-show{font:600 13.5px/1 var(--body);border:1.5px solid var(--s-teal);background:var(--teal-bg);color:var(--teal);padding:9px 14px;border-radius:999px;cursor:pointer}
+.rt-show:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.rt-body{display:none;margin-top:10px;border-left:4px solid var(--s-teal);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 16px}
+.rt-body .q{margin:0;border:0;padding:0;background:none}
+.rt-open > .rt-body, body.rt-all .rt-body{display:block}
+.rt-open > .rt-show{background:var(--paper)}
+body:not(.rt-all):not(.editing) .solved:not(.rt-open) .rt-hide{display:none}
+body.rt-all .rt-showstep{display:none}
+.solved.rt-open .rt-showstep{display:none}
+.rt-showstep{margin:4px 0 6px}
+body.student .rt-ans{display:none}
+body.editing .rt, body.editing .rt-showstep{display:none}
+/* Λειτουργία προβολής */
+body.proj #bar,body.proj #nav{zoom:1.25}
+body.proj{--muted:#3a4254;--line:#b5bfd2}
+:root[data-theme="dark"] body.proj{--muted:#b9c1d4;--line:#3b465e}
+@media print{#kitfloat,.rt,.rt-showstep,.kit-btn{display:none!important}.rt-hide{display:grid!important}}
+/* Καθαρές γραμμές */
+body{font-size:17px;line-height:1.68}
+.ln{display:block;margin:.22em 0}
+.ln.li{position:relative;padding-left:1.25em}
+.ln.li::before{content:"•";position:absolute;left:.35em;color:var(--muted)}
+.kvs{display:inline-flex;flex-wrap:wrap;gap:.2em 1.2em;vertical-align:top}
+.kv,.nw{white-space:nowrap}
+p,li,td{text-wrap:pretty}
+.ln.cd{font-family:var(--mono);font-size:.92em}
+.cdcols{display:inline-flex;flex-wrap:wrap;gap:4px 28px;vertical-align:top}
+.cdcol{display:inline-block;padding-left:10px;border-left:2px solid var(--line)}/*<KIT*/</style>
+<script id="kitjs">/*KITJS>*/(function(){
+  /* kit: θέμα (φωτεινό/σκοτεινό), προβολή, «Δείξε λύση» */
+  var root = document.documentElement, body = document.body, doc = document.getElementById('doc');
+  if (!doc || body.getAttribute('data-kit')) return;
+  body.setAttribute('data-kit', '1');
+  function get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function put(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+  var theme = get('synapsi-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  var proj = get('aepp-proj') === '1';
+  function mk(id, txt){ var b = document.createElement('button'); b.type = 'button'; b.id = id; b.className = 'kit-btn'; b.textContent = txt; return b; }
+  var bTheme = mk('k-theme', ''), bProj = mk('k-proj', 'Προβολή'), bAll = null;
+  function applyTheme(){ root.setAttribute('data-theme', theme); bTheme.textContent = theme === 'dark' ? '☀ Φωτεινό' : '☾ Σκοτεινό'; bTheme.setAttribute('aria-label', theme === 'dark' ? 'Φωτεινό θέμα' : 'Σκοτεινό θέμα'); }
+  function fit(){
+    if (!proj){ doc.style.zoom = ''; doc.style.maxWidth = ''; return; }
+    var W = window.innerWidth, z = W < 700 ? 1.12 : 1.38;
+    doc.style.zoom = z; doc.style.maxWidth = Math.max(300, Math.min(900, (W - 36) / z)) + 'px';
+  }
+  function applyProj(){ body.classList.toggle('proj', proj); bProj.setAttribute('aria-pressed', String(proj)); fit(); }
+  window.addEventListener('resize', fit);
+  bTheme.onclick = function(){ theme = theme === 'dark' ? 'light' : 'dark'; put('synapsi-theme', theme); applyTheme(); };
+  bProj.onclick = function(){ proj = !proj; put('aepp-proj', proj ? '1' : '0'); applyProj(); };
+  applyTheme(); applyProj();
+
+  var bar = document.getElementById('bar');
+  var teacherSec = doc.querySelector('section.teacher');
+  if (bar){
+    var anchor = document.getElementById('status') || null;
+    if (teacherSec){ bAll = mk('k-all', 'Όλες οι λύσεις'); bar.insertBefore(bAll, anchor); }
+    bar.insertBefore(bProj, anchor); bar.insertBefore(bTheme, anchor);
+  } else {
+    var f = document.createElement('div'); f.id = 'kitfloat';
+    f.appendChild(bTheme); body.appendChild(f); proj = false; applyProj();
+  }
+  if (bAll){
+    bAll.onclick = function(){ var on = !body.classList.contains('rt-all'); body.classList.toggle('rt-all', on); bAll.setAttribute('aria-pressed', String(on)); };
+  }
+
+  /* λυμένα: φαίνεται η εκφώνηση και το «Κατανοώ», τα υπόλοιπα με κουμπί */
+  doc.querySelectorAll('.box.solved').forEach(function(box){
+    var steps = box.querySelector('.steps');
+    if (!steps) return;
+    var st = steps.querySelectorAll(':scope > .step');
+    if (st.length < 2) return;
+    box.classList.add('rt-closed');
+    for (var i = 1; i < st.length; i++) st[i].classList.add('rt-hide');
+    var w = document.createElement('div'); w.className = 'rt-showstep'; w.contentEditable = 'false';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε τη λύση';
+    b.onclick = function(){ box.classList.add('rt-open'); };
+    w.appendChild(b); st[0].after(w);
+  });
+
+  /* ασκήσεις: η απάντηση από τη σελίδα καθηγητή, κρυμμένη κάτω από την εκφώνηση */
+  if (teacherSec){
+    var ans = {};
+    teacherSec.querySelectorAll('.ans .q').forEach(function(q){ var n = q.querySelector('.qn'); if (n) ans[n.textContent.trim()] = q; });
+    doc.querySelectorAll('.exercises .q').forEach(function(q){
+      var n = q.querySelector(':scope > .qn'); if (!n) return;
+      var a = ans[n.textContent.trim()]; if (!a) return;
+      var w = document.createElement('div'); w.className = 'rt rt-ans'; w.contentEditable = 'false';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε λύση';
+      var bodyEl = document.createElement('div'); bodyEl.className = 'rt-body ans';
+      var c = a.cloneNode(true); var qn = c.querySelector('.qn'); if (qn) qn.remove();
+      bodyEl.appendChild(c);
+      b.onclick = function(){ var on = !w.classList.contains('rt-open'); w.classList.toggle('rt-open', on); b.textContent = on ? 'Κρύψε λύση' : 'Δείξε λύση'; };
+      w.appendChild(b); w.appendChild(bodyEl);
+      q.after(w);
+    });
+  }
+})();/*<KITJS*/</script>
+
+</body></html>

@@ -1,0 +1,669 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Μάθημα 4 · Ανάλυση προβλημάτων</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
+<style>
+/* Layout: one A4-like sheet centred on a cool ground; coloured callouts by role (ορισμός, ήξερες ότι, παγίδα, παράδειγμα) */
+:root{
+  --ground:#e9edf4; --paper:#ffffff; --ink:#172036; --muted:#5a6377; --line:#d9dfea; --soft:#f3f5f9;
+  --blue:#2457d6; --blue-bg:#e9efff; --teal:#0b7f72; --teal-bg:#e2f4f1;
+  --amber:#a65400; --amber-bg:#fff3df; --amber-line:#e2ad62;
+  --coral:#b93b12; --coral-bg:#fcebe4; --violet:#6534c9; --violet-bg:#efe8fd;
+  --s-blue:#2457d6; --s-teal:#0b8174; --s-violet:#6534c9; --s-ink:#172036; --on-solid:#ffffff; --on-solid-2:#d8e1ff;
+  --hero:#172036; --hero-fg:#ffffff; --hero-sub:#c4cef0; --hero-kick:#a9bcff;
+  --mark:#ffe28a;
+  --display:"Commissioner","Noto Sans",system-ui,sans-serif;
+  --body:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0 0 8px}
+
+/* Toolbar */
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:10px 0;background:var(--ground)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:3px}
+.seg button,.btn{font:600 13px/1 var(--body);border:0;background:none;color:var(--muted);padding:8px 13px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid)}
+.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.spacer{flex:1}
+#status{font-size:12.5px;color:var(--muted)}
+.edit-only{display:none}
+body.editing .edit-only{display:inline-block}
+body.editing .view-only{display:none}
+body.editing #doc{outline:2px dashed var(--blue);outline-offset:6px}
+body.editing #doc [contenteditable="false"]{cursor:default}
+
+/* Sheet */
+#doc{max-width:860px;margin:0 auto;background:var(--paper);border-radius:14px;padding:clamp(18px,4vw,44px);box-shadow:0 1px 2px rgba(10,20,40,.06),0 8px 30px rgba(10,20,40,.06)}
+body.student .teacher{display:none}
+
+.hero{background:var(--hero);color:var(--hero-fg);border-radius:14px;padding:22px 24px 24px;position:relative;overflow:hidden}
+.hero .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--hero-kick);font-weight:700}
+.hero h1{font-size:clamp(28px,5vw,40px);font-weight:800;margin:6px 0 8px;letter-spacing:-.01em}
+.hero .sub{color:var(--hero-sub);max-width:34em}
+.hero .sub b{color:var(--hero-fg)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.12);color:var(--hero-fg)}
+.hero .deco{position:absolute;right:-10px;top:-6px;opacity:.16;width:220px;height:auto}
+.hero .deco *{stroke:var(--hero-fg)}
+
+.goals{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 18px;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px}
+.goals h3{grid-column:1/-1;font-size:13px;color:var(--blue);text-transform:uppercase;letter-spacing:.08em}
+.goals div{padding-left:20px;position:relative;font-size:14px}
+.goals div::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:800}
+
+.glance{margin-top:14px;background:var(--soft);border-radius:12px;padding:14px 16px}
+.glance h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.figure{overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:520px;height:auto;font-family:var(--body)}
+
+.sec{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:5px;margin:30px 0 12px;break-after:avoid}
+.sec .num{font-family:var(--display);font-weight:800;font-size:22px;color:var(--blue);font-variant-numeric:tabular-nums}
+.sec h2{font-size:22px;font-weight:800}
+.sec .ref{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;break-inside:avoid}
+.tag{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.def{background:var(--blue-bg);border-left:4px solid var(--blue)} .def .tag{color:var(--blue)}
+.src{font-size:12px;color:var(--muted);margin:2px 0 0}
+.trivia{background:var(--amber-bg);border:1.5px dashed var(--amber-line)} .trivia .tag{color:var(--amber)}
+.talk{margin-top:6px;font-size:14px;color:var(--amber);font-weight:600}
+.talk span{font-weight:400}
+.trap{background:var(--coral-bg);border-left:4px solid var(--coral)} .trap .tag{color:var(--coral)}
+.ex{background:var(--teal-bg);border-left:4px solid var(--teal)} .ex .tag{color:var(--teal)}
+.plain{background:var(--soft)} .plain .tag{color:var(--ink)}
+.hl{background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 1px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:10px 0}
+.grid .box{margin:0}
+ul.tight{margin:4px 0 8px;padding-left:20px} ul.tight li{margin:3px 0}
+.small{font-size:13px;color:var(--muted)}
+.cap{font-size:13.5px;font-weight:700;margin-bottom:6px}
+
+.tablewrap{overflow-x:auto;margin:10px 0}
+table.t{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
+table.t th{background:var(--s-ink);color:var(--paper);text-align:left;padding:7px 10px;font-weight:600}
+table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:top}
+
+.exhead{display:flex;align-items:center;gap:10px;margin:22px 0 8px}
+.lvl{display:inline-flex;gap:4px}
+.lvl i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}
+.lvl i.on{background:var(--violet)}
+.exhead h3{font-size:17px}
+.q{margin:10px 0 14px;break-inside:avoid}
+.qn{display:inline-block;min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:7px;background:var(--violet-bg);color:var(--violet);font-weight:800;font-size:13px;margin-right:8px}
+.theme{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-left:6px}
+table.tf{width:100%;border-collapse:collapse;margin-top:6px;font-size:14.5px}
+table.tf td{padding:6px 8px;border-bottom:1px solid var(--line)}
+table.tf td.b{width:70px;text-align:center;color:var(--muted)}
+.lines{height:var(--h,44px);background:repeating-linear-gradient(transparent 0 27px,var(--line) 27px 28px);margin-top:6px}
+.drawbox{height:180px;border:1.5px dashed var(--line);border-radius:10px;margin-top:8px}
+.indent{margin-left:34px}
+.sol{color:var(--teal);font-weight:700}
+.ans .q{margin:8px 0}
+.teacher .sec{border-color:var(--teal)} .teacher .sec .num{color:var(--teal)}
+
+/* SVG roles */
+.f-blue{fill:var(--s-blue)} .f-teal{fill:var(--s-teal)} .f-violet{fill:var(--s-violet)} .f-ink{fill:var(--s-ink)}
+.f-paper{fill:var(--paper)} .f-on{fill:var(--on-solid)} .f-on2{fill:var(--on-solid-2)} .f-text{fill:var(--ink)} .f-muted{fill:var(--muted)} .f-onink{fill:var(--paper)}
+.st-ink{stroke:var(--ink)} .st-blue{stroke:var(--blue)} .st-teal{stroke:var(--teal)} .st-violet{stroke:var(--violet)}
+.f-arrow{fill:var(--ink)}
+
+
+/* v2 additions: code, narrow flowcharts, legends */
+:root{--mono:ui-monospace,"Cascadia Mono","Consolas","DejaVu Sans Mono",monospace}
+pre.code{font-family:var(--mono);font-size:14px;line-height:1.55;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:6px 0 8px;overflow-x:auto;white-space:pre}
+.figure.narrow svg{min-width:0;max-width:250px;margin:4px auto}
+.grid.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+ul.legend{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0 2px}
+ul.legend li{font-size:14px}
+ul.legend b{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:6px;background:var(--violet-bg);color:var(--violet);margin-right:4px}
+
+
+/* v3 additions: solved examples step by step, blank value tables */
+.solved{border:1.5px solid var(--teal);background:var(--paper)} .solved .tag{color:var(--teal)}
+.steps{display:grid;gap:14px;margin-top:10px}
+.step{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.stepn{width:30px;height:30px;border-radius:50%;background:var(--s-teal);color:var(--on-solid);font:800 14px/30px var(--display);text-align:center}
+table.t.blank td{height:34px;border:1px solid var(--line)}
+
+/* v4: graphs */
+.figure.narrow.graph svg{max-width:380px}
+
+/* homework vs self-check */
+.q.hw::before{content:"Για το σπίτι";display:block;width:max-content;font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:99px;padding:4px 9px;margin-bottom:6px}
+body.editing .q.hw::before{display:none}
+.hwtoggle{display:block;margin-bottom:6px;font:600 12px/1 var(--body);padding:6px 10px;border-radius:99px;border:1.5px dashed var(--line);background:var(--paper);color:var(--muted);cursor:pointer}
+.hwtoggle[aria-pressed="true"]{border-style:solid;border-color:var(--amber-line);color:var(--amber);background:var(--amber-bg)}
+.hwnote{font-size:13px;color:var(--amber);font-weight:600}
+
+@media (max-width:520px){ .indent{margin-left:0} .hero .deco{display:none} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* student additions */
+#doc{margin-top:0}
+#nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ground);max-width:860px;margin:0 auto;padding-block:10px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.navin{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.navin::-webkit-scrollbar{display:none}
+#nav a{flex:none;font:600 13px/1 var(--body);color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
+#nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
+.btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.quiz{display:grid;gap:10px;margin-top:10px}
+.qi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:8px}
+.qi .qs{margin:0}
+.qb{display:flex;gap:8px;flex-wrap:wrap}
+.qb button{font:600 14px/1 var(--body);padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;min-width:96px}
+.qb button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.qi.ok{border-color:var(--teal);background:var(--teal-bg)}
+.qi.no{border-color:var(--coral);background:var(--coral-bg)}
+.qi .qb button.pick{border-color:currentColor}
+.qi.ok .qb button.pick{background:var(--s-teal);border-color:var(--s-teal);color:var(--on-solid)}
+.qi.no .qb button.pick{background:var(--coral);border-color:var(--coral);color:var(--paper)}
+.qi.no .qb button.right{border-color:var(--teal);color:var(--teal)}
+.fb{font-size:13px;font-weight:700}
+.qi.ok .fb{color:var(--teal)} .qi.no .fb{color:var(--coral)}
+.score{font:700 15px/1.4 var(--display);padding:10px 14px;border-radius:10px;background:var(--violet-bg);color:var(--violet);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.score .btn{font-size:13px;padding:8px 12px}
+
+details.reveal{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+details.reveal summary{cursor:pointer;font-weight:700;color:var(--teal);padding:10px 14px;list-style:none}
+details.reveal summary::-webkit-details-marker{display:none}
+details.reveal summary::before{content:"▸ ";}
+details.reveal[open] summary::before{content:"▾ ";}
+details.reveal .rv{padding:0 14px 12px}
+
+.deck{display:grid;gap:12px;margin-top:10px}
+.card{position:relative;display:block;width:100%;min-height:220px;border:0;padding:0;background:none;cursor:pointer;perspective:1200px;font:inherit;color:inherit;text-align:left}
+.card .face{position:absolute;inset:0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;backface-visibility:hidden;transition:transform .45s ease}
+.card .front{background:var(--hero);color:var(--hero-fg);justify-content:center}
+.card .back{background:var(--blue-bg);color:var(--ink);border:1.5px solid var(--blue);transform:rotateY(180deg);overflow:auto}
+.card.flipped .front{transform:rotateY(-180deg)}
+.card.flipped .back{transform:rotateY(0)}
+.card:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:14px}
+.ck{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.term{font:800 clamp(24px,6vw,34px)/1.15 var(--display)}
+.cdef{font-size:15.5px;line-height:1.55}
+.tap{font-size:12.5px;opacity:.7;margin-top:auto}
+.deckbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.count{font:700 14px var(--display);min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.card .face{transition:none}}
+@media (max-width:520px){ #doc{border-radius:12px} .card{min-height:260px} }
+</style>
+<style id="synapsi-brand">
+:root{--ground:#F7F6F0;--ink:#2B3722;--muted:#5E6253;--line:#E1E1D7;--soft:#F3F2EA;--blue:#4F6230;--blue-bg:#EEF0E2;--s-blue:#4F6230;--s-ink:#2B3722;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D;--on-solid-2:#E6E0CC}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}}
+:root[data-theme="dark"]{--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}
+body::before{background:var(--ground)}
+.syn-bar{max-width:860px;margin:0 auto;padding-top:12px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
+.syn-bar a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--hero);color:#fff;text-decoration:none}
+.syn-bar span{color:var(--muted)}
+.syn-foot{max-width:860px;margin:18px auto 0;display:flex;flex-direction:column;gap:12px}
+.syn-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.syn-nav a,.syn-nav span{min-height:52px;padding:8px 14px;border-radius:12px;display:flex;flex-direction:column;justify-content:center;gap:2px;text-decoration:none;font:700 14px/1.3 var(--display);background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.syn-nav small{font:600 11.5px var(--body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.syn-nav .next{text-align:right;background:var(--hero);color:#fff;border-color:var(--hero)}
+.syn-nav .next small{color:var(--hero-kick)}
+.syn-nav .off{opacity:.6}
+.syn-note{font-size:13px;color:var(--muted);padding:12px 14px;border-radius:10px;background:var(--soft)}
+.syn-copy{font-size:12px;color:var(--muted)}
+</style>
+<script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<div class="syn-bar"><a href="../index.html">&#8592; Διαδρομή</a><span>Μάθημα 4 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-4-1">4.1</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a></div></nav>
+<main id="doc" lang="el">
+<section class="hero">
+<svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
+<circle cx="120" cy="30" r="14"></circle><circle cx="196" cy="40" r="14"></circle><circle cx="110" cy="128" r="14"></circle><circle cx="190" cy="132" r="14"></circle>
+<path d="M134 32L182 38M120 44L112 114M196 54L192 118M124 128L176 132M130 42L180 122M182 50L120 116"></path>
+</svg>
+<div class="kicker">Κεφάλαιο 4 · Τεχνικές σχεδίασης αλγορίθμων</div>
+<h1>Ανάλυση προβλημάτων</h1>
+<p class="sub">Η πρώτη ιδέα που σου έρχεται δεν είναι πάντα η καλύτερη. Η <b>ανάλυση</b> είναι αυτό που σε σταματά πριν γράψεις κώδικα για λάθος λύση.</p>
+<div class="chips"><span class="chip">Βιβλίο §4.1</span><span class="chip">1 διδακτική ώρα</span><span class="chip">Θεωρία · Θέμα Α</span></div>
+</section>
+<div class="goals">
+<h3>Στο τέλος του μαθήματος θα μπορείς να…</h3>
+<div>εξηγείς <b>γιατί</b> χρειάζεται ανάλυση πριν από τον αλγόριθμο</div>
+<div>αναφέρεις τι <b>περιλαμβάνει</b> η ανάλυση ενός προβλήματος</div>
+<div>απαντάς στις <b>5 ερωτήσεις</b> της ανάλυσης για ένα πρόβλημα</div>
+<div>συγκρίνεις <b>δύο διαφορετικές αναλύσεις</b> του ίδιου προβλήματος</div>
+<div>αναφέρεις γιατί μας ενδιαφέρουν οι <b>μέθοδοι</b> ανάλυσης</div>
+<div>καταλαβαίνεις γιατί το <b>μέγεθος</b> ενός προβλήματος μετράει</div>
+</div>
+<div class="glance">
+<h3>Όλο το μάθημα με μια ματιά: τα βήματα της ανάλυσης</h3>
+<div class="figure">
+<svg aria-label="Καταγραφή πληροφορίας, ιδιαιτερότητες, συνθήκες και προϋποθέσεις, πρόταση μεθόδου, επίλυση με υπολογιστή." font-size="10.5" role="img" viewbox="0 0 640 128">
+<defs><marker id="arG4" markerheight="7" markerwidth="7" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="f-arrow" d="M0 0L10 5L0 10z"></path></marker></defs>
+<text class="f-muted" font-weight="700" x="6" y="16">ΜΕΛΕΤΗ ΤΟΥ ΠΡΟΒΛΗΜΑΤΟΣ</text>
+<text class="f-muted" font-weight="700" x="400" y="16">ΚΑΙ ΣΤΗ ΣΥΝΕΧΕΙΑ</text>
+<g font-weight="700" text-anchor="middle">
+<rect class="f-blue" height="62" rx="10" width="112" x="6" y="28"></rect><text class="f-on" x="62" y="54">Καταγραφή</text><text class="f-on" x="62" y="70">πληροφορίας</text>
+<rect class="f-blue" height="62" rx="10" width="112" x="134" y="28"></rect><text class="f-on" x="190" y="54">Αναγνώριση</text><text class="f-on" x="190" y="70">ιδιαιτεροτήτων</text>
+<rect class="f-blue" height="62" rx="10" width="112" x="262" y="28"></rect><text class="f-on" x="318" y="54">Συνθήκες και</text><text class="f-on" x="318" y="70">προϋποθέσεις</text>
+<rect class="f-violet" height="62" rx="10" width="112" x="400" y="28"></rect><text class="f-on" x="456" y="54">Πρόταση</text><text class="f-on" x="456" y="70">μεθόδου</text>
+<rect class="f-violet" height="62" rx="10" width="106" x="528" y="28"></rect><text class="f-on" x="581" y="54">Επίλυση με</text><text class="f-on" x="581" y="70">υπολογιστή</text>
+</g>
+<g class="st-ink" stroke-width="1.8"><path d="M118 59H132" marker-end="url(#arG4)"></path><path d="M246 59H260" marker-end="url(#arG4)"></path><path d="M374 59H398" marker-end="url(#arG4)"></path><path d="M512 59H526" marker-end="url(#arG4)"></path></g>
+<text class="f-text" font-size="11.5" text-anchor="middle" x="320" y="118">Στόχος: <tspan font-weight="700">έξυπνες και αποδοτικές λύσεις</tspan>, όσο γίνεται ταχύτερα και με τους λιγότερους υπολογιστικούς πόρους.</text>
+</svg>
+</div>
+</div>
+<div class="sec" id="s-4-1"><span class="num">4.1</span><h2>Γιατί αναλύουμε ένα πρόβλημα</h2><span class="ref">Βιβλίο σελ. 77–79</span></div>
+<p>Ένα πρόβλημα <b>σπάνια έχει μία μόνο λύση</b>. Μπορεί να λυθεί με διαφορετικές προσεγγίσεις, τεχνικές και μεθόδους, και κάποιες είναι πολύ καλύτερες από άλλες. Γι' αυτό, πριν γράψουμε αλγόριθμο, κάνουμε <b>ανάλυση</b>: μελετάμε το πρόβλημα και διαλέγουμε συγκεκριμένη μεθοδολογία και σειρά βημάτων.</p>
+<div class="box def">
+<div class="tag">Απομνημόνευση · Τι περιλαμβάνει η ανάλυση</div>
+<p>Η ανάλυση ενός προβλήματος σε ένα σύγχρονο υπολογιστικό περιβάλλον περιλαμβάνει: την <b>καταγραφή</b> της υπάρχουσας πληροφορίας για το πρόβλημα, την <b>αναγνώριση των ιδιαιτεροτήτων</b> του προβλήματος, την <b>αποτύπωση των συνθηκών και προϋποθέσεων</b> υλοποίησής του και στη συνέχεια: την <b>πρόταση επίλυσης</b> με χρήση κάποιας μεθόδου, και την <b>τελική επίλυση</b> με χρήση υπολογιστικών συστημάτων.</p>
+<p class="src">Σχολικό βιβλίο, §4.1</p>
+</div>
+<p>Στην πράξη, η ανάλυση είναι οι απαντήσεις σε πέντε ερωτήσεις:</p>
+<div class="box def">
+<div class="tag">Απομνημόνευση · Οι 5 ερωτήσεις της ανάλυσης</div>
+<p>① Ποια είναι τα <b>δεδομένα</b> και το <b>μέγεθος</b> του προβλήματος,<br/>② Ποιες είναι οι <b>συνθήκες</b> που πρέπει να πληρούνται για την επίλυση του προβλήματος,<br/>③ Ποια είναι η πλέον <b>αποδοτική μέθοδος</b> επίλυσής τους (σχεδίαση αλγορίθμου),<br/>④ Πώς θα <b>καταγραφεί</b> η λύση σε ένα πρόβλημα (π.χ. σε ψευδογλώσσα), και<br/>⑤ Ποιος είναι ο <b>τρόπος υλοποίησης</b> στο συγκεκριμένο υπολογιστικό σύστημα (π.χ. επιλογή γλώσσας προγραμματισμού).</p>
+<p class="src">Σχολικό βιβλίο, §4.1</p>
+</div>
+<p class="cap"><span class="ln li">Παράδειγμα</span><span class="ln li">Ο διανομέας της πιτσαρίας</span></p>
+<div class="grid g2" style="align-items:start">
+<div>
+<p>Ένας διανομέας ξεκινά από την <b>πιτσαρία (Π)</b>, πρέπει να παραδώσει σε τρεις πολυκατοικίες <b>Β, Γ, Δ</b>, μία φορά στην καθεμία, και να γυρίσει στην πιτσαρία. Οι αριθμοί είναι αποστάσεις σε εκατοντάδες μέτρα. Ποια διαδρομή είναι η <b>συντομότερη</b>;</p>
+<p class="small">Κάθε κύκλος είναι ένα σημείο και κάθε γραμμή ένας δρόμος με το μήκος του.</p>
+</div>
+<div class="figure narrow graph">
+<svg aria-label="Γράφος: Π-Β 2, Π-Γ 12, Π-Δ 3, Β-Γ 6, Β-Δ 5, Γ-Δ 8" font-size="12" role="img" viewbox="0 0 360 250">
+<g class="st-ink" stroke-width="1.6">
+<line x1="60" x2="300" y1="50" y2="50"></line>
+<line x1="60" x2="300" y1="50" y2="200"></line>
+<line x1="60" x2="60" y1="50" y2="200"></line>
+<line x1="300" x2="300" y1="50" y2="200"></line>
+<line x1="300" x2="60" y1="50" y2="200"></line>
+<line x1="300" x2="60" y1="200" y2="200"></line>
+</g>
+<rect class="f-paper" height="20" rx="4" width="24" x="168.0" y="40.0"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="180.0" y="54.0">2</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="115.2" y="82.0"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="127.2" y="96.0">12</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="48.0" y="115.0"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="60.0" y="129.0">3</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="288.0" y="115.0"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="300.0" y="129.0">6</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="220.8" y="82.0"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="232.8" y="96.0">5</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="168.0" y="190.0"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="180.0" y="204.0">8</text>
+<circle class="f-blue" cx="60" cy="50" r="20"></circle><text class="f-on" font-size="14" font-weight="800" text-anchor="middle" x="60" y="55">Π</text>
+<circle class="f-blue" cx="300" cy="50" r="20"></circle><text class="f-on" font-size="14" font-weight="800" text-anchor="middle" x="300" y="55">Β</text>
+<circle class="f-blue" cx="300" cy="200" r="20"></circle><text class="f-on" font-size="14" font-weight="800" text-anchor="middle" x="300" y="205">Γ</text>
+<circle class="f-blue" cx="60" cy="200" r="20"></circle><text class="f-on" font-size="14" font-weight="800" text-anchor="middle" x="60" y="205">Δ</text>
+</svg>
+</div>
+</div>
+<div class="grid g2">
+<div class="box plain"><div class="tag">Ανάλυση Α · «Κάθε φορά στο πιο κοντινό»</div>
+<p>1. Καταγράφω όλες τις αποστάσεις.<br/>2. Από όπου βρίσκομαι, πηγαίνω στο <b>πιο κοντινό</b> σημείο που δεν έχω επισκεφθεί.</p>
+<p>Π → Β (2) → Δ (5) → Γ (8) → Π (12) = <b>27</b></p>
+<p class="small">Στην αρχή όλα πάνε τέλεια, αλλά στο τέλος «πληρώνω» τον μεγάλο δρόμο από το Γ στο Π.</p></div>
+<div class="box ex"><div class="tag">Ανάλυση Β · «Ελάχιστη συνολική απόσταση»</div>
+<p>1. Καταγράφω όλες τις αποστάσεις.<br/>2. Ψάχνω τη σειρά που κάνει <b>μικρότερο το σύνολο</b>, όχι το κάθε βήμα.</p>
+<p>Π → Β (2) → Γ (6) → Δ (8) → Π (3) = <b>19</b></p>
+<p class="small">Κερδίζει 8 «εκατοντάδες μέτρα», δηλαδή 800 μ. σε κάθε διαδρομή.</p></div>
+</div>
+<p>Και οι δύο αναλύσεις δίνουν μια λύση. Μόνο η δεύτερη δίνει τη <b>ζητούμενη</b>. Αυτός είναι ο λόγος που η ανάλυση είναι απαραίτητη: για να βρεθεί η πιο κατάλληλη μέθοδος, που δίνει τη λύση όσο γίνεται <b>ταχύτερα</b> και με το <b>λιγότερο δυνατό κόστος</b> σε υπολογιστικούς πόρους.</p>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Αυτό είναι το διάσημο <b>πρόβλημα του περιοδεύοντα πωλητή</b> (Travelling Salesman Problem). Με 4 στάσεις υπάρχουν μόνο 3 διαφορετικές κυκλικές διαδρομές. Με 20 στάσεις υπάρχουν πάνω από <b>60 τετράκις εκατομμύρια</b> (6.10<sup>16</sup>). Παρ' όλα αυτά, το 2004 ερευνητές βρήκαν με έξυπνους αλγορίθμους τη βέλτιστη διαδρομή που περνά από <b>όλες τις 24.978 πόλεις της Σουηδίας</b>.</p>
+<p class="talk">Σκέψου: Αν δοκιμάζαμε μία-μία όλες τις διαδρομές, με 20 στάσεις ποια από τις 5 ερωτήσεις της ανάλυσης θα μας «έκαιγε»;</p>
+</div>
+<p>Δεν υπάρχει <b>ένας γενικός κανόνας</b> που να λύνει όλα τα προβλήματα. Υπάρχουν όμως <b>«συγγενή» προβλήματα</b>, που αναλύονται με παρόμοιο τρόπο και λύνονται με αντίστοιχες μεθόδους: ο διανομέας πίτσας, ο ταχυδρόμος και το σχολικό λεωφορείο έχουν το ίδιο πρόβλημα.</p>
+<div class="box def">
+<div class="tag">Απομνημόνευση · Γιατί μας ενδιαφέρουν οι μέθοδοι ανάλυσης και επίλυσης</div>
+<p>• παρέχουν ένα <b>γενικό πρότυπο</b> κατάλληλο για την επίλυση προβλημάτων ευρείας κλίμακας,<br/>• μπορούν να αναπαρασταθούν με <b>κοινές δομές δεδομένων και ελέγχου</b> (που υποστηρίζονται από τις περισσότερες σύγχρονες γλώσσες προγραμματισμού),<br/>• παρέχουν τη δυνατότητα καταγραφής των <b>χρονικών και "χωρικών" απαιτήσεων</b> της μεθόδου επίλυσης, έτσι ώστε να μπορεί να γίνει επακριβής εκτίμηση των αποτελεσμάτων.</p>
+<p class="src">Σχολικό βιβλίο, §4.1</p>
+</div>
+<div class="box trap">
+<div class="tag">Παγίδες που κοστίζουν μονάδες</div>
+<ul class="tight">
+<li>«Το καλύτερο σε κάθε βήμα» <b>δεν</b> σημαίνει «το καλύτερο συνολικά».</li>
+<li>Δεν υπάρχει γενική φόρμουλα για όλα τα προβλήματα, υπάρχουν όμως <b>συγγενή</b> προβλήματα.</li>
+<li>Η επιλογή της <b>γλώσσας προγραμματισμού</b> είναι κι αυτή μέρος της ανάλυσης (5η ερώτηση).</li>
+<li>Η 1η ερώτηση ρωτάει και το <b>μέγεθος</b> του προβλήματος, όχι μόνο τα δεδομένα. Συχνά ξεχνιέται.</li>
+</ul>
+</div>
+<section class="solved-wrap">
+<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένο παράδειγμα βήμα-βήμα</h2><span class="ref">Οι 5 ερωτήσεις στην πράξη</span></div>
+<div class="box solved">
+<div class="tag">Πρόβλημα · Πόσα λεωφορεία για την εκδρομή;</div>
+<p>Στην εκδρομή του σχολείου πηγαίνουν 87 μαθητές και 6 συνοδοί καθηγητές. Η εταιρεία διαθέτει λεωφορεία των 50 θέσεων. Να γίνει η ανάλυση του προβλήματος «Πόσα λεωφορεία πρέπει να κλείσουμε;».</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ: ερωτήσεις ① και ②.</b>
+<ul class="tight"><li><b>Δεδομένα και μέγεθος:</b> <span class="nw">87 + 6 = 93</span> άτομα, λεωφορεία 50 θέσεων. Είναι ένα <b>μικρό</b> πρόβλημα, οπότε λύνεται και με το χέρι.</li>
+<li><b>Συνθήκες</b> (εδώ ρωτάω τον διευθυντή): όλοι πρέπει να έχουν θέση, σε κάθε λεωφορείο πρέπει να υπάρχει <b>τουλάχιστον ένας συνοδός</b>, και θέλουμε όσο γίνεται <b>λιγότερα</b> λεωφορεία, για το κόστος.</li></ul></div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω: ερώτηση ③.</b> Η πρώτη ιδέα είναι <span class="nw">93 / 50 = 1,86.</span> Όμως <b>δεν κλείνεις 1,86 λεωφορεία</b>: στρογγυλεύω <b>προς τα πάνω</b>, άρα 2. Μετά ελέγχω τη δεύτερη συνθήκη: έχω 6 συνοδούς για 2 λεωφορεία, ✓. Μοιράζω 47 και 46 άτομα, με 3 συνοδούς στο καθένα.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω: ερωτήσεις ④ και ⑤.</b> Θα καταγράψω τη λύση σε φυσική γλώσσα κατά βήματα, και αργότερα σε ψευδογλώσσα, όταν μάθουμε την ακέραια διαίρεση. Θα την υλοποιήσω σε ΓΛΩΣΣΑ, στους υπολογιστές του εργαστηρίου.
+<pre class="code">1. Διάβασε μαθητές και συνοδούς.
+2. Υπολόγισε άτομα = μαθητές + συνοδοί.
+3. Υπολόγισε λεωφορεία = άτομα / 50, στρογγυλεμένο προς τα πάνω.
+4. Αν συνοδοί &lt; λεωφορεία, εμφάνισε «Χρειάζονται κι άλλοι συνοδοί».
+5. Εμφάνισε λεωφορεία.</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω τις «άκρες».</b></span><span class="ln li">100 άτομα: ακριβώς 2 λεωφορεία.</span><span class="ln li">101 άτομα: 3 λεωφορεία, και όχι 2,02.</span><span class="ln li">120 άτομα και μόνο 2 συνοδοί: 3 λεωφορεία αλλά 2 συνοδοί, άρα η συνθήκη ② χαλάει.</span><span class="ln">Η ανάλυση το «έπιασε» πριν γραφτεί ούτε μία γραμμή κώδικα.</span></div></div>
+</div>
+</div>
+</section>
+
+<section class="cards" id="s-cards">
+<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2><span class="ref">Ορισμοί για απομνημόνευση</span></div>
+<p class="small">Διάβασε τον όρο, πες τον ορισμό από μέσα σου και πάτα την κάρτα για να τον δεις.</p>
+<div class="deck">
+<button aria-live="polite" class="card" id="card" type="button">
+<span class="face front"><span class="ck">Όρος</span><span class="term" id="c-term"></span><span class="tap">Πάτα για τον ορισμό</span></span>
+<span class="face back"><span class="ck">Ορισμός</span><span class="cdef" id="c-def"></span><span class="tap" id="c-ref"></span></span>
+</button>
+<div class="deckbar">
+<button aria-label="Προηγούμενη κάρτα" class="btn" id="c-prev" type="button">←</button>
+<span class="count" id="c-count"></span>
+<button aria-label="Επόμενη κάρτα" class="btn" id="c-next" type="button">→</button>
+<button class="btn" id="c-shuf" type="button">Ανακάτεμα</button>
+</div>
+</div>
+</section><section class="exercises">
+<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2><span class="ref">Από τα εύκολα στα δύσκολα</span></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div>
+<div class="q"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Γράψε Σ ή Λ.
+<table class="tf">
+<tbody><tr><td>α. Κάθε πρόβλημα έχει μία μόνο λύση.</td><td class="b">____</td></tr>
+<tr><td>β. Υπάρχει ένας γενικός κανόνας που επιλύει όλα τα προβλήματα.</td><td class="b">____</td></tr>
+<tr><td>γ. Συγγενή προβλήματα μπορούν να αναλυθούν με παρόμοιο τρόπο και να λυθούν με αντίστοιχες μεθόδους.</td><td class="b">____</td></tr>
+<tr><td>δ. Η επιλογή της γλώσσας προγραμματισμού αφορά τον τρόπο υλοποίησης και είναι μέρος της ανάλυσης.</td><td class="b">____</td></tr>
+<tr><td>ε. Αν σε κάθε βήμα διαλέγουμε το πιο κοντινό σημείο, βρίσκουμε πάντα τη συντομότερη συνολική διαδρομή.</td><td class="b">____</td></tr>
+<tr><td>στ. Βασικός στόχος της ανάλυσης είναι η πρόταση έξυπνων και αποδοτικών λύσεων.</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Λ, β Λ, γ Σ, δ Σ, ε Λ, στ Σ</span>
+<p class="small">ε: το παράδειγμα του διανομέα δίνει 27 με την Ανάλυση Α, ενώ η καλύτερη είναι 19.</p></div></details></div>
+<div class="q"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
+<p>α) Τι περιλαμβάνει η ανάλυση ενός προβλήματος σε ένα σύγχρονο υπολογιστικό περιβάλλον;<br/>β) Ποιες ερωτήσεις πρέπει να απαντηθούν κατά την ανάλυση ενός προβλήματος;<br/>γ) Για ποιους λόγους παρουσιάζουν ενδιαφέρον οι μέθοδοι ανάλυσης και επίλυσης των προβλημάτων;<br/>δ) Γιατί είναι απαραίτητη η ανάλυση κάθε προβλήματος;</p>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p>α) Την καταγραφή της υπάρχουσας πληροφορίας για το πρόβλημα, την αναγνώριση των ιδιαιτεροτήτων του, την αποτύπωση των συνθηκών και προϋποθέσεων υλοποίησής του, και στη συνέχεια την πρόταση επίλυσης με χρήση κάποιας μεθόδου και την τελική επίλυση με χρήση υπολογιστικών συστημάτων.</p>
+<p>β) Ποια είναι τα δεδομένα και το μέγεθος του προβλήματος. Ποιες είναι οι συνθήκες που πρέπει να πληρούνται για την επίλυσή του. Ποια είναι η πλέον αποδοτική μέθοδος επίλυσης (σχεδίαση αλγορίθμου). Πώς θα καταγραφεί η λύση (π.χ. σε ψευδογλώσσα). Ποιος είναι ο τρόπος υλοποίησης στο συγκεκριμένο υπολογιστικό σύστημα (π.χ. επιλογή γλώσσας προγραμματισμού).</p>
+<p>γ) Παρέχουν ένα γενικό πρότυπο κατάλληλο για την επίλυση προβλημάτων ευρείας κλίμακας. Μπορούν να αναπαρασταθούν με κοινές δομές δεδομένων και ελέγχου. Παρέχουν τη δυνατότητα καταγραφής των χρονικών και «χωρικών» απαιτήσεων της μεθόδου, ώστε να γίνεται επακριβής εκτίμηση των αποτελεσμάτων.</p>
+<p>δ) Επειδή ένα πρόβλημα μπορεί να λυθεί με πολλές διαφορετικές προσεγγίσεις. Η ανάλυση αναζητά την πλέον κατάλληλη μέθοδο, που δίνει τη ζητούμενη λύση όσο γίνεται ταχύτερα και με το λιγότερο δυνατό κόστος σε υπολογιστικούς πόρους.</p></div></details></div>
+<div class="q"><span class="qn">3</span><b>Σε ποια ερώτηση απαντά;</b><span class="theme">Σχολική βιβλιοθήκη</span>
+<p>Το σχολείο θέλει εφαρμογή για τους δανεισμούς της βιβλιοθήκης. Για κάθε φράση γράψε το γράμμα της ερώτησης της ανάλυσης στην οποία απαντά.</p>
+<ul class="legend tight">
+<li data-v="Α"><b>Α</b> Δεδομένα και μέγεθος</li>
+<li data-v="Β"><b>Β</b> Συνθήκες</li>
+<li data-v="Γ"><b>Γ</b> Αποδοτικότερη μέθοδος</li>
+<li data-v="Δ"><b>Δ</b> Καταγραφή της λύσης</li>
+<li data-v="Ε"><b>Ε</b> Τρόπος υλοποίησης</li>
+</ul>
+<table class="tf">
+<tbody><tr><td>α. «Η βιβλιοθήκη έχει 2.000 βιβλία και 300 μέλη.»</td><td class="b">____</td></tr>
+<tr><td>β. «Κάθε μαθητής μπορεί να έχει το πολύ 3 βιβλία, για 15 ημέρες.»</td><td class="b">____</td></tr>
+<tr><td>γ. «Θα γράψουμε πρώτα τον αλγόριθμο σε ψευδογλώσσα.»</td><td class="b">____</td></tr>
+<tr><td>δ. «Το πρόγραμμα θα γραφτεί σε ΓΛΩΣΣΑ για τους υπολογιστές του εργαστηρίου.»</td><td class="b">____</td></tr>
+<tr><td>ε. «Για την αναζήτηση ενός βιβλίου θα διαλέξουμε τον πιο γρήγορο τρόπο.»</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Α, β Β, γ Δ, δ Ε, ε Γ</span></div></details></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div>
+<div class="q"><span class="qn">4</span><b>Δύο αναλύσεις, μία βόλτα.</b><span class="theme">Θεματικό πάρκο</span>
+<p>Σε ένα θεματικό πάρκο θέλεις να ξεκινήσεις από την <b>Είσοδο (Ε)</b>, να δεις το <b>Λούνα παρκ (Λ)</b>, το <b>Ενυδρείο (Υ)</b> και τον <b>Ζωολογικό κήπο (Ζ)</b>, και να γυρίσεις στην Είσοδο. Οι αριθμοί είναι λεπτά περπάτημα.</p>
+<div class="figure narrow graph">
+<svg aria-label="Γράφος: Ε-Λ 6, Ε-Υ 5, Ε-Ζ 15, Λ-Υ 11, Λ-Ζ 5, Υ-Ζ 13" font-size="12" role="img" viewbox="0 0 360 250">
+<g class="st-ink" stroke-width="1.6">
+<line x1="60" x2="300" y1="50" y2="50"></line>
+<line x1="60" x2="60" y1="50" y2="200"></line>
+<line x1="60" x2="300" y1="50" y2="200"></line>
+<line x1="300" x2="60" y1="50" y2="200"></line>
+<line x1="300" x2="300" y1="50" y2="200"></line>
+<line x1="60" x2="300" y1="200" y2="200"></line>
+</g>
+<rect class="f-paper" height="20" rx="4" width="24" x="168.0" y="40.0"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="180.0" y="54.0">6</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="48.0" y="115.0"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="60.0" y="129.0">5</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="115.2" y="82.0"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="127.2" y="96.0">15</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="220.8" y="82.0"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="232.8" y="96.0">11</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="288.0" y="115.0"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="300.0" y="129.0">5</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="168.0" y="190.0"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="180.0" y="204.0">13</text>
+<circle class="f-blue" cx="60" cy="50" r="20"></circle><text class="f-on" font-size="14" font-weight="800" text-anchor="middle" x="60" y="55">Ε</text>
+<circle class="f-blue" cx="300" cy="50" r="20"></circle><text class="f-on" font-size="14" font-weight="800" text-anchor="middle" x="300" y="55">Λ</text>
+<circle class="f-blue" cx="300" cy="200" r="20"></circle><text class="f-on" font-size="14" font-weight="800" text-anchor="middle" x="300" y="205">Ζ</text>
+<circle class="f-blue" cx="60" cy="200" r="20"></circle><text class="f-on" font-size="14" font-weight="800" text-anchor="middle" x="60" y="205">Υ</text>
+</svg>
+</div>
+<p>α) Ποια διαδρομή βγάζει η <b>Ανάλυση Α</b> («κάθε φορά στο πιο κοντινό») και πόσα λεπτά κάνει;<br/>β) Γράψε και τις 3 διαφορετικές κυκλικές διαδρομές με τον χρόνο τους. Ποια είναι η καλύτερη;<br/>γ) Πόσα λεπτά κερδίζεις με την Ανάλυση Β;</p>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p>α) Ανάλυση Α: Ε → Υ (5) → Λ (11) → Ζ (5) → Ε (15) = <b>36 λεπτά</b>.</p>
+<p><span class="ln">β)</span><span class="ln li">Ε-Λ-Υ-Ζ-Ε: <span class="nw">6 + 11 + 13 + 15 = 45</span></span><span class="ln li">Ε-Λ-Ζ-Υ-Ε: <span class="nw">6 + 5 + 13 + 5</span> = <b>29</b></span><span class="ln li">Ε-Υ-Λ-Ζ-Ε: 36</span><span class="ln">Καλύτερη: <b>Ε → Λ → Ζ → Υ → Ε</b> (ή η αντίστροφή της).</span></p>
+<p>γ) <span class="nw">36 − 29</span> = <b>7 λεπτά</b>.</p></div></details></div>
+<div class="q hw"><span class="qn">5</span><b>Οι 5 ερωτήσεις σε ένα αληθινό πρόβλημα.</b><span class="theme">Σχολική ζωή</span>
+<p>Το 15μελές θέλει <b>ηλεκτρονική ψηφοφορία</b> για τον προορισμό της πενθήμερης εκδρομής ανάμεσα σε 4 προορισμούς. Να κάνετε την ανάλυση του προβλήματος απαντώντας σε καθεμία από τις 5 ερωτήσεις της ανάλυσης. Για τη 2η ερώτηση γράψτε τουλάχιστον τρεις συνθήκες.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">6</span><b>Συγγενή προβλήματα.</b>
+<p>Ποια από τα παρακάτω προβλήματα είναι «συγγενή» με το πρόβλημα του διανομέα; Να αιτιολογήσετε την απάντησή σας για καθένα.</p>
+<p>α) Ένα απορριμματοφόρο πρέπει να περάσει από όλους τους κάδους μιας γειτονιάς και να επιστρέψει στο αμαξοστάσιο.<br/>β) Υπολογισμός του μέσου όρου των βαθμών ενός τμήματος.<br/>γ) Ένα drone πρέπει να φωτογραφίσει 10 χωράφια και να γυρίσει στη βάση του.<br/>δ) Ταξινόμηση των ονομάτων μιας τάξης αλφαβητικά.<br/>ε) Ένα τουριστικό λεωφορείο πρέπει να περάσει από 6 αξιοθέατα της πόλης και να επιστρέψει στο ξενοδοχείο.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">7</span><b>Ανάλυση με τις 5 ερωτήσεις.</b><span class="theme">Σχολική ζωή</span>
+<p>Ο διευθυντής θέλει ένα πρόγραμμα που φτιάχνει αυτόματα το <b>πρόγραμμα των προαγωγικών εξετάσεων</b> του Ιουνίου: ποια μέρα γράφει κάθε τάξη κάθε μάθημα. Να κάνετε την ανάλυση του προβλήματος απαντώντας στις 5 ερωτήσεις της ανάλυσης. Για τη 2η ερώτηση να γράψετε τουλάχιστον τέσσερις συνθήκες.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">8</span><b>Τα κέρματα της Ζουμπουλίας.</b><span class="theme">Χρήματα</span>
+<p>Στη φανταστική χώρα Ζουμπουλία υπάρχουν κέρματα των <b>1, 3 και 4</b> ζουμπουλιών. Ένας ταμίας θέλει να δίνει τα ρέστα με <b>όσο το δυνατόν λιγότερα κέρματα</b>.</p>
+<p>α) Η <b>Ανάλυση Α</b> λέει: «δίνε κάθε φορά το μεγαλύτερο κέρμα που χωράει». Τι κέρματα θα δώσει για ρέστα <b>6</b> ζουμπουλιών; Πόσα είναι;<br/>β) Βρείτε καλύτερο τρόπο για τα 6 ζουμπούλια.<br/>γ) Με τα κέρματα του ευρώ (1, 2, 5, 10, 20, 50 λεπτά, 1 €, 2 €) η Ανάλυση Α δίνει πάντα τον μικρότερο αριθμό κερμάτων. Τι συμπέρασμα βγάζετε για τη σχέση ανάμεσα στη μέθοδο επίλυσης και στα δεδομένα του προβλήματος;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Μεγάλες ασκήσεις</h3></div>
+<div class="q hw"><span class="qn">9</span><b>Το λεωφορείο της εκδρομής.</b><span class="theme">Ταξίδια</span>
+<p>Ένα λεωφορείο ξεκινά από το <b>σχολείο (Σ)</b>, πρέπει να περάσει από τέσσερα αξιοθέατα <b>Α, Β, Γ, Δ</b>, μία φορά από το καθένα, και να επιστρέψει στο σχολείο. Οι αριθμοί είναι χιλιόμετρα.</p>
+<div class="figure narrow graph">
+<svg aria-label="Γράφος: Σ-Α 3, Σ-Β 14, Σ-Γ 5, Σ-Δ 15, Α-Β 9, Α-Γ 7, Α-Δ 10, Β-Γ 7, Β-Δ 10, Γ-Δ 6" font-size="12" role="img" viewbox="0 0 360 330">
+<g class="st-ink" stroke-width="1.6">
+<line x1="180" x2="330" y1="32" y2="135"></line>
+<line x1="330" x2="272" y1="135" y2="295"></line>
+<line x1="272" x2="88" y1="295" y2="295"></line>
+<line x1="88" x2="30" y1="295" y2="135"></line>
+<line x1="30" x2="180" y1="135" y2="32"></line>
+<line x1="180" x2="272" y1="32" y2="295"></line>
+<line x1="180" x2="88" y1="32" y2="295"></line>
+<line x1="330" x2="88" y1="135" y2="295"></line>
+<line x1="330" x2="30" y1="135" y2="135"></line>
+<line x1="272" x2="30" y1="295" y2="135"></line>
+</g>
+<rect class="f-paper" height="20" rx="4" width="24" x="243.0" y="73.5"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="255.0" y="87.5">3</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="289.0" y="205.0"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="301.0" y="219.0">9</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="168.0" y="285.0"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="180.0" y="299.0">7</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="47.0" y="205.0"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="59.0" y="219.0">6</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="93.0" y="73.5"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="105.0" y="87.5">15</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="195.6" y="100.89999999999999"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="207.6" y="114.89999999999999">14</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="140.4" y="100.89999999999999"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="152.4" y="114.89999999999999">5</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="264.76" y="160.2"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="276.76" y="174.2">7</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="168.0" y="125.0"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="180.0" y="139.0">10</text>
+<rect class="f-paper" height="20" rx="4" width="24" x="206.76" y="249.8"></rect><text class="f-violet" font-weight="800" text-anchor="middle" x="218.76" y="263.8">10</text>
+<circle class="f-blue" cx="180" cy="32" r="20"></circle><text class="f-on" font-size="14" font-weight="800" text-anchor="middle" x="180" y="37">Σ</text>
+<circle class="f-blue" cx="330" cy="135" r="20"></circle><text class="f-on" font-size="14" font-weight="800" text-anchor="middle" x="330" y="140">Α</text>
+<circle class="f-blue" cx="272" cy="295" r="20"></circle><text class="f-on" font-size="14" font-weight="800" text-anchor="middle" x="272" y="300">Β</text>
+<circle class="f-blue" cx="88" cy="295" r="20"></circle><text class="f-on" font-size="14" font-weight="800" text-anchor="middle" x="88" y="300">Γ</text>
+<circle class="f-blue" cx="30" cy="135" r="20"></circle><text class="f-on" font-size="14" font-weight="800" text-anchor="middle" x="30" y="140">Δ</text>
+</svg>
+</div>
+<p>α) Να βρείτε τη διαδρομή που προκύπτει από την <b>Ανάλυση Α</b> και το μήκος της, δείχνοντας σε κάθε βήμα ποιες επιλογές είχατε.<br/>β) Να βρείτε μια διαδρομή <b>συντομότερη</b> από αυτή.<br/>γ) Πόσες διαφορετικές κυκλικές διαδρομές υπάρχουν με 4 αξιοθέατα; (Θεωρούμε ίδια μια διαδρομή και την αντίστροφή της.)<br/>δ) Με βάση τα παραπάνω, να εξηγήσετε γιατί η ανάλυση ενός προβλήματος είναι απαραίτητη.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">10</span><b>Όταν το μέγεθος μετράει.</b><span class="theme">Μαθηματικά, Υπολογιστές</span>
+<p><span class="ln li">Για ένα πρόβλημα διανομής με <b>n</b> στάσεις (μαζί με την αφετηρία) υπάρχουν <span class="nw">(n − 1)</span>! / 2 διαφορετικές κυκλικές διαδρομές, όπου k! = <span class="nw">1 · 2 · 3</span></span><span class="ln li">…</span><span class="ln li">k.</span></p>
+<p><span class="ln li">α) Να υπολογίσετε πόσες διαδρομές υπάρχουν για <span class="nw">n = 4,</span> 5, 6 και 10.<br/>β) Για <span class="nw">n = 20</span> οι διαδρομές είναι περίπου 6,08</span><span class="ln li">10<sup>16</sup>. Αν ένας υπολογιστής ελέγχει <b>ένα εκατομμύριο</b> διαδρομές το δευτερόλεπτο, πόσα <b>χρόνια</b> θα χρειαζόταν για να τις ελέγξει όλες; (1 έτος ≈ 31.536.000 δευτερόλεπτα)<br/>γ) Ποιες από τις 5 ερωτήσεις της ανάλυσης αναδεικνύει αυτή η άσκηση και γιατί;</span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+</section>
+
+</main><div class="syn-foot"><div class="syn-nav"><a href="03.html"><small>&#8592; Μάθημα 3</small>Από την εκφώνηση στον αλγόριθμο</a><a class="next" href="05.html"><small>Μάθημα 5 &#8594;</small>Το πρόγραμμα και η σχεδίασή του</a></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
+<script>
+(function(){
+  var CARDS = [{"term": "καταγραφή", "def": "Η ανάλυση ενός προβλήματος σε ένα σύγχρονο υπολογιστικό περιβάλλον περιλαμβάνει: την καταγραφή της υπάρχουσας πληροφορίας για το πρόβλημα, την αναγνώριση των ιδιαιτεροτήτων του προβλήματος, την αποτύπωση των συνθηκών και προϋποθέσεων υλοποίησής του και στη συνέχεια: την πρόταση επίλυσης με χρήση κάποιας μεθόδου, και την τελική επίλυση με χρήση υπολογιστικών συστημάτων.", "ref": "Σχολικό βιβλίο, §4.1"}, {"term": "δεδομένα", "def": "① Ποια είναι τα δεδομένα και το μέγεθος του προβλήματος, ② Ποιες είναι οι συνθήκες που πρέπει να πληρούνται για την επίλυση του προβλήματος, ③ Ποια είναι η πλέον αποδοτική μέθοδος επίλυσής τους (σχεδίαση αλγορίθμου), ④ Πώς θα καταγραφεί η λύση σε ένα πρόβλημα (π.χ. σε ψευδογλώσσα), και ⑤ Ποιος είναι ο τρόπος υλοποίησης στο συγκεκριμένο υπολογιστικό σύστημα (π.χ. επιλογή γλώσσας προγραμματισμού).", "ref": "Σχολικό βιβλίο, §4.1"}, {"term": "γενικό πρότυπο", "def": "• παρέχουν ένα γενικό πρότυπο κατάλληλο για την επίλυση προβλημάτων ευρείας κλίμακας, • μπορούν να αναπαρασταθούν με κοινές δομές δεδομένων και ελέγχου (που υποστηρίζονται από τις περισσότερες σύγχρονες γλώσσες προγραμματισμού), • παρέχουν τη δυνατότητα καταγραφής των χρονικών και \"χωρικών\" απαιτήσεων της μεθόδου επίλυσης, έτσι ώστε να μπορεί να γίνει επακριβής εκτίμηση των αποτελεσμάτων.", "ref": "Σχολικό βιβλίο, §4.1"}];
+  // ---- quiz ----
+  document.querySelectorAll('.quiz').forEach(function(quiz){
+    var items = quiz.querySelectorAll('.qi');
+    var score = quiz.querySelector('.score');
+    function update(){
+      var done = quiz.querySelectorAll('.qi.ok, .qi.no').length;
+      if (done < items.length){ score.hidden = true; return; }
+      var ok = quiz.querySelectorAll('.qi.ok').length;
+      score.hidden = false;
+      score.innerHTML = '';
+      var t = document.createElement('span');
+      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? ' · Τέλεια!' : ok >= items.length * 0.7 ? ' · Πολύ καλά' : ' · Ξαναδιάβασε τη θεωρία');
+      var r = document.createElement('button'); r.type = 'button'; r.className = 'btn'; r.textContent = 'Ξανά από την αρχή';
+      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); }); update(); };
+      score.append(t, r);
+    }
+    items.forEach(function(it){
+      var ans = it.getAttribute('data-ans');
+      it.querySelectorAll('.qb button').forEach(function(b){
+        b.addEventListener('click', function(){
+          var v = b.getAttribute('data-v');
+          it.querySelectorAll('.qb button').forEach(function(x){ x.disabled = true; if (x.getAttribute('data-v') === ans) x.classList.add('right'); });
+          b.classList.add('pick');
+          it.classList.add(v === ans ? 'ok' : 'no');
+          var f = document.createElement('span'); f.className = 'fb';
+          f.textContent = v === ans ? '✓ Σωστά' : '✗ Η σωστή απάντηση είναι: ' + (it.querySelector('.qb button[data-v="' + ans + '"]') || {}).textContent;
+          it.appendChild(f);
+          update();
+        });
+      });
+    });
+  });
+  // ---- flashcards ----
+  var order = CARDS.map(function(_, i){ return i; }), pos = 0;
+  var card = document.getElementById('card');
+  if (!card || !CARDS.length) return;
+  function show(){
+    var c = CARDS[order[pos]];
+    card.classList.remove('flipped');
+    document.getElementById('c-term').textContent = c.term;
+    document.getElementById('c-def').textContent = c.def;
+    document.getElementById('c-ref').textContent = c.ref;
+    document.getElementById('c-count').textContent = (pos + 1) + ' / ' + CARDS.length;
+  }
+  card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+  document.getElementById('c-next').onclick = function(){ pos = (pos + 1) % CARDS.length; show(); };
+  document.getElementById('c-prev').onclick = function(){ pos = (pos - 1 + CARDS.length) % CARDS.length; show(); };
+  document.getElementById('c-shuf').onclick = function(){
+    for (var i = order.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+    pos = 0; show();
+  };
+  show();
+})();
+</script>
+<style id="kitcss">/*KIT>*//* ==== kit: θέμα, προβολή, «Δείξε λύση» ==== */
+body{font-size:16px}
+.kit-btn{font:600 13px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 12px;border-radius:999px;cursor:pointer}
+.kit-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.kit-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#kitfloat{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:30;display:flex;gap:6px;padding:5px;border-radius:999px;background:var(--ground);border:1px solid var(--line);box-shadow:0 4px 16px rgba(10,20,40,.12)}
+.rt-ans{margin:-2px 0 14px}
+.rt-show{font:600 13.5px/1 var(--body);border:1.5px solid var(--s-teal);background:var(--teal-bg);color:var(--teal);padding:9px 14px;border-radius:999px;cursor:pointer}
+.rt-show:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.rt-body{display:none;margin-top:10px;border-left:4px solid var(--s-teal);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 16px}
+.rt-body .q{margin:0;border:0;padding:0;background:none}
+.rt-open > .rt-body, body.rt-all .rt-body{display:block}
+.rt-open > .rt-show{background:var(--paper)}
+body:not(.rt-all):not(.editing) .solved:not(.rt-open) .rt-hide{display:none}
+body.rt-all .rt-showstep{display:none}
+.solved.rt-open .rt-showstep{display:none}
+.rt-showstep{margin:4px 0 6px}
+body.student .rt-ans{display:none}
+body.editing .rt, body.editing .rt-showstep{display:none}
+/* Λειτουργία προβολής */
+body.proj #bar,body.proj #nav{zoom:1.25}
+body.proj{--muted:#3a4254;--line:#b5bfd2}
+:root[data-theme="dark"] body.proj{--muted:#b9c1d4;--line:#3b465e}
+@media print{#kitfloat,.rt,.rt-showstep,.kit-btn{display:none!important}.rt-hide{display:grid!important}}
+/* Καθαρές γραμμές */
+body{font-size:17px;line-height:1.68}
+.ln{display:block;margin:.22em 0}
+.ln.li{position:relative;padding-left:1.25em}
+.ln.li::before{content:"•";position:absolute;left:.35em;color:var(--muted)}
+.kvs{display:inline-flex;flex-wrap:wrap;gap:.2em 1.2em;vertical-align:top}
+.kv,.nw{white-space:nowrap}
+p,li,td{text-wrap:pretty}
+.ln.cd{font-family:var(--mono);font-size:.92em}
+.cdcols{display:inline-flex;flex-wrap:wrap;gap:4px 28px;vertical-align:top}
+.cdcol{display:inline-block;padding-left:10px;border-left:2px solid var(--line)}/*<KIT*/</style>
+<script id="kitjs">/*KITJS>*/(function(){
+  /* kit: θέμα (φωτεινό/σκοτεινό), προβολή, «Δείξε λύση» */
+  var root = document.documentElement, body = document.body, doc = document.getElementById('doc');
+  if (!doc || body.getAttribute('data-kit')) return;
+  body.setAttribute('data-kit', '1');
+  function get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function put(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+  var theme = get('synapsi-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  var proj = get('aepp-proj') === '1';
+  function mk(id, txt){ var b = document.createElement('button'); b.type = 'button'; b.id = id; b.className = 'kit-btn'; b.textContent = txt; return b; }
+  var bTheme = mk('k-theme', ''), bProj = mk('k-proj', 'Προβολή'), bAll = null;
+  function applyTheme(){ root.setAttribute('data-theme', theme); bTheme.textContent = theme === 'dark' ? '☀ Φωτεινό' : '☾ Σκοτεινό'; bTheme.setAttribute('aria-label', theme === 'dark' ? 'Φωτεινό θέμα' : 'Σκοτεινό θέμα'); }
+  function fit(){
+    if (!proj){ doc.style.zoom = ''; doc.style.maxWidth = ''; return; }
+    var W = window.innerWidth, z = W < 700 ? 1.12 : 1.38;
+    doc.style.zoom = z; doc.style.maxWidth = Math.max(300, Math.min(900, (W - 36) / z)) + 'px';
+  }
+  function applyProj(){ body.classList.toggle('proj', proj); bProj.setAttribute('aria-pressed', String(proj)); fit(); }
+  window.addEventListener('resize', fit);
+  bTheme.onclick = function(){ theme = theme === 'dark' ? 'light' : 'dark'; put('synapsi-theme', theme); applyTheme(); };
+  bProj.onclick = function(){ proj = !proj; put('aepp-proj', proj ? '1' : '0'); applyProj(); };
+  applyTheme(); applyProj();
+
+  var bar = document.getElementById('bar');
+  var teacherSec = doc.querySelector('section.teacher');
+  if (bar){
+    var anchor = document.getElementById('status') || null;
+    if (teacherSec){ bAll = mk('k-all', 'Όλες οι λύσεις'); bar.insertBefore(bAll, anchor); }
+    bar.insertBefore(bProj, anchor); bar.insertBefore(bTheme, anchor);
+  } else {
+    var f = document.createElement('div'); f.id = 'kitfloat';
+    f.appendChild(bTheme); body.appendChild(f); proj = false; applyProj();
+  }
+  if (bAll){
+    bAll.onclick = function(){ var on = !body.classList.contains('rt-all'); body.classList.toggle('rt-all', on); bAll.setAttribute('aria-pressed', String(on)); };
+  }
+
+  /* λυμένα: φαίνεται η εκφώνηση και το «Κατανοώ», τα υπόλοιπα με κουμπί */
+  doc.querySelectorAll('.box.solved').forEach(function(box){
+    var steps = box.querySelector('.steps');
+    if (!steps) return;
+    var st = steps.querySelectorAll(':scope > .step');
+    if (st.length < 2) return;
+    box.classList.add('rt-closed');
+    for (var i = 1; i < st.length; i++) st[i].classList.add('rt-hide');
+    var w = document.createElement('div'); w.className = 'rt-showstep'; w.contentEditable = 'false';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε τη λύση';
+    b.onclick = function(){ box.classList.add('rt-open'); };
+    w.appendChild(b); st[0].after(w);
+  });
+
+  /* ασκήσεις: η απάντηση από τη σελίδα καθηγητή, κρυμμένη κάτω από την εκφώνηση */
+  if (teacherSec){
+    var ans = {};
+    teacherSec.querySelectorAll('.ans .q').forEach(function(q){ var n = q.querySelector('.qn'); if (n) ans[n.textContent.trim()] = q; });
+    doc.querySelectorAll('.exercises .q').forEach(function(q){
+      var n = q.querySelector(':scope > .qn'); if (!n) return;
+      var a = ans[n.textContent.trim()]; if (!a) return;
+      var w = document.createElement('div'); w.className = 'rt rt-ans'; w.contentEditable = 'false';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε λύση';
+      var bodyEl = document.createElement('div'); bodyEl.className = 'rt-body ans';
+      var c = a.cloneNode(true); var qn = c.querySelector('.qn'); if (qn) qn.remove();
+      bodyEl.appendChild(c);
+      b.onclick = function(){ var on = !w.classList.contains('rt-open'); w.classList.toggle('rt-open', on); b.textContent = on ? 'Κρύψε λύση' : 'Δείξε λύση'; };
+      w.appendChild(b); w.appendChild(bodyEl);
+      q.after(w);
+    });
+  }
+})();/*<KITJS*/</script>
+
+</body></html>

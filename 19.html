@@ -1,0 +1,955 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Μάθημα 19 · Δομές δεδομένων και πίνακες</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
+<style>
+/* Layout: one A4-like sheet centred on a cool ground; coloured callouts by role (ορισμός, ήξερες ότι, παγίδα, παράδειγμα) */
+:root{
+  --ground:#e9edf4; --paper:#ffffff; --ink:#172036; --muted:#5a6377; --line:#d9dfea; --soft:#f3f5f9;
+  --blue:#2457d6; --blue-bg:#e9efff; --teal:#0b7f72; --teal-bg:#e2f4f1;
+  --amber:#a65400; --amber-bg:#fff3df; --amber-line:#e2ad62;
+  --coral:#b93b12; --coral-bg:#fcebe4; --violet:#6534c9; --violet-bg:#efe8fd;
+  --s-blue:#2457d6; --s-teal:#0b8174; --s-violet:#6534c9; --s-ink:#172036; --on-solid:#ffffff; --on-solid-2:#d8e1ff;
+  --hero:#172036; --hero-fg:#ffffff; --hero-sub:#c4cef0; --hero-kick:#a9bcff;
+  --mark:#ffe28a;
+  --display:"Commissioner","Noto Sans",system-ui,sans-serif;
+  --body:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0 0 8px}
+
+/* Toolbar */
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:10px 0;background:var(--ground)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:3px}
+.seg button,.btn{font:600 13px/1 var(--body);border:0;background:none;color:var(--muted);padding:8px 13px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid)}
+.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.spacer{flex:1}
+#status{font-size:12.5px;color:var(--muted)}
+.edit-only{display:none}
+body.editing .edit-only{display:inline-block}
+body.editing .view-only{display:none}
+body.editing #doc{outline:2px dashed var(--blue);outline-offset:6px}
+body.editing #doc [contenteditable="false"]{cursor:default}
+
+/* Sheet */
+#doc{max-width:860px;margin:0 auto;background:var(--paper);border-radius:14px;padding:clamp(18px,4vw,44px);box-shadow:0 1px 2px rgba(10,20,40,.06),0 8px 30px rgba(10,20,40,.06)}
+body.student .teacher{display:none}
+
+.hero{background:var(--hero);color:var(--hero-fg);border-radius:14px;padding:22px 24px 24px;position:relative;overflow:hidden}
+.hero .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--hero-kick);font-weight:700}
+.hero h1{font-size:clamp(28px,5vw,40px);font-weight:800;margin:6px 0 8px;letter-spacing:-.01em}
+.hero .sub{color:var(--hero-sub);max-width:34em}
+.hero .sub b{color:var(--hero-fg)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.12);color:var(--hero-fg)}
+.hero .deco{position:absolute;right:-10px;top:-6px;opacity:.16;width:220px;height:auto}
+.hero .deco *{stroke:var(--hero-fg)}
+
+.goals{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 18px;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px}
+.goals h3{grid-column:1/-1;font-size:13px;color:var(--blue);text-transform:uppercase;letter-spacing:.08em}
+.goals div{padding-left:20px;position:relative;font-size:14px}
+.goals div::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:800}
+
+.glance{margin-top:14px;background:var(--soft);border-radius:12px;padding:14px 16px}
+.glance h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.figure{overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:520px;height:auto;font-family:var(--body)}
+
+.sec{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:5px;margin:30px 0 12px;break-after:avoid}
+.sec .num{font-family:var(--display);font-weight:800;font-size:22px;color:var(--blue);font-variant-numeric:tabular-nums}
+.sec h2{font-size:22px;font-weight:800}
+.sec .ref{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;break-inside:avoid}
+.tag{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.def{background:var(--blue-bg);border-left:4px solid var(--blue)} .def .tag{color:var(--blue)}
+.src{font-size:12px;color:var(--muted);margin:2px 0 0}
+.trivia{background:var(--amber-bg);border:1.5px dashed var(--amber-line)} .trivia .tag{color:var(--amber)}
+.talk{margin-top:6px;font-size:14px;color:var(--amber);font-weight:600}
+.talk span{font-weight:400}
+.trap{background:var(--coral-bg);border-left:4px solid var(--coral)} .trap .tag{color:var(--coral)}
+.ex{background:var(--teal-bg);border-left:4px solid var(--teal)} .ex .tag{color:var(--teal)}
+.plain{background:var(--soft)} .plain .tag{color:var(--ink)}
+.hl{background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 1px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:10px 0}
+.grid .box{margin:0}
+ul.tight{margin:4px 0 8px;padding-left:20px} ul.tight li{margin:3px 0}
+.small{font-size:13px;color:var(--muted)}
+.cap{font-size:13.5px;font-weight:700;margin-bottom:6px}
+
+.tablewrap{overflow-x:auto;margin:10px 0}
+table.t{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
+table.t th{background:var(--s-ink);color:var(--paper);text-align:left;padding:7px 10px;font-weight:600}
+table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:top}
+
+.exhead{display:flex;align-items:center;gap:10px;margin:22px 0 8px}
+.lvl{display:inline-flex;gap:4px}
+.lvl i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}
+.lvl i.on{background:var(--violet)}
+.exhead h3{font-size:17px}
+.q{margin:10px 0 14px;break-inside:avoid}
+.qn{display:inline-block;min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:7px;background:var(--violet-bg);color:var(--violet);font-weight:800;font-size:13px;margin-right:8px}
+.theme{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-left:6px}
+table.tf{width:100%;border-collapse:collapse;margin-top:6px;font-size:14.5px}
+table.tf td{padding:6px 8px;border-bottom:1px solid var(--line)}
+table.tf td.b{width:70px;text-align:center;color:var(--muted)}
+.lines{height:var(--h,44px);background:repeating-linear-gradient(transparent 0 27px,var(--line) 27px 28px);margin-top:6px}
+.drawbox{height:180px;border:1.5px dashed var(--line);border-radius:10px;margin-top:8px}
+.indent{margin-left:34px}
+.sol{color:var(--teal);font-weight:700}
+.ans .q{margin:8px 0}
+.teacher .sec{border-color:var(--teal)} .teacher .sec .num{color:var(--teal)}
+
+/* SVG roles */
+.f-blue{fill:var(--s-blue)} .f-teal{fill:var(--s-teal)} .f-violet{fill:var(--s-violet)} .f-ink{fill:var(--s-ink)}
+.f-paper{fill:var(--paper)} .f-on{fill:var(--on-solid)} .f-on2{fill:var(--on-solid-2)} .f-text{fill:var(--ink)} .f-muted{fill:var(--muted)} .f-onink{fill:var(--paper)}
+.st-ink{stroke:var(--ink)} .st-blue{stroke:var(--blue)} .st-teal{stroke:var(--teal)} .st-violet{stroke:var(--violet)}
+.f-arrow{fill:var(--ink)}
+
+
+/* v2 additions: code, narrow flowcharts, legends */
+:root{--mono:ui-monospace,"Cascadia Mono","Consolas","DejaVu Sans Mono",monospace}
+pre.code{font-family:var(--mono);font-size:14px;line-height:1.55;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:6px 0 8px;overflow-x:auto;white-space:pre}
+.figure.narrow svg{min-width:0;max-width:250px;margin:4px auto}
+.grid.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+ul.legend{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0 2px}
+ul.legend li{font-size:14px}
+ul.legend b{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:6px;background:var(--violet-bg);color:var(--violet);margin-right:4px}
+
+
+/* v3 additions: solved examples step by step, blank value tables */
+.solved{border:1.5px solid var(--teal);background:var(--paper)} .solved .tag{color:var(--teal)}
+.steps{display:grid;gap:14px;margin-top:10px}
+.step{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.stepn{width:30px;height:30px;border-radius:50%;background:var(--s-teal);color:var(--on-solid);font:800 14px/30px var(--display);text-align:center}
+table.t.blank td{height:34px;border:1px solid var(--line)}
+
+/* v4: graphs */
+.figure.narrow.graph svg{max-width:380px}
+
+/* v5: toolbox subsections */
+h3.tool{font-size:17px;margin:24px 0 8px;padding-top:4px;border-top:1px solid var(--line)}
+
+/* homework vs self-check */
+.q.hw::before{content:"Για το σπίτι";display:block;width:max-content;font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:99px;padding:4px 9px;margin-bottom:6px}
+body.editing .q.hw::before{display:none}
+.hwtoggle{display:block;margin-bottom:6px;font:600 12px/1 var(--body);padding:6px 10px;border-radius:99px;border:1.5px dashed var(--line);background:var(--paper);color:var(--muted);cursor:pointer}
+.hwtoggle[aria-pressed="true"]{border-style:solid;border-color:var(--amber-line);color:var(--amber);background:var(--amber-bg)}
+.hwnote{font-size:13px;color:var(--amber);font-weight:600}
+
+@media (max-width:520px){ .indent{margin-left:0} .hero .deco{display:none} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* v4: math notation (fractions, roots) */
+.mx{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:1.06em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 2px;line-height:1.25}
+.frac>span{padding:0 4px}
+.frac>span:first-child{border-bottom:1.3px solid currentColor}
+.rt{border-top:1.3px solid currentColor;padding:0 2px 0 1px;margin-left:1px}
+
+/* student additions */
+#doc{margin-top:0}
+#nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ground);max-width:860px;margin:0 auto;padding-block:10px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.navin{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.navin::-webkit-scrollbar{display:none}
+#nav a{flex:none;font:600 13px/1 var(--body);color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
+#nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
+.btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.quiz{display:grid;gap:10px;margin-top:10px}
+.qi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:8px}
+.qi .qs{margin:0}
+.qb{display:flex;gap:8px;flex-wrap:wrap}
+.qb button{font:600 14px/1 var(--body);padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;min-width:96px}
+.qb button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.qi.ok{border-color:var(--teal);background:var(--teal-bg)}
+.qi.no{border-color:var(--coral);background:var(--coral-bg)}
+.qi .qb button.pick{border-color:currentColor}
+.qi.ok .qb button.pick{background:var(--s-teal);border-color:var(--s-teal);color:var(--on-solid)}
+.qi.no .qb button.pick{background:var(--coral);border-color:var(--coral);color:var(--paper)}
+.qi.no .qb button.right{border-color:var(--teal);color:var(--teal)}
+.fb{font-size:13px;font-weight:700}
+.qi.ok .fb{color:var(--teal)} .qi.no .fb{color:var(--coral)}
+.score{font:700 15px/1.4 var(--display);padding:10px 14px;border-radius:10px;background:var(--violet-bg);color:var(--violet);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.score .btn{font-size:13px;padding:8px 12px}
+
+details.reveal{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+details.reveal summary{cursor:pointer;font-weight:700;color:var(--teal);padding:10px 14px;list-style:none}
+details.reveal summary::-webkit-details-marker{display:none}
+details.reveal summary::before{content:"▸ ";}
+details.reveal[open] summary::before{content:"▾ ";}
+details.reveal .rv{padding:0 14px 12px}
+
+.deck{display:grid;gap:12px;margin-top:10px}
+.card{position:relative;display:block;width:100%;min-height:220px;border:0;padding:0;background:none;cursor:pointer;perspective:1200px;font:inherit;color:inherit;text-align:left}
+.card .face{position:absolute;inset:0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;backface-visibility:hidden;transition:transform .45s ease}
+.card .front{background:var(--hero);color:var(--hero-fg);justify-content:center}
+.card .back{background:var(--blue-bg);color:var(--ink);border:1.5px solid var(--blue);transform:rotateY(180deg);overflow:auto}
+.card.flipped .front{transform:rotateY(-180deg)}
+.card.flipped .back{transform:rotateY(0)}
+.card:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:14px}
+.ck{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.term{font:800 clamp(24px,6vw,34px)/1.15 var(--display)}
+.cdef{font-size:15.5px;line-height:1.55}
+.tap{font-size:12.5px;opacity:.7;margin-top:auto}
+.deckbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.count{font:700 14px var(--display);min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.card .face{transition:none}}
+@media (max-width:520px){ #doc{border-radius:12px} .card{min-height:260px} }
+</style>
+<style id="synapsi-brand">
+:root{--ground:#F7F6F0;--ink:#2B3722;--muted:#5E6253;--line:#E1E1D7;--soft:#F3F2EA;--blue:#4F6230;--blue-bg:#EEF0E2;--s-blue:#4F6230;--s-ink:#2B3722;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D;--on-solid-2:#E6E0CC}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}}
+:root[data-theme="dark"]{--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}
+body::before{background:var(--ground)}
+.syn-bar{max-width:860px;margin:0 auto;padding-top:12px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
+.syn-bar a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--hero);color:#fff;text-decoration:none}
+.syn-bar span{color:var(--muted)}
+.syn-foot{max-width:860px;margin:18px auto 0;display:flex;flex-direction:column;gap:12px}
+.syn-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.syn-nav a,.syn-nav span{min-height:52px;padding:8px 14px;border-radius:12px;display:flex;flex-direction:column;justify-content:center;gap:2px;text-decoration:none;font:700 14px/1.3 var(--display);background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.syn-nav small{font:600 11.5px var(--body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.syn-nav .next{text-align:right;background:var(--hero);color:#fff;border-color:var(--hero)}
+.syn-nav .next small{color:var(--hero-kick)}
+.syn-nav .off{opacity:.6}
+.syn-note{font-size:13px;color:var(--muted);padding:12px 14px;border-radius:10px;background:var(--soft)}
+.syn-copy{font-size:12px;color:var(--muted)}
+</style>
+<script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<div class="syn-bar"><a href="../index.html">&#8592; Διαδρομή</a><span>Μάθημα 19 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-3-1">3.1</a><a href="#s-3-2">3.2</a><a href="#s-3-3">3.3</a><a href="#s-tools">Εργαλειοθήκη</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a></div></nav>
+<main id="doc" lang="el">
+<section class="hero">
+<svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
+<rect height="30" width="30" x="20" y="30"></rect><rect height="30" width="30" x="50" y="30"></rect><rect height="30" width="30" x="80" y="30"></rect><rect height="30" width="30" x="110" y="30"></rect><rect height="30" width="30" x="140" y="30"></rect><rect height="30" width="30" x="170" y="30"></rect>
+<rect height="30" width="30" x="80" y="90"></rect><rect height="30" width="30" x="110" y="90"></rect><rect height="30" width="30" x="140" y="90"></rect><rect height="30" width="30" x="80" y="120"></rect><rect height="30" width="30" x="110" y="120"></rect><rect height="30" width="30" x="140" y="120"></rect>
+</svg>
+<div class="kicker">Μέρος Δ · Δομές δεδομένων και πίνακες</div>
+<h1>Δομές δεδομένων και πίνακες</h1>
+<p class="sub">Μέχρι τώρα κάθε μεταβλητή κρατούσε <b>μία</b> τιμή: διάβαζες την επόμενη θερμοκρασία και η προηγούμενη χανόταν. Ο πίνακας είναι μια μεταβλητή με <b>πολλές θέσεις</b>, που θυμάται όλα τα δεδομένα για όσο τα χρειάζεσαι.</p>
+<div class="chips"><span class="chip">Βιβλίο §3.1–3.3 · σελ. 54–60</span><span class="chip">Οδηγίες Μελέτης §4, 4.1</span><span class="chip">4 διδακτικές ώρες</span></div>
+</section>
+<div class="goals">
+<h3>Στο τέλος του μαθήματος θα μπορείς να…</h3>
+<div>διακρίνεις <b>δεδομένα</b> από <b>πληροφορία</b> και τις τέσσερις σκοπιές μελέτης των δεδομένων</div>
+<div>ορίζεις τη <b>δομή δεδομένων</b> και τις οκτώ βασικές λειτουργίες της</div>
+<div>εξηγείς τη σχέση <b><span class="nw">Αλγόριθμοι + Δομές</span> <span class="nw">Δεδομένων = Προγράμματα</span></b></div>
+<div>συγκρίνεις <b>στατικές</b> και <b>δυναμικές</b> δομές ως προς τη μνήμη</div>
+<div>δηλώνεις και χρησιμοποιείς <b>μονοδιάστατους</b> και <b>δισδιάστατους</b> πίνακες</div>
+<div>αναγνωρίζεις πότε ένα πρόβλημα <b>χρειάζεται</b> πίνακα</div>
+</div>
+<div class="glance">
+<h3>Όλο το μάθημα με μια ματιά: μία μεταβλητή, πολλές θέσεις</h3>
+<div class="grid g2" style="align-items:start">
+<div><p class="small" style="text-align:center"><b>Μονοδιάστατος</b> πίνακας: ένας δείκτης</p>
+<div class="figure">
+<svg aria-label="Μονοδιάστατος πίνακας Θ με 7 θέσεις" role="img" style="min-width:0" viewbox="0 0 496 150">
+<text class="f-text" font-size="22" font-weight="700" text-anchor="end" x="40" y="86">Θ</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="62" x="50" y="56"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="81.0" y="87">3</text>
+<text class="f-muted" font-size="18" text-anchor="middle" x="81.0" y="46">1</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="62" x="112" y="56"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="143.0" y="87">-1</text>
+<text class="f-muted" font-size="18" text-anchor="middle" x="143.0" y="46">2</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="62" x="174" y="56"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="205.0" y="87">5.5</text>
+<text class="f-muted" font-size="18" text-anchor="middle" x="205.0" y="46">3</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="62" x="236" y="56"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="267.0" y="87">-2</text>
+<text class="f-muted" font-size="18" text-anchor="middle" x="267.0" y="46">4</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="62" x="298" y="56"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="329.0" y="87">8</text>
+<text class="f-muted" font-size="18" text-anchor="middle" x="329.0" y="46">5</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="62" x="360" y="56"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="391.0" y="87">8</text>
+<text class="f-muted" font-size="18" text-anchor="middle" x="391.0" y="46">6</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="62" x="422" y="56"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="453.0" y="87">4</text>
+<text class="f-muted" font-size="18" text-anchor="middle" x="453.0" y="46">7</text>
+<text class="f-muted" font-size="17" text-anchor="start" x="50" y="22">δείκτης (θέση) →</text>
+<text class="f-text" font-size="19" text-anchor="middle" x="267.0" y="136">Θ[4] = −2 · Θ[5] = Θ[6] = 8</text>
+</svg>
+</div></div>
+<div><p class="small" style="text-align:center"><b>Δισδιάστατος</b> πίνακας: δύο δείκτες (γραμμή, στήλη)</p>
+<div class="figure">
+<svg aria-label="Δισδιάστατος πίνακας Π 3 επί 4" role="img" style="min-width:0" viewbox="0 0 344 186">
+<text class="f-text" font-size="18" font-weight="700" text-anchor="end" x="40" y="103.0">Π</text>
+<text class="f-muted" font-size="13" text-anchor="middle" x="125.0" y="34">στήλη 1</text>
+<text class="f-muted" font-size="13" text-anchor="middle" x="183.0" y="34">στήλη 2</text>
+<text class="f-muted" font-size="13" text-anchor="middle" x="241.0" y="34">στήλη 3</text>
+<text class="f-muted" font-size="13" text-anchor="middle" x="299.0" y="34">στήλη 4</text>
+<text class="f-muted" font-size="13" text-anchor="end" x="88" y="66">γρ. 1</text>
+<rect class="f-paper st-ink" height="34" stroke-width="1.4" width="58" x="96" y="44"></rect>
+<text class="f-text" font-size="15" text-anchor="middle" x="125.0" y="66">4</text>
+<rect class="f-paper st-ink" height="34" stroke-width="1.4" width="58" x="154" y="44"></rect>
+<text class="f-text" font-size="15" text-anchor="middle" x="183.0" y="66">16</text>
+<rect class="f-paper st-ink" height="34" stroke-width="1.4" width="58" x="212" y="44"></rect>
+<text class="f-text" font-size="15" text-anchor="middle" x="241.0" y="66">5</text>
+<rect class="f-paper st-ink" height="34" stroke-width="1.4" width="58" x="270" y="44"></rect>
+<text class="f-text" font-size="15" text-anchor="middle" x="299.0" y="66">21</text>
+<text class="f-muted" font-size="13" text-anchor="end" x="88" y="100">γρ. 2</text>
+<rect class="f-paper st-ink" height="34" stroke-width="1.4" width="58" x="96" y="78"></rect>
+<text class="f-text" font-size="15" text-anchor="middle" x="125.0" y="100">28</text>
+<rect class="f-paper st-ink" height="34" stroke-width="1.4" width="58" x="154" y="78"></rect>
+<text class="f-text" font-size="15" text-anchor="middle" x="183.0" y="100">9</text>
+<rect class="f-paper st-ink" height="34" stroke-width="1.4" width="58" x="212" y="78"></rect>
+<rect height="34" style="fill:var(--blue);opacity:.25" width="58" x="212" y="78"></rect>
+<text class="f-text" font-size="15" text-anchor="middle" x="241.0" y="100">38</text>
+<rect class="f-paper st-ink" height="34" stroke-width="1.4" width="58" x="270" y="78"></rect>
+<text class="f-text" font-size="15" text-anchor="middle" x="299.0" y="100">13</text>
+<text class="f-muted" font-size="13" text-anchor="end" x="88" y="134">γρ. 3</text>
+<rect class="f-paper st-ink" height="34" stroke-width="1.4" width="58" x="96" y="112"></rect>
+<text class="f-text" font-size="15" text-anchor="middle" x="125.0" y="134">17</text>
+<rect class="f-paper st-ink" height="34" stroke-width="1.4" width="58" x="154" y="112"></rect>
+<text class="f-text" font-size="15" text-anchor="middle" x="183.0" y="134">67</text>
+<rect class="f-paper st-ink" height="34" stroke-width="1.4" width="58" x="212" y="112"></rect>
+<text class="f-text" font-size="15" text-anchor="middle" x="241.0" y="134">22</text>
+<rect class="f-paper st-ink" height="34" stroke-width="1.4" width="58" x="270" y="112"></rect>
+<text class="f-text" font-size="15" text-anchor="middle" x="299.0" y="134">40</text>
+<text class="f-text" font-size="13" text-anchor="middle" x="212" y="174">Π[2, 3] = 38 (γραμμή 2, στήλη 3)</text>
+</svg>
+</div></div>
+</div>
+<p class="small">Στο Μάθημα 14 μείναμε με ένα ερώτημα: «πόσες μέρες είχαν θερμοκρασία πάνω από τη μέση;». Τη μέση την ξέρουμε μόνο <b>αφού</b> διαβαστούν όλες, και τότε έχουν χαθεί. Με τον πίνακα Θ οι 7 θερμοκρασίες μένουν αποθηκευμένες και τις ξαναδιαβάζουμε όσες φορές θέλουμε (Λυμένο 1).</p>
+</div>
+<div class="sec" id="s-3-1"><span class="num">3.1</span><h2>Δεδομένα</h2><span class="ref">Βιβλίο σελ. 54–55</span></div>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση · δεδομένα και πληροφορία</div>
+<p><b>Δεδομένα.</b> Τα δεδομένα (data) είναι η αφαιρετική αναπαράσταση της πραγματικότητας και συνεπώς μία απλοποιημένη όψη της. […] Τα δεδομένα, λοιπόν, είναι ακατέργαστα γεγονότα, και κάθε φορά η επιλογή τους εξαρτάται από τον τύπο του προβλήματος.</p>
+<p><b>Πληροφορία.</b> Η συλλογή των ακατέργαστων δεδομένων και ο συσχετισμός τους δίνει ως αποτέλεσμα την πληροφορία (information). […] Μπορεί να θεωρηθεί ότι ο αλγόριθμος είναι το μέσο για την παραγωγή πληροφορίας από τα δεδομένα.</p>
+<p class="src">Σχολικό βιβλίο, §3.1</p>
+</div>
+<div class="grid g2" style="align-items:start">
+<div class="box def" style="margin:0">
+<div class="tag">Ορισμός · απομνημόνευση · οι τέσσερις σκοπιές</div>
+<p>Πληροφορική θεωρείται η επιστήμη που μελετά τα δεδομένα από τις ακόλουθες σκοπιές:</p>
+<p><b>Υλικού.</b> Το υλικό (hardware) επιτρέπει στα δεδομένα να αποθηκεύονται στην κύρια μνήμη και στις περιφερειακές συσκευές με διάφορες αναπαραστάσεις (δυαδική, ASCII, EBCDIC, συμπλήρωμα του 1 ή του 2 κ.λπ.).</p>
+<p><b>Γλωσσών προγραμματισμού.</b> Οι γλώσσες υψηλού επιπέδου επιτρέπουν τη χρήση διάφορων τύπων μεταβλητών για να περιγράψουν ένα δεδομένο.</p>
+<p><b>Δομών Δεδομένων.</b> Π.χ. η εγγραφή (record), με πεδία (fields) διαφορετικού τύπου, και το αρχείο, που αποτελείται από ένα σύνολο εγγραφών.</p>
+<p><b>Ανάλυσης Δεδομένων.</b> Τρόποι καταγραφής και αλληλοσυσχέτισης των δεδομένων μελετώνται έτσι ώστε να αναπαρασταθεί η γνώση για πραγματικά γεγονότα (Βάσεις Δεδομένων, Μοντελοποίηση Δεδομένων, Αναπαράσταση Γνώσης).</p>
+<p class="src">Σχολικό βιβλίο, §3.1 (σε συντομία)</p>
+</div>
+<div class="box plain" style="margin:0"><div class="tag">Ένα byte, έξι νοήματα</div>
+<p>Το βιβλίο δίνει ένα εντυπωσιακό παράδειγμα: μια θέση μνήμης με περιεχόμενο <code>11110001</code> μπορεί να είναι ένας χαρακτήρας (σε διαφορετικό κώδικα, διαφορετικός χαρακτήρας: π.χ. «ρ» στον ΕΛΟΤ 928), ο αριθμός 241 (μη προσημασμένος), το −14 ή το −15 (σε διαφορετικές αναπαραστάσεις προσημασμένων), ή μέρος ενός μεγαλύτερου αριθμού. Τα <b>ίδια bit</b> σημαίνουν άλλο πράγμα ανάλογα με τον <b>τύπο</b> που τους δίνουμε. Γι' αυτό η ΓΛΩΣΣΑ θέλει να δηλώνεις τον τύπο κάθε μεταβλητής.</p>
+<p class="small">Παράδειγμα δεδομένων: σε ένα αρχείο μαθητών κρατάμε ονοματεπώνυμο, ηλικία, τάξη, τμήμα, όχι όμως βάρος ή ύψος. Το ποια δεδομένα κρατάμε εξαρτάται από το πρόβλημα.</p></div>
+</div>
+<div class="sec" id="s-3-2"><span class="num">3.2</span><h2>Αλγόριθμοι + Δομές Δεδομένων = Προγράμματα</h2><span class="ref">Βιβλίο σελ. 56–57</span></div>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση · δομή δεδομένων και λειτουργίες</div>
+<p><b>Δομή Δεδομένων</b> είναι ένα σύνολο αποθηκευμένων δεδομένων που υφίστανται επεξεργασία από ένα σύνολο λειτουργιών. Κάθε μορφή δομής δεδομένων αποτελείται από ένα σύνολο κόμβων (nodes).</p>
+<p><span class="ln"><b>Οι βασικές λειτουργίες:</b></span><span class="ln li"><b>Προσπέλαση</b> (access), πρόσβαση σε έναν κόμβο με σκοπό να εξετασθεί ή να τροποποιηθεί το περιεχόμενό του</span><span class="ln li"><b>Εισαγωγή</b> (insertion), η προσθήκη νέων κόμβων</span><span class="ln li"><b>Διαγραφή</b> (deletion), ένας κόμβος αφαιρείται</span><span class="ln li"><b>Αναζήτηση</b> (searching), προσπελαύνονται οι κόμβοι για να εντοπιστούν ένας ή περισσότεροι που έχουν μια δεδομένη ιδιότητα</span><span class="ln li"><b>Ταξινόμηση</b> (sorting), οι κόμβοι διατάσσονται κατά αύξουσα ή φθίνουσα σειρά</span><span class="ln li"><b>Αντιγραφή</b> (copying), όλοι ή μερικοί κόμβοι αντιγράφονται σε μία άλλη δομή</span><span class="ln li"><b>Συγχώνευση</b> (merging), δύο ή περισσότερες δομές συνενώνονται σε μία</span><span class="ln li"><b>Διαχωρισμός</b> (separation), η αντίστροφη πράξη της συγχώνευσης.</span></p>
+<p class="src">Σχολικό βιβλίο, §3.2 (σε συντομία)</p>
+</div>
+<div class="grid g2">
+<div class="box ex"><div class="tag">Γιατί τόσες δομές;</div>
+<p>Στην πράξη σπάνια χρησιμοποιούνται και οι οκτώ λειτουργίες. Μια δομή μπορεί να είναι πιο αποδοτική από μια άλλη σε μία λειτουργία (π.χ. αναζήτηση) και λιγότερο σε άλλη (π.χ. εισαγωγή). Γι' αυτό υπάρχουν πολλές δομές, και η <b>επιλογή της κατάλληλης</b> είναι μέρος της λύσης. Ο Wirth το συνόψισε το 1976: <b><span class="nw">Αλγόριθμοι + Δομές</span> <span class="nw">Δεδομένων = Προγράμματα</span></b>.</p></div>
+<div class="box ex"><div class="tag">Το παράδειγμα του τηλεφωνικού καταλόγου</div>
+<p><b>1η λύση:</b> μια σειρά από ζεύγη (όνομα, τηλέφωνο) και σειριακή αναζήτηση: εντάξει για ένα χωριό, αργό για μια πόλη (Λυμένο 4). <b>2η λύση:</b> τα ονόματα <b>ταξινομημένα</b>, και ένας δεύτερος πίνακας που λέει για κάθε γράμμα πού αρχίζουν τα ονόματά του. Ίδιο πρόβλημα, άλλη δομή, πολύ ταχύτερος αλγόριθμος (Ασκ. 12).</p></div>
+</div>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση · στατικές και δυναμικές δομές</div>
+<p><b>Στατικές δομές:</b> Αποθηκεύονται σε συνεχόμενες θέσεις μνήμης και έχουν σταθερό μέγεθος, το οποίο καθορίζεται στην αρχή του προγράμματος. Οι στατικές δομές υλοποιούνται με πίνακες.</p>
+<p><b>Δυναμικές δομές:</b> Δεν αποθηκεύονται σε συνεχόμενες θέσεις μνήμης, δεν έχουν σταθερό μέγεθος, αλλά ο αριθμός των κόμβων τους αυξάνεται και μειώνεται, όταν στη δομή αντίστοιχα εισάγονται ή διαγράφονται δεδομένα. Το μέγεθος της μνήμης καθορίζεται κατά την εκτέλεση του προγράμματος. Με δυναμικές δομές υλοποιούνται οι λίστες, τα δένδρα και οι γράφοι.</p>
+<p class="src">Οδηγίες διδασκαλίας 2024–25, ενότητα 21</p>
+</div>
+<div class="grid g2">
+<div class="box ex"><div class="tag">Η ΓΛΩΣΣΑ έχει μόνο στατικές</div>
+<p>Μια δομή δεν είναι «από τη φύση της» στατική ή δυναμική: εξαρτάται από τη γλώσσα και από τον τρόπο υλοποίησης. Η ΓΛΩΣΣΑ υποστηρίζει μόνο <b>στατικές</b> δομές: κάθε πίνακας δηλώνεται με το μέγεθός του πριν από την ΑΡΧΗ. Ακόμα και η στοίβα και η ουρά (Μαθήματα 27, 28) θα υλοποιηθούν με μονοδιάστατους πίνακες.</p></div>
+<div class="box ex"><div class="tag">Λειτουργίες σε πίνακα</div>
+<p>Οι λειτουργίες της §3.2 είναι γενικές και αποκτούν σημασία ανάλογα με τη δομή. Σε πίνακα, η <b>ταξινόμηση</b> δεν μετακινεί τις θέσεις (οι κόμβοι μένουν όπου είναι) αλλά αλλάζει το <b>περιεχόμενό</b> τους. Η «εισαγωγή» σε στατικό πίνακα σημαίνει να χρησιμοποιήσουμε μια θέση που υπάρχει ήδη.</p></div>
+</div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Ο <b>Niklaus Wirth</b>, που έδωσε τον τίτλο «<span class="nw">Αλγόριθμοι + Δομές</span> <span class="nw">Δεδομένων = Προγράμματα</span>» στο βιβλίο του του 1976, είχε σχεδιάσει την <b>Pascal</b> (1970), τη γλώσσα από την οποία εμπνέεται σε μεγάλο βαθμό η ΓΛΩΣΣΑ: δηλώσεις τύπων, πίνακες με όρια, ΑΡΧΗ/ΤΕΛΟΣ. Πήρε το βραβείο Turing το 1984 και πέθανε στις αρχές του 2024, σε ηλικία 89 ετών. Ο τίτλος του βιβλίου του έγινε, όπως βλέπετε, κεφάλαιο στα σχολικά βιβλία.</p>
+<p class="talk">Σκέψου: Σκέψου τη λίστα επαφών του κινητού σου. Ποια δεδομένα κρατά για κάθε επαφή; Ποιες από τις οκτώ λειτουργίες κάνεις πιο συχνά;</p>
+</div>
+<div class="sec" id="s-3-3"><span class="num">3.3</span><h2>Πίνακες</h2><span class="ref">Βιβλίο σελ. 58–60, Οδηγίες Μελέτης §4</span></div>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση · στατική δομή και πίνακας</div>
+<p><b>Στατική δομή.</b> Με τον όρο στατική δομή δεδομένων εννοείται ότι το ακριβές μέγεθος της απαιτούμενης κύριας μνήμης καθορίζεται κατά τη στιγμή του προγραμματισμού τους, και κατά συνέπεια κατά τη στιγμή της μετάφρασής τους και όχι κατά τη στιγμή της εκτέλεσης του προγράμματος. Μία άλλη σημαντική διαφορά σε σχέση με τις δυναμικές δομές είναι ότι τα στοιχεία των στατικών δομών αποθηκεύονται σε συνεχόμενες θέσεις μνήμης.</p>
+<p><b>Πίνακας.</b> Μπορούμε να ορίσουμε τον πίνακα ως μια δομή που περιέχει στοιχεία του ίδιου τύπου (δηλαδή ακέραιους, πραγματικούς κ.λπ.). […] Η αναφορά στα στοιχεία ενός πίνακα γίνεται με τη χρήση του συμβολικού ονόματος του πίνακα ακολουθούμενου από την τιμή ενός ή περισσότερων δεικτών (indexes) σε παρένθεση ή αγκύλη.</p>
+<p><b>Διαστάσεις.</b> Ένας πίνακας μπορεί να είναι μονοδιάστατος, αλλά στη γενικότερη περίπτωση μπορεί να είναι δισδιάστατος, τρισδιάστατος και γενικά ν-διάστατος πίνακας. […] Αν το μέγεθος των δύο διαστάσεων είναι ίσο, τότε ο πίνακας λέγεται τετραγωνικός (square). […] Μπορούμε να θεωρήσουμε το δισδιάστατο πίνακα ότι είναι ένας μονοδιάστατος πίνακας, όπου κάθε θέση του περιέχει ένα νέο μονοδιάστατο πίνακα.</p>
+<p class="src">Σχολικό βιβλίο, §3.3</p>
+</div>
+<div class="grid g2" style="align-items:start">
+<div class="box ex" style="margin:0"><div class="tag">Δήλωση στη ΓΛΩΣΣΑ (Οδηγίες §4.1)</div>
+<pre class="code">ΣΤΑΘΕΡΕΣ
+  Ν = 30
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Α[20], i
+  ΠΡΑΓΜΑΤΙΚΕΣ: Θ[Ν], Π[3, 4]
+  ΧΑΡΑΚΤΗΡΕΣ: Ον[Ν]</pre>
+<p class="small">Μονοδιάστατος: <code>Όνομα[πλήθος θέσεων]</code>. Δισδιάστατος: <code>Όνομα[γραμμές, στήλες]</code>. Το μέγεθος είναι <b>αριθμός ή σταθερά</b>, ποτέ μεταβλητή. Οι θέσεις αριθμούνται από το <b>1</b>.</p></div>
+<div class="box ex" style="margin:0"><div class="tag">Ο δείκτης είναι έκφραση</div>
+<p>Ο δείκτης μπορεί να είναι αριθμός (<code>Α[3]</code>), μεταβλητή (<code>Α[i]</code>) ή ακέραια έκφραση (<code>Α[Ν + 1 - i]</code>, <code>Α[Α[2]]</code>). Πρέπει να είναι <b>ακέραιος</b> και <b>μέσα στα όρια</b> (1..20 για τον Α): το <code>Α[0]</code> ή το <code>Α[21]</code> είναι σφάλμα κατά την εκτέλεση.</p>
+<p><b>Πλεονέκτημα:</b> διαχειριζόμαστε πολλά δεδομένα του ίδιου τύπου, αποθηκευμένα για μεταγενέστερη χρήση. <b>Μειονέκτημα:</b> δεσμεύουν από την αρχή συγκεκριμένο πλήθος θέσεων μνήμης, ακόμα κι αν δεν τις χρησιμοποιήσουμε όλες (Οδηγίες Μελέτης §4).</p></div>
+</div>
+<div class="grid g2" style="align-items:start">
+<div class="box def" style="margin:0">
+<div class="tag">Ορισμός · απομνημόνευση · Παράδειγμα 1 (μικρότερο στοιχείο)</div>
+<p>Δίνεται ένας μονοδιάστατος πίνακας table 100 στοιχείων. Να σχεδιασθεί αλγόριθμος που να βρίσκει το μικρότερο στοιχείο του.</p>
+<pre class="code">Αλγόριθμος Ελάχ_Πίνακα
+Δεδομένα // table //
+Min ← table[1]
+Για i από 2 μέχρι 100
+  Αν table[i] &lt; Min τότε Min ← table[i]
+Τέλος_επανάληψης
+Αποτελέσματα // Min //
+Τέλος Ελάχ_Πίνακα</pre>
+<p class="src">Σχολικό βιβλίο, §3.3, Παράδειγμα 1</p>
+</div>
+<div class="box def" style="margin:0">
+<div class="tag">Ορισμός · απομνημόνευση · Παράδειγμα 2 (αθροίσματα)</div>
+<p>Δίδεται ο δισδιάστατος πίνακας table με m γραμμές n στήλες. Να βρεθεί το άθροισμα κατά γραμμή, κατά στήλη και συνολικά.</p>
+<pre class="code">Αλγόριθμος Αθρ_Πίνακα
+Δεδομένα // m, n, table //
+sum ← 0
+Για i από 1 μέχρι m
+  row[i] ← 0
+Τέλος_επανάληψης
+Για j από 1 μέχρι n
+  col[j] ← 0
+Τέλος_επανάληψης
+Για i από 1 μέχρι m
+  Για j από 1 μέχρι n
+    sum ← sum + table[i, j]
+    row[i] ← row[i] + table[i, j]
+    col[j] ← col[j] + table[i, j]
+  Τέλος_επανάληψης
+Τέλος_επανάληψης
+Αποτελέσματα // row, col, sum //
+Τέλος Αθρ_Πίνακα</pre>
+<p class="src">Σχολικό βιβλίο, §3.3, Παράδειγμα 2</p>
+</div>
+</div>
+<p class="small">Στο Παράδειγμα 2 οι δύο πρώτοι βρόχοι μηδενίζουν τους πίνακες row και col που θα δεχθούν τα αθροίσματα: «τακτική που πρέπει να εφαρμόζεται οποτεδήποτε στα προβλήματά μας έχουμε να υπολογίσουμε αθροίσματα». Στον διπλό βρόχο, για κάθε τιμή του i (γραμμή), το j παίρνει διαδοχικά όλες τις τιμές 1..n (στήλες). Για τον πίνακα <span class="nw">5 × 5</span> του βιβλίου τα αποτελέσματα είναι <span class="nw">row = [53,</span> 139, 176, 86, 158], <span class="nw">col = [90,</span> 166, 123, 106, 127], <span class="nw">sum = 612</span> (Λυμένο 3).</p>
+<div class="sec" id="s-tools"><span class="num">⚙</span><h2>Η εργαλειοθήκη των πινάκων: πρώτα βήματα</h2><span class="ref">Θα την επεκτείνουμε στο Μάθημα 20</span></div>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th>Μοτίβο</th><th>Σκελετός</th><th>Πρόσεξε</th></tr>
+<tr><td><b>Α1. Γέμισμα από το πληκτρολόγιο</b></td><td><code>ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν · ΔΙΑΒΑΣΕ Α[i]</code></td><td>με έλεγχο: ΜΕΧΡΙΣ_ΟΤΟΥ πάνω στο <code>Α[i]</code></td></tr>
+<tr><td><b>Α2. Διάσχιση</b></td><td><span class="ln cd"><code>ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν</code></span><span class="ln cd">επεξεργασία του <code>Α[i]</code></span></td><td>ανάποδα: <code>ΑΠΟ Ν ΜΕΧΡΙ 1 ΜΕ_ΒΗΜΑ -1</code></td></tr>
+<tr><td><b>Α3. Δύο περάσματα</b></td><td><span class="ln">1ο πέρασμα:</span><span class="ln li">διάβασμα και άθροισμα</span><span class="ln li">2ο πέρασμα: σύγκριση με τον μέσο όρο</span></td><td>ο λόγος ύπαρξης του πίνακα</td></tr>
+<tr><td><b>Α4. Μηδενισμός</b></td><td><code>ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν · Σ[i] ← 0</code></td><td>πριν από κάθε πίνακα-αθροιστή ή μετρητή</td></tr>
+<tr><td><b>Α5. Η τιμή ως δείκτης</b></td><td><code>Σ[ρ] ← Σ[ρ] + 1</code> (συχνότητες)</td><td>έλεγχος ότι ρ είναι μέσα στα όρια</td></tr>
+<tr><td><b>Α6. Μέγιστο με θέση</b></td><td><code>θέση ← 1 · ΑΝ Α[i] &gt; Α[θέση] ΤΟΤΕ θέση ← i</code></td><td>κρατάμε μόνο τη θέση. Η τιμή είναι <code>Α[θέση]</code></td></tr>
+<tr><td><b>Α7. Δισδιάστατη διάσχιση</b></td><td><code>ΓΙΑ i … (γραμμές) · ΓΙΑ j … (στήλες)</code></td><td>i για γραμμή, j για στήλη, πάντα με αυτή τη σειρά στον δείκτη</td></tr>
+<tr><td><b>Α8. Συμμετρικές θέσεις</b></td><td><code>Α[i]</code> με <code>Α[Ν + 1 - i]</code></td><td>η πρώτη με την τελευταία, η δεύτερη με την προτελευταία</td></tr>
+</tbody></table></div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Στη ΓΛΩΣΣΑ, όπως και στην Pascal και τη FORTRAN, η πρώτη θέση ενός πίνακα είναι η <b>1</b>. Στις C, Java και Python είναι η <b>0</b>: ένας πίνακας 10 θέσεων έχει δείκτες 0 έως 9. Το 1982 ο <b>Dijkstra</b> έγραψε ένα σύντομο σημείωμα με τίτλο «Γιατί η αρίθμηση πρέπει να ξεκινά από το μηδέν», όπου υποστήριξε ότι οι θέσεις μιας ακολουθίας Ν στοιχείων γράφονται πιο «καθαρά» ως <span class="nw">0 &lt;= i &lt; Ν.</span> Η συζήτηση συνεχίζεται ακόμα ανάμεσα στους προγραμματιστές.</p>
+<p class="talk">Σκέψου: Ο πρώτος όροφος ενός κτιρίου στην Ελλάδα είναι αυτός πάνω από το ισόγειο. Στις ΗΠΑ το ισόγειο λέγεται «first floor». Πού αλλού στη ζωή μετράμε από το 0 και πού από το 1;</p>
+</div>
+<div class="box trap">
+<div class="tag">Παγίδες που κοστίζουν μονάδες</div>
+<ul class="tight">
+<li>Το μέγεθος του πίνακα στη δήλωση είναι <b>αριθμός ή σταθερά</b>: <code>ΑΚΕΡΑΙΕΣ: Α[ν]</code> με ν μεταβλητή είναι λάθος (στατική δομή).</li>
+<li>Ο δείκτης πρέπει να είναι μέσα στα όρια: σε έναν Α[20], τα <code>Α[0]</code> και <code>Α[21]</code> είναι σφάλμα κατά την εκτέλεση.</li>
+<li>Ο πίνακας δεν «αθροίζεται» ούτε «εμφανίζεται» ολόκληρος: <code>ΓΡΑΨΕ Α</code> δεν επιτρέπεται, θέλει βρόχο.</li>
+<li>Όλα τα στοιχεία ενός πίνακα έχουν τον <b>ίδιο</b> τύπο. Για ονόματα και βαθμούς χρειάζονται δύο πίνακες (παράλληλοι πίνακες, Μάθημα 20).</li>
+<li>Πίνακες-αθροιστές και πίνακες-μετρητές θέλουν μηδενισμό με βρόχο πριν χρησιμοποιηθούν.</li>
+<li>Στον δισδιάστατο ο <b>πρώτος</b> δείκτης είναι η γραμμή και ο <b>δεύτερος</b> η στήλη.</li>
+</ul>
+</div>
+<div class="box def">
+<div class="tag">Σύνοψη</div>
+<p><b><span class="nw">Δεδομένα / πληροφορία</span>:</b> ακατέργαστα <span class="nw">γεγονότα / το</span> αποτέλεσμα της συσχέτισής τους. Ο αλγόριθμος παράγει πληροφορία από τα δεδομένα.</p>
+<p><b>Δομή δεδομένων:</b> σύνολο αποθηκευμένων δεδομένων και λειτουργιών (προσπέλαση, εισαγωγή, διαγραφή, αναζήτηση, ταξινόμηση, αντιγραφή, συγχώνευση, διαχωρισμός).</p>
+<p><b>Στατικές:</b> συνεχόμενες θέσεις, σταθερό μέγεθος από την αρχή (πίνακες). <b>Δυναμικές:</b> μέγεθος που αλλάζει κατά την εκτέλεση (λίστες, δένδρα, γράφοι).</p>
+<p><b>Πίνακας:</b> στοιχεία ίδιου τύπου με κοινό όνομα και δείκτες. Μονοδιάστατος, δισδιάστατος, ν-διάστατος. Τετραγωνικός όταν <span class="nw">γραμμές = στήλες.</span></p>
+</div>
+
+<section class="solved-wrap">
+<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένα παραδείγματα βήμα-βήμα</h2><span class="ref">Έτσι σκεφτόμαστε</span></div>
+<div class="box solved">
+<div class="tag">Λυμένο 1 · Πόσες μέρες πάνω από τη μέση; (επιτέλους)</div>
+<p>Να γραφτεί πρόγραμμα που διαβάζει τις θερμοκρασίες των 7 ημερών μιας εβδομάδας, εμφανίζει τη μέση θερμοκρασία και, στη συνέχεια, ποιες μέρες είχαν θερμοκρασία πάνω από τη μέση και πόσες ήταν.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Το «πάνω από τη μέση» θέλει να συγκρίνουμε <b>κάθε</b> θερμοκρασία με τη μέση, που υπολογίζεται μόνο <b>αφού</b> διαβαστούν όλες. Χωρίς αποθήκευση οι θερμοκρασίες έχουν χαθεί (Μάθημα 14, Λυμένο 2). Χρειάζεται πίνακας Θ[7].</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Δύο περάσματα (Α3): στο 1ο διαβάζουμε στο Θ[i] και αθροίζουμε. Μετά τον βρόχο ο μέσος όρος. Στο 2ο ξαναδιατρέχουμε τον πίνακα και συγκρίνουμε. Η σταθερά ΜΕΡΕΣ δίνει και το μέγεθος του πίνακα και τα όρια των βρόχων.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Πάνω_από_τη_μέση
+ΣΤΑΘΕΡΕΣ
+  ΜΕΡΕΣ = 7
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: Θ[ΜΕΡΕΣ], σ, μο
+  ΑΚΕΡΑΙΕΣ: i, πάνω
+ΑΡΧΗ
+  σ &lt;- 0
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ ΜΕΡΕΣ
+    ΓΡΑΨΕ 'Θερμοκρασία μέρας', i, ':'
+    ΔΙΑΒΑΣΕ Θ[i]
+    σ &lt;- σ + Θ[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  μο &lt;- σ / ΜΕΡΕΣ
+  ΓΡΑΨΕ 'Μέση θερμοκρασία:', μο
+  πάνω &lt;- 0
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ ΜΕΡΕΣ
+    ΑΝ Θ[i] &gt; μο ΤΟΤΕ
+      ΓΡΑΨΕ 'Μέρα', i, ':', Θ[i]
+      πάνω &lt;- πάνω + 1
+    ΤΕΛΟΣ_ΑΝ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ 'Μέρες πάνω από τη μέση:', πάνω
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Πάνω_από_τη_μέση</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> Είσοδος 3, −1, 5.5, −2, 8, 8, 4:</span><span class="ln li">μέση ≈ <b>3.64</b></span><span class="ln li">μέρες πάνω από τη μέση: 3 (5.5), 5 (8), 6 (8), 7 (4), δηλαδή <b>4</b></span><span class="ln">Αν η εβδομάδα γίνει μήνας, αλλάζει μόνο η σταθερά <span class="nw">(ΜΕΡΕΣ = 30).</span></span></div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 2 · Πίνακας τιμών: το μικρότερο στοιχείο (Παράδειγμα 1)</div>
+<p>Να γίνει πίνακας τιμών για τον αλγόριθμο του Παραδείγματος 1, για έναν πίνακα 6 θέσεων με περιεχόμενο 7, 3, 9, 3, −2, 5.</p>
+<pre class="code">Αλγόριθμος Ελάχ_6
+Δεδομένα // table //
+Min ← table[1]
+Για i από 2 μέχρι 6
+  Αν table[i] &lt; Min τότε Min ← table[i]
+Τέλος_επανάληψης
+Αποτελέσματα // Min //
+Τέλος Ελάχ_6</pre>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Μοτίβο «ελάχιστο» (Μάθημα 12, Β6) με αρχική τιμή το <b>πρώτο</b> στοιχείο, γι' αυτό ο βρόχος ξεκινά από το 2 (Μάθημα 14, Γ4). Τα στοιχεία είναι ήδη στον πίνακα: δεν υπάρχει ΔΙΑΒΑΣΕ μέσα στον βρόχο.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Στον πίνακα τιμών γράφουμε το i, το table[i] (η τιμή που εξετάζεται), το αποτέλεσμα της σύγκρισης και τη Min.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<div class="tablewrap"><table class="t"><tbody><tr><th>i</th><th>table[i]</th><th><span class="nw">table[i] &lt; Min</span></th><th>Min</th></tr>
+<tr><td>–</td><td>–</td><td>–</td><td>7</td></tr>
+<tr><td>2</td><td>3</td><td>Α</td><td>3</td></tr>
+<tr><td>3</td><td>9</td><td>Ψ</td><td>3</td></tr>
+<tr><td>4</td><td>3</td><td>Ψ</td><td>3</td></tr>
+<tr><td>5</td><td>−2</td><td>Α</td><td>−2</td></tr>
+<tr><td>6</td><td>5</td><td>Ψ</td><td>−2</td></tr></tbody></table></div></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Αποτελέσματα: <b>−2</b> ✓. Στη θέση 4 το 3 είναι ίσο με τη Min και η αυστηρή <span class="nw">σύγκριση &lt; δεν</span> την αλλάζει. Με τον πίνακα των 100 στοιχείων του βιβλίου ο αλγόριθμος κάνει 99 συγκρίσεις.</div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 3 · Αθροίσματα γραμμών και στηλών (Παράδειγμα 2)</div>
+<p>Να εκτελεστεί ο αλγόριθμος του Παραδείγματος 2 για τον πίνακα 5 × 5 του βιβλίου και να εξηγηθεί πώς υπολογίζονται τα row[2] και col[3].</p>
+<div class="tablewrap"><table class="t"><tbody><tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>row</th></tr>
+<tr><th>1</th><td>4</td><td>16</td><td>5</td><td>21</td><td>7</td><td><b>53</b></td></tr>
+<tr><th>2</th><td>28</td><td>9</td><td>38</td><td>13</td><td>51</td><td><b>139</b></td></tr>
+<tr><th>3</th><td>17</td><td>67</td><td>22</td><td>40</td><td>30</td><td><b>176</b></td></tr>
+<tr><th>4</th><td>20</td><td>40</td><td>10</td><td>3</td><td>13</td><td><b>86</b></td></tr>
+<tr><th>5</th><td>21</td><td>34</td><td>48</td><td>29</td><td>26</td><td><b>158</b></td></tr>
+<tr><th>col</th><td><b>90</b></td><td><b>166</b></td><td><b>123</b></td><td><b>106</b></td><td><b>127</b></td><td><b>612</b></td></tr>
+</tbody></table></div>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><span class="ln"><b>Κατανοώ.</b> Τρία ζητούμενα:</span><span class="ln li">άθροισμα κάθε γραμμής: 5 τιμές, άρα πίνακας row[5],</span><span class="ln li">άθροισμα κάθε στήλης: πίνακας col[5],</span><span class="ln li">άθροισμα όλων: μεταβλητή sum.</span></div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Μηδενισμός (Α4) των row και col, και μετά διπλός βρόχος (Α7): κάθε στοιχείο table[i, j] προστίθεται <b>τρεις</b> φορές: στο sum, στο row[i] της γραμμής του και στο col[j] της στήλης του.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b> Ο αλγόριθμος είναι του βιβλίου (§3.3, Παράδειγμα 2). <b>row[2]</b> = <span class="nw">28 + 9 + 38 + 13 + 51 = 139</span>: γεμίζει όταν <span class="nw">i = 2</span> και το j πάρει τις τιμές 1..5. <b>col[3]</b> = <span class="nw">5 + 38 + 22 + 10 + 48 = 123</span>: γεμίζει σταδιακά, ένα στοιχείο σε κάθε γραμμή (όταν <span class="nw">j = 3).</span></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Ο διερμηνευτής δίνει <span class="nw">row = [53,</span> 139, 176, 86, 158], <span class="nw">col = [90,</span> 166, 123, 106, 127], <span class="nw">sum = 612.</span> Διπλός έλεγχος: το άθροισμα των row <span class="nw">(53 + 139 + 176 + 86 + 158)</span> και των col δίνουν και τα δύο 612 ✓.</div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 4 · Ο τηλεφωνικός κατάλογος (1η λύση του βιβλίου)</div>
+<p>Δίνονται δύο πίνακες n θέσεων: ο Ο με ονόματα συνδρομητών και ο Τ με τα τηλέφωνά τους (το Τ[i] είναι το τηλέφωνο του Ο[i]). Να γραφτεί αλγόριθμος που δέχεται ένα όνομα και εμφανίζει το τηλέφωνο, ή «Δεν υπάρχει».</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Η δομή είναι η «ακολουθία (Ο1, Τ1), (Ο2, Τ2), …» του βιβλίου, υλοποιημένη με δύο <b>παράλληλους</b> πίνακες. Ο αλγόριθμος: σειριακή αναζήτηση (Μάθημα 21).</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Δεν ξέρουμε σε ποια θέση θα βρεθεί, άρα Όσο με δύο λόγους τερματισμού (τέλος πίνακα ή βρέθηκε, Μ6). Όταν βρεθεί, το i δείχνει τη θέση και στους δύο πίνακες.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">Αλγόριθμος Τηλεφωνικός_κατάλογος
+Δεδομένα // Ο, Τ, n, όνομα //
+i ← 1
+βρέθηκε ← ψευδής
+Όσο i &lt;= n και βρέθηκε = ψευδής επανάλαβε
+  Αν Ο[i] = όνομα τότε
+    βρέθηκε ← αληθής
+  αλλιώς
+    i ← i + 1
+  Τέλος_αν
+Τέλος_επανάληψης
+Αν βρέθηκε = αληθής τότε
+  Εμφάνισε Τ[i]
+αλλιώς
+  Εμφάνισε 'Δεν υπάρχει'
+Τέλος_αν
+Τέλος Τηλεφωνικός_κατάλογος</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b></span><span class="ln li"><span class="nw">Ο = [Άννα,</span> Βασίλης, Γιώτα], <span class="nw">Τ = [2101,</span> 2102, 2103], όνομα Βασίλης: <b>2102</b> (2 συγκρίσεις).</span><span class="ln li">Ένας συνδρομητής, όνομα Ζωή: <b>Δεν υπάρχει</b>.</span><span class="ln">Σε έναν κατάλογο 1 000 000 συνδρομητών, ένα όνομα που δεν υπάρχει κοστίζει 1 000 000 συγκρίσεις. Εδώ φαίνεται γιατί το βιβλίο προτείνει και 2η λύση με άλλη δομή.</span></div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 5 · Ανάποδα: κάτι που χωρίς πίνακα δεν γίνεται</div>
+<p>Να γραφτεί πρόγραμμα που διαβάζει 6 γράμματα και τα εμφανίζει με την αντίστροφη σειρά.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Το πρώτο γράμμα εμφανίζεται <b>τελευταίο</b>. Πρέπει να έχουν διαβαστεί όλα πριν εμφανιστεί οποιοδήποτε, άρα τα αποθηκεύω σε πίνακα χαρακτήρων.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Α1 (γέμισμα) και Α2 ανάποδα: <code>ΓΙΑ i ΑΠΟ Ν ΜΕΧΡΙ 1 ΜΕ_ΒΗΜΑ -1</code> (Μάθημα 14, Γ3).</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ανάποδα
+ΣΤΑΘΕΡΕΣ
+  Ν = 6
+ΜΕΤΑΒΛΗΤΕΣ
+  ΧΑΡΑΚΤΗΡΕΣ: Λ[Ν]
+  ΑΚΕΡΑΙΕΣ: i
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΔΙΑΒΑΣΕ Λ[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΙΑ i ΑΠΟ Ν ΜΕΧΡΙ 1 ΜΕ_ΒΗΜΑ -1
+    ΓΡΑΨΕ Λ[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ανάποδα</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Είσοδος Ρ, Ο, Μ, Α, Λ, Η. Έξοδος <b>Η, Λ, Α, Μ, Ο, Ρ</b>. Με απλή μεταβλητή μόνο το τελευταίο γράμμα θα είχε μείνει.</div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 6 · Συχνότητες: η τιμή γίνεται δείκτης</div>
+<p>Ένας μαθητής ρίχνει ένα ζάρι και καταγράφει τα αποτελέσματα, μέχρι να δώσει 0. Τιμές εκτός 1–6 απορρίπτονται με μήνυμα. Να εμφανιστεί για κάθε έδρα πόσες φορές ήρθε και τι ποσοστό, και ποιο αποτέλεσμα ήρθε συχνότερα (το μικρότερο, σε ισοβαθμία).</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Έξι μετρητές, ένας για κάθε έδρα. Αντί για έξι μεταβλητές και ένα ΕΠΙΛΕΞΕ (όπως στην Καντίνα του Μαθήματος 13), ένας πίνακας Σ[6].</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Η ίδια η ρίψη ρ <b>είναι</b> η θέση του μετρητή της: <code>Σ[ρ] ← Σ[ρ] + 1</code> (Α5). Πρώτα μηδενισμός (Α4) και έλεγχος ότι ρ είναι από 1 έως 6 (αλλιώς δείκτης εκτός ορίων). Συχνότερο: μέγιστο με θέση (Α6).</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ζάρι
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Σ[6], ρ, i, πλ, μεγ
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 6
+    Σ[i] &lt;- 0
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  πλ &lt;- 0
+  ΓΡΑΨΕ 'Ρίψη (1-6, 0 για τέλος):'
+  ΔΙΑΒΑΣΕ ρ
+  ΟΣΟ ρ &lt;&gt; 0 ΕΠΑΝΑΛΑΒΕ
+    ΑΝ ρ &gt;= 1 ΚΑΙ ρ &lt;= 6 ΤΟΤΕ
+      Σ[ρ] &lt;- Σ[ρ] + 1
+      πλ &lt;- πλ + 1
+    ΑΛΛΙΩΣ
+      ΓΡΑΨΕ 'Λάθος ρίψη'
+    ΤΕΛΟΣ_ΑΝ
+    ΔΙΑΒΑΣΕ ρ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΑΝ πλ &gt; 0 ΤΟΤΕ
+    μεγ &lt;- 1
+    ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 6
+      ΓΡΑΨΕ i, ':', Σ[i], ' φορές (', Σ[i] * 100 / πλ, '%)'
+      ΑΝ Σ[i] &gt; Σ[μεγ] ΤΟΤΕ
+        μεγ &lt;- i
+      ΤΕΛΟΣ_ΑΝ
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+    ΓΡΑΨΕ 'Συχνότερο αποτέλεσμα:', μεγ
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ζάρι</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> Είσοδος 3, 6, 6, 2, 9 (απορρίπτεται), 6, 1, 3, 0: 7 ρίψεις.</span><span class="ln li">1: 1, 2: 1, 3: 2</span><span class="ln li">4: 0, 5: 0, 6: 3 (≈ 42.9%)</span><span class="ln">Συχνότερο το <b>6</b>. Χωρίς τον έλεγχο, το 9 θα έδινε «Δείκτης εκτός ορίων: Σ[9]».</span></div></div>
+</div>
+</div>
+</section>
+
+<section class="cards" id="s-cards">
+<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2><span class="ref">Ορισμοί για απομνημόνευση</span></div>
+<p class="small">Διάβασε τον όρο, πες τον ορισμό από μέσα σου και πάτα την κάρτα για να τον δεις.</p>
+<div class="deck">
+<button aria-live="polite" class="card" id="card" type="button">
+<span class="face front"><span class="ck">Όρος</span><span class="term" id="c-term"></span><span class="tap">Πάτα για τον ορισμό</span></span>
+<span class="face back"><span class="ck">Ορισμός</span><span class="cdef" id="c-def"></span><span class="tap" id="c-ref"></span></span>
+</button>
+<div class="deckbar">
+<button aria-label="Προηγούμενη κάρτα" class="btn" id="c-prev" type="button">←</button>
+<span class="count" id="c-count"></span>
+<button aria-label="Επόμενη κάρτα" class="btn" id="c-next" type="button">→</button>
+<button class="btn" id="c-shuf" type="button">Ανακάτεμα</button>
+</div>
+</div>
+</section><section class="exercises">
+<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2><span class="ref">Από τα εύκολα στα δύσκολα</span></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div>
+<div class="q"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Γράψε Σ ή Λ.
+<table class="tf">
+<tbody><tr><td>α. Τα δεδομένα είναι ακατέργαστα γεγονότα.</td><td class="b">____</td></tr>
+<tr><td>β. Η πληροφορία είναι η αφαιρετική αναπαράσταση της πραγματικότητας.</td><td class="b">____</td></tr>
+<tr><td>γ. Κάθε δομή δεδομένων αποτελείται από ένα σύνολο κόμβων.</td><td class="b">____</td></tr>
+<tr><td>δ. Η συγχώνευση είναι η αντίστροφη πράξη του διαχωρισμού.</td><td class="b">____</td></tr>
+<tr><td>ε. Οι στατικές δομές αποθηκεύονται σε συνεχόμενες θέσεις μνήμης.</td><td class="b">____</td></tr>
+<tr><td>στ. Το μέγεθος μιας δυναμικής δομής καθορίζεται κατά τη μετάφραση του προγράμματος.</td><td class="b">____</td></tr>
+<tr><td>ζ. Ένας πίνακας μπορεί να έχει στοιχεία διαφορετικού τύπου.</td><td class="b">____</td></tr>
+<tr><td>η. Ένας δισδιάστατος πίνακας 6 × 6 λέγεται τετραγωνικός.</td><td class="b">____</td></tr>
+<tr><td>θ. Η ΓΛΩΣΣΑ υποστηρίζει δυναμικές δομές δεδομένων.</td><td class="b">____</td></tr>
+<tr><td>ι. Με δυναμικές δομές υλοποιούνται οι λίστες, τα δένδρα και οι γράφοι.</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Σ, β Λ, γ Σ, δ Σ, ε Σ, στ Λ, ζ Λ, η Σ, θ Λ, ι Σ</span>
+<p class="small">β: αυτός είναι ο ορισμός των δεδομένων. στ: κατά την εκτέλεση. ζ: στοιχεία του ίδιου τύπου.</p></div></details></div>
+<div class="q"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
+<p>α) Τι είναι δεδομένα και τι πληροφορία; Ποια η σχέση τους με τον αλγόριθμο;<br/>β) Από ποιες σκοπιές μελετά η Πληροφορική τα δεδομένα;<br/>γ) Να δώσετε τον ορισμό της δομής δεδομένων και να περιγράψετε τις βασικές λειτουργίες της.<br/>δ) Ποιες οι διαφορές στατικών και δυναμικών δομών ως προς τη μνήμη;<br/>ε) Τι είναι πίνακας; Πότε ένας δισδιάστατος πίνακας λέγεται τετραγωνικός;</p>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p>Βλ. τα πλαίσια ορισμών των §3.1–3.3. Για το (δ): οι στατικές δεσμεύουν από την αρχή συγκεκριμένο, σταθερό πλήθος συνεχόμενων θέσεων (ακόμα κι αν δεν χρησιμοποιηθούν όλες). Οι δυναμικές δεσμεύουν μνήμη κατά την εκτέλεση, όσο χρειάζεται, σε μη συνεχόμενες θέσεις.</p></div></details></div>
+<div class="q"><span class="qn">3</span><b>Ποια λειτουργία;</b> Για κάθε ενέργεια σε μια λίστα επαφών κινητού, γράψε τη λειτουργία της δομής.
+<ul class="legend tight">
+<li data-v="Α"><b>Α</b> Προσπέλαση</li>
+<li data-v="Β"><b>Β</b> Εισαγωγή</li>
+<li data-v="Γ"><b>Γ</b> Διαγραφή</li>
+<li data-v="Δ"><b>Δ</b> Αναζήτηση</li>
+<li data-v="Ε"><b>Ε</b> Ταξινόμηση</li>
+<li data-v="Ζ"><b>Ζ</b> Αντιγραφή</li>
+<li data-v="Η"><b>Η</b> Συγχώνευση</li>
+<li data-v="Θ"><b>Θ</b> Διαχωρισμός</li>
+</ul>
+<table class="tf">
+<tbody><tr><td>α. Αλλάζω τον αριθμό τηλεφώνου μιας επαφής.</td><td class="b">____</td></tr>
+<tr><td>β. Προσθέτω τον νέο μου συμμαθητή.</td><td class="b">____</td></tr>
+<tr><td>γ. Γράφω «Μαρ» και βλέπω όσες επαφές ξεκινούν έτσι.</td><td class="b">____</td></tr>
+<tr><td>δ. Εμφανίζω τις επαφές κατά επώνυμο.</td><td class="b">____</td></tr>
+<tr><td>ε. Μεταφέρω τις επαφές σε νέο κινητό.</td><td class="b">____</td></tr>
+<tr><td>στ. Ενώνω τις επαφές της κάρτας SIM με αυτές του λογαριασμού μου.</td><td class="b">____</td></tr>
+<tr><td>ζ. Σβήνω μια παλιά επαφή.</td><td class="b">____</td></tr>
+<tr><td>η. Χωρίζω τις επαφές σε «οικογένεια» και «σχολείο».</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Α, β Β, γ Δ, δ Ε, ε Ζ, στ Η, ζ Γ, η Θ</span></div></details></div>
+<div class="q"><span class="qn">4</span><b>Σωστή δήλωση;</b> Γράψε Σ αν η δήλωση είναι σωστή στη ΓΛΩΣΣΑ, Λ αν όχι.
+<table class="tf">
+<tbody><tr><td>α. <code>ΑΚΕΡΑΙΕΣ: Α[50]</code></td><td class="b">____</td></tr>
+<tr><td>β. <code>ΑΚΕΡΑΙΕΣ: ν, Α[ν]</code> (το ν διαβάζεται μετά)</td><td class="b">____</td></tr>
+<tr><td>γ. <code>ΧΑΡΑΚΤΗΡΕΣ: Ον[30]</code></td><td class="b">____</td></tr>
+<tr><td>δ. <code>ΠΡΑΓΜΑΤΙΚΕΣ: Β[2.5]</code></td><td class="b">____</td></tr>
+<tr><td>ε. <code>ΑΚΕΡΑΙΕΣ: Π[3, 4]</code></td><td class="b">____</td></tr>
+<tr><td>στ. <code>ΣΤΑΘΕΡΕΣ Ν = 10</code> και <code>ΑΚΕΡΑΙΕΣ: Α[Ν]</code></td><td class="b">____</td></tr>
+<tr><td>ζ. <code>ΛΟΓΙΚΕΣ: Π[1000]</code></td><td class="b">____</td></tr>
+<tr><td>η. <code>ΑΚΕΡΑΙΕΣ: Α[0]</code></td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Σ, β Λ, γ Σ, δ Λ, ε Σ, στ Σ, ζ Σ, η Λ</span>
+<p class="small">β: το μέγεθος δεν μπορεί να είναι μεταβλητή (στατική δομή). δ: το μέγεθος είναι ακέραιο. η: πρέπει να είναι θετικό.</p></div></details></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div>
+<div class="q"><span class="qn">5</span><b>Δείκτες μέσα σε δείκτες.</b> Να συμπληρώσετε τον πίνακα Α μετά τον πρώτο βρόχο και να βρείτε τι εμφανίζεται.
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Άσκηση_5
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Α[6], i
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 6
+    Α[i] &lt;- i * i - 3 * i
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ Α[1], Α[3], Α[6]
+  ΓΡΑΨΕ Α[Α[5] - 4], Α[2] + Α[4]
+  Α[Α[4] + 1] &lt;- 100
+  ΓΡΑΨΕ Α[3], Α[6 div 2 + 1]
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Άσκηση_5</pre>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p><span class="ln li">Α = [−2, −2, 0, 4, 10, 18]. Εμφανίζει <b>−2 0 18</b> · <b>18 2</b> <span class="nw">(Α[10 − 4] = Α[6].</span> −<span class="nw">2 + 4)</span></span><span class="ln li">μετά το <span class="nw">Α[Α[4] + 1] = Α[5]</span> γίνεται 100</span><span class="ln li"><b>0 4</b> (Α[3], <span class="nw">Α[6 div 2 + 1] = Α[4]).</span></span></p></div></details></div>
+<div class="q hw"><span class="qn">6</span><b>Πόση μνήμη;</b>
+<p><span class="ln">α) Πόσα στοιχεία έχει ένας πίνακας <code>ΠΡΑΓΜΑΤΙΚΕΣ: Β[20, 30]</code>; Αν κάθε πραγματικός πιάνει 8 bytes, πόση μνήμη δεσμεύει;</span><span class="ln">β) Ένα πρόγραμμα δηλώνει <code>ΑΚΕΡΑΙΕΣ: Α[10000]</code> για τους βαθμούς των μαθητών ενός σχολείου που έχει 380 μαθητές. Τι ποσοστό της δεσμευμένης μνήμης χρησιμοποιείται; Ποιο μειονέκτημα των στατικών δομών φαίνεται εδώ;</span><span class="ln">γ) (Για όποιον θέλει) Τα στοιχεία ενός πίνακα είναι σε συνεχόμενες θέσεις. Αν το Α[1] αρχίζει στη διεύθυνση 1000 και κάθε ακέραιος πιάνει 4 bytes, σε ποια διεύθυνση αρχίζει το Α[17];</span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">7</span><b>Μέγιστο και θέση.</b>
+<p>Να τροποποιηθεί ο αλγόριθμος του Παραδείγματος 1 ώστε, για πίνακα n θέσεων, να βρίσκει το <b>μεγαλύτερο</b> στοιχείο και τη <b>θέση</b> του (την πρώτη, αν εμφανίζεται πολλές φορές). Να γίνει πίνακας τιμών για <span class="nw">table = [12,</span> 45, 7, 45, 30].</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">8</span><b>Μέσος όρος και μέγιστο κάθε γραμμής.</b>
+<p>Δίνεται δισδιάστατος πίνακας table με m γραμμές και n στήλες. Να γραφτεί αλγόριθμος (στο ύφος του Παραδείγματος 2) που υπολογίζει σε έναν πίνακα μο[m] τον μέσο όρο κάθε γραμμής και σε έναν πίνακα max[m] το μεγαλύτερο στοιχείο κάθε γραμμής. Έλεγχος: <span class="nw">m = 2,</span> <span class="nw">n = 3,</span> γραμμές 1, 5, 3 και 10, −2, 4.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">9</span><b>Πάνω από τον μέσο όρο.</b>
+<p>Να γραφτεί πρόγραμμα που διαβάζει τους βαθμούς 10 μαθητών (0–20, με έλεγχο) σε πίνακα, εμφανίζει τον μέσο όρο και, στη συνέχεια, τον αριθμό και τον βαθμό κάθε μαθητή που είναι <b>πάνω</b> από τον μέσο όρο, καθώς και πόσοι είναι (και τι ποσοστό). Έλεγχος: 12, 18, 25 (απορρίπτεται), 9.5, 14, 20, 7, 11, 16, 13, 15.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">10</span><b>Παλίνδρομος κωδικός.</b>
+<p><span class="ln li">Ένας κωδικός ασφαλείας έχει 7 ψηφία. Να γραφτεί πρόγραμμα που διαβάζει τα 7 ψηφία (0–9, με έλεγχο) σε πίνακα και εμφανίζει αν ο κωδικός είναι παλίνδρομος (διαβάζεται ίδιος και ανάποδα). Πόσες συγκρίσεις χρειάζονται; Έλεγχος: 1 2 3 4 3 2 1</span><span class="ln li">1 2 3 4 5 2 1.</span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">11</span><b>Ποια μέρα του χρόνου;</b>
+<p>Να γραφτεί πρόγραμμα που κρατά σε έναν πίνακα Μ[12] τις μέρες κάθε μήνα (μη δίσεκτο έτος), διαβάζει μήνα (1–12) και μέρα (με έλεγχο, ανάλογα με τον μήνα: <code>μέρα &lt;= Μ[μήνας]</code>) και εμφανίζει ποια μέρα του έτους είναι (π.χ. η 1η Μαρτίου είναι η 60ή). Έλεγχος με: 3/1, μετά 13 και 2, 30 (απορρίπτεται), 28, και τέλος 12/31.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">12</span><b>Ο κατάλογος, 2η λύση.</b>
+<p>Το βιβλίο (§3.2) αφήνει «για άσκηση στον μαθητή» τον αλγόριθμο της 2ης λύσης: τα ονόματα Ο[1..n] είναι ταξινομημένα αλφαβητικά, και ένας δεύτερος πίνακας Θ[24] δίνει για κάθε γράμμα <span class="nw">(1 = Α,</span> …, <span class="nw">24 = Ω)</span> τη θέση του πρώτου ονόματος που αρχίζει από αυτό. Θεωρήστε ότι δίνεται ο αριθμός γ του αρχικού γράμματος του ονόματος που ψάχνουμε. α) Από ποια θέση ξεκινά η αναζήτηση και πού μπορεί να σταματήσει; (Βοήθεια: πού αρχίζουν τα ονόματα του επόμενου γράμματος;) β) Να γράψετε τον αλγόριθμο σε ψευδογλώσσα. γ) Γιατί η 2η λύση είναι ταχύτερη για έναν μεγάλο κατάλογο;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">13</span><b>Στατικό ή δυναμικό;</b>
+<p><span class="ln">Ένας αθλητικός σύλλογος έχει σήμερα 140 μέλη και κάθε χρόνο γράφονται 20–60 νέα. Θέλει πρόγραμμα σε ΓΛΩΣΣΑ για τα μέλη του.</span><span class="ln">α) Πόσες θέσεις θα δηλώνατε στον πίνακα και γιατί;</span><span class="ln">β) Τι κερδίζει και τι χάνει ο σύλλογος με τη στατική δομή;</span><span class="ln">γ) Πώς θα ήταν τα πράγματα σε μια γλώσσα με δυναμικές δομές;</span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Μεγάλες ασκήσεις</h3></div>
+<div class="q hw"><span class="qn">14</span><b>Ο καιρός του μήνα.</b><span class="theme">Μετεωρολογία, Θέμα Γ</span>
+<p>Να γραφτεί πρόγραμμα που διαβάζει τις θερμοκρασίες 30 ημερών (σταθερά, −30 έως 50 με έλεγχο) σε πίνακα και εμφανίζει:</p>
+<ul class="tight">
+<li>τη μέση θερμοκρασία και πόσες μέρες ήταν πάνω από αυτήν.</li>
+<li>τη μέγιστη και την ελάχιστη θερμοκρασία με τη μέρα τους (την πρώτη, σε ισοβαθμία).</li>
+<li>το μεγαλύτερο διάστημα συνεχόμενων ημερών πάνω από τη μέση (σερί, Μάθημα 17).</li>
+</ul>
+<p><span class="ln">α) Ποια ζητούμενα μπορούν να βρεθούν στο <b>πρώτο</b> πέρασμα και ποια χρειάζονται <b>δεύτερο</b>;</span><span class="ln">β) Να γράψετε το πρόγραμμα.</span><span class="ln">γ) Για να το ελέγξετε γρήγορα, αλλάξτε τη σταθερά σε 7 και δώστε 3, −1, 5.5, −2, 8, 8, 4.</span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">15</span><b>Οι εκλογές του συλλόγου.</b><span class="theme">Κοινότητα, Θέμα Δ</span>
+<p>Σε εκλογές με 8 υποψηφίους (σταθερά) διαβάζεται κάθε ψηφοδέλτιο ως αριθμός υποψηφίου, μέχρι να δοθεί 0. Αριθμοί εκτός 1–8 είναι άκυρα. Να εμφανίζονται:</p>
+<ul class="tight">
+<li>τα έγκυρα και τα άκυρα.</li>
+<li>για κάθε υποψήφιο οι ψήφοι και το ποσοστό του επί των έγκυρων, με σημείωση αν είναι κάτω από 5%.</li>
+<li>ο νικητής ή, σε ισοψηφία στην πρώτη θέση, πόσοι ισοψήφησαν.</li>
+</ul>
+<p><span class="ln">α) Γιατί εδώ ένας πίνακας Ψ[8] είναι πολύ καλύτερος από 8 μεταβλητές;</span><span class="ln">β) Να γράψετε το πρόγραμμα. Τι γίνεται αν δεν δοθεί κανένα έγκυρο ψηφοδέλτιο;</span><span class="ln">γ) Έλεγχος: 3, 1, 3, 9, 5, 3, 1, 1, 0.</span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">16</span><b>Το κόσκινο του Ερατοσθένη.</b><span class="theme">Ιστορία των μαθηματικών, Πρόκληση</span>
+<p><span class="ln li">Ο Ερατοσθένης (3ος αι. π.Χ.) έβρισκε τους πρώτους αριθμούς «κοσκινίζοντας»: γράφεις όλους τους αριθμούς από το 2 και μετά, και για κάθε αριθμό που δεν έχει διαγραφεί διαγράφεις όλα τα πολλαπλάσιά του. Να γραφτεί πρόγραμμα με έναν πίνακα <code>ΛΟΓΙΚΕΣ: Π[1000]</code> (Π[i] αληθής = «το i δεν έχει διαγραφεί»), που μετρά τους πρώτους έως το 1000 και εμφανίζει τον μεγαλύτερο. Γιατί αρκεί να κοσκινίσουμε με αριθμούς i για τους οποίους <span class="nw">i · i &lt;= 1000</span>; Γιατί η διαγραφή μπορεί να ξεκινά από το i</span><span class="ln li">i;</span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+</section>
+
+</main><div class="syn-foot"><div class="syn-nav"><a href="18.html"><small>&#8592; Μάθημα 18</small>Διαίρει και βασίλευε</a><a class="next" href="20.html"><small>Μάθημα 20 &#8594;</small>Μονοδιάστατοι πίνακες</a></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
+<script>
+(function(){
+  var CARDS = [{"term": "Δεδομένα.", "def": "Δεδομένα. Τα δεδομένα (data) είναι η αφαιρετική αναπαράσταση της πραγματικότητας και συνεπώς μία απλοποιημένη όψη της. […] Τα δεδομένα, λοιπόν, είναι ακατέργαστα γεγονότα, και κάθε φορά η επιλογή τους εξαρτάται από τον τύπο του προβλήματος.", "ref": "Σχολικό βιβλίο, §3.1"}, {"term": "Πληροφορία.", "def": "Πληροφορία. Η συλλογή των ακατέργαστων δεδομένων και ο συσχετισμός τους δίνει ως αποτέλεσμα την πληροφορία (information). […] Μπορεί να θεωρηθεί ότι ο αλγόριθμος είναι το μέσο για την παραγωγή πληροφορίας από τα δεδομένα.", "ref": "Σχολικό βιβλίο, §3.1"}, {"term": "Υλικού.", "def": "Υλικού. Το υλικό (hardware) επιτρέπει στα δεδομένα να αποθηκεύονται στην κύρια μνήμη και στις περιφερειακές συσκευές με διάφορες αναπαραστάσεις (δυαδική, ASCII, EBCDIC, συμπλήρωμα του 1 ή του 2 κ.λπ.).", "ref": "Σχολικό βιβλίο, §3.1 (σε συντομία)"}, {"term": "Γλωσσών προγραμματισμού.", "def": "Γλωσσών προγραμματισμού. Οι γλώσσες υψηλού επιπέδου επιτρέπουν τη χρήση διάφορων τύπων μεταβλητών για να περιγράψουν ένα δεδομένο.", "ref": "Σχολικό βιβλίο, §3.1 (σε συντομία)"}, {"term": "Δομών Δεδομένων.", "def": "Δομών Δεδομένων. Π.χ. η εγγραφή (record), με πεδία (fields) διαφορετικού τύπου, και το αρχείο, που αποτελείται από ένα σύνολο εγγραφών.", "ref": "Σχολικό βιβλίο, §3.1 (σε συντομία)"}, {"term": "Ανάλυσης Δεδομένων.", "def": "Ανάλυσης Δεδομένων. Τρόποι καταγραφής και αλληλοσυσχέτισης των δεδομένων μελετώνται έτσι ώστε να αναπαρασταθεί η γνώση για πραγματικά γεγονότα (Βάσεις Δεδομένων, Μοντελοποίηση Δεδομένων, Αναπαράσταση Γνώσης).", "ref": "Σχολικό βιβλίο, §3.1 (σε συντομία)"}, {"term": "Δομή Δεδομένων", "def": "Δομή Δεδομένων είναι ένα σύνολο αποθηκευμένων δεδομένων που υφίστανται επεξεργασία από ένα σύνολο λειτουργιών. Κάθε μορφή δομής δεδομένων αποτελείται από ένα σύνολο κόμβων (nodes).", "ref": "Σχολικό βιβλίο, §3.2 (σε συντομία)"}, {"term": "Οι βασικές λειτουργίες:", "def": "Οι βασικές λειτουργίες: Προσπέλαση (access), πρόσβαση σε έναν κόμβο με σκοπό να εξετασθεί ή να τροποποιηθεί το περιεχόμενό του · Εισαγωγή (insertion), η προσθήκη νέων κόμβων · Διαγραφή (deletion), ένας κόμβος αφαιρείται · Αναζήτηση (searching), προσπελαύνονται οι κόμβοι για να εντοπιστούν ένας ή περισσότεροι που έχουν μια δεδομένη ιδιότητα · Ταξινόμηση (sorting), οι κόμβοι διατάσσονται κατά αύξουσα ή φθίνουσα σειρά · Αντιγραφή (copying), όλοι ή μερικοί κόμβοι αντιγράφονται σε μία άλλη δομή · Συγχώνευση (merging), δύο ή περισσότερες δομές συνενώνονται σε μία · Διαχωρισμός (separation), η αντίστροφη πράξη της συγχώνευσης.", "ref": "Σχολικό βιβλίο, §3.2 (σε συντομία)"}, {"term": "Στατικές δομές:", "def": "Στατικές δομές: Αποθηκεύονται σε συνεχόμενες θέσεις μνήμης και έχουν σταθερό μέγεθος, το οποίο καθορίζεται στην αρχή του προγράμματος. Οι στατικές δομές υλοποιούνται με πίνακες.", "ref": "Οδηγίες διδασκαλίας 2024–25, ενότητα 21"}, {"term": "Δυναμικές δομές:", "def": "Δυναμικές δομές: Δεν αποθηκεύονται σε συνεχόμενες θέσεις μνήμης, δεν έχουν σταθερό μέγεθος, αλλά ο αριθμός των κόμβων τους αυξάνεται και μειώνεται, όταν στη δομή αντίστοιχα εισάγονται ή διαγράφονται δεδομένα. Το μέγεθος της μνήμης καθορίζεται κατά την εκτέλεση του προγράμματος. Με δυναμικές δομές υλοποιούνται οι λίστες, τα δένδρα και οι γράφοι.", "ref": "Οδηγίες διδασκαλίας 2024–25, ενότητα 21"}, {"term": "Στατική δομή.", "def": "Στατική δομή. Με τον όρο στατική δομή δεδομένων εννοείται ότι το ακριβές μέγεθος της απαιτούμενης κύριας μνήμης καθορίζεται κατά τη στιγμή του προγραμματισμού τους, και κατά συνέπεια κατά τη στιγμή της μετάφρασής τους και όχι κατά τη στιγμή της εκτέλεσης του προγράμματος. Μία άλλη σημαντική διαφορά σε σχέση με τις δυναμικές δομές είναι ότι τα στοιχεία των στατικών δομών αποθηκεύονται σε συνεχόμενες θέσεις μνήμης.", "ref": "Σχολικό βιβλίο, §3.3"}, {"term": "Πίνακας.", "def": "Πίνακας. Μπορούμε να ορίσουμε τον πίνακα ως μια δομή που περιέχει στοιχεία του ίδιου τύπου (δηλαδή ακέραιους, πραγματικούς κ.λπ.). […] Η αναφορά στα στοιχεία ενός πίνακα γίνεται με τη χρήση του συμβολικού ονόματος του πίνακα ακολουθούμενου από την τιμή ενός ή περισσότερων δεικτών (indexes) σε παρένθεση ή αγκύλη.", "ref": "Σχολικό βιβλίο, §3.3"}, {"term": "Διαστάσεις.", "def": "Διαστάσεις. Ένας πίνακας μπορεί να είναι μονοδιάστατος, αλλά στη γενικότερη περίπτωση μπορεί να είναι δισδιάστατος, τρισδιάστατος και γενικά ν-διάστατος πίνακας. […] Αν το μέγεθος των δύο διαστάσεων είναι ίσο, τότε ο πίνακας λέγεται τετραγωνικός (square). […] Μπορούμε να θεωρήσουμε το δισδιάστατο πίνακα ότι είναι ένας μονοδιάστατος πίνακας, όπου κάθε θέση του περιέχει ένα νέο μονοδιάστατο πίνακα.", "ref": "Σχολικό βιβλίο, §3.3"}, {"term": "Δεδομένα / πληροφορία:", "def": "Δεδομένα / πληροφορία: ακατέργαστα γεγονότα / το αποτέλεσμα της συσχέτισής τους· ο αλγόριθμος παράγει πληροφορία από τα δεδομένα.", "ref": "Σύνοψη"}, {"term": "Δομή δεδομένων:", "def": "Δομή δεδομένων: σύνολο αποθηκευμένων δεδομένων και λειτουργιών (προσπέλαση, εισαγωγή, διαγραφή, αναζήτηση, ταξινόμηση, αντιγραφή, συγχώνευση, διαχωρισμός).", "ref": "Σύνοψη"}, {"term": "Στατικές:", "def": "Στατικές: συνεχόμενες θέσεις, σταθερό μέγεθος από την αρχή (πίνακες). Δυναμικές: μέγεθος που αλλάζει κατά την εκτέλεση (λίστες, δένδρα, γράφοι).", "ref": "Σύνοψη"}, {"term": "Πίνακας:", "def": "Πίνακας: στοιχεία ίδιου τύπου με κοινό όνομα και δείκτες· μονοδιάστατος, δισδιάστατος, ν-διάστατος· τετραγωνικός όταν γραμμές = στήλες.", "ref": "Σύνοψη"}, {"term": "Δήλωση πίνακα στη ΓΛΩΣΣΑ", "def": "ΑΚΕΡΑΙΕΣ: Α[20] · ΠΡΑΓΜΑΤΙΚΕΣ: Π[3, 4] (γραμμές, στήλες)", "ref": "§4.1 Οδηγιών"}, {"term": "Δύο περάσματα", "def": "1ο: διάβασμα και άθροισμα · 2ο: σύγκριση κάθε στοιχείου με τον μέσο όρο.", "ref": "Α3"}, {"term": "Συχνότητες με πίνακα", "def": "Σ[ρ] ← Σ[ρ] + 1, αφού μηδενιστεί ο Σ.", "ref": "Α5"}, {"term": "Συμμετρική θέση του i", "def": "Ν + 1 − i", "ref": "Α8"}, {"term": "Wirth, 1976", "def": "Αλγόριθμοι + Δομές Δεδομένων = Προγράμματα", "ref": "§3.2"}];
+  // ---- quiz ----
+  document.querySelectorAll('.quiz').forEach(function(quiz){
+    var items = quiz.querySelectorAll('.qi');
+    var score = quiz.querySelector('.score');
+    function update(){
+      var done = quiz.querySelectorAll('.qi.ok, .qi.no').length;
+      if (done < items.length){ score.hidden = true; return; }
+      var ok = quiz.querySelectorAll('.qi.ok').length;
+      score.hidden = false;
+      score.innerHTML = '';
+      var t = document.createElement('span');
+      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? ' · Τέλεια!' : ok >= items.length * 0.7 ? ' · Πολύ καλά' : ' · Ξαναδιάβασε τη θεωρία');
+      var r = document.createElement('button'); r.type = 'button'; r.className = 'btn'; r.textContent = 'Ξανά από την αρχή';
+      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); }); update(); };
+      score.append(t, r);
+    }
+    items.forEach(function(it){
+      var ans = it.getAttribute('data-ans');
+      it.querySelectorAll('.qb button').forEach(function(b){
+        b.addEventListener('click', function(){
+          var v = b.getAttribute('data-v');
+          it.querySelectorAll('.qb button').forEach(function(x){ x.disabled = true; if (x.getAttribute('data-v') === ans) x.classList.add('right'); });
+          b.classList.add('pick');
+          it.classList.add(v === ans ? 'ok' : 'no');
+          var f = document.createElement('span'); f.className = 'fb';
+          f.textContent = v === ans ? '✓ Σωστά' : '✗ Η σωστή απάντηση είναι: ' + (it.querySelector('.qb button[data-v="' + ans + '"]') || {}).textContent;
+          it.appendChild(f);
+          update();
+        });
+      });
+    });
+  });
+  // ---- flashcards ----
+  var order = CARDS.map(function(_, i){ return i; }), pos = 0;
+  var card = document.getElementById('card');
+  if (!card || !CARDS.length) return;
+  function show(){
+    var c = CARDS[order[pos]];
+    card.classList.remove('flipped');
+    document.getElementById('c-term').textContent = c.term;
+    document.getElementById('c-def').textContent = c.def;
+    document.getElementById('c-ref').textContent = c.ref;
+    document.getElementById('c-count').textContent = (pos + 1) + ' / ' + CARDS.length;
+  }
+  card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+  document.getElementById('c-next').onclick = function(){ pos = (pos + 1) % CARDS.length; show(); };
+  document.getElementById('c-prev').onclick = function(){ pos = (pos - 1 + CARDS.length) % CARDS.length; show(); };
+  document.getElementById('c-shuf').onclick = function(){
+    for (var i = order.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+    pos = 0; show();
+  };
+  show();
+})();
+</script>
+<style id="kitcss">/*KIT>*//* ==== kit: θέμα, προβολή, «Δείξε λύση» ==== */
+body{font-size:16px}
+.kit-btn{font:600 13px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 12px;border-radius:999px;cursor:pointer}
+.kit-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.kit-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#kitfloat{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:30;display:flex;gap:6px;padding:5px;border-radius:999px;background:var(--ground);border:1px solid var(--line);box-shadow:0 4px 16px rgba(10,20,40,.12)}
+.rt-ans{margin:-2px 0 14px}
+.rt-show{font:600 13.5px/1 var(--body);border:1.5px solid var(--s-teal);background:var(--teal-bg);color:var(--teal);padding:9px 14px;border-radius:999px;cursor:pointer}
+.rt-show:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.rt-body{display:none;margin-top:10px;border-left:4px solid var(--s-teal);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 16px}
+.rt-body .q{margin:0;border:0;padding:0;background:none}
+.rt-open > .rt-body, body.rt-all .rt-body{display:block}
+.rt-open > .rt-show{background:var(--paper)}
+body:not(.rt-all):not(.editing) .solved:not(.rt-open) .rt-hide{display:none}
+body.rt-all .rt-showstep{display:none}
+.solved.rt-open .rt-showstep{display:none}
+.rt-showstep{margin:4px 0 6px}
+body.student .rt-ans{display:none}
+body.editing .rt, body.editing .rt-showstep{display:none}
+/* Λειτουργία προβολής */
+body.proj #bar,body.proj #nav{zoom:1.25}
+body.proj{--muted:#3a4254;--line:#b5bfd2}
+:root[data-theme="dark"] body.proj{--muted:#b9c1d4;--line:#3b465e}
+@media print{#kitfloat,.rt,.rt-showstep,.kit-btn{display:none!important}.rt-hide{display:grid!important}}
+/* Καθαρές γραμμές */
+body{font-size:17px;line-height:1.68}
+.ln{display:block;margin:.22em 0}
+.ln.li{position:relative;padding-left:1.25em}
+.ln.li::before{content:"•";position:absolute;left:.35em;color:var(--muted)}
+.kvs{display:inline-flex;flex-wrap:wrap;gap:.2em 1.2em;vertical-align:top}
+.kv,.nw{white-space:nowrap}
+p,li,td{text-wrap:pretty}
+.ln.cd{font-family:var(--mono);font-size:.92em}
+.cdcols{display:inline-flex;flex-wrap:wrap;gap:4px 28px;vertical-align:top}
+.cdcol{display:inline-block;padding-left:10px;border-left:2px solid var(--line)}/*<KIT*/</style>
+<script id="kitjs">/*KITJS>*/(function(){
+  /* kit: θέμα (φωτεινό/σκοτεινό), προβολή, «Δείξε λύση» */
+  var root = document.documentElement, body = document.body, doc = document.getElementById('doc');
+  if (!doc || body.getAttribute('data-kit')) return;
+  body.setAttribute('data-kit', '1');
+  function get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function put(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+  var theme = get('synapsi-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  var proj = get('aepp-proj') === '1';
+  function mk(id, txt){ var b = document.createElement('button'); b.type = 'button'; b.id = id; b.className = 'kit-btn'; b.textContent = txt; return b; }
+  var bTheme = mk('k-theme', ''), bProj = mk('k-proj', 'Προβολή'), bAll = null;
+  function applyTheme(){ root.setAttribute('data-theme', theme); bTheme.textContent = theme === 'dark' ? '☀ Φωτεινό' : '☾ Σκοτεινό'; bTheme.setAttribute('aria-label', theme === 'dark' ? 'Φωτεινό θέμα' : 'Σκοτεινό θέμα'); }
+  function fit(){
+    if (!proj){ doc.style.zoom = ''; doc.style.maxWidth = ''; return; }
+    var W = window.innerWidth, z = W < 700 ? 1.12 : 1.38;
+    doc.style.zoom = z; doc.style.maxWidth = Math.max(300, Math.min(900, (W - 36) / z)) + 'px';
+  }
+  function applyProj(){ body.classList.toggle('proj', proj); bProj.setAttribute('aria-pressed', String(proj)); fit(); }
+  window.addEventListener('resize', fit);
+  bTheme.onclick = function(){ theme = theme === 'dark' ? 'light' : 'dark'; put('synapsi-theme', theme); applyTheme(); };
+  bProj.onclick = function(){ proj = !proj; put('aepp-proj', proj ? '1' : '0'); applyProj(); };
+  applyTheme(); applyProj();
+
+  var bar = document.getElementById('bar');
+  var teacherSec = doc.querySelector('section.teacher');
+  if (bar){
+    var anchor = document.getElementById('status') || null;
+    if (teacherSec){ bAll = mk('k-all', 'Όλες οι λύσεις'); bar.insertBefore(bAll, anchor); }
+    bar.insertBefore(bProj, anchor); bar.insertBefore(bTheme, anchor);
+  } else {
+    var f = document.createElement('div'); f.id = 'kitfloat';
+    f.appendChild(bTheme); body.appendChild(f); proj = false; applyProj();
+  }
+  if (bAll){
+    bAll.onclick = function(){ var on = !body.classList.contains('rt-all'); body.classList.toggle('rt-all', on); bAll.setAttribute('aria-pressed', String(on)); };
+  }
+
+  /* λυμένα: φαίνεται η εκφώνηση και το «Κατανοώ», τα υπόλοιπα με κουμπί */
+  doc.querySelectorAll('.box.solved').forEach(function(box){
+    var steps = box.querySelector('.steps');
+    if (!steps) return;
+    var st = steps.querySelectorAll(':scope > .step');
+    if (st.length < 2) return;
+    box.classList.add('rt-closed');
+    for (var i = 1; i < st.length; i++) st[i].classList.add('rt-hide');
+    var w = document.createElement('div'); w.className = 'rt-showstep'; w.contentEditable = 'false';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε τη λύση';
+    b.onclick = function(){ box.classList.add('rt-open'); };
+    w.appendChild(b); st[0].after(w);
+  });
+
+  /* ασκήσεις: η απάντηση από τη σελίδα καθηγητή, κρυμμένη κάτω από την εκφώνηση */
+  if (teacherSec){
+    var ans = {};
+    teacherSec.querySelectorAll('.ans .q').forEach(function(q){ var n = q.querySelector('.qn'); if (n) ans[n.textContent.trim()] = q; });
+    doc.querySelectorAll('.exercises .q').forEach(function(q){
+      var n = q.querySelector(':scope > .qn'); if (!n) return;
+      var a = ans[n.textContent.trim()]; if (!a) return;
+      var w = document.createElement('div'); w.className = 'rt rt-ans'; w.contentEditable = 'false';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε λύση';
+      var bodyEl = document.createElement('div'); bodyEl.className = 'rt-body ans';
+      var c = a.cloneNode(true); var qn = c.querySelector('.qn'); if (qn) qn.remove();
+      bodyEl.appendChild(c);
+      b.onclick = function(){ var on = !w.classList.contains('rt-open'); w.classList.toggle('rt-open', on); b.textContent = on ? 'Κρύψε λύση' : 'Δείξε λύση'; };
+      w.appendChild(b); w.appendChild(bodyEl);
+      q.after(w);
+    });
+  }
+})();/*<KITJS*/</script>
+
+</body></html>

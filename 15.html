@@ -1,0 +1,1147 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Μάθημα 15 · Λάθη και εκσφαλμάτωση</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
+<style>
+/* Layout: one A4-like sheet centred on a cool ground; coloured callouts by role (ορισμός, ήξερες ότι, παγίδα, παράδειγμα) */
+:root{
+  --ground:#e9edf4; --paper:#ffffff; --ink:#172036; --muted:#5a6377; --line:#d9dfea; --soft:#f3f5f9;
+  --blue:#2457d6; --blue-bg:#e9efff; --teal:#0b7f72; --teal-bg:#e2f4f1;
+  --amber:#a65400; --amber-bg:#fff3df; --amber-line:#e2ad62;
+  --coral:#b93b12; --coral-bg:#fcebe4; --violet:#6534c9; --violet-bg:#efe8fd;
+  --s-blue:#2457d6; --s-teal:#0b8174; --s-violet:#6534c9; --s-ink:#172036; --on-solid:#ffffff; --on-solid-2:#d8e1ff;
+  --hero:#172036; --hero-fg:#ffffff; --hero-sub:#c4cef0; --hero-kick:#a9bcff;
+  --mark:#ffe28a;
+  --display:"Commissioner","Noto Sans",system-ui,sans-serif;
+  --body:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0 0 8px}
+
+/* Toolbar */
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:10px 0;background:var(--ground)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:3px}
+.seg button,.btn{font:600 13px/1 var(--body);border:0;background:none;color:var(--muted);padding:8px 13px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid)}
+.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.spacer{flex:1}
+#status{font-size:12.5px;color:var(--muted)}
+.edit-only{display:none}
+body.editing .edit-only{display:inline-block}
+body.editing .view-only{display:none}
+body.editing #doc{outline:2px dashed var(--blue);outline-offset:6px}
+body.editing #doc [contenteditable="false"]{cursor:default}
+
+/* Sheet */
+#doc{max-width:860px;margin:0 auto;background:var(--paper);border-radius:14px;padding:clamp(18px,4vw,44px);box-shadow:0 1px 2px rgba(10,20,40,.06),0 8px 30px rgba(10,20,40,.06)}
+body.student .teacher{display:none}
+
+.hero{background:var(--hero);color:var(--hero-fg);border-radius:14px;padding:22px 24px 24px;position:relative;overflow:hidden}
+.hero .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--hero-kick);font-weight:700}
+.hero h1{font-size:clamp(28px,5vw,40px);font-weight:800;margin:6px 0 8px;letter-spacing:-.01em}
+.hero .sub{color:var(--hero-sub);max-width:34em}
+.hero .sub b{color:var(--hero-fg)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.12);color:var(--hero-fg)}
+.hero .deco{position:absolute;right:-10px;top:-6px;opacity:.16;width:220px;height:auto}
+.hero .deco *{stroke:var(--hero-fg)}
+
+.goals{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 18px;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px}
+.goals h3{grid-column:1/-1;font-size:13px;color:var(--blue);text-transform:uppercase;letter-spacing:.08em}
+.goals div{padding-left:20px;position:relative;font-size:14px}
+.goals div::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:800}
+
+.glance{margin-top:14px;background:var(--soft);border-radius:12px;padding:14px 16px}
+.glance h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.figure{overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:520px;height:auto;font-family:var(--body)}
+
+.sec{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:5px;margin:30px 0 12px;break-after:avoid}
+.sec .num{font-family:var(--display);font-weight:800;font-size:22px;color:var(--blue);font-variant-numeric:tabular-nums}
+.sec h2{font-size:22px;font-weight:800}
+.sec .ref{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;break-inside:avoid}
+.tag{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.def{background:var(--blue-bg);border-left:4px solid var(--blue)} .def .tag{color:var(--blue)}
+.src{font-size:12px;color:var(--muted);margin:2px 0 0}
+.trivia{background:var(--amber-bg);border:1.5px dashed var(--amber-line)} .trivia .tag{color:var(--amber)}
+.talk{margin-top:6px;font-size:14px;color:var(--amber);font-weight:600}
+.talk span{font-weight:400}
+.trap{background:var(--coral-bg);border-left:4px solid var(--coral)} .trap .tag{color:var(--coral)}
+.ex{background:var(--teal-bg);border-left:4px solid var(--teal)} .ex .tag{color:var(--teal)}
+.plain{background:var(--soft)} .plain .tag{color:var(--ink)}
+.hl{background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 1px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:10px 0}
+.grid .box{margin:0}
+ul.tight{margin:4px 0 8px;padding-left:20px} ul.tight li{margin:3px 0}
+.small{font-size:13px;color:var(--muted)}
+.cap{font-size:13.5px;font-weight:700;margin-bottom:6px}
+
+.tablewrap{overflow-x:auto;margin:10px 0}
+table.t{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
+table.t th{background:var(--s-ink);color:var(--paper);text-align:left;padding:7px 10px;font-weight:600}
+table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:top}
+
+.exhead{display:flex;align-items:center;gap:10px;margin:22px 0 8px}
+.lvl{display:inline-flex;gap:4px}
+.lvl i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}
+.lvl i.on{background:var(--violet)}
+.exhead h3{font-size:17px}
+.q{margin:10px 0 14px;break-inside:avoid}
+.qn{display:inline-block;min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:7px;background:var(--violet-bg);color:var(--violet);font-weight:800;font-size:13px;margin-right:8px}
+.theme{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-left:6px}
+table.tf{width:100%;border-collapse:collapse;margin-top:6px;font-size:14.5px}
+table.tf td{padding:6px 8px;border-bottom:1px solid var(--line)}
+table.tf td.b{width:70px;text-align:center;color:var(--muted)}
+.lines{height:var(--h,44px);background:repeating-linear-gradient(transparent 0 27px,var(--line) 27px 28px);margin-top:6px}
+.drawbox{height:180px;border:1.5px dashed var(--line);border-radius:10px;margin-top:8px}
+.indent{margin-left:34px}
+.sol{color:var(--teal);font-weight:700}
+.ans .q{margin:8px 0}
+.teacher .sec{border-color:var(--teal)} .teacher .sec .num{color:var(--teal)}
+
+/* SVG roles */
+.f-blue{fill:var(--s-blue)} .f-teal{fill:var(--s-teal)} .f-violet{fill:var(--s-violet)} .f-ink{fill:var(--s-ink)}
+.f-paper{fill:var(--paper)} .f-on{fill:var(--on-solid)} .f-on2{fill:var(--on-solid-2)} .f-text{fill:var(--ink)} .f-muted{fill:var(--muted)} .f-onink{fill:var(--paper)}
+.st-ink{stroke:var(--ink)} .st-blue{stroke:var(--blue)} .st-teal{stroke:var(--teal)} .st-violet{stroke:var(--violet)}
+.f-arrow{fill:var(--ink)}
+
+
+/* v2 additions: code, narrow flowcharts, legends */
+:root{--mono:ui-monospace,"Cascadia Mono","Consolas","DejaVu Sans Mono",monospace}
+pre.code{font-family:var(--mono);font-size:14px;line-height:1.55;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:6px 0 8px;overflow-x:auto;white-space:pre}
+.figure.narrow svg{min-width:0;max-width:250px;margin:4px auto}
+.grid.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+ul.legend{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0 2px}
+ul.legend li{font-size:14px}
+ul.legend b{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:6px;background:var(--violet-bg);color:var(--violet);margin-right:4px}
+
+
+/* v3 additions: solved examples step by step, blank value tables */
+.solved{border:1.5px solid var(--teal);background:var(--paper)} .solved .tag{color:var(--teal)}
+.steps{display:grid;gap:14px;margin-top:10px}
+.step{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.stepn{width:30px;height:30px;border-radius:50%;background:var(--s-teal);color:var(--on-solid);font:800 14px/30px var(--display);text-align:center}
+table.t.blank td{height:34px;border:1px solid var(--line)}
+
+/* v4: graphs */
+.figure.narrow.graph svg{max-width:380px}
+
+/* v5: toolbox subsections */
+h3.tool{font-size:17px;margin:24px 0 8px;padding-top:4px;border-top:1px solid var(--line)}
+
+/* homework vs self-check */
+.q.hw::before{content:"Για το σπίτι";display:block;width:max-content;font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:99px;padding:4px 9px;margin-bottom:6px}
+body.editing .q.hw::before{display:none}
+.hwtoggle{display:block;margin-bottom:6px;font:600 12px/1 var(--body);padding:6px 10px;border-radius:99px;border:1.5px dashed var(--line);background:var(--paper);color:var(--muted);cursor:pointer}
+.hwtoggle[aria-pressed="true"]{border-style:solid;border-color:var(--amber-line);color:var(--amber);background:var(--amber-bg)}
+.hwnote{font-size:13px;color:var(--amber);font-weight:600}
+
+@media (max-width:520px){ .indent{margin-left:0} .hero .deco{display:none} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* v4: math notation (fractions, roots) */
+.mx{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:1.06em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 2px;line-height:1.25}
+.frac>span{padding:0 4px}
+.frac>span:first-child{border-bottom:1.3px solid currentColor}
+.rt{border-top:1.3px solid currentColor;padding:0 2px 0 1px;margin-left:1px}
+
+/* student additions */
+#doc{margin-top:0}
+#nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ground);max-width:860px;margin:0 auto;padding-block:10px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.navin{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.navin::-webkit-scrollbar{display:none}
+#nav a{flex:none;font:600 13px/1 var(--body);color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
+#nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
+.btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.quiz{display:grid;gap:10px;margin-top:10px}
+.qi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:8px}
+.qi .qs{margin:0}
+.qb{display:flex;gap:8px;flex-wrap:wrap}
+.qb button{font:600 14px/1 var(--body);padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;min-width:96px}
+.qb button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.qi.ok{border-color:var(--teal);background:var(--teal-bg)}
+.qi.no{border-color:var(--coral);background:var(--coral-bg)}
+.qi .qb button.pick{border-color:currentColor}
+.qi.ok .qb button.pick{background:var(--s-teal);border-color:var(--s-teal);color:var(--on-solid)}
+.qi.no .qb button.pick{background:var(--coral);border-color:var(--coral);color:var(--paper)}
+.qi.no .qb button.right{border-color:var(--teal);color:var(--teal)}
+.fb{font-size:13px;font-weight:700}
+.qi.ok .fb{color:var(--teal)} .qi.no .fb{color:var(--coral)}
+.score{font:700 15px/1.4 var(--display);padding:10px 14px;border-radius:10px;background:var(--violet-bg);color:var(--violet);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.score .btn{font-size:13px;padding:8px 12px}
+
+details.reveal{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+details.reveal summary{cursor:pointer;font-weight:700;color:var(--teal);padding:10px 14px;list-style:none}
+details.reveal summary::-webkit-details-marker{display:none}
+details.reveal summary::before{content:"▸ ";}
+details.reveal[open] summary::before{content:"▾ ";}
+details.reveal .rv{padding:0 14px 12px}
+
+.deck{display:grid;gap:12px;margin-top:10px}
+.card{position:relative;display:block;width:100%;min-height:220px;border:0;padding:0;background:none;cursor:pointer;perspective:1200px;font:inherit;color:inherit;text-align:left}
+.card .face{position:absolute;inset:0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;backface-visibility:hidden;transition:transform .45s ease}
+.card .front{background:var(--hero);color:var(--hero-fg);justify-content:center}
+.card .back{background:var(--blue-bg);color:var(--ink);border:1.5px solid var(--blue);transform:rotateY(180deg);overflow:auto}
+.card.flipped .front{transform:rotateY(-180deg)}
+.card.flipped .back{transform:rotateY(0)}
+.card:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:14px}
+.ck{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.term{font:800 clamp(24px,6vw,34px)/1.15 var(--display)}
+.cdef{font-size:15.5px;line-height:1.55}
+.tap{font-size:12.5px;opacity:.7;margin-top:auto}
+.deckbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.count{font:700 14px var(--display);min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.card .face{transition:none}}
+@media (max-width:520px){ #doc{border-radius:12px} .card{min-height:260px} }
+</style>
+<style id="synapsi-brand">
+:root{--ground:#F7F6F0;--ink:#2B3722;--muted:#5E6253;--line:#E1E1D7;--soft:#F3F2EA;--blue:#4F6230;--blue-bg:#EEF0E2;--s-blue:#4F6230;--s-ink:#2B3722;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D;--on-solid-2:#E6E0CC}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}}
+:root[data-theme="dark"]{--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}
+body::before{background:var(--ground)}
+.syn-bar{max-width:860px;margin:0 auto;padding-top:12px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
+.syn-bar a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--hero);color:#fff;text-decoration:none}
+.syn-bar span{color:var(--muted)}
+.syn-foot{max-width:860px;margin:18px auto 0;display:flex;flex-direction:column;gap:12px}
+.syn-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.syn-nav a,.syn-nav span{min-height:52px;padding:8px 14px;border-radius:12px;display:flex;flex-direction:column;justify-content:center;gap:2px;text-decoration:none;font:700 14px/1.3 var(--display);background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.syn-nav small{font:600 11.5px var(--body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.syn-nav .next{text-align:right;background:var(--hero);color:#fff;border-color:var(--hero)}
+.syn-nav .next small{color:var(--hero-kick)}
+.syn-nav .off{opacity:.6}
+.syn-note{font-size:13px;color:var(--muted);padding:12px 14px;border-radius:10px;background:var(--soft)}
+.syn-copy{font-size:12px;color:var(--muted)}
+</style>
+<script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<div class="syn-bar"><a href="../index.html">&#8592; Διαδρομή</a><span>Μάθημα 15 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-13-1">13.1</a><a href="#s-5-1">5.1</a><a href="#s-5-2">5.2</a><a href="#s-3">Σενάρια ελέγχου</a><a href="#s-tools">Εργαλειοθήκη</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a></div></nav>
+<main id="doc" lang="el">
+<section class="hero">
+<svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
+<ellipse cx="150" cy="80" rx="22" ry="32"></ellipse><circle cx="150" cy="40" r="12"></circle>
+<path d="M128 66l-24-10M128 84h-26M130 102l-22 14M172 66l24-10M172 84h26M170 102l22 14M144 30l-8-14M156 30l8-14"></path>
+<path d="M40 130l30-30M40 100l30 30" stroke-width="3"></path>
+</svg>
+<div class="kicker">Μέρος Γ · Επιλογή και επανάληψη</div>
+<h1>Λάθη και εκσφαλμάτωση</h1>
+<p class="sub">Κάθε προγραμματιστής κάνει λάθη. Ο καλός προγραμματιστής τα <b>βρίσκει</b> γρήγορα. Σήμερα μαθαίνουμε τι είδους λάθη υπάρχουν και πώς τα κυνηγάμε με μέθοδο, όχι με τύχη.</p>
+<div class="chips"><span class="chip">Βιβλίο §13.1 · σελ. 233–234</span><span class="chip">Συμπληρωματικό υλικό §5.1, 5.2.1, 5.2.2</span><span class="chip">3 διδακτικές ώρες</span></div>
+</section>
+<div class="goals">
+<h3>Στο τέλος του μαθήματος θα μπορείς να…</h3>
+<div>διακρίνεις <b>συντακτικά</b> λάθη, λάθη <b>κατά την εκτέλεση</b> και <b>λογικά</b> λάθη</div>
+<div>διορθώνεις συντακτικά λάθη διαβάζοντας το <b>μήνυμα</b> του μεταφραστή</div>
+<div>προλαμβάνεις τον <b>αντικανονικό τερματισμό</b> (διαίρεση με 0, ρίζα αρνητικού)</div>
+<div>φτιάχνεις <b>σενάρια ελέγχου</b> με τιμές κάτω, πάνω και ακριβώς στα όρια</div>
+<div>εκσφαλματώνεις <b>δομές επιλογής και επανάληψης</b> με πίνακα τιμών και εντολές ελέγχου</div>
+<div>βλέπεις το λάθος ως <b>πληροφορία</b>, όχι ως αποτυχία</div>
+</div>
+<div class="glance">
+<h3>Όλο το μάθημα με μια ματιά: τρία είδη λαθών</h3>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th></th><th>Συντακτικό</th><th>Κατά την εκτέλεση</th><th>Λογικό</th></tr>
+<tr><td><b>Πότε φαίνεται;</b></td><td>πριν τρέξει το πρόγραμμα</td><td>ενώ τρέχει, με συγκεκριμένα δεδομένα</td><td>όταν ελέγξουμε τα αποτελέσματα</td></tr>
+<tr><td><b>Ποιος το βρίσκει;</b></td><td>ο μεταφραστής (μήνυμα, γραμμή)</td><td>το σύστημα (το πρόγραμμα «σκάει»)</td><td><b>μόνο εμείς</b>, με έλεγχο</td></tr>
+<tr><td><b>Παράδειγμα</b></td><td><code>ΑΝ x &gt; 0</code> χωρίς ΤΟΤΕ</td><td><code>μο ← σ / πλ</code> με <span class="nw">πλ = 0</span></td><td><code>ποσό ← τιμή + πλήθος</code> αντί για *</td></tr>
+<tr><td><b>Τι κάνουμε</b></td><td>διαβάζουμε το μήνυμα, διορθώνουμε</td><td>ελέγχουμε τα δεδομένα πριν από την πράξη</td><td>σενάρια ελέγχου, πίνακας τιμών</td></tr>
+</tbody></table></div>
+<p class="small">Όσο πιο δεξιά στον πίνακα, τόσο πιο <b>επικίνδυνο</b> το λάθος: το συντακτικό δεν αφήνει το πρόγραμμα να τρέξει, το λογικό τρέχει «κανονικά» και δίνει λάθος απαντήσεις χωρίς να το καταλάβει κανείς.</p>
+</div>
+<div class="sec" id="s-13-1"><span class="num">13.1</span><h2>Κατηγορίες λαθών</h2><span class="ref">Βιβλίο σελ. 233–234</span></div>
+<p>Ένας προγραμματιστής, ανεξάρτητα από πόσο ικανός είναι, όταν δημιουργεί ένα πρόγραμμα, είναι φυσικό να κάνει κάποιο λάθος. Το βιβλίο χωρίζει τα λάθη σε τρεις βασικές κατηγορίες:</p>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση · κατηγορίες λαθών</div>
+<p><b>Λάθη κατά την υλοποίηση.</b> Τα λάθη κατά το χρόνο υλοποίησης προκαλούνται κυρίως από λανθασμένη σύνταξη εντολών προγράμματος. Τέτοια λάθη μπορεί να είναι η λανθασμένη συγγραφή μιας δεσμευμένης λέξης της γλώσσας προγραμματισμού ή η χρήση μιας δομής ελέγχου χωρίς την εντολή τερματισμού της. Ένα λάθος που προκαλείται κατά τη συγγραφή του προγράμματος ανιχνεύεται από το μεταγλωττιστή, ο οποίος εμφανίζει προς τον προγραμματιστή κάποιο προειδοποιητικό μήνυμα.</p>
+<p><b>Λάθη κατά την εκτέλεση.</b> Τα λάθη που προκαλούνται κατά το χρόνο εκτέλεσης του προγράμματος είναι πιο επώδυνα γιατί συνήθως εμφανίζονται σε πραγματικό περιβάλλον εκτέλεσης και τις περισσότερες φορές προκαλούν τον αντικανονικό τερματισμό της εφαρμογής και το κρέμασμα (crash) του συστήματος. Τέτοια λάθη είναι δυνατό να προκληθούν από […] την προσπάθεια διαίρεσης ενός αριθμού με το μηδέν, την υπερχείλιση μιας αριθμητικής μεταβλητής ή από δυσλειτουργία του υλικού μέρους του υπολογιστή.</p>
+<p><b>Λογικά λάθη.</b> Τα λογικά λάθη είναι συνήθως λάθη σχεδιασμού και δεν προκαλούν τη διακοπή της εκτέλεσης του προγράμματος. Ενώ ο μεταγλωττιστής της γλώσσας προγραμματισμού δεν ανιχνεύει κανένα συντακτικό λάθος και κατά την εκτέλεση του προγράμματος δεν παρουσιάζονται ανεπιθύμητες καταστάσεις σφαλμάτων, τελικά δεν παράγονται τα επιθυμητά αποτελέσματα. Η ανίχνευση τέτοιων λαθών δεν είναι δυνατό να πραγματοποιηθεί από κάποιο εργαλείο του υπολογιστή και διαπιστώνονται μόνο με τη διαδικασία ελέγχου (testing) και την ανάλυση των αποτελεσμάτων των προγραμμάτων.</p>
+<p class="src">Σχολικό βιβλίο, §13.1</p>
+</div>
+<div class="grid g2">
+<div class="box plain"><div class="tag">Τα ίδια λάθη με άλλα ονόματα</div>
+<p>Το Συμπληρωματικό Εκπαιδευτικό Υλικό (§5.1) ονομάζει τις ίδιες κατηγορίες: <b>συντακτικά λάθη</b>, <b>λάθη που οδηγούν σε αντικανονικό τερματισμό του προγράμματος</b> και <b>λογικά λάθη που παράγουν λανθασμένα αποτελέσματα</b>. Στις εξετάσεις γίνονται δεκτά και τα δύο σετ ονομάτων.</p></div>
+<div class="box plain"><div class="tag">Ιστορικό σημείωμα του βιβλίου</div>
+<p>Μια από τις πρώτες βλάβες που εμφανίστηκαν στους υπολογιστές ήταν ένα βραχυκύκλωμα που οφειλόταν στον εγκλωβισμό ενός εντόμου (bug) στο εσωτερικό ενός υπολογιστή. Από το γεγονός αυτό είναι πολύ πιθανό να προέρχεται ο όρος bugs. (Τη σκόρο της Grace Hopper τη γνωρίσαμε στο Μάθημα 6.) <b>Εκσφαλμάτωση</b> (debugging) είναι ο εντοπισμός και η διόρθωση των λαθών.</p></div>
+</div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Τον Ιούνιο του 1994 ο καθηγητής μαθηματικών <b>Thomas Nicely</b> παρατήρησε ότι ο υπολογιστής του έδινε λάθος αποτελέσματα σε κάποιες διαιρέσεις. Η αιτία ήταν ο νέος επεξεργαστής <b>Pentium</b>: σε έναν πίνακα 2048 τιμών που χρησιμοποιούσε για τη διαίρεση, <b>πέντε</b> θέσεις είχαν 0 αντί για 2. Το λάθος εμφανιζόταν σπάνια (μία φορά στα δισεκατομμύρια διαιρέσεις), αλλά η Intel αναγκάστηκε τελικά να αντικαταστήσει τους επεξεργαστές, με κόστος 475 εκατομμύρια δολάρια (Ιανουάριος 1995). Κλασικό <b>λογικό</b> λάθος: τίποτα δεν «έσκαγε», απλώς οι απαντήσεις ήταν λίγο λάθος.</p>
+<p class="talk">Σκέψου: Πώς καταλαβαίνεις ότι ένα αποτέλεσμα είναι λάθος, αν δεν ξέρεις από πριν τη σωστή απάντηση; Τι έκανε ο Nicely που δεν έκαναν οι άλλοι χρήστες;</p>
+</div>
+<div class="sec" id="s-5-1"><span class="num">5.1</span><h2>Τα λάθη ένα ένα, σε ΓΛΩΣΣΑ</h2><span class="ref">Συμπληρωματικό υλικό §5.1</span></div>
+<div class="grid g2" style="align-items:start">
+<div class="box ex" style="margin:0"><div class="tag">Συντακτικά: ο μεταφραστής σου μιλάει</div>
+<p>Συνηθισμένα: δεσμευμένη λέξη γραμμένη λάθος (<code>ΕΩΣ</code> αντί για ΜΕΧΡΙ), λέξη που λείπει (ΤΟΤΕ, ΤΕΛΟΣ_ΑΝ, ΑΡΧΗ), μεταβλητή που <b>δεν δηλώθηκε</b>, όνομα με κενό (<code>Μέσος όρος</code>), εισαγωγικά που δεν κλείνουν, τιμή λάθος τύπου (πραγματική σε ΑΚΕΡΑΙΑ).</p>
+<p class="small">Το μήνυμα δείχνει τη γραμμή όπου <b>το κατάλαβε</b>, όχι πάντα εκεί που <b>έγινε</b>: ένα ΤΕΛΟΣ_ΑΝ που λείπει φαίνεται στο τέλος του προγράμματος.</p></div>
+<div class="box ex" style="margin:0"><div class="tag">Κατά την εκτέλεση: με κάποια δεδομένα «σκάει»</div>
+<p><span class="ln li">Διαίρεση (ή div, mod) με το <b>0</b></span><span class="ln li"><code>Τ_Ρ</code> αρνητικού</span><span class="ln li"><code>ΛΟΓ</code> μη θετικού</span><span class="ln li">χρήση μεταβλητής που <b>δεν έχει πάρει τιμή</b></span><span class="ln li">γράμμα εκεί που ζητείται αριθμός</span><span class="ln li">υπερχείλιση. Πρόληψη: <b>ΑΝ πριν από την πράξη</b> ή έλεγχος δεδομένων (Μ1). Το Συμπληρωματικό υλικό σημειώνει ότι εδώ παραβιάζεται το κριτήριο της <b>καθοριστικότητας</b>.</span></p></div>
+</div>
+<div class="box ex"><div class="tag">Λογικά: το πρόγραμμα κάνει ακριβώς ό,τι του είπες, όχι ό,τι ήθελες</div>
+<p>Λάθος τελεστής (<code>&gt;</code> αντί για <code>&gt;=</code>, ΚΑΙ αντί για Η, + αντί για *), λάθος σειρά στις ΑΛΛΙΩΣ_ΑΝ, ξεχασμένη αρχικοποίηση, βρόχος που εκτελείται μία φορά παραπάνω ή λιγότερο, τιμή φρουρός που μπήκε στους υπολογισμούς. Το λάθος δεν είναι πάντα στη γραμμή που βγάζει το λάθος αποτέλεσμα, αλλά συχνά <b>σε προηγούμενη</b> εντολή.</p></div>
+<div class="sec" id="s-5-2"><span class="num">5.2</span><h2>Εκσφαλμάτωση λογικών λαθών</h2><span class="ref">Συμπληρωματικό υλικό §5.2.1, 5.2.2</span></div>
+<div class="grid g2" style="align-items:start">
+<div class="box def" style="margin:0">
+<div class="tag">Ορισμός · απομνημόνευση · δομές επιλογής</div>
+<p>Σε μια δομή επιλογής μπορεί να εμφανιστούν λογικά λάθη που σχετίζονται με:</p>
+<ul class="tight"><li>τη συνθήκη ή τις συνθήκες</li><li>τις ομάδες εντολών που εκτελούνται όταν μια συνθήκη είναι αληθής ή ψευδής.</li></ul>
+<p>Στην ανίχνευση ενός λογικού λάθους στις δομές επιλογής δεν αρκεί η μεμονωμένη μελέτη των συνθηκών και των ομάδων εντολών […] αλλά χρειάζεται να μελετηθεί το αποτέλεσμα που παράγει ο συνδυασμός των συνθηκών και των ομάδων εντολών.</p>
+<p class="src">Συμπληρωματικό Εκπαιδευτικό Υλικό, §5.2.1</p>
+</div>
+<div class="box def" style="margin:0">
+<div class="tag">Ορισμός · απομνημόνευση · δομές επανάληψης</div>
+<p>Σε μια δομή επανάληψης μπορεί να εμφανιστούν λογικά λάθη που σχετίζονται με:</p>
+<ul class="tight"><li>τη συνθήκη επανάληψης ή τερματισμού,</li><li>την αρχικοποίηση της συνθήκης,</li><li>την ενημέρωση της συνθήκης εντός του βρόχου επανάληψης,</li><li>τις εντολές που περιλαμβάνονται εντός του βρόχου.</li></ul>
+<p class="src">Συμπληρωματικό Εκπαιδευτικό Υλικό, §5.2.2</p>
+</div>
+</div>
+<div class="sec" id="s-3"><span class="num">⚑</span><h2>Σενάρια ελέγχου</h2><span class="ref">Η μέθοδος του Συμπληρωματικού υλικού</span></div>
+<p>Για κάθε σύγκριση του προγράμματος (π.χ. <code>ηλικία &gt;= 18</code>) δοκιμάζουμε τρεις τιμές: <b>λίγο κάτω</b> από το όριο, <b>ακριβώς</b> στο όριο και <b>λίγο πάνω</b>. Για κάθε σενάριο γράφουμε <b>πριν</b> τρέξουμε το πρόγραμμα τι <b>περιμένουμε</b> σύμφωνα με την εκφώνηση, και μετά το συγκρίνουμε με αυτό που <b>βγάζει</b>.</p>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th>Α/Α</th><th>Είσοδος</th><th>Αναμενόμενο (εκφώνηση)</th><th>Συνθήκη που ίσχυσε</th><th>Έξοδος προγράμματος</th><th>Σωστό;</th></tr>
+<tr><td>1</td><td>κάτω από το όριο</td><td>…</td><td>…</td><td>…</td><td>✓ / ✗</td></tr>
+<tr><td>2</td><td><b>ακριβώς στο όριο</b></td><td>…</td><td>…</td><td>…</td><td>✓ / ✗</td></tr>
+<tr><td>3</td><td>πάνω από το όριο</td><td>…</td><td>…</td><td>…</td><td>✓ / ✗</td></tr>
+<tr><td>4</td><td>μη αποδεκτή τιμή (αρνητική, 0, «καμία είσοδος»)</td><td>μήνυμα</td><td>…</td><td>…</td><td>✓ / ✗</td></tr>
+</tbody></table></div>
+<p class="small">Με κλιμακωτή χρέωση σε τρία κλιμάκια (π.χ. 10 και 20 κυβικά), τα σενάρια γίνονται επτά: αρνητικό, 0, μέσα στο 1ο, 10, μέσα στο 2ο, 20, πάνω από 20. Τα περισσότερα λάθη «κρύβονται» ακριβώς στα όρια.</p>
+<div class="sec" id="s-tools"><span class="num">⚙</span><h2>Η εργαλειοθήκη του κυνηγού λαθών</h2><span class="ref">Λίστα ελέγχου για κάθε πρόγραμμα που γράφεις</span></div>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th>Εργαλείο</th><th>Τι κάνω</th><th>Πιάνει</th></tr>
+<tr><td><b>Λ1. Διαβάζω το μήνυμα</b></td><td>Πηγαίνω στη γραμμή του μηνύματος <b>και πιο πάνω</b>. Διορθώνω το πρώτο λάθος και ξαναμεταφράζω.</td><td>συντακτικά</td></tr>
+<tr><td><b>Λ2. «Πού μπορεί να σκάσει;»</b></td><td>Για κάθε <code>/</code>, <code>div</code>, <code>mod</code>, <code>Τ_Ρ</code>, <code>ΛΟΓ</code>: ποια τιμή του δεν επιτρέπεται; Μπαίνει ΑΝ ή έλεγχος δεδομένων πριν.</td><td>εκτέλεσης</td></tr>
+<tr><td><b>Λ3. Σενάρια ορίων</b></td><td><span class="ln li">Κάτω</span><span class="ln li">ακριβώς</span><span class="ln li">πάνω, για κάθε σύγκριση. Αναμενόμενο <b>πριν</b> από την εκτέλεση.</span></td><td>&gt; αντί για &gt;=, σειρά ΑΛΛΙΩΣ_ΑΝ</td></tr>
+<tr><td><b>Λ4. Ακραίες περιπτώσεις</b></td><td>Καμία είσοδος (αμέσως φρουρός), μία μόνο τιμή, όλες ίσες, όλες αρνητικές.</td><td>διαίρεση με πλήθος 0, μέγιστο από 0</td></tr>
+<tr><td><b>Λ5. Πίνακας τιμών</b></td><td>Τρέχω με το χέρι με <b>μικρά</b> δεδομένα. Βρίσκω την <b>πρώτη</b> γραμμή που διαφωνεί με αυτό που περίμενα.</td><td>λογικά σε βρόχους</td></tr>
+<tr><td><b>Λ6. ΓΡΑΨΕ ελέγχου</b></td><td>Προσθέτω <b>προσωρινά</b> <code>ΓΡΑΨΕ '&gt;&gt;', x, σ</code> μέσα στον βρόχο, βλέπω πού χαλάει, μετά τις σβήνω.</td><td>λογικά σε μεγάλα προγράμματα</td></tr>
+<tr><td><b>Λ7. Τα 4 σημεία του βρόχου</b></td><td><span class="ln li">Αρχικοποίηση</span><span class="ln li">συνθήκη</span><span class="ln li">ενημέρωση</span><span class="ln li">σώμα. Και: εκτελείται μία φορά παραπάνω ή λιγότερο;</span></td><td>ατέρμονες, off-by-one</td></tr>
+<tr><td><b>Λ8. Ένα λάθος τη φορά</b></td><td>Διορθώνω <b>ένα</b>, και ξανατρέχω <b>όλα</b> τα σενάρια. Μια διόρθωση μπορεί να χαλάσει κάτι άλλο.</td><td>«διόρθωσα αλλά χάλασε αλλού»</td></tr>
+</tbody></table></div>
+<div class="grid g2">
+<div class="box ex"><div class="tag">Λ3 στην πράξη: ΚΑΙ ή Η;</div>
+<p>«Ο βαθμός είναι λάθος όταν είναι κάτω από 0 <b>ή</b> πάνω από 20». Αν γράψεις <code>β &lt; 0 ΚΑΙ β &gt; 20</code>, η συνθήκη δεν είναι <b>ποτέ</b> αληθής: κανένας αριθμός δεν είναι ταυτόχρονα κάτω από 0 και πάνω από 20. Ένα σενάριο με β = −9 το αποκαλύπτει αμέσως. Η άρνηση του <code>β &gt;= 0 ΚΑΙ β &lt;= 20</code> είναι <code>β &lt; 0 Η β &gt; 20</code>: το ΚΑΙ γίνεται Η και κάθε σύγκριση αντιστρέφεται.</p></div>
+<div class="box ex"><div class="tag">Θετική στάση: το λάθος είναι πληροφορία</div>
+<p>Ένα μήνυμα λάθους δεν σημαίνει «δεν τα καταφέρνω». Σημαίνει «ο υπολογιστής σού δείχνει πού να κοιτάξεις». Οι επαγγελματίες περνούν μεγάλο μέρος του χρόνου τους στην εκσφαλμάτωση. Γράφε στο τετράδιο τα λάθη που κάνεις συχνά: είναι η δική σου λίστα ελέγχου.</p></div>
+</div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Για δεκαετίες πολλά προγράμματα αποθήκευαν το έτος με <b>δύο</b> ψηφία (85 αντί για 1985), για να γλιτώσουν χώρο στη μνήμη, που τότε ήταν ακριβή. Όσο πλησίαζε το 2000, φάνηκε το πρόβλημα: το 00 θα θεωρούνταν 1900. Ένας άνθρωπος γεννημένος το 85 θα είχε το 00 ηλικία <span class="nw">00 − 85</span> = −85. Αυτό ήταν το «πρόβλημα του 2000» (Y2K, millennium bug), που αναφέρει και το βιβλίο σας. Χρειάστηκαν χρόνια ελέγχων και διορθώσεων σε όλο τον κόσμο. Ήταν ένα λάθος <b>ορίου</b>: όλα δούλευαν, μέχρι να περάσουμε από το 99 στο 00. (Θα το διορθώσεις στο Λυμένο 6.)</p>
+<p class="talk">Σκέψου: Ποια «όρια» κρύβονται στη ζωή μας και μπορεί να ξεγελάσουν ένα πρόγραμμα; (Αλλαγή χρονιάς, 29 Φεβρουαρίου, αλλαγή ώρας, μεσάνυχτα…)</p>
+</div>
+<div class="box trap">
+<div class="tag">Παγίδες που κοστίζουν μονάδες</div>
+<ul class="tight">
+<li>Το «δεν δηλώθηκε η μεταβλητή» είναι <b>συντακτικό</b> λάθος, όχι λογικό.</li>
+<li>Η διαίρεση με το 0 είναι λάθος <b>κατά την εκτέλεση</b>: το πρόγραμμα μεταφράζεται κανονικά και «σκάει» μόνο με κάποια δεδομένα.</li>
+<li>Ένα πρόγραμμα που βγάζει σωστό αποτέλεσμα σε <b>ένα</b> σενάριο δεν είναι αποδεδειγμένα σωστό. Ο έλεγχος δείχνει την ύπαρξη λαθών, όχι την απουσία τους.</li>
+<li>Στα όρια: <code>&gt;</code> ή <code>&gt;=</code>; Γύρνα πάντα στη λέξη της εκφώνησης («από 18», «πάνω από 18», «έως 18»).</li>
+<li>Στις ΑΛΛΙΩΣ_ΑΝ, η <b>σειρά</b> μετράει: ελέγχεται πρώτα η πιο «στενή» συνθήκη (Μάθημα 11).</li>
+<li>Τις ΓΡΑΨΕ ελέγχου τις <b>σβήνεις</b> στο τέλος. Δεν ανήκουν στη λύση.</li>
+</ul>
+</div>
+<div class="box def">
+<div class="tag">Σύνοψη</div>
+<p><b>Συντακτικά (κατά την υλοποίηση):</b> λάθος σύνταξη. Τα βρίσκει ο μεταφραστής. Το πρόγραμμα δεν εκτελείται.</p>
+<p><b>Κατά την εκτέλεση (αντικανονικός τερματισμός):</b> εμφανίζονται με ορισμένα δεδομένα, π.χ. διαίρεση με το μηδέν, υπερχείλιση.</p>
+<p><b>Λογικά:</b> λάθη σχεδιασμού. Το πρόγραμμα τρέχει αλλά δίνει λάθος αποτελέσματα. Τα βρίσκουμε μόνο με έλεγχο (testing).</p>
+<p><b>Εκσφαλμάτωση:</b> σενάρια ελέγχου στα όρια, πίνακας τιμών, εντολές ελέγχου. Ένα λάθος τη φορά.</p>
+</div>
+
+<section class="solved-wrap">
+<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένα παραδείγματα βήμα-βήμα</h2><span class="ref">Έτσι σκεφτόμαστε</span></div>
+<div class="box solved">
+<div class="tag">Λυμένο 1 · Έξι συντακτικά λάθη</div>
+<p>Το πρόγραμμα θέλει να διαβάζει ν βαθμούς και να εμφανίζει τον μέσο όρο τους. Να βρεθούν και να διορθωθούν τα συντακτικά λάθη.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Μέσος όρος
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: ν, i
+  ΠΡΑΓΜΑΤΙΚΕΣ: β, σ
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ ν
+  σ &lt;- 0
+  ΓΙΑ i ΑΠΟ 1 ΕΩΣ ν
+    ΔΙΑΒΑΣΕ β
+    σ &lt;- σ + β
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΑΝ ν &gt; 0
+    μο &lt;- σ / ν
+    ΓΡΑΨΕ 'Μέσος όρος: , μο
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Ψάχνω μόνο λάθη <b>σύνταξης</b>: λέξεις, δηλώσεις, δομές που δεν κλείνουν, εισαγωγικά. Το τι υπολογίζει το πρόγραμμα έρχεται μετά.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Διαβάζω γραμμή γραμμή με τη λίστα ελέγχου: όνομα προγράμματος, δηλώσεις, κάθε ΑΝ με ΤΟΤΕ/ΤΕΛΟΣ_ΑΝ, κάθε ΓΙΑ με ΑΠΟ/ΜΕΧΡΙ, κάθε μεταβλητή δηλωμένη, κάθε ' κλειστό. Ο διερμηνευτής σταματά στο <b>πρώτο</b> («Το πρόγραμμα ξεκινά με ΠΡΟΓΡΑΜΜΑ όνομα»), οπότε τα υπόλοιπα τα βρίσκω μόνος μου ή με διαδοχικές μεταφράσεις (Λ1).</div></div>
+<div class="step"><span class="stepn">3</span><div><span class="ln"><b>Γράφω.</b></span><span class="ln"><b>1)</b> Όνομα με κενό: <code>Μέσος_όρος</code>.</span><span class="ln"><b>2)</b> Το <code>ΕΩΣ</code> γίνεται <code>ΜΕΧΡΙ</code>.</span><span class="ln"><b>3)</b> <code>ΑΝ ν &gt; 0</code> χωρίς <code>ΤΟΤΕ</code>.</span><span class="ln"><b>4)</b> Η μο δεν δηλώθηκε (ΠΡΑΓΜΑΤΙΚΕΣ).</span><span class="ln"><b>5)</b> <code>'Μέσος όρος: , μο</code>: τα εισαγωγικά δεν κλείνουν.</span><span class="ln"><b>6)</b> Λείπει το <code>ΤΕΛΟΣ_ΑΝ</code>.</span>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Μέσος_όρος
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: ν, i
+  ΠΡΑΓΜΑΤΙΚΕΣ: β, σ, μο
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ ν
+  σ &lt;- 0
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ ν
+    ΔΙΑΒΑΣΕ β
+    σ &lt;- σ + β
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΑΝ ν &gt; 0 ΤΟΤΕ
+    μο &lt;- σ / ν
+    ΓΡΑΨΕ 'Μέσος όρος:', μο
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Μέσος_όρος</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> <span class="nw">ν = 2,</span> βαθμοί 10, 20: <b>Μέσος όρος: 15</b>. Με <span class="nw">ν = 0</span> δεν γίνεται διαίρεση. (Το «ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Μέσος_όρος» με το όνομα είναι προαιρετικό, αλλά αν μπει πρέπει να ταιριάζει.)</div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 2 · Πότε «σκάει» ένα πρόγραμμα; Ο τύπος του Ήρωνα</div>
+<p>Το πρόγραμμα διαβάζει τις πλευρές α, β, γ ενός τριγώνου και υπολογίζει το εμβαδόν με τον τύπο του Ήρωνα <span class="nw">(τ = ημιπερίμετρος)</span> και το ύψος προς την πλευρά α. Για ποια δεδομένα τερματίζει αντικανονικά; Να διορθωθεί.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Τρίγωνο
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: α, β, γ, τ, εμβ, ύψος
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ α, β, γ
+  τ &lt;- (α + β + γ) / 2
+  εμβ &lt;- Τ_Ρ(τ * (τ - α) * (τ - β) * (τ - γ))
+  ύψος &lt;- 2 * εμβ / α
+  ΓΡΑΨΕ 'Εμβαδόν:', εμβ, ' · ύψος προς την α:', ύψος
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Τρίγωνο</pre>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Συντακτικά είναι σωστό. Ψάχνω λάθη <b>κατά την εκτέλεση</b> (Λ2): κάθε Τ_Ρ και κάθε διαίρεση.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> <code>Τ_Ρ(…)</code>: σκάει αν το γινόμενο είναι αρνητικό, δηλαδή όταν οι τρεις αριθμοί <b>δεν</b> σχηματίζουν τρίγωνο (π.χ. 1, 2, 10). <code>/ α</code>: σκάει αν <span class="nw">α = 0.</span> Λύση: έλεγχος ότι οι πλευρές είναι θετικές και ισχύει η τριγωνική ανισότητα <b>πριν</b> από τους υπολογισμούς.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Τρίγωνο
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: α, β, γ, τ, εμβ, ύψος
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ α, β, γ
+  ΑΝ α &gt; 0 ΚΑΙ β &gt; 0 ΚΑΙ γ &gt; 0 ΚΑΙ α &lt; β + γ ΚΑΙ β &lt; α + γ ΚΑΙ γ &lt; α + β ΤΟΤΕ
+    τ &lt;- (α + β + γ) / 2
+    εμβ &lt;- Τ_Ρ(τ * (τ - α) * (τ - β) * (τ - γ))
+    ύψος &lt;- 2 * εμβ / α
+    ΓΡΑΨΕ 'Εμβαδόν:', εμβ, ' · ύψος προς την α:', ύψος
+  ΑΛΛΙΩΣ
+    ΓΡΑΨΕ 'Δεν σχηματίζεται τρίγωνο'
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Τρίγωνο</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b></span><span class="ln li">3, 4, 5: εμβαδόν <b>6</b>, ύψος <b>4</b> ✓ (και πριν και μετά).</span><span class="ln li">1, 2, 10: πριν «Τ_Ρ αρνητικού αριθμού», τώρα «Δεν σχηματίζεται τρίγωνο».</span><span class="ln li">0, 3, 3: πριν «Διαίρεση με το μηδέν», τώρα μήνυμα.</span><span class="ln">Το πρόγραμμα έγινε <b>καθοριστικό</b> για κάθε είσοδο.</span></div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 3 · Σενάρια ορίων σε δομή επιλογής: η έκπτωση</div>
+<p>Ένα κατάστημα κάνει έκπτωση 10% σε αγορές <b>από 50 €</b> και πάνω και 20% σε αγορές <b>από 100 €</b> και πάνω. Το παρακάτω πρόγραμμα το υλοποιεί; Να γίνει έλεγχος με σενάρια ορίων.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Έκπτωση
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: ποσό, τελικό
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ ποσό
+  ΑΝ ποσό &gt; 50 ΤΟΤΕ
+    τελικό &lt;- ποσό * 0.90
+  ΑΛΛΙΩΣ_ΑΝ ποσό &gt;= 100 ΤΟΤΕ
+    τελικό &lt;- ποσό * 0.80
+  ΑΛΛΙΩΣ
+    τελικό &lt;- ποσό
+  ΤΕΛΟΣ_ΑΝ
+  ΓΡΑΨΕ τελικό
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Έκπτωση</pre>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Δύο όρια: 50 και 100. Σενάρια (Λ3): κάτω από 50 (40), <b>50</b>, ανάμεσα (60), <b>100</b>, πάνω από 100 (150).</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Γράφω το αναμενόμενο <b>πριν</b> τρέξω το πρόγραμμα:
+<div class="tablewrap"><table class="t"><tbody><tr><th>Ποσό</th><th>Αναμενόμενο</th><th>Συνθήκη που ίσχυσε</th><th>Έξοδος</th><th></th></tr>
+<tr><td>40</td><td>40</td><td>ΑΛΛΙΩΣ</td><td>40</td><td>✓</td></tr>
+<tr><td>50</td><td>45</td><td>ΑΛΛΙΩΣ</td><td>50</td><td>✗</td></tr>
+<tr><td>60</td><td>54</td><td><span class="nw">ποσό &gt; 50</span></td><td>54</td><td>✓</td></tr>
+<tr><td>100</td><td>80</td><td><span class="nw">ποσό &gt; 50</span></td><td>90</td><td>✗</td></tr>
+<tr><td>150</td><td>120</td><td><span class="nw">ποσό &gt; 50</span></td><td>135</td><td>✗</td></tr></tbody></table></div></div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b> Δύο λάθη: <b>α)</b> «από 50» σημαίνει <code>&gt;= 50</code>. <b>β)</b> Κάθε ποσό από 100 και πάνω είναι και πάνω από 50, άρα η πρώτη συνθήκη το «αρπάζει» και η δεύτερη δεν ελέγχεται ποτέ. Η πιο στενή συνθήκη (&gt;= 100) πρέπει να μπει <b>πρώτη</b>.
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Έκπτωση
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: ποσό, τελικό
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ ποσό
+  ΑΝ ποσό &gt;= 100 ΤΟΤΕ
+    τελικό &lt;- ποσό * 0.80
+  ΑΛΛΙΩΣ_ΑΝ ποσό &gt;= 50 ΤΟΤΕ
+    τελικό &lt;- ποσό * 0.90
+  ΑΛΛΙΩΣ
+    τελικό &lt;- ποσό
+  ΤΕΛΟΣ_ΑΝ
+  ΓΡΑΨΕ τελικό
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Έκπτωση</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Ξανατρέχω <b>όλα</b> τα σενάρια (Λ8): 40 δίνει 40, 49.99 δίνει 49.99, 50 δίνει 45, 100 δίνει 80, 150 δίνει 120 ✓. Παρατήρηση: το 60 έβγαινε σωστό και πριν. Ένας έλεγχος μόνο με 60 θα μας ξεγελούσε.</div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 4 · Πίνακας τιμών σε βρόχο: οι άριστοι</div>
+<p>Το πρόγραμμα πρέπει να διαβάζει τους βαθμούς <b>5</b> μαθητών και να εμφανίζει πόσοι είναι άριστοι (βαθμός <b>από 18.5</b> και πάνω). Με είσοδο 19, 20, 15, 18.5, 19.5 περιμένουμε 4, αλλά εμφανίζει 0. Να βρεθούν τα λάθη.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Άριστοι
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: i, πλ
+  ΠΡΑΓΜΑΤΙΚΕΣ: β
+ΑΡΧΗ
+  i &lt;- 1
+  ΟΣΟ i &lt; 5 ΕΠΑΝΑΛΑΒΕ
+    πλ &lt;- 0
+    ΔΙΑΒΑΣΕ β
+    ΑΝ β &gt; 18.5 ΤΟΤΕ
+      πλ &lt;- πλ + 1
+    ΤΕΛΟΣ_ΑΝ
+    i &lt;- i + 1
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ 'Άριστοι:', πλ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Άριστοι</pre>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Λογικό λάθος σε βρόχο. Ελέγχω τα 4 σημεία (Λ7): αρχικοποίηση, συνθήκη, ενημέρωση, σώμα.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Πίνακας τιμών (Λ5):
+<div class="tablewrap"><table class="t"><tbody><tr><th>i</th><th><span class="nw">i &lt; 5</span></th><th><span class="nw">πλ ← 0</span></th><th>β</th><th><span class="nw">β &gt; 18.5</span></th><th>πλ</th></tr>
+<tr><td>1</td><td>Α</td><td>0</td><td>19</td><td>Α</td><td>1</td></tr>
+<tr><td>2</td><td>Α</td><td><b>0</b></td><td>20</td><td>Α</td><td>1</td></tr>
+<tr><td>3</td><td>Α</td><td><b>0</b></td><td>15</td><td>Ψ</td><td>0</td></tr>
+<tr><td>4</td><td>Α</td><td><b>0</b></td><td>18.5</td><td><b>Ψ</b></td><td>0</td></tr>
+<tr><td>5</td><td><b>Ψ</b></td><td></td><td></td><td></td><td>έξοδος: 0</td></tr></tbody></table></div>
+    Η πρώτη γραμμή που διαφωνεί με ό,τι περιμέναμε είναι η 2: το πλ ξαναγίνεται 0.</div></div>
+<div class="step"><span class="stepn">3</span><div><span class="ln"><b>Γράφω.</b> Τρία λάθη:</span><span class="ln"><b>α) αρχικοποίηση</b> μέσα στον βρόχο (το πλ μηδενίζεται σε κάθε γύρο)</span><span class="ln"><b>β) συνθήκη</b> <span class="nw">i &lt; 5</span>: διαβάζει μόνο 4 βαθμούς (ο 19.5 δεν διαβάστηκε ποτέ)</span><span class="ln"><b>γ) σώμα</b>: «από 18.5» θέλει &gt;=. Αφού το πλήθος είναι γνωστό, η ΓΙΑ αποκλείει τα α και β από την αρχή.</span>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Άριστοι
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: i, πλ
+  ΠΡΑΓΜΑΤΙΚΕΣ: β
+ΑΡΧΗ
+  πλ &lt;- 0
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 5
+    ΔΙΑΒΑΣΕ β
+    ΑΝ β &gt;= 18.5 ΤΟΤΕ
+      πλ &lt;- πλ + 1
+    ΤΕΛΟΣ_ΑΝ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ 'Άριστοι:', πλ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Άριστοι</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Είσοδος 19, 20, 15, 18.5, 19.5: <b>Άριστοι: 4</b> ✓. Σενάριο ορίου 18.5: μετράει ✓.</div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 5 · ΓΡΑΨΕ ελέγχου: ο αντίστροφος αριθμός</div>
+<p>Το πρόγραμμα πρέπει να εμφανίζει τον αριθμό με τα ψηφία ανάποδα (το 123 γίνεται 321), αλλά για 123 εμφανίζει 60. Πού είναι το λάθος;</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Αντίστροφος
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: x, αντ, ψ
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ x
+  αντ &lt;- 0
+  ΟΣΟ x &gt; 0 ΕΠΑΝΑΛΑΒΕ
+    ψ &lt;- x mod 10
+    αντ &lt;- αντ + ψ * 10
+    x &lt;- x div 10
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ αντ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Αντίστροφος</pre>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Το αποτέλεσμα είναι λάθος, αλλά δεν ξέρω σε ποιο γύρο χαλάει. Αντί για πίνακα τιμών με το χέρι, βάζω τον υπολογιστή να μου τον «τυπώσει» (Λ6).</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Προσθέτω προσωρινά μία ΓΡΑΨΕ στο τέλος του βρόχου, με όλες τις μεταβλητές του, και ένα σχόλιο που θυμίζει να τη σβήσω:
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Αντίστροφος
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: x, αντ, ψ
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ x
+  αντ &lt;- 0
+  ΟΣΟ x &gt; 0 ΕΠΑΝΑΛΑΒΕ
+    ψ &lt;- x mod 10
+    αντ &lt;- αντ + ψ * 10
+    x &lt;- x div 10
+    ΓΡΑΨΕ '&gt;&gt; ψ =', ψ, ' αντ =', αντ, ' x =', x   ! ΠΡΟΣΩΡΙΝΗ εντολή ελέγχου
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ αντ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Αντίστροφος</pre>
+<span class="ln li">Έξοδος: <code>&gt;&gt; ψ = 3 αντ = 30 x = 12</code></span><span class="ln li"><code>&gt;&gt; ψ = 2 αντ = 50 x = 1</code></span><span class="ln li"><code>&gt;&gt; ψ = 1 αντ = 60 x = 0</code>. Το ψ και το x είναι σωστά σε κάθε γύρο. Το <b>αντ</b> είναι λάθος ήδη από τον 1ο γύρο (έπρεπε 3, μετά 32, μετά 321).</span></div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b> Το λάθος είναι στην <code>αντ ← αντ + ψ * 10</code>: ο αντίστροφος «χτίζεται» με <code>αντ ← αντ * 10 + ψ</code> (Μάθημα 12, Β7). Διορθώνω και <b>σβήνω</b> τη ΓΡΑΨΕ ελέγχου.
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Αντίστροφος
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: x, αντ, ψ
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ x
+  αντ &lt;- 0
+  ΟΣΟ x &gt; 0 ΕΠΑΝΑΛΑΒΕ
+    ψ &lt;- x mod 10
+    αντ &lt;- αντ * 10 + ψ
+    x &lt;- x div 10
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ αντ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Αντίστροφος</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> 123 δίνει <b>321</b> ✓. 7 δίνει 7 ✓. Ακραίο σενάριο: 1200 δίνει <b>21</b>. Είναι σωστό για ακέραιο (τα αρχικά μηδενικά του 0021 χάνονται).</div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 6 · Το πρόβλημα του 2000 σε μικρογραφία</div>
+<p>Ένα παλιό πρόγραμμα κρατά τα έτη με δύο ψηφία και υπολογίζει την ηλικία. Για γέννηση 08 και φέτος 26 βγάζει 18. Τι γίνεται για γέννηση 98; Να διορθωθεί, θεωρώντας ότι κανείς δεν είναι πάνω από 99 ετών.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ηλικία
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: γέννηση, φέτος, ηλικία
+ΑΡΧΗ
+  ΓΡΑΨΕ 'Έτος γέννησης (2 ψηφία):'
+  ΔΙΑΒΑΣΕ γέννηση
+  ΓΡΑΨΕ 'Τρέχον έτος (2 ψηφία):'
+  ΔΙΑΒΑΣΕ φέτος
+  ηλικία &lt;- φέτος - γέννηση
+  ΓΡΑΨΕ 'Ηλικία:', ηλικία
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ηλικία</pre>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><span class="ln"><b>Κατανοώ.</b> Το «όριο» εδώ είναι η αλλαγή αιώνα, από το 99 στο 00. Σενάρια:</span><span class="ln li">γέννηση πριν από το φέτος στον ίδιο αιώνα (08),</span><span class="ln li"><b>ίδιο έτος</b> (26),</span><span class="ln li">γέννηση στον προηγούμενο αιώνα (98).</span></div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Για γέννηση 98: <span class="nw">26 − 98</span> = <b>−72</b>, αδύνατη ηλικία. Αν η γέννηση είναι «μεγαλύτερη» από το φέτος, ανήκει στον προηγούμενο αιώνα: προσθέτω 100.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ηλικία
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: γέννηση, φέτος, ηλικία
+ΑΡΧΗ
+  ΓΡΑΨΕ 'Έτος γέννησης (2 ψηφία):'
+  ΔΙΑΒΑΣΕ γέννηση
+  ΓΡΑΨΕ 'Τρέχον έτος (2 ψηφία):'
+  ΔΙΑΒΑΣΕ φέτος
+  ΑΝ γέννηση &lt;= φέτος ΤΟΤΕ
+    ηλικία &lt;- φέτος - γέννηση
+  ΑΛΛΙΩΣ
+    ηλικία &lt;- φέτος + 100 - γέννηση
+  ΤΕΛΟΣ_ΑΝ
+  ΓΡΑΨΕ 'Ηλικία:', ηλικία
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ηλικία</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> 08, 26 δίνει 18. 98, 26 δίνει <b>28</b>. 26, 26 δίνει 0 ✓. Η πραγματική λύση του Y2K ήταν συχνά ακριβώς αυτή η «βελόνα»: ένα όριο (εδώ το φέτος) που χωρίζει τον αιώνα. Η καλύτερη λύση είναι, φυσικά, τα <b>τέσσερα</b> ψηφία.</div></div>
+</div>
+</div>
+</section>
+
+<section class="cards" id="s-cards">
+<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2><span class="ref">Ορισμοί για απομνημόνευση</span></div>
+<p class="small">Διάβασε τον όρο, πες τον ορισμό από μέσα σου και πάτα την κάρτα για να τον δεις.</p>
+<div class="deck">
+<button aria-live="polite" class="card" id="card" type="button">
+<span class="face front"><span class="ck">Όρος</span><span class="term" id="c-term"></span><span class="tap">Πάτα για τον ορισμό</span></span>
+<span class="face back"><span class="ck">Ορισμός</span><span class="cdef" id="c-def"></span><span class="tap" id="c-ref"></span></span>
+</button>
+<div class="deckbar">
+<button aria-label="Προηγούμενη κάρτα" class="btn" id="c-prev" type="button">←</button>
+<span class="count" id="c-count"></span>
+<button aria-label="Επόμενη κάρτα" class="btn" id="c-next" type="button">→</button>
+<button class="btn" id="c-shuf" type="button">Ανακάτεμα</button>
+</div>
+</div>
+</section><section class="exercises">
+<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2><span class="ref">Από τα εύκολα στα δύσκολα</span></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div>
+<div class="q"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Γράψε Σ ή Λ.
+<table class="tf">
+<tbody><tr><td>α. Τα συντακτικά λάθη εντοπίζονται από τον μεταγλωττιστή.</td><td class="b">____</td></tr>
+<tr><td>β. Ένα πρόγραμμα με συντακτικό λάθος μπορεί να εκτελεστεί μέχρι τη γραμμή του λάθους.</td><td class="b">____</td></tr>
+<tr><td>γ. Η διαίρεση με το μηδέν είναι λάθος κατά την εκτέλεση.</td><td class="b">____</td></tr>
+<tr><td>δ. Τα λογικά λάθη προκαλούν πάντα τη διακοπή της εκτέλεσης.</td><td class="b">____</td></tr>
+<tr><td>ε. Τα λογικά λάθη μπορούν να ανιχνευτούν αυτόματα από κάποιο εργαλείο του υπολογιστή.</td><td class="b">____</td></tr>
+<tr><td>στ. Η χρήση μεταβλητής που δεν έχει δηλωθεί είναι συντακτικό λάθος.</td><td class="b">____</td></tr>
+<tr><td>ζ. Αν ένα πρόγραμμα δίνει σωστό αποτέλεσμα σε ένα σενάριο, τότε είναι σωστό.</td><td class="b">____</td></tr>
+<tr><td>η. Τα περισσότερα λάθη σε συνθήκες εμφανίζονται με τιμές ακριβώς στα όρια.</td><td class="b">____</td></tr>
+<tr><td>θ. Ένα λογικό λάθος βρίσκεται πάντα στη γραμμή που εμφανίζει το λάθος αποτέλεσμα.</td><td class="b">____</td></tr>
+<tr><td>ι. Εκσφαλμάτωση είναι ο εντοπισμός και η διόρθωση των λαθών ενός προγράμματος.</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Σ, β Λ, γ Σ, δ Λ, ε Λ, στ Σ, ζ Λ, η Σ, θ Λ, ι Σ</span>
+<p class="small">β: δεν εκτελείται καθόλου μέχρι να διορθωθεί. δ, ε: δεν διακόπτουν την εκτέλεση και διαπιστώνονται μόνο με έλεγχο. θ: συχνά βρίσκεται σε προηγούμενη εντολή (π.χ. αρχικοποίηση).</p></div></details></div>
+<div class="q"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
+<p>α) Ποιες είναι οι τρεις κατηγορίες λαθών; Να περιγράψετε την καθεμία με ένα παράδειγμα σε ΓΛΩΣΣΑ.<br/>β) Γιατί τα λάθη κατά την εκτέλεση θεωρούνται «πιο επώδυνα» από τα συντακτικά;<br/>γ) Με τι σχετίζονται τα λογικά λάθη στις δομές επιλογής; Και στις δομές επανάληψης;<br/>δ) Τι είναι τα σενάρια ελέγχου και πώς επιλέγουμε τις τιμές τους;</p>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p><span class="ln">α) Συντακτικά / κατά την υλοποίηση (π.χ. ΑΝ χωρίς ΤΟΤΕ). Κατά την <span class="nw">εκτέλεση / αντικανονικός</span> τερματισμός (π.χ. διαίρεση με πλήθος 0). Λογικά (π.χ. <span class="nw">τιμή + πλήθος</span> αντί για <span class="nw">τιμή * πλήθος).</span></span><span class="ln">β) Εμφανίζονται σε πραγματικό περιβάλλον, μόνο με ορισμένα δεδομένα, συχνά μετά από καιρό, και προκαλούν αντικανονικό τερματισμό.</span><span class="ln">γ) Επιλογή: συνθήκες και ομάδες εντολών (και ο συνδυασμός τους). Επανάληψη: συνθήκη, αρχικοποίηση, ενημέρωση, εντολές του βρόχου.</span><span class="ln">δ) Δοκιμαστικές εκτελέσεις με επιλεγμένες εισόδους και γνωστό αναμενόμενο αποτέλεσμα. Τιμές κάτω, πάνω και ακριβώς στα όρια κάθε συνθήκης, και μη αποδεκτές τιμές.</span></p></div></details></div>
+<div class="q"><span class="qn">3</span><b>Τι λάθος είναι;</b> Για κάθε περίπτωση γράψε την κατηγορία.
+<ul class="legend tight">
+<li data-v="Α"><b>Α</b> Συντακτικό</li>
+<li data-v="Β"><b>Β</b> Κατά την εκτέλεση</li>
+<li data-v="Γ"><b>Γ</b> Λογικό</li>
+</ul>
+<table class="tf">
+<tbody><tr><td>α. Γράφτηκε <code>ΤΕΛΟΣ ΑΝ</code> αντί για ΤΕΛΟΣ_ΑΝ.</td><td class="b">____</td></tr>
+<tr><td>β. Ο μέσος όρος υπολογίζεται χωρίς έλεγχο και δεν δόθηκε κανένας βαθμός.</td><td class="b">____</td></tr>
+<tr><td>γ. Το εμβαδόν κύκλου γράφτηκε <code>π * ρ * 2</code>.</td><td class="b">____</td></tr>
+<tr><td>δ. Η μεταβλητή σύνολο χρησιμοποιείται αλλά δεν δηλώθηκε.</td><td class="b">____</td></tr>
+<tr><td>ε. Ζητείται η <code>Τ_Ρ(x)</code> και ο χρήστης έδωσε x = −4.</td><td class="b">____</td></tr>
+<tr><td>στ. Ο βρόχος διαβάζει 9 τιμές αντί για 10.</td><td class="b">____</td></tr>
+<tr><td>ζ. Σε μεταβλητή ΑΚΕΡΑΙΑ εκχωρείται το αποτέλεσμα της <code>α / β</code>.</td><td class="b">____</td></tr>
+<tr><td>η. Ο έλεγχος «κάτω από 0 ή πάνω από 20» γράφτηκε με ΚΑΙ.</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Α, β Β, γ Γ, δ Α, ε Β, στ Γ, ζ Α, η Γ</span>
+<p class="small">ζ: ασυμβατότητα τύπων, εντοπίζεται κατά τη μετάφραση.</p></div></details></div>
+<div class="q"><span class="qn">4</span><b>Κυνήγι συντακτικών λαθών.</b> Το πρόγραμμα υπολογίζει το κόστος ενοικίασης αυτοκινήτου: 40 €/μέρα για έως 3 μέρες, 120 <span class="nw">€ + 35</span> €/μέρα για τις μέρες από 4 έως 7, 260 <span class="nw">€ + 30</span> €/μέρα για κάθε μέρα μετά την 7η. Να βρείτε <b>έξι</b> συντακτικά λάθη και να γράψετε το σωστό πρόγραμμα. Πόσο κοστίζουν 2, 5 και 10 μέρες;
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ενοίκιο
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: μέρες
+  ΠΡΑΓΜΑΤΙΚΕΣ: κόστος
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ μέρες
+  ΑΝ μέρες &lt;= 3
+    κόστος &lt;- μέρες * 40
+  ΑΛΛΙΩΣ ΑΝ μέρες &lt;= 7 ΤΟΤΕ
+    κόστος &lt;- 120 + (μέρες - 3) * 35
+  ΑΛΛΙΩΣ
+    κόστος &lt;- 260 + (μέρες - 7) x 30
+  ΤΕΛΟΣ ΑΝ
+  ΓΡΑΨΕ 'Κόστος:, κόστος
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ενοίκια</pre>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p><span class="ln"><b>1)</b> <code>ΑΝ μέρες &lt;= 3</code> χωρίς ΤΟΤΕ.</span><span class="ln"><b>2)</b> Το <code>ΑΛΛΙΩΣ ΑΝ</code> γράφεται ΑΛΛΙΩΣ_ΑΝ.</span><span class="ln"><b>3)</b> Το <code>x</code> δεν είναι τελεστής. Γράφουμε <code>*</code>.</span><span class="ln"><b>4)</b> Το <code>ΤΕΛΟΣ ΑΝ</code> γράφεται ΤΕΛΟΣ_ΑΝ.</span><span class="ln"><b>5)</b> <code>'Κόστος:, κόστος</code>: δεν κλείνουν τα εισαγωγικά.</span><span class="ln"><b>6)</b> <code>ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ενοίκια</code>: άλλο όνομα από του προγράμματος.</span></p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ενοίκιο
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: μέρες
+  ΠΡΑΓΜΑΤΙΚΕΣ: κόστος
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ μέρες
+  ΑΝ μέρες &lt;= 3 ΤΟΤΕ
+    κόστος &lt;- μέρες * 40
+  ΑΛΛΙΩΣ_ΑΝ μέρες &lt;= 7 ΤΟΤΕ
+    κόστος &lt;- 120 + (μέρες - 3) * 35
+  ΑΛΛΙΩΣ
+    κόστος &lt;- 260 + (μέρες - 7) * 30
+  ΤΕΛΟΣ_ΑΝ
+  ΓΡΑΨΕ 'Κόστος:', κόστος
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ενοίκιο</pre>
+<p><span class="ln li">2 μέρες: <b>80</b></span><span class="ln li">5 μέρες: <span class="nw">120 + 70</span> = <b>190</b></span><span class="ln li">10 μέρες: <span class="nw">260 + 90</span> = <b>350</b></span></p></div></details></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div>
+<div class="q"><span class="qn">5</span><b>Σενάρια ελέγχου.</b> Τα ταχυδρομικά τέλη είναι 1 € για επιστολές <b>έως</b> 20 g, 2 € για <b>πάνω από 20 έως και 100 g</b>, και 3.50 € για πάνω από 100 g. Μη θετικό βάρος είναι λάθος.
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ταχυδρομείο
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: βάρος, τέλη
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ βάρος
+  ΑΝ βάρος &lt;= 0 ΤΟΤΕ
+    ΓΡΑΨΕ 'Μη αποδεκτό βάρος'
+  ΑΛΛΙΩΣ
+    ΑΝ βάρος &lt;= 20 ΤΟΤΕ
+      τέλη &lt;- 1
+    ΑΛΛΙΩΣ_ΑΝ βάρος &lt; 100 ΤΟΤΕ
+      τέλη &lt;- 2
+    ΑΛΛΙΩΣ
+      τέλη &lt;- 3.5
+    ΤΕΛΟΣ_ΑΝ
+    ΓΡΑΨΕ 'Τέλη:', τέλη
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ταχυδρομείο</pre>
+<p>α) Να φτιάξετε πίνακα σεναρίων ελέγχου (αναμενόμενο, συνθήκη που ισχύει, έξοδος, σωστό;) για βάρη −5, 0, 10, 20, 50, 100, 150.<br/>β) Ποιο λάθος αποκαλύπτεται και ποια διόρθωση χρειάζεται;</p>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><div class="tablewrap"><table class="t"><tbody><tr><th>Βάρος</th><th>Αναμενόμενο</th><th>Έξοδος</th><th></th></tr>
+<tr><td>−5</td><td>μήνυμα</td><td>μήνυμα</td><td>✓</td></tr>
+<tr><td>0</td><td>μήνυμα</td><td>μήνυμα</td><td>✓</td></tr>
+<tr><td>10</td><td>1</td><td>1</td><td>✓</td></tr>
+<tr><td>20</td><td>1</td><td>1</td><td>✓</td></tr>
+<tr><td>50</td><td>2</td><td>2</td><td>✓</td></tr>
+<tr><td><b>100</b></td><td>2</td><td><b>3.5</b></td><td>✗</td></tr>
+<tr><td>150</td><td>3.5</td><td>3.5</td><td>✓</td></tr></tbody></table></div>
+<p>«Έως και 100» γράφεται <code>ΑΛΛΙΩΣ_ΑΝ βάρος &lt;= 100 ΤΟΤΕ</code>. Μόνο το σενάριο ακριβώς στο όριο το αποκαλύπτει.</p></div></details></div>
+<div class="q"><span class="qn">6</span><b>Πού χάλασε ο βρόχος;</b> Κάθε τμήμα θέλει να υπολογίσει το άθροισμα <span class="nw">1 + 2</span> + … + 10 και έχει <b>ένα</b> λάθος. Γράψε σε ποιο από τα 4 σημεία του βρόχου (Λ7) βρίσκεται.
+<ul class="legend tight">
+<li data-v="Α"><b>Α</b> Αρχικοποίηση</li>
+<li data-v="Β"><b>Β</b> Συνθήκη</li>
+<li data-v="Γ"><b>Γ</b> Ενημέρωση</li>
+<li data-v="Δ"><b>Δ</b> Σώμα (υπολογισμός)</li>
+</ul>
+<table class="tf">
+<tbody><tr><td><span class="ln cd">α. <span class="nw">σ ← 0</span></span><span class="ln cd"><span class="nw">i ← 1</span></span><span class="ln cd">ΟΣΟ <span class="nw">i &lt; 10</span> ΕΠΑΝΑΛΑΒΕ</span><span class="ln cd"><span class="nw">σ ← σ + i</span></span><span class="ln cd"><span class="nw">i ← i + 1</span></span><span class="ln cd">ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</span></td><td class="b">____</td></tr>
+<tr><td><span class="ln cd">β. <span class="nw">σ ← 0</span></span><span class="ln cd"><span class="nw">i ← 1</span></span><span class="ln cd">ΟΣΟ <span class="nw">i &lt;= 10</span> ΕΠΑΝΑΛΑΒΕ</span><span class="ln cd"><span class="nw">σ ← σ + i</span></span><span class="ln cd">ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</span></td><td class="b">____</td></tr>
+<tr><td><span class="ln cd">γ. <span class="nw">σ ← 1</span></span><span class="ln cd"><span class="nw">i ← 1</span></span><span class="ln cd">ΟΣΟ <span class="nw">i &lt;= 10</span> ΕΠΑΝΑΛΑΒΕ</span><span class="ln cd"><span class="nw">σ ← σ + i</span></span><span class="ln cd"><span class="nw">i ← i + 1</span></span><span class="ln cd">ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</span></td><td class="b">____</td></tr>
+<tr><td><span class="ln cd">δ. <span class="nw">σ ← 0</span></span><span class="ln cd"><span class="nw">i ← 1</span></span><span class="ln cd">ΟΣΟ <span class="nw">i &lt;= 10</span> ΕΠΑΝΑΛΑΒΕ</span><span class="ln cd"><span class="nw">σ ← σ + 1</span></span><span class="ln cd"><span class="nw">i ← i + 1</span></span><span class="ln cd">ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</span></td><td class="b">____</td></tr>
+<tr><td><span class="ln cd">ε. <span class="nw">σ ← 0</span></span><span class="ln cd">ΟΣΟ <span class="nw">i &lt;= 10</span> ΕΠΑΝΑΛΑΒΕ</span><span class="ln cd"><span class="nw">σ ← σ + i</span></span><span class="ln cd"><span class="nw">i ← i + 1</span></span><span class="ln cd">ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</span></td><td class="b">____</td></tr>
+<tr><td><span class="ln cd">στ. <span class="nw">σ ← 0</span></span><span class="ln cd"><span class="nw">i ← 1</span></span><span class="ln cd">ΟΣΟ <span class="nw">i &lt;= 10</span> ΕΠΑΝΑΛΑΒΕ</span><span class="ln cd"><span class="nw">σ ← σ + i</span></span><span class="ln cd"><span class="nw">i ← i - 1</span></span><span class="ln cd">ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</span></td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Β, β Γ, γ Α, δ Δ, ε Α, στ Γ</span>
+<p class="small">α: 45 (λείπει το 10). β: ατέρμων (λείπει η ενημέρωση). γ: 56. δ: 10 (μετράει, δεν αθροίζει). ε: το i δεν έχει αρχική τιμή (σφάλμα εκτέλεσης στη ΓΛΩΣΣΑ). στ: ατέρμων, το i μικραίνει.</p></div></details></div>
+<div class="q hw"><span class="qn">7</span><b>Το ταξί.</b><span class="theme">Μεταφορές</span>
+<p>Η χρέωση ταξί είναι: σημαία 4 €, 0.90 €/km για τα πρώτα 10 km και 0.70 €/km για κάθε km μετά τα 10. Ελάχιστη χρέωση 5 €. Το πρόγραμμα:</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ταξί
+ΣΤΑΘΕΡΕΣ
+  ΣΗΜΑΙΑ = 4
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: km, χρέωση
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ km
+  ΑΝ km &lt; 10 ΤΟΤΕ
+    χρέωση &lt;- ΣΗΜΑΙΑ + km * 0.9
+  ΑΛΛΙΩΣ
+    χρέωση &lt;- ΣΗΜΑΙΑ + (km - 10) * 0.7
+  ΤΕΛΟΣ_ΑΝ
+  ΑΝ χρέωση &lt; 5 ΤΟΤΕ
+    χρέωση &lt;- 5
+  ΤΕΛΟΣ_ΑΝ
+  ΓΡΑΨΕ 'Χρέωση:', χρέωση
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ταξί</pre>
+<p>α) Πίνακας σεναρίων για 0.5, 5, 10 και 20 km (το αναμενόμενο υπολογίζεται με το χέρι).<br/>β) Πόσα και ποια λάθη βρήκατε; Να γράψετε το σωστό πρόγραμμα.<br/>γ) Ποιο σενάριο θα μπορούσε να σας ξεγελάσει ότι όλα είναι σωστά;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">8</span><b>Τρία είδη μαζί.</b>
+<p>Το πρόγραμμα διαβάζει την απόσταση (km) και τον χρόνο (λεπτά) μιας διαδρομής, υπολογίζει τη μέση ταχύτητα σε <b>km/h</b> και εμφανίζει «Υπέρβαση ορίου!» αν ξεπερνά τα 130 km/h. Να βρείτε <b>δύο</b> συντακτικά λάθη, <b>ένα</b> λάθος κατά την εκτέλεση και <b>ένα</b> λογικό λάθος, και να γράψετε το σωστό πρόγραμμα (με έλεγχο δεδομένων). Τι εμφανίζει το σωστό για 100 km σε 60 λεπτά και για 140 km σε 60 λεπτά;</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ταχύτητα
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: απόσταση, λεπτά, ταχύτητα
+ΑΡΧΗ
+  ΓΡΑΨΕ 'Απόσταση (km) και χρόνος (λεπτά):'
+  ΔΙΑΒΑΣΕ απόσταση, λεπτά
+  ταχύτητα &lt;- απόσταση / λεπτά
+  ΑΝ ταχύτητα &gt; 130 ΤΟΤΕ
+    ΓΡΑΨΕ 'Υπέρβαση ορίου!
+  ΑΛΛΙΩΣ
+    ΓΡΑΨΕ 'Εντός ορίου'
+  ΤΕΛΟΣ_ΑΝ
+  ΓΡΑΨΕ 'Μέση ταχύτητα:' ταχύτητα, ' km/h'
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ταχύτητα</pre>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">9</span><b>ΚΑΙ, Η, ΟΧΙ.</b>
+<p>Ένας μήνας είναι αποδεκτός αν είναι από 1 έως 12.<br/>α) Να γράψετε τη συνθήκη «αποδεκτός μήνας».<br/>β) Να γράψετε τη συνθήκη «μη αποδεκτός μήνας» με δύο τρόπους: με ΟΧΙ και χωρίς ΟΧΙ.<br/>γ) Ένας μαθητής έγραψε <code>ΟΣΟ μ &lt; 1 ΚΑΙ μ &gt; 12 ΕΠΑΝΑΛΑΒΕ</code> για τον έλεγχο. Για ποιες τιμές εκτελείται ο βρόχος; Ποιο σενάριο το αποκαλύπτει;<br/>δ) Ένας άλλος έγραψε <code>ΜΕΧΡΙΣ_ΟΤΟΥ μ &gt;= 1 Η μ &lt;= 12</code>. Ποια τιμή δεν απορρίπτεται ποτέ; (Βοήθεια: δοκίμασε 50 και −3.)</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">10</span><b>Ο φρουρός που μέτρησε.</b>
+<p>Το πρόγραμμα θέλει να διαβάζει αριθμούς μέχρι να δοθεί 0 και να εμφανίζει τον μέσο όρο τους.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Μέσος_όρος
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: πλ
+  ΠΡΑΓΜΑΤΙΚΕΣ: x, σ
+ΑΡΧΗ
+  σ &lt;- 0
+  πλ &lt;- 0
+  ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+    ΔΙΑΒΑΣΕ x
+    σ &lt;- σ + x
+    πλ &lt;- πλ + 1
+  ΜΕΧΡΙΣ_ΟΤΟΥ x = 0
+  ΓΡΑΨΕ 'Μέσος όρος:', σ / πλ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Μέσος_όρος</pre>
+<p>α) Τι εμφανίζει για 4, 6, 8, 0; Τι θα έπρεπε;<br/>β) Τι συμβαίνει αν δοθεί αμέσως 0; (Λ4)<br/>γ) Να το διορθώσετε με δύο τρόπους: με ΟΣΟ (Β5) και με ΜΕΧΡΙΣ_ΟΤΟΥ και ΑΝ.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">11</span><b>Μία φορά λιγότερο.</b>
+<p>Ο αλγόριθμος πρέπει να εμφανίζει τα <b>10</b> πρώτα πολλαπλάσια του 7 (7 έως 70).</p>
+<pre class="code">Αλγόριθμος Πολλαπλάσια
+i ← 1
+Όσο i &lt; 10 επανάλαβε
+  Εμφάνισε 7 * i
+  i ← i + 1
+Τέλος_επανάληψης
+Τέλος Πολλαπλάσια</pre>
+<p>α) Πόσες τιμές εμφανίζει; Ποια λείπει;<br/>β) Να δώσετε <b>δύο</b> διαφορετικές διορθώσεις στον ίδιο αλγόριθμο και μία με Για.<br/>γ) Ποιες δύο τιμές του i ελέγχεις πάντα για να πιάσεις τέτοιο λάθος;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">12</span><b>Η ψυχρότερη μέρα.</b><span class="theme">Καιρός</span>
+<p>Το πρόγραμμα διαβάζει τις θερμοκρασίες 5 ημερών και εμφανίζει την ψυχρότερη μέρα και τη θερμοκρασία της.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ψυχρότερη_μέρα
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: i, μέρα
+  ΠΡΑΓΜΑΤΙΚΕΣ: θ, ελ
+ΑΡΧΗ
+  ελ &lt;- 0
+  μέρα &lt;- 0
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 5
+    ΔΙΑΒΑΣΕ θ
+    ΑΝ θ &lt; ελ ΤΟΤΕ
+      ελ &lt;- θ
+      μέρα &lt;- i
+    ΤΕΛΟΣ_ΑΝ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ 'Ψυχρότερη μέρα:', μέρα, ' με', ελ, ' βαθμούς'
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ψυχρότερη_μέρα</pre>
+<p>α) Τι εμφανίζει για 3, −2, −5, 1, −4; Και για 3, 5, 2, 8, 4;<br/>β) Να προσθέσετε μια ΓΡΑΨΕ ελέγχου (Λ6) μέσα στον βρόχο και να γράψετε τι θα τύπωνε για τη δεύτερη είσοδο.<br/>γ) Ποιο είναι το λάθος και πώς διορθώνεται (Γ4, Μάθημα 14);</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">13</span><b>Η λάθος σειρά.</b>
+<p>Χαρακτηρισμός βαθμού: Άριστα από 18.5, Πολύ καλά από 16, Καλά από 13, Καλώς από 10, αλλιώς Ανεπαρκώς. Για βαθμούς εκτός 0–20 εμφανίζεται μήνυμα.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Χαρακτηρισμός
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: β
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ β
+  ΑΝ β &gt;= 10 ΤΟΤΕ
+    ΓΡΑΨΕ 'Καλώς'
+  ΑΛΛΙΩΣ_ΑΝ β &gt;= 13 ΤΟΤΕ
+    ΓΡΑΨΕ 'Καλά'
+  ΑΛΛΙΩΣ_ΑΝ β &gt;= 16 ΤΟΤΕ
+    ΓΡΑΨΕ 'Πολύ καλά'
+  ΑΛΛΙΩΣ_ΑΝ β &gt; 18.5 ΤΟΤΕ
+    ΓΡΑΨΕ 'Άριστα'
+  ΑΛΛΙΩΣ
+    ΓΡΑΨΕ 'Ανεπαρκώς'
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Χαρακτηρισμός</pre>
+<p>α) Τι εμφανίζει για 19, 14 και 9;<br/>β) Να φτιάξετε σενάρια ορίων για <b>όλα</b> τα όρια. Πόσα σενάρια χρειάζονται;<br/>γ) Να γράψετε το σωστό πρόγραμμα.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">14</span><b>Η εξίσωση που «σκάει».</b><span class="theme">Μαθηματικά</span>
+<p>Το πρόγραμμα λύνει την <span class="nw">αx² + βx + γ = 0.</span></p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Εξίσωση
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: α, β, γ, Δ, x1, x2
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ α, β, γ
+  Δ &lt;- β ^ 2 - 4 * α * γ
+  x1 &lt;- (-β + Τ_Ρ(Δ)) / (2 * α)
+  x2 &lt;- (-β - Τ_Ρ(Δ)) / (2 * α)
+  ΓΡΑΨΕ x1, x2
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Εξίσωση</pre>
+<p>α) Με ποια δεδομένα τερματίζει αντικανονικά; Να βρείτε δύο διαφορετικές αιτίες.<br/>β) Να γράψετε σωστό πρόγραμμα που χειρίζεται όλες τις περιπτώσεις: δύο λύσεις, διπλή, καμία πραγματική, πρωτοβάθμια <span class="nw">(α = 0),</span> αδύνατη, ταυτότητα.<br/>γ) Να γράψετε έξι σενάρια ελέγχου, ένα για κάθε περίπτωση.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">15</span><b>Ατέρμονες βρόχοι.</b> Για κάθε τμήμα, να βρείτε για ποιες τιμές του x (ακέραιος που διαβάζεται. Στα γ και δ θεωρήστε <span class="nw">x &gt;= 0)</span> ο βρόχος δεν τερματίζει.
+<pre class="code">α) ΟΣΟ x &lt;&gt; 0 ΕΠΑΝΑΛΑΒΕ          β) ΟΣΟ x &lt; 100 ΕΠΑΝΑΛΑΒΕ
+     x ← x - 2                       x ← x * 2
+   ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ                ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+
+γ) ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ               δ) ΟΣΟ x &gt; 1 ΕΠΑΝΑΛΑΒΕ
+     x ← x div 2                     x ← x mod 2
+   ΜΕΧΡΙΣ_ΟΤΟΥ x = 0                ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</pre>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Μεγάλες ασκήσεις</h3></div>
+<div class="q hw"><span class="qn">16</span><b>Ο λογαριασμός ρεύματος.</b><span class="theme">Σπίτι, Θέμα Γ</span>
+<p>Η κιλοβατώρα χρεώνεται κλιμακωτά: 0.10 € για τις πρώτες 200 kWh, 0.15 € για τις επόμενες 300 (201–500) και 0.20 € για κάθε kWh πάνω από 500. Στο ποσό προστίθεται πάγιο 5 € και, αν το σύνολο (μαζί με το πάγιο) ξεπερνά τα 50 €, επιβάρυνση 6%. Αποδεκτή κατανάλωση: 0 έως 5000 kWh.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ρεύμα
+ΣΤΑΘΕΡΕΣ
+  ΠΑΓΙΟ = 5
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: kwh
+  ΠΡΑΓΜΑΤΙΚΕΣ: ποσό
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ kwh
+  ΑΝ kwh &lt; 0 ΚΑΙ kwh &gt; 5000 ΤΟΤΕ
+    ΓΡΑΨΕ 'Μη αποδεκτή κατανάλωση'
+  ΑΛΛΙΩΣ
+    ΑΝ kwh &lt; 200 ΤΟΤΕ
+      ποσό &lt;- kwh * 0.10
+    ΑΛΛΙΩΣ_ΑΝ kwh &lt;= 500 ΤΟΤΕ
+      ποσό &lt;- 200 * 0.10 + (kwh - 200) * 0.15
+    ΑΛΛΙΩΣ
+      ποσό &lt;- 200 * 0.10 + 300 * 0.15 + kwh * 0.20
+    ΤΕΛΟΣ_ΑΝ
+    ΑΝ ποσό &gt; 50 ΤΟΤΕ
+      ποσό &lt;- ποσό * 1.06
+    ΤΕΛΟΣ_ΑΝ
+    ποσό &lt;- ποσό + ΠΑΓΙΟ
+    ΓΡΑΨΕ 'Λογαριασμός:', ποσό
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ρεύμα</pre>
+<p>α) Να φτιάξετε πίνακα σεναρίων ελέγχου για −1, 0, 150, 200, 201, 500, 501, 600 kWh με το αναμενόμενο αποτέλεσμα.<br/>β) Το πρόγραμμα έχει <b>τρία</b> λογικά λάθη. Να τα βρείτε, να εξηγήσετε ποιο σενάριο αποκαλύπτει το καθένα και να γράψετε το σωστό πρόγραμμα.<br/>γ) Ένας συμμαθητής λέει ότι και το <code>kwh &lt; 200</code> είναι λάθος (έπρεπε <code>&lt;=</code>). Έχει δίκιο; Τι βγάζει το πρόγραμμα για 200 kWh με το καθένα;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">17</span><b>Τα πρόστιμα της βιβλιοθήκης.</b><span class="theme">Σχολείο, Θέμα Δ</span>
+<p>Για κάθε μέλος που επιστρέφει βιβλίο διαβάζεται το όνομα και οι μέρες καθυστέρησης (μη αρνητικός ακέραιος, με έλεγχο). Η εισαγωγή τελειώνει με το όνομα ΤΕΛΟΣ. Πρόστιμο: 0.20 € για καθεμία από τις πρώτες 7 μέρες και 0.50 € για κάθε μέρα μετά την 7η, με ανώτατο όριο 10 €. Στο τέλος: σύνολο προστίμων, πόσα μέλη πλήρωσαν πρόστιμο και ποιος πλήρωσε το μεγαλύτερο (αν πλήρωσε κάποιος).</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Βιβλιοθήκη
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: μέρες, πλ
+  ΠΡΑΓΜΑΤΙΚΕΣ: πρόστιμο, σύνολο, μεγ
+  ΧΑΡΑΚΤΗΡΕΣ: όνομα, μεγΌνομα
+ΑΡΧΗ
+  σύνολο &lt;- 0
+  πλ &lt;- 0
+  μεγ &lt;- 0
+  μεγΌνομα &lt;- '-'
+  ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+    ΔΙΑΒΑΣΕ όνομα
+    ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+      ΔΙΑΒΑΣΕ μέρες
+    ΜΕΧΡΙΣ_ΟΤΟΥ μέρες &lt; 0
+    ΑΝ μέρες &lt;= 7 ΤΟΤΕ
+      πρόστιμο &lt;- μέρες * 0.20
+    ΑΛΛΙΩΣ
+      πρόστιμο &lt;- (μέρες - 7) * 0.50
+    ΤΕΛΟΣ_ΑΝ
+    ΑΝ πρόστιμο &gt; 10 ΤΟΤΕ
+      πρόστιμο &lt;- 10
+    ΤΕΛΟΣ_ΑΝ
+    σύνολο &lt;- σύνολο + πρόστιμο
+    πλ &lt;- πλ + 1
+    ΑΝ πρόστιμο &gt; μεγ ΤΟΤΕ
+      μεγ &lt;- πρόστιμο
+      μεγΌνομα &lt;- όνομα
+    ΤΕΛΟΣ_ΑΝ
+  ΜΕΧΡΙΣ_ΟΤΟΥ όνομα = 'ΤΕΛΟΣ'
+  ΓΡΑΨΕ 'Σύνολο προστίμων:', σύνολο, ' · με πρόστιμο:', πλ
+  ΓΡΑΨΕ 'Μεγαλύτερο πρόστιμο:', μεγΌνομα, μεγ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Βιβλιοθήκη</pre>
+<p><span class="ln li">α) Να εντοπίσετε <b>τέσσερα</b> λογικά λάθη. Για το καθένα να γράψετε ένα σενάριο που το αποκαλύπτει.<br/>β) Να γράψετε το σωστό πρόγραμμα. Ποια δομή επανάληψης ταιριάζει καλύτερα για το όνομα-φρουρό;<br/>γ) Έλεγχος: Άλκης 3</span><span class="ln li">Βίκυ −2 και μετά 12</span><span class="ln li">Γιώργος 0</span><span class="ln li">Δανάη 40</span><span class="ln li">ΤΕΛΟΣ.<br/>δ) Ακραία σενάρια: τι πρέπει να εμφανίζει αν δοθεί αμέσως ΤΕΛΟΣ;</span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">18</span><b>Ο κατάσκοπος των ορίων: δίσεκτα έτη.</b><span class="theme">Πρόκληση</span>
+<p>Ένα έτος είναι δίσεκτο αν διαιρείται με το 4 αλλά όχι με το 100, <b>εκτός</b> αν διαιρείται με το 400 (τότε είναι δίσεκτο). Ένας προγραμματιστής έγραψε:</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Δίσεκτο
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: ε
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ ε
+  ΑΝ ε mod 4 = 0 ΚΑΙ ε mod 100 &lt;&gt; 0 ΤΟΤΕ
+    ΓΡΑΨΕ ε, ' δίσεκτο'
+  ΑΛΛΙΩΣ
+    ΓΡΑΨΕ ε, ' κοινό'
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Δίσεκτο</pre>
+<p>α) Να βρείτε ένα έτος για το οποίο το πρόγραμμα κάνει λάθος.<br/>β) Να προτείνετε το <b>ελάχιστο</b> σύνολο σεναρίων που ελέγχει κάθε «κλάδο» του κανόνα (δίσεκτο/κοινό για κάθε λόγο). Γιατί το 2024 και το 2023 μόνα τους δεν αρκούν;<br/>γ) Να γράψετε τη σωστή συνθήκη.<br/>δ) Το λάθος αυτό θα γινόταν ορατό για πρώτη φορά σε ποιο έτος, για ένα πρόγραμμα γραμμένο το 1990; Γιατί τέτοια λάθη είναι ύπουλα;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+</section>
+
+</main><div class="syn-foot"><div class="syn-nav"><a href="14.html"><small>&#8592; Μάθημα 14</small>Δομή επανάληψης: ΓΙΑ … ΑΠΟ … ΜΕΧΡΙ</a><a class="next" href="16.html"><small>Μάθημα 16 &#8594;</small>Μετατροπές μεταξύ δομών επανάληψης</a></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
+<script>
+(function(){
+  var CARDS = [{"term": "Λάθη κατά την υλοποίηση.", "def": "Λάθη κατά την υλοποίηση. Τα λάθη κατά το χρόνο υλοποίησης προκαλούνται κυρίως από λανθασμένη σύνταξη εντολών προγράμματος. Τέτοια λάθη μπορεί να είναι η λανθασμένη συγγραφή μιας δεσμευμένης λέξης της γλώσσας προγραμματισμού ή η χρήση μιας δομής ελέγχου χωρίς την εντολή τερματισμού της. Ένα λάθος που προκαλείται κατά τη συγγραφή του προγράμματος ανιχνεύεται από το μεταγλωττιστή, ο οποίος εμφανίζει προς τον προγραμματιστή κάποιο προειδοποιητικό μήνυμα.", "ref": "Σχολικό βιβλίο, §13.1"}, {"term": "Λάθη κατά την εκτέλεση.", "def": "Λάθη κατά την εκτέλεση. Τα λάθη που προκαλούνται κατά το χρόνο εκτέλεσης του προγράμματος είναι πιο επώδυνα γιατί συνήθως εμφανίζονται σε πραγματικό περιβάλλον εκτέλεσης και τις περισσότερες φορές προκαλούν τον αντικανονικό τερματισμό της εφαρμογής και το κρέμασμα (crash) του συστήματος. Τέτοια λάθη είναι δυνατό να προκληθούν από […] την προσπάθεια διαίρεσης ενός αριθμού με το μηδέν, την υπερχείλιση μιας αριθμητικής μεταβλητής ή από δυσλειτουργία του υλικού μέρους του υπολογιστή.", "ref": "Σχολικό βιβλίο, §13.1"}, {"term": "Λογικά λάθη.", "def": "Λογικά λάθη. Τα λογικά λάθη είναι συνήθως λάθη σχεδιασμού και δεν προκαλούν τη διακοπή της εκτέλεσης του προγράμματος. Ενώ ο μεταγλωττιστής της γλώσσας προγραμματισμού δεν ανιχνεύει κανένα συντακτικό λάθος και κατά την εκτέλεση του προγράμματος δεν παρουσιάζονται ανεπιθύμητες καταστάσεις σφαλμάτων, τελικά δεν παράγονται τα επιθυμητά αποτελέσματα. Η ανίχνευση τέτοιων λαθών δεν είναι δυνατό να πραγματοποιηθεί από κάποιο εργαλείο του υπολογιστή και διαπιστώνονται μόνο με τη διαδικασία ελέγχου (testing) και την ανάλυση των αποτελεσμάτων των προγραμμάτων.", "ref": "Σχολικό βιβλίο, §13.1"}, {"term": "Δομές επιλογής", "def": "Σε μια δομή επιλογής μπορεί να εμφανιστούν λογικά λάθη που σχετίζονται με: τη συνθήκη ή τις συνθήκες τις ομάδες εντολών που εκτελούνται όταν μια συνθήκη είναι αληθής ή ψευδής. Στην ανίχνευση ενός λογικού λάθους στις δομές επιλογής δεν αρκεί η μεμονωμένη μελέτη των συνθηκών και των ομάδων εντολών […] αλλά χρειάζεται να μελετηθεί το αποτέλεσμα που παράγει ο συνδυασμός των συνθηκών και των ομάδων εντολών.", "ref": "Συμπληρωματικό Εκπαιδευτικό Υλικό, §5.2.1"}, {"term": "Δομές επανάληψης", "def": "Σε μια δομή επανάληψης μπορεί να εμφανιστούν λογικά λάθη που σχετίζονται με: τη συνθήκη επανάληψης ή τερματισμού, την αρχικοποίηση της συνθήκης, την ενημέρωση της συνθήκης εντός του βρόχου επανάληψης, τις εντολές που περιλαμβάνονται εντός του βρόχου.", "ref": "Συμπληρωματικό Εκπαιδευτικό Υλικό, §5.2.2"}, {"term": "Συντακτικά (κατά την υλοποίηση):", "def": "Συντακτικά (κατά την υλοποίηση): λάθος σύνταξη· τα βρίσκει ο μεταφραστής· το πρόγραμμα δεν εκτελείται.", "ref": "Σύνοψη"}, {"term": "Κατά την εκτέλεση (αντικανονικός τερματισμός):", "def": "Κατά την εκτέλεση (αντικανονικός τερματισμός): εμφανίζονται με ορισμένα δεδομένα, π.χ. διαίρεση με το μηδέν, υπερχείλιση.", "ref": "Σύνοψη"}, {"term": "Λογικά:", "def": "Λογικά: λάθη σχεδιασμού· το πρόγραμμα τρέχει αλλά δίνει λάθος αποτελέσματα· τα βρίσκουμε μόνο με έλεγχο (testing).", "ref": "Σύνοψη"}, {"term": "Εκσφαλμάτωση:", "def": "Εκσφαλμάτωση: σενάρια ελέγχου στα όρια, πίνακας τιμών, εντολές ελέγχου· ένα λάθος τη φορά.", "ref": "Σύνοψη"}, {"term": "Σενάρια ορίων", "def": "Για κάθε σύγκριση: τιμή λίγο κάτω, ακριβώς στο όριο, λίγο πάνω.", "ref": "Λ3"}, {"term": "Πού μπορεί να σκάσει;", "def": "/, div, mod με 0 · Τ_Ρ αρνητικού · ΛΟΓ μη θετικού · μεταβλητή χωρίς τιμή.", "ref": "Λ2"}, {"term": "Τα 4 σημεία ενός βρόχου", "def": "Αρχικοποίηση · συνθήκη · ενημέρωση · σώμα.", "ref": "Λ7"}, {"term": "Άρνηση του (x >= α ΚΑΙ x <= β)", "def": "x < α Η x > β", "ref": "ΚΑΙ / Η"}];
+  // ---- quiz ----
+  document.querySelectorAll('.quiz').forEach(function(quiz){
+    var items = quiz.querySelectorAll('.qi');
+    var score = quiz.querySelector('.score');
+    function update(){
+      var done = quiz.querySelectorAll('.qi.ok, .qi.no').length;
+      if (done < items.length){ score.hidden = true; return; }
+      var ok = quiz.querySelectorAll('.qi.ok').length;
+      score.hidden = false;
+      score.innerHTML = '';
+      var t = document.createElement('span');
+      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? ' · Τέλεια!' : ok >= items.length * 0.7 ? ' · Πολύ καλά' : ' · Ξαναδιάβασε τη θεωρία');
+      var r = document.createElement('button'); r.type = 'button'; r.className = 'btn'; r.textContent = 'Ξανά από την αρχή';
+      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); }); update(); };
+      score.append(t, r);
+    }
+    items.forEach(function(it){
+      var ans = it.getAttribute('data-ans');
+      it.querySelectorAll('.qb button').forEach(function(b){
+        b.addEventListener('click', function(){
+          var v = b.getAttribute('data-v');
+          it.querySelectorAll('.qb button').forEach(function(x){ x.disabled = true; if (x.getAttribute('data-v') === ans) x.classList.add('right'); });
+          b.classList.add('pick');
+          it.classList.add(v === ans ? 'ok' : 'no');
+          var f = document.createElement('span'); f.className = 'fb';
+          f.textContent = v === ans ? '✓ Σωστά' : '✗ Η σωστή απάντηση είναι: ' + (it.querySelector('.qb button[data-v="' + ans + '"]') || {}).textContent;
+          it.appendChild(f);
+          update();
+        });
+      });
+    });
+  });
+  // ---- flashcards ----
+  var order = CARDS.map(function(_, i){ return i; }), pos = 0;
+  var card = document.getElementById('card');
+  if (!card || !CARDS.length) return;
+  function show(){
+    var c = CARDS[order[pos]];
+    card.classList.remove('flipped');
+    document.getElementById('c-term').textContent = c.term;
+    document.getElementById('c-def').textContent = c.def;
+    document.getElementById('c-ref').textContent = c.ref;
+    document.getElementById('c-count').textContent = (pos + 1) + ' / ' + CARDS.length;
+  }
+  card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+  document.getElementById('c-next').onclick = function(){ pos = (pos + 1) % CARDS.length; show(); };
+  document.getElementById('c-prev').onclick = function(){ pos = (pos - 1 + CARDS.length) % CARDS.length; show(); };
+  document.getElementById('c-shuf').onclick = function(){
+    for (var i = order.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+    pos = 0; show();
+  };
+  show();
+})();
+</script>
+<style id="kitcss">/*KIT>*//* ==== kit: θέμα, προβολή, «Δείξε λύση» ==== */
+body{font-size:16px}
+.kit-btn{font:600 13px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 12px;border-radius:999px;cursor:pointer}
+.kit-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.kit-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#kitfloat{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:30;display:flex;gap:6px;padding:5px;border-radius:999px;background:var(--ground);border:1px solid var(--line);box-shadow:0 4px 16px rgba(10,20,40,.12)}
+.rt-ans{margin:-2px 0 14px}
+.rt-show{font:600 13.5px/1 var(--body);border:1.5px solid var(--s-teal);background:var(--teal-bg);color:var(--teal);padding:9px 14px;border-radius:999px;cursor:pointer}
+.rt-show:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.rt-body{display:none;margin-top:10px;border-left:4px solid var(--s-teal);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 16px}
+.rt-body .q{margin:0;border:0;padding:0;background:none}
+.rt-open > .rt-body, body.rt-all .rt-body{display:block}
+.rt-open > .rt-show{background:var(--paper)}
+body:not(.rt-all):not(.editing) .solved:not(.rt-open) .rt-hide{display:none}
+body.rt-all .rt-showstep{display:none}
+.solved.rt-open .rt-showstep{display:none}
+.rt-showstep{margin:4px 0 6px}
+body.student .rt-ans{display:none}
+body.editing .rt, body.editing .rt-showstep{display:none}
+/* Λειτουργία προβολής */
+body.proj #bar,body.proj #nav{zoom:1.25}
+body.proj{--muted:#3a4254;--line:#b5bfd2}
+:root[data-theme="dark"] body.proj{--muted:#b9c1d4;--line:#3b465e}
+@media print{#kitfloat,.rt,.rt-showstep,.kit-btn{display:none!important}.rt-hide{display:grid!important}}
+/* Καθαρές γραμμές */
+body{font-size:17px;line-height:1.68}
+.ln{display:block;margin:.22em 0}
+.ln.li{position:relative;padding-left:1.25em}
+.ln.li::before{content:"•";position:absolute;left:.35em;color:var(--muted)}
+.kvs{display:inline-flex;flex-wrap:wrap;gap:.2em 1.2em;vertical-align:top}
+.kv,.nw{white-space:nowrap}
+p,li,td{text-wrap:pretty}
+.ln.cd{font-family:var(--mono);font-size:.92em}
+.cdcols{display:inline-flex;flex-wrap:wrap;gap:4px 28px;vertical-align:top}
+.cdcol{display:inline-block;padding-left:10px;border-left:2px solid var(--line)}/*<KIT*/</style>
+<script id="kitjs">/*KITJS>*/(function(){
+  /* kit: θέμα (φωτεινό/σκοτεινό), προβολή, «Δείξε λύση» */
+  var root = document.documentElement, body = document.body, doc = document.getElementById('doc');
+  if (!doc || body.getAttribute('data-kit')) return;
+  body.setAttribute('data-kit', '1');
+  function get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function put(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+  var theme = get('synapsi-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  var proj = get('aepp-proj') === '1';
+  function mk(id, txt){ var b = document.createElement('button'); b.type = 'button'; b.id = id; b.className = 'kit-btn'; b.textContent = txt; return b; }
+  var bTheme = mk('k-theme', ''), bProj = mk('k-proj', 'Προβολή'), bAll = null;
+  function applyTheme(){ root.setAttribute('data-theme', theme); bTheme.textContent = theme === 'dark' ? '☀ Φωτεινό' : '☾ Σκοτεινό'; bTheme.setAttribute('aria-label', theme === 'dark' ? 'Φωτεινό θέμα' : 'Σκοτεινό θέμα'); }
+  function fit(){
+    if (!proj){ doc.style.zoom = ''; doc.style.maxWidth = ''; return; }
+    var W = window.innerWidth, z = W < 700 ? 1.12 : 1.38;
+    doc.style.zoom = z; doc.style.maxWidth = Math.max(300, Math.min(900, (W - 36) / z)) + 'px';
+  }
+  function applyProj(){ body.classList.toggle('proj', proj); bProj.setAttribute('aria-pressed', String(proj)); fit(); }
+  window.addEventListener('resize', fit);
+  bTheme.onclick = function(){ theme = theme === 'dark' ? 'light' : 'dark'; put('synapsi-theme', theme); applyTheme(); };
+  bProj.onclick = function(){ proj = !proj; put('aepp-proj', proj ? '1' : '0'); applyProj(); };
+  applyTheme(); applyProj();
+
+  var bar = document.getElementById('bar');
+  var teacherSec = doc.querySelector('section.teacher');
+  if (bar){
+    var anchor = document.getElementById('status') || null;
+    if (teacherSec){ bAll = mk('k-all', 'Όλες οι λύσεις'); bar.insertBefore(bAll, anchor); }
+    bar.insertBefore(bProj, anchor); bar.insertBefore(bTheme, anchor);
+  } else {
+    var f = document.createElement('div'); f.id = 'kitfloat';
+    f.appendChild(bTheme); body.appendChild(f); proj = false; applyProj();
+  }
+  if (bAll){
+    bAll.onclick = function(){ var on = !body.classList.contains('rt-all'); body.classList.toggle('rt-all', on); bAll.setAttribute('aria-pressed', String(on)); };
+  }
+
+  /* λυμένα: φαίνεται η εκφώνηση και το «Κατανοώ», τα υπόλοιπα με κουμπί */
+  doc.querySelectorAll('.box.solved').forEach(function(box){
+    var steps = box.querySelector('.steps');
+    if (!steps) return;
+    var st = steps.querySelectorAll(':scope > .step');
+    if (st.length < 2) return;
+    box.classList.add('rt-closed');
+    for (var i = 1; i < st.length; i++) st[i].classList.add('rt-hide');
+    var w = document.createElement('div'); w.className = 'rt-showstep'; w.contentEditable = 'false';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε τη λύση';
+    b.onclick = function(){ box.classList.add('rt-open'); };
+    w.appendChild(b); st[0].after(w);
+  });
+
+  /* ασκήσεις: η απάντηση από τη σελίδα καθηγητή, κρυμμένη κάτω από την εκφώνηση */
+  if (teacherSec){
+    var ans = {};
+    teacherSec.querySelectorAll('.ans .q').forEach(function(q){ var n = q.querySelector('.qn'); if (n) ans[n.textContent.trim()] = q; });
+    doc.querySelectorAll('.exercises .q').forEach(function(q){
+      var n = q.querySelector(':scope > .qn'); if (!n) return;
+      var a = ans[n.textContent.trim()]; if (!a) return;
+      var w = document.createElement('div'); w.className = 'rt rt-ans'; w.contentEditable = 'false';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε λύση';
+      var bodyEl = document.createElement('div'); bodyEl.className = 'rt-body ans';
+      var c = a.cloneNode(true); var qn = c.querySelector('.qn'); if (qn) qn.remove();
+      bodyEl.appendChild(c);
+      b.onclick = function(){ var on = !w.classList.contains('rt-open'); w.classList.toggle('rt-open', on); b.textContent = on ? 'Κρύψε λύση' : 'Δείξε λύση'; };
+      w.appendChild(b); w.appendChild(bodyEl);
+      q.after(w);
+    });
+  }
+})();/*<KITJS*/</script>
+
+</body></html>

@@ -1,0 +1,955 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Μάθημα 9 · Το πρώτο σου πρόγραμμα: εκχώρηση, είσοδος, έξοδος</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
+<style>
+/* Layout: one A4-like sheet centred on a cool ground; coloured callouts by role (ορισμός, ήξερες ότι, παγίδα, παράδειγμα) */
+:root{
+  --ground:#e9edf4; --paper:#ffffff; --ink:#172036; --muted:#5a6377; --line:#d9dfea; --soft:#f3f5f9;
+  --blue:#2457d6; --blue-bg:#e9efff; --teal:#0b7f72; --teal-bg:#e2f4f1;
+  --amber:#a65400; --amber-bg:#fff3df; --amber-line:#e2ad62;
+  --coral:#b93b12; --coral-bg:#fcebe4; --violet:#6534c9; --violet-bg:#efe8fd;
+  --s-blue:#2457d6; --s-teal:#0b8174; --s-violet:#6534c9; --s-ink:#172036; --on-solid:#ffffff; --on-solid-2:#d8e1ff;
+  --hero:#172036; --hero-fg:#ffffff; --hero-sub:#c4cef0; --hero-kick:#a9bcff;
+  --mark:#ffe28a;
+  --display:"Commissioner","Noto Sans",system-ui,sans-serif;
+  --body:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0 0 8px}
+
+/* Toolbar */
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:10px 0;background:var(--ground)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:3px}
+.seg button,.btn{font:600 13px/1 var(--body);border:0;background:none;color:var(--muted);padding:8px 13px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid)}
+.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.spacer{flex:1}
+#status{font-size:12.5px;color:var(--muted)}
+.edit-only{display:none}
+body.editing .edit-only{display:inline-block}
+body.editing .view-only{display:none}
+body.editing #doc{outline:2px dashed var(--blue);outline-offset:6px}
+body.editing #doc [contenteditable="false"]{cursor:default}
+
+/* Sheet */
+#doc{max-width:860px;margin:0 auto;background:var(--paper);border-radius:14px;padding:clamp(18px,4vw,44px);box-shadow:0 1px 2px rgba(10,20,40,.06),0 8px 30px rgba(10,20,40,.06)}
+body.student .teacher{display:none}
+
+.hero{background:var(--hero);color:var(--hero-fg);border-radius:14px;padding:22px 24px 24px;position:relative;overflow:hidden}
+.hero .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--hero-kick);font-weight:700}
+.hero h1{font-size:clamp(28px,5vw,40px);font-weight:800;margin:6px 0 8px;letter-spacing:-.01em}
+.hero .sub{color:var(--hero-sub);max-width:34em}
+.hero .sub b{color:var(--hero-fg)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.12);color:var(--hero-fg)}
+.hero .deco{position:absolute;right:-10px;top:-6px;opacity:.16;width:220px;height:auto}
+.hero .deco *{stroke:var(--hero-fg)}
+
+.goals{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 18px;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px}
+.goals h3{grid-column:1/-1;font-size:13px;color:var(--blue);text-transform:uppercase;letter-spacing:.08em}
+.goals div{padding-left:20px;position:relative;font-size:14px}
+.goals div::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:800}
+
+.glance{margin-top:14px;background:var(--soft);border-radius:12px;padding:14px 16px}
+.glance h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.figure{overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:520px;height:auto;font-family:var(--body)}
+
+.sec{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:5px;margin:30px 0 12px;break-after:avoid}
+.sec .num{font-family:var(--display);font-weight:800;font-size:22px;color:var(--blue);font-variant-numeric:tabular-nums}
+.sec h2{font-size:22px;font-weight:800}
+.sec .ref{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;break-inside:avoid}
+.tag{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.def{background:var(--blue-bg);border-left:4px solid var(--blue)} .def .tag{color:var(--blue)}
+.src{font-size:12px;color:var(--muted);margin:2px 0 0}
+.trivia{background:var(--amber-bg);border:1.5px dashed var(--amber-line)} .trivia .tag{color:var(--amber)}
+.talk{margin-top:6px;font-size:14px;color:var(--amber);font-weight:600}
+.talk span{font-weight:400}
+.trap{background:var(--coral-bg);border-left:4px solid var(--coral)} .trap .tag{color:var(--coral)}
+.ex{background:var(--teal-bg);border-left:4px solid var(--teal)} .ex .tag{color:var(--teal)}
+.plain{background:var(--soft)} .plain .tag{color:var(--ink)}
+.hl{background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 1px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:10px 0}
+.grid .box{margin:0}
+ul.tight{margin:4px 0 8px;padding-left:20px} ul.tight li{margin:3px 0}
+.small{font-size:13px;color:var(--muted)}
+.cap{font-size:13.5px;font-weight:700;margin-bottom:6px}
+
+.tablewrap{overflow-x:auto;margin:10px 0}
+table.t{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
+table.t th{background:var(--s-ink);color:var(--paper);text-align:left;padding:7px 10px;font-weight:600}
+table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:top}
+
+.exhead{display:flex;align-items:center;gap:10px;margin:22px 0 8px}
+.lvl{display:inline-flex;gap:4px}
+.lvl i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}
+.lvl i.on{background:var(--violet)}
+.exhead h3{font-size:17px}
+.q{margin:10px 0 14px;break-inside:avoid}
+.qn{display:inline-block;min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:7px;background:var(--violet-bg);color:var(--violet);font-weight:800;font-size:13px;margin-right:8px}
+.theme{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-left:6px}
+table.tf{width:100%;border-collapse:collapse;margin-top:6px;font-size:14.5px}
+table.tf td{padding:6px 8px;border-bottom:1px solid var(--line)}
+table.tf td.b{width:70px;text-align:center;color:var(--muted)}
+.lines{height:var(--h,44px);background:repeating-linear-gradient(transparent 0 27px,var(--line) 27px 28px);margin-top:6px}
+.drawbox{height:180px;border:1.5px dashed var(--line);border-radius:10px;margin-top:8px}
+.indent{margin-left:34px}
+.sol{color:var(--teal);font-weight:700}
+.ans .q{margin:8px 0}
+.teacher .sec{border-color:var(--teal)} .teacher .sec .num{color:var(--teal)}
+
+/* SVG roles */
+.f-blue{fill:var(--s-blue)} .f-teal{fill:var(--s-teal)} .f-violet{fill:var(--s-violet)} .f-ink{fill:var(--s-ink)}
+.f-paper{fill:var(--paper)} .f-on{fill:var(--on-solid)} .f-on2{fill:var(--on-solid-2)} .f-text{fill:var(--ink)} .f-muted{fill:var(--muted)} .f-onink{fill:var(--paper)}
+.st-ink{stroke:var(--ink)} .st-blue{stroke:var(--blue)} .st-teal{stroke:var(--teal)} .st-violet{stroke:var(--violet)}
+.f-arrow{fill:var(--ink)}
+
+
+/* v2 additions: code, narrow flowcharts, legends */
+:root{--mono:ui-monospace,"Cascadia Mono","Consolas","DejaVu Sans Mono",monospace}
+pre.code{font-family:var(--mono);font-size:14px;line-height:1.55;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:6px 0 8px;overflow-x:auto;white-space:pre}
+.figure.narrow svg{min-width:0;max-width:250px;margin:4px auto}
+.grid.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+ul.legend{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0 2px}
+ul.legend li{font-size:14px}
+ul.legend b{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:6px;background:var(--violet-bg);color:var(--violet);margin-right:4px}
+
+
+/* v3 additions: solved examples step by step, blank value tables */
+.solved{border:1.5px solid var(--teal);background:var(--paper)} .solved .tag{color:var(--teal)}
+.steps{display:grid;gap:14px;margin-top:10px}
+.step{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.stepn{width:30px;height:30px;border-radius:50%;background:var(--s-teal);color:var(--on-solid);font:800 14px/30px var(--display);text-align:center}
+table.t.blank td{height:34px;border:1px solid var(--line)}
+
+/* v4: graphs */
+.figure.narrow.graph svg{max-width:380px}
+
+/* v5: toolbox subsections */
+h3.tool{font-size:17px;margin:24px 0 8px;padding-top:4px;border-top:1px solid var(--line)}
+
+/* homework vs self-check */
+.q.hw::before{content:"Για το σπίτι";display:block;width:max-content;font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:99px;padding:4px 9px;margin-bottom:6px}
+body.editing .q.hw::before{display:none}
+.hwtoggle{display:block;margin-bottom:6px;font:600 12px/1 var(--body);padding:6px 10px;border-radius:99px;border:1.5px dashed var(--line);background:var(--paper);color:var(--muted);cursor:pointer}
+.hwtoggle[aria-pressed="true"]{border-style:solid;border-color:var(--amber-line);color:var(--amber);background:var(--amber-bg)}
+.hwnote{font-size:13px;color:var(--amber);font-weight:600}
+
+@media (max-width:520px){ .indent{margin-left:0} .hero .deco{display:none} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* v4: math notation (fractions, roots) */
+.mx{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:1.06em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 2px;line-height:1.25}
+.frac>span{padding:0 4px}
+.frac>span:first-child{border-bottom:1.3px solid currentColor}
+.rt{border-top:1.3px solid currentColor;padding:0 2px 0 1px;margin-left:1px}
+
+/* student additions */
+#doc{margin-top:0}
+#nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ground);max-width:860px;margin:0 auto;padding-block:10px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.navin{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.navin::-webkit-scrollbar{display:none}
+#nav a{flex:none;font:600 13px/1 var(--body);color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
+#nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
+.btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.quiz{display:grid;gap:10px;margin-top:10px}
+.qi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:8px}
+.qi .qs{margin:0}
+.qb{display:flex;gap:8px;flex-wrap:wrap}
+.qb button{font:600 14px/1 var(--body);padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;min-width:96px}
+.qb button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.qi.ok{border-color:var(--teal);background:var(--teal-bg)}
+.qi.no{border-color:var(--coral);background:var(--coral-bg)}
+.qi .qb button.pick{border-color:currentColor}
+.qi.ok .qb button.pick{background:var(--s-teal);border-color:var(--s-teal);color:var(--on-solid)}
+.qi.no .qb button.pick{background:var(--coral);border-color:var(--coral);color:var(--paper)}
+.qi.no .qb button.right{border-color:var(--teal);color:var(--teal)}
+.fb{font-size:13px;font-weight:700}
+.qi.ok .fb{color:var(--teal)} .qi.no .fb{color:var(--coral)}
+.score{font:700 15px/1.4 var(--display);padding:10px 14px;border-radius:10px;background:var(--violet-bg);color:var(--violet);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.score .btn{font-size:13px;padding:8px 12px}
+
+details.reveal{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+details.reveal summary{cursor:pointer;font-weight:700;color:var(--teal);padding:10px 14px;list-style:none}
+details.reveal summary::-webkit-details-marker{display:none}
+details.reveal summary::before{content:"▸ ";}
+details.reveal[open] summary::before{content:"▾ ";}
+details.reveal .rv{padding:0 14px 12px}
+
+.deck{display:grid;gap:12px;margin-top:10px}
+.card{position:relative;display:block;width:100%;min-height:220px;border:0;padding:0;background:none;cursor:pointer;perspective:1200px;font:inherit;color:inherit;text-align:left}
+.card .face{position:absolute;inset:0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;backface-visibility:hidden;transition:transform .45s ease}
+.card .front{background:var(--hero);color:var(--hero-fg);justify-content:center}
+.card .back{background:var(--blue-bg);color:var(--ink);border:1.5px solid var(--blue);transform:rotateY(180deg);overflow:auto}
+.card.flipped .front{transform:rotateY(-180deg)}
+.card.flipped .back{transform:rotateY(0)}
+.card:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:14px}
+.ck{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.term{font:800 clamp(24px,6vw,34px)/1.15 var(--display)}
+.cdef{font-size:15.5px;line-height:1.55}
+.tap{font-size:12.5px;opacity:.7;margin-top:auto}
+.deckbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.count{font:700 14px var(--display);min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.card .face{transition:none}}
+@media (max-width:520px){ #doc{border-radius:12px} .card{min-height:260px} }
+</style>
+<style id="synapsi-brand">
+:root{--ground:#F7F6F0;--ink:#2B3722;--muted:#5E6253;--line:#E1E1D7;--soft:#F3F2EA;--blue:#4F6230;--blue-bg:#EEF0E2;--s-blue:#4F6230;--s-ink:#2B3722;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D;--on-solid-2:#E6E0CC}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}}
+:root[data-theme="dark"]{--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}
+body::before{background:var(--ground)}
+.syn-bar{max-width:860px;margin:0 auto;padding-top:12px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
+.syn-bar a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--hero);color:#fff;text-decoration:none}
+.syn-bar span{color:var(--muted)}
+.syn-foot{max-width:860px;margin:18px auto 0;display:flex;flex-direction:column;gap:12px}
+.syn-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.syn-nav a,.syn-nav span{min-height:52px;padding:8px 14px;border-radius:12px;display:flex;flex-direction:column;justify-content:center;gap:2px;text-decoration:none;font:700 14px/1.3 var(--display);background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.syn-nav small{font:600 11.5px var(--body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.syn-nav .next{text-align:right;background:var(--hero);color:#fff;border-color:var(--hero)}
+.syn-nav .next small{color:var(--hero-kick)}
+.syn-nav .off{opacity:.6}
+.syn-note{font-size:13px;color:var(--muted);padding:12px 14px;border-radius:10px;background:var(--soft)}
+.syn-copy{font-size:12px;color:var(--muted)}
+</style>
+<script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<div class="syn-bar"><a href="../index.html">&#8592; Διαδρομή</a><span>Μάθημα 9 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-recap">Υπενθύμιση</a><a href="#s-7-8">7.8</a><a href="#s-7-9">7.9</a><a href="#s-7-10">7.10</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a></div></nav>
+<main id="doc" lang="el">
+<section class="hero">
+<svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
+<rect height="74" rx="6" width="110" x="96" y="20"></rect>
+<path d="M136 94v18M116 112h60"></path>
+<path d="M108 40h40M108 54h70M108 68h30"></path>
+<rect height="24" rx="4" width="104" x="100" y="126"></rect>
+<path d="M110 138h4M122 138h4M134 138h4M146 138h4M158 138h4M170 138h4M182 138h12"></path>
+</svg>
+<div class="kicker">Κεφάλαιο 7 · Βασικές έννοιες προγραμματισμού</div>
+<h1>Το πρώτο σου πρόγραμμα: εκχώρηση, είσοδος, έξοδος</h1>
+<p class="sub">Μέχρι τώρα έγραφες αλγορίθμους για ανθρώπους. Σήμερα γράφεις <b>προγράμματα για τον υπολογιστή</b>: διαβάζουν από το πληκτρολόγιο, υπολογίζουν και <b>μιλάνε στον χρήστη</b> στην οθόνη.</p>
+<div class="chips"><span class="chip">Βιβλίο §2.4.1, 7.8–7.10 · σελ. 36, 132–135</span><span class="chip">Οδηγίες Μελέτης §1.6</span><span class="chip">3 διδακτικές ώρες · εργαστήριο</span><span class="chip">Θέματα Β, Γ, Δ</span></div>
+</section>
+<div class="goals">
+<h3>Στο τέλος του μαθήματος θα μπορείς να…</h3>
+<div>χρησιμοποιείς σωστά την <b>εντολή εκχώρησης</b> και ελέγχεις τον <b>τύπο</b></div>
+<div>διαβάζεις δεδομένα με <b>ΔΙΑΒΑΣΕ</b> και εμφανίζεις μηνύματα και αποτελέσματα με <b>ΓΡΑΨΕ</b></div>
+<div>γράφεις <b>πλήρες πρόγραμμα</b> σε ΓΛΩΣΣΑ, με δηλώσεις και σχόλια</div>
+<div>μετατρέπεις <b>αλγόριθμο</b> ή <b>διάγραμμα ροής</b> σε πρόγραμμα και αντίστροφα</div>
+<div>κάνεις <b>πίνακα τιμών</b> και γράφεις τι θα εμφανιστεί στην <b>οθόνη</b></div>
+<div>βρίσκεις και διορθώνεις <b>λάθη</b> σε έτοιμα προγράμματα</div>
+</div>
+<div class="glance">
+<h3>Όλο το μάθημα με μια ματιά: είσοδος → επεξεργασία → έξοδος</h3>
+<div class="figure">
+<svg aria-label="Το πληκτρολόγιο δίνει τιμές με ΔΙΑΒΑΣΕ στις μεταβλητές της μνήμης. Η εκχώρηση υπολογίζει νέες τιμές στη μνήμη. Η ΓΡΑΨΕ εμφανίζει μηνύματα και τιμές στην οθόνη." font-size="11" role="img" viewbox="0 0 640 188">
+<defs><marker id="arG9" markerheight="7" markerwidth="7" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="f-arrow" d="M0 0L10 5L0 10z"></path></marker></defs>
+<g stroke-width="1.8">
+<rect class="f-paper st-teal" height="90" rx="10" width="130" x="10" y="40"></rect>
+<rect class="f-paper st-violet" height="130" rx="10" width="140" x="250" y="20"></rect>
+<rect class="f-paper st-blue" height="90" rx="10" width="130" x="500" y="40"></rect>
+</g>
+<g font-size="12.5" font-weight="700" text-anchor="middle"><text class="f-teal" x="75" y="62">Είσοδος</text><text class="f-violet" x="320" y="42">Επεξεργασία</text><text class="f-blue" x="565" y="62">Έξοδος</text></g>
+<g class="f-text" font-size="11" text-anchor="middle"><text x="75" y="82">πληκτρολόγιο:</text><text x="75" y="98">ο χρήστης δίνει</text><text x="75" y="113">τιμές</text>
+<text x="565" y="82">οθόνη:</text><text x="565" y="98">μηνύματα και</text><text x="565" y="113">αποτελέσματα</text></g>
+<g stroke-width="1.4"><rect class="f-paper st-ink" height="30" rx="4" width="52" x="264" y="56"></rect><rect class="f-paper st-ink" height="30" rx="4" width="52" x="324" y="56"></rect><rect class="f-paper st-ink" height="30" rx="4" width="60" x="290" y="100"></rect></g>
+<g class="f-text" font-family="ui-monospace,Consolas,monospace" font-size="11.5" text-anchor="middle"><text x="290" y="76">α 4</text><text x="350" y="76">β 3</text><text x="320" y="120">εμβ 12</text></g>
+<g class="st-ink" fill="none" stroke-width="1.6"><path d="M141 92H248" marker-end="url(#arG9)"></path><path d="M391 92H498" marker-end="url(#arG9)"></path><path d="M298 87L310 98" marker-end="url(#arG9)"></path><path d="M342 87L330 98" marker-end="url(#arG9)"></path></g>
+<g class="f-text" font-family="ui-monospace,Consolas,monospace" font-size="11" font-weight="700" text-anchor="middle"><text x="195" y="82">ΔΙΑΒΑΣΕ α, β</text><text x="445" y="82">ΓΡΑΨΕ εμβ</text><text x="320" y="170">εμβ ← α * β</text></g>
+<g class="f-muted" font-size="10.5" text-anchor="middle"><text x="195" y="110">§7.9</text><text x="445" y="110">§7.9</text><text x="320" y="184">εκχώρηση · §7.8</text></g>
+</svg>
+</div>
+</div>
+<div class="sec" id="s-recap"><span class="num">⟳</span><h2>Η δομή ακολουθίας</h2><span class="ref">Βιβλίο §2.4.1, σελ. 36</span></div>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση</div>
+<p><b>Δομή ακολουθίας.</b> Η ακολουθιακή δομή εντολών (σειριακών βημάτων) χρησιμοποιείται πρακτικά για την αντιμετώπιση απλών προβλημάτων, όπου είναι δεδομένη η σειρά εκτέλεσης ενός συνόλου ενεργειών.</p>
+<p class="src">Σχολικό βιβλίο, §2.4.1</p>
+</div>
+<p>Τη γνώρισες στο Μάθημα 3 με ψευδογλώσσα και διάγραμμα ροής: οι εντολές εκτελούνται <b>μία φορά η καθεμία</b>, <b>με τη σειρά που γράφονται</b>. Στη ΓΛΩΣΣΑ ισχύει το ίδιο. Αυτό που αλλάζει είναι ο «σκελετός» (Μάθημα 7) και οι λέξεις των εντολών:</p>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th>Ψευδογλώσσα</th><th>ΓΛΩΣΣΑ</th><th>Τι αλλάζει</th></tr>
+<tr><td>Αλγόριθμος Όνομα … Τέλος Όνομα</td><td>ΠΡΟΓΡΑΜΜΑ Όνομα … ΑΡΧΗ … ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Όνομα</td><td>προστίθενται δηλώσεις σταθερών και μεταβλητών</td></tr>
+<tr><td>Διάβασε α, β</td><td>ΔΙΑΒΑΣΕ α, β</td><td>ίδια λειτουργία</td></tr>
+<tr><td><span class="nw">Εμφάνισε / Εκτύπωσε</span> …</td><td>ΓΡΑΨΕ …</td><td>μία εντολή για κάθε έξοδο</td></tr>
+<tr><td><span class="ln li">Δεδομένα // … //</span><span class="ln li">Αποτελέσματα // … //</span></td><td><span class="kvs"><span class="kv">ΔΙΑΒΑΣΕ …</span><span class="kv">ΓΡΑΨΕ …</span></span></td><td>η ΓΛΩΣΣΑ δεν έχει <span class="nw">Δεδομένα / Αποτελέσματα</span></td></tr>
+<tr><td>Αντιμετάθεσε α, β</td><td><span class="kvs"><span class="kv">temp ← α</span><span class="kv">α ← β</span><span class="kv">β ← temp</span></span></td><td>η ΓΛΩΣΣΑ δεν έχει Αντιμετάθεσε</td></tr>
+</tbody></table></div>
+<div class="sec" id="s-7-8"><span class="num">7.8</span><h2>Εντολή εκχώρησης</h2><span class="ref">Βιβλίο σελ. 132</span></div>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση</div>
+<p><b>Εντολή εκχώρησης.</b> Η εντολή εκχώρησης χρησιμοποιείται για την απόδοση τιμών στις μεταβλητές κατά τη διάρκεια εκτέλεσης του προγράμματος. Σύνταξη: Όνομα-<span class="nw">Μεταβλητής ← έκφραση.</span></p>
+<p><b>Λειτουργία εκχώρησης.</b> Υπολογίζεται η τιμή της έκφρασης στη δεξιά πλευρά και εκχωρείται η τιμή αυτή στη μεταβλητή, που αναφέρεται στην αριστερή πλευρά.</p>
+<p class="src">Σχολικό βιβλίο, §7.8</p>
+</div>
+<div class="grid g2" style="align-items:start">
+<pre class="code">Α ← 132
+ΜΗΝΑΣ ← 'Ιανουάριος'
+ΕΜΒΑΔΟΝ ← Α * Β
+μετρητής ← μετρητής + 1
+άθροισμα ← άθροισμα + χ
+πέρασε ← βαθμός &gt;= 10</pre>
+<div>
+<p><b>Αριστερά: μόνο ένα όνομα μεταβλητής.</b> Ποτέ πράξη, σταθερά ή τιμή (το <span class="nw">α + β ← 5</span> και το <span class="nw">5 ← α</span> είναι λάθος).</p>
+<p><b>Δεξιά: οποιαδήποτε έκφραση</b>, που μπορεί να περιέχει και την ίδια τη μεταβλητή: το <span class="nw">μετρητής ← μετρητής + 1</span> αυξάνει την τιμή κατά 1 (<b>μετρητής</b>) και το <span class="nw">άθροισμα ← άθροισμα + χ</span> προσθέτει το χ (<b>αθροιστής</b>). Θα τα χρησιμοποιούμε πολύ στις επαναλήψεις.</p>
+<p><b>Ίδιος τύπος</b> αριστερά και δεξιά: η μεταβλητή και η έκφραση πρέπει να είναι του ιδίου τύπου.</p>
+<p class="src">Οδηγίες Μελέτης Μαθητή, §1.6</p>
+</div>
+</div>
+<div class="box trap"><div class="tag">Δεν είναι εξίσωση</div><p>Στην εξίσωση το αριστερό μέλος <b>ισούται</b> με το δεξί. Στην εκχώρηση η τιμή του δεξιού μέλους <b>μεταβιβάζεται</b> στη μεταβλητή του αριστερού. Γι' αυτό η ΓΛΩΣΣΑ χρησιμοποιεί το σύμβολο <b>←</b> και όχι το =. Το <span class="nw">α = α + 1</span> είναι σύγκριση (πάντα ΨΕΥΔΗΣ). Το <span class="nw">α ← α + 1</span> είναι εντολή.</p></div>
+<div class="sec" id="s-7-9"><span class="num">7.9</span><h2>Εντολές εισόδου και εξόδου</h2><span class="ref">Βιβλίο σελ. 133–134</span></div>
+<div class="grid g2" style="align-items:start">
+<div class="box def" style="margin:0">
+<div class="tag">Ορισμός · απομνημόνευση · ΔΙΑΒΑΣΕ</div>
+<p><b>ΔΙΑΒΑΣΕ.</b> Η εκτέλεση της εντολής οδηγεί στην είσοδο τιμών από το πληκτρολόγιο και την εκχώρησή τους στις μεταβλητές που αναφέρονται. Ακολουθείται πάντοτε από ένα ή περισσότερα ονόματα μεταβλητών, που χωρίζονται με κόμμα. Κατά την εκτέλεση η εντολή διακόπτει το πρόγραμμα, που περιμένει την εισαγωγή τιμών.</p>
+<p class="src">Σχολικό βιβλίο, §7.9</p>
+</div>
+<div class="box def" style="margin:0">
+<div class="tag">Ορισμός · απομνημόνευση · ΓΡΑΨΕ</div>
+<p><b>ΓΡΑΨΕ.</b> Χρησιμοποιείται για την εμφάνιση σταθερών τιμών καθώς και των τιμών των μεταβλητών που αναφέρονται στη λίστα. Όταν κάποιο όνομα μεταβλητής περιέχεται στη λίστα, αρχικά ανακτάται η τιμή της και στη συνέχεια η τιμή αυτή εμφανίζεται στην οθόνη.</p>
+<p class="src">Σχολικό βιβλίο, §7.9</p>
+</div>
+</div>
+<p>Η ΓΡΑΨΕ μπορεί να έχει στη λίστα της <b>κείμενο σε εισαγωγικά</b> (εμφανίζεται ακριβώς όπως είναι), <b>μεταβλητές</b> (εμφανίζεται η τιμή τους) και <b>εκφράσεις</b> (εμφανίζεται το αποτέλεσμα). Τα στοιχεία χωρίζονται με κόμμα.</p>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th>Αν <span class="nw">α = 7</span> και <span class="nw">όνομα = 'Άννα'</span></th><th>Στην οθόνη</th></tr>
+<tr><td><code>ΓΡΑΨΕ α</code></td><td>7</td></tr>
+<tr><td><code>ΓΡΑΨΕ 'α'</code></td><td>α</td></tr>
+<tr><td><code>ΓΡΑΨΕ α * 2 + 1</code></td><td>15</td></tr>
+<tr><td><code>ΓΡΑΨΕ 'Η', όνομα, 'πήρε', α</code></td><td>Η Άννα πήρε 7</td></tr>
+<tr><td><code>ΓΡΑΨΕ 'όνομα'</code></td><td>όνομα</td></tr>
+</tbody></table></div>
+<div class="grid g2">
+<div class="box ex"><div class="tag">Φιλικό πρόγραμμα: πρώτα ρωτάς, μετά διαβάζεις</div>
+<pre class="code">ΓΡΑΨΕ 'Δώσε την ηλικία σου:'
+ΔΙΑΒΑΣΕ ηλικία</pre>
+<p>Χωρίς το μήνυμα, ο χρήστης βλέπει μια οθόνη που «περιμένει» και δεν ξέρει τι να πληκτρολογήσει. Στις εξετάσεις το μήνυμα <b>δεν</b> είναι υποχρεωτικό, εκτός αν το ζητά η εκφώνηση. Στο εργαστήριο βάζε το πάντα.</p></div>
+<div class="box trap" style="margin:0"><div class="tag">Μετά τη ΔΙΑΒΑΣΕ μόνο μεταβλητές</div><p><b>ΔΙΑΒΑΣΕ 'Δώσε όνομα'</b>, <b>ΔΙΑΒΑΣΕ <span class="nw">α + 1</span></b> και <b>ΔΙΑΒΑΣΕ ΦΠΑ</b> (σταθερά) είναι λάθος. Τα μηνύματα γράφονται με ΓΡΑΨΕ. Και στη ΓΡΑΨΕ το κείμενο θέλει <b>εισαγωγικά</b>: το ΓΡΑΨΕ Τέλος χωρίς εισαγωγικά ψάχνει μεταβλητή «Τέλος».</p></div>
+</div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Το πρώτο πρόγραμμα που γράφει σχεδόν κάθε προγραμματιστής στον κόσμο εμφανίζει μόνο το μήνυμα <b>«Hello, world!»</b>. Η παράδοση ξεκίνησε από τον <b>Brian Kernighan</b>, που το χρησιμοποίησε στις αρχές της δεκαετίας του 1970 σε εγχειρίδια για τις γλώσσες B και C στα εργαστήρια Bell. Από τότε είναι το «καλωσόρισμα» σε κάθε νέα γλώσσα.</p>
+<p class="talk">Σκέψου: Γράψε το «Hello, world!» σε ΓΛΩΣΣΑ. Χρειάζεται τμήμα ΜΕΤΑΒΛΗΤΕΣ; Γιατί όχι;</p>
+</div>
+<div class="sec" id="s-7-10"><span class="num">7.10</span><h2>Δομή προγράμματος</h2><span class="ref">Βιβλίο σελ. 134–135</span></div>
+<p>Όπως κάθε εντολή ακολουθεί αυστηρούς συντακτικούς κανόνες, έτσι και ολόκληρο το πρόγραμμα. Τον «σκελετό» τον είδαμε στο Μάθημα 7. Εδώ είναι ένα πλήρες πρόγραμμα, με όλα τα κομμάτια του στη θέση τους:</p>
+<div class="grid g2" style="align-items:start">
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Σινεμά
+! Κόστος εισιτηρίων για μια παρέα
+ΣΤΑΘΕΡΕΣ
+  ΕΙΣΙΤΗΡΙΟ = 9.5
+  ΠΟΠ_ΚΟΡΝ = 4
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: άτομα, σακουλάκια
+  ΠΡΑΓΜΑΤΙΚΕΣ: σύνολο
+ΑΡΧΗ
+  ! Είσοδος
+  ΓΡΑΨΕ 'Πόσα άτομα και πόσα ποπ κορν;'
+  ΔΙΑΒΑΣΕ άτομα, σακουλάκια
+  ! Επεξεργασία
+  σύνολο ← άτομα * ΕΙΣΙΤΗΡΙΟ +
+  &amp; σακουλάκια * ΠΟΠ_ΚΟΡΝ
+  ! Έξοδος
+  ΓΡΑΨΕ 'Θα πληρώσετε', σύνολο, '€'
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Σινεμά</pre>
+<div>
+<ol class="tight">
+<li><b>Επικεφαλίδα:</b> ΠΡΟΓΡΑΜΜΑ και όνομα. Είναι υποχρεωτικά η πρώτη εντολή.</li>
+<li><b>Σχόλια (!)</b>: εξηγούν τι κάνει κάθε κομμάτι. Δεν εκτελούνται.</li>
+<li><b>ΣΤΑΘΕΡΕΣ</b>, αν υπάρχουν.</li>
+<li><b>ΜΕΤΑΒΛΗΤΕΣ</b>: υποχρεωτικά όλες, με τον τύπο τους.</li>
+<li><b>Κύριο μέρος</b> ανάμεσα σε ΑΡΧΗ και ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ: πρώτα είσοδος, μετά επεξεργασία, στο τέλος έξοδος.</li>
+<li><b>&amp;</b>: η εντολή συνεχίζεται στην επόμενη γραμμή.</li>
+<li>Αν υπάρχουν διαδικασίες (κεφ. 10), γράφονται <b>μετά</b> το ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ.</li>
+</ol>
+<p class="small">Για 3 άτομα και 2 ποπ κορν η οθόνη δείχνει: <b>Θα πληρώσετε 36.5 €</b>.</p>
+</div>
+</div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Υπάρχει μια διάσημη φωτογραφία του 1969 με τη <b>Margaret Hamilton</b>, επικεφαλής της ομάδας που έγραψε το λογισμικό πλοήγησης των αποστολών <b>Apollo</b>, να στέκεται δίπλα σε μια στοίβα με εκτυπώσεις κώδικα σχεδόν όσο ψηλή είναι η ίδια. Σε τόσο μεγάλα προγράμματα, χωρίς σταθερή δομή και σχόλια, κανείς δεν θα έβρισκε τίποτα.</p>
+<p class="talk">Σκέψου: Ποιος διαβάζει τα σχόλια ενός προγράμματος, αφού ο υπολογιστής τα αγνοεί;</p>
+</div>
+<div class="box trap">
+<div class="tag">Παγίδες που κοστίζουν μονάδες</div>
+<ul class="tight">
+<li>Αριστερά από το ← <b>μόνο ένα όνομα μεταβλητής</b>. Ποτέ σταθερά, τιμή ή πράξη.</li>
+<li>Η μεταβλητή που χρησιμοποιείς δεξιά πρέπει να <b>έχει ήδη τιμή</b> (από ΔΙΑΒΑΣΕ ή εκχώρηση).</li>
+<li>Ίδιος τύπος αριστερά και δεξιά. Αποτέλεσμα <span class="nw">της / σε</span> ακέραια μεταβλητή: λάθος.</li>
+<li>ΔΙΑΒΑΣΕ: <b>μόνο ονόματα μεταβλητών</b>. Τα μηνύματα με ΓΡΑΨΕ, σε <b>εισαγωγικά</b>.</li>
+<li>Στη ΓΡΑΨΕ τα στοιχεία χωρίζονται με <b>κόμμα</b>: ΓΡΑΨΕ 'Σύνολο:', σ.</li>
+<li>Τα δεδομένα που λέει η εκφώνηση ότι «διαβάζονται» μπαίνουν σε ΔΙΑΒΑΣΕ. Οι <b>γνωστές τιμές</b> (ΦΠΑ, 60 λεπτά) γράφονται στις εκφράσεις ή γίνονται σταθερές.</li>
+<li>ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ με το <b>ίδιο όνομα</b> με την επικεφαλίδα.</li>
+</ul>
+</div>
+<div class="box def">
+<div class="tag">Σύνοψη</div>
+<p><b>Εκχώρηση:</b> <span class="nw">μεταβλητή ← έκφραση.</span> Υπολογίζεται το δεξί μέρος και η τιμή πηγαίνει στη μεταβλητή. Ίδιος τύπος.</p>
+<p><b>ΔΙΑΒΑΣΕ:</b> σταματά το πρόγραμμα μέχρι ο χρήστης να δώσει τιμές από το πληκτρολόγιο, που εκχωρούνται στις μεταβλητές.</p>
+<p><b>ΓΡΑΨΕ:</b> εμφανίζει στην οθόνη σταθερές (π.χ. μηνύματα σε εισαγωγικά) και τιμές μεταβλητών ή εκφράσεων.</p>
+<p><b>Πρόγραμμα</b>, από πάνω προς τα κάτω: επικεφαλίδα, σταθερές, μεταβλητές, ΑΡΧΗ … ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ.</p>
+</div>
+
+<section class="solved-wrap">
+<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένα παραδείγματα βήμα-βήμα</h2><span class="ref">Έτσι σκεφτόμαστε</span></div>
+<div class="box solved">
+<div class="tag">Λυμένο 1 · Τι θα δει ο χρήστης στην οθόνη;</div>
+<p>Να γραφτεί τι θα εμφανιστεί στην οθόνη, αν ο χρήστης δώσει 12 και 5.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Οθόνη
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: α, β, γ
+ΑΡΧΗ
+  ΓΡΑΨΕ 'Δώσε δύο αριθμούς'
+  ΔΙΑΒΑΣΕ α, β
+  γ ← α div β
+  ΓΡΑΨΕ 'γ'
+  ΓΡΑΨΕ γ, α mod β
+  α ← α + γ
+  ΓΡΑΨΕ 'α =', α, 'και α / β =', α / β
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Οθόνη</pre>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Μου ζητούν την <b>οθόνη</b>, όχι μόνο τις τιμές. Κάθε ΓΡΑΨΕ γράφει μία γραμμή. Ό,τι είναι σε εισαγωγικά εμφανίζεται <b>όπως είναι</b>.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Φτιάχνω πίνακα τιμών με στήλη «Οθόνη». Στην ΔΙΑΒΑΣΕ γράφω ποια τιμή πήρε κάθε μεταβλητή. Σε κάθε ΓΡΑΨΕ αντικαθιστώ τις μεταβλητές και τις εκφράσεις με την τιμή τους.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<div class="tablewrap"><table class="t"><tbody><tr><th>Εντολή</th><th>α</th><th>β</th><th>γ</th><th>Οθόνη</th></tr>
+<tr><td>ΓΡΑΨΕ 'Δώσε δύο αριθμούς'</td><td></td><td></td><td></td><td>Δώσε δύο αριθμούς</td></tr>
+<tr><td>ΔΙΑΒΑΣΕ α, β</td><td>12</td><td>5</td><td></td><td></td></tr>
+<tr><td><span class="nw">γ ← α div β</span></td><td>12</td><td>5</td><td>2</td><td></td></tr>
+<tr><td>ΓΡΑΨΕ 'γ'</td><td>12</td><td>5</td><td>2</td><td>γ</td></tr>
+<tr><td>ΓΡΑΨΕ γ, <span class="nw">α mod β</span></td><td>12</td><td>5</td><td>2</td><td>2 2</td></tr>
+<tr><td><span class="nw">α ← α + γ</span></td><td>14</td><td>5</td><td>2</td><td></td></tr>
+<tr><td>ΓΡΑΨΕ 'α =', α, …</td><td>14</td><td>5</td><td>2</td><td><span class="nw">α = 14</span> και <span class="nw">α / β = 2.8</span></td></tr>
+</tbody></table></div></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Η 4η γραμμή εμφανίζει το <b>γράμμα</b> γ, όχι την τιμή του. Η <span class="nw">α / β</span> υπολογίζεται με τη <b>νέα</b> τιμή της α (14), όχι με την αρχική. Η <span class="nw">α / β</span> μπορεί να εμφανιστεί, παρότι είναι πραγματική: δεν εκχωρείται σε ακέραια μεταβλητή.</div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 2 · Πίτσες για την παρέα: ένα πρόγραμμα από την αρχή</div>
+<p>Κάθε πίτσα κόβεται σε 8 κομμάτια και κοστίζει 11,50 €. Να γραφτεί πρόγραμμα που ρωτά πόσα άτομα είναι η παρέα και πόσα κομμάτια τρώει ο καθένας, και εμφανίζει πόσες πίτσες πρέπει να παραγγείλουν (τις λιγότερες που φτάνουν), πόσα κομμάτια θα περισσέψουν και πόσα πληρώνει ο καθένας, στρογγυλεμένα σε λεπτά.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><span class="ln"><b>Κατανοώ.</b></span><span class="ln li">Δεδομένα που <b>διαβάζονται</b>: άτομα, κομμάτια ανά άτομο.</span><span class="ln li">Γνωστές τιμές: 8 κομμάτια, 11,50 €. Αυτές γίνονται <b>σταθερές</b>.</span><span class="ln li">Ζητούμενα: πίτσες, περισσεύουν (ακέραια), μερίδιο (πραγματική).</span><span class="ln">Η εκφώνηση λέει «ρωτά», άρα γράφω μήνυμα με ΓΡΑΨΕ πριν από κάθε ΔΙΑΒΑΣΕ.</span></div></div>
+<div class="step"><span class="stepn">2</span><div><span class="ln li"><b>Αναλύω.</b> Σύνολο <span class="nw">κομματιών = άτομα</span></span><span class="ln li">ανά_άτομο. Οι πίτσες είναι στρογγυλοποίηση <b>προς τα πάνω</b>: <span class="nw">(σύνολο + 7) div 8,</span> (Μάθημα 3, Εργαλείο 10). <span class="nw">Περισσεύουν = πίτσες</span></span><span class="ln li"><span class="nw">8 − σύνολο.</span> <span class="nw">Κόστος = πίτσες</span></span><span class="ln li">11.5, και διαιρώ με τα άτομα.</span></div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Πίτσες
+ΣΤΑΘΕΡΕΣ
+  ΚΟΜΜΑΤΙΑ = 8
+  ΤΙΜΗ = 11.5
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: άτομα, ανά_άτομο, σύνολο, πίτσες, περισσεύουν
+  ΠΡΑΓΜΑΤΙΚΕΣ: κόστος, μερίδιο
+ΑΡΧΗ
+  ΓΡΑΨΕ 'Πόσα άτομα είστε;'
+  ΔΙΑΒΑΣΕ άτομα
+  ΓΡΑΨΕ 'Πόσα κομμάτια τρώει ο καθένας;'
+  ΔΙΑΒΑΣΕ ανά_άτομο
+  σύνολο ← άτομα * ανά_άτομο
+  πίτσες ← (σύνολο + ΚΟΜΜΑΤΙΑ - 1) div ΚΟΜΜΑΤΙΑ
+  περισσεύουν ← πίτσες * ΚΟΜΜΑΤΙΑ - σύνολο
+  κόστος ← πίτσες * ΤΙΜΗ
+  μερίδιο ← Α_Μ(κόστος / άτομα * 100 + 0.5) / 100
+  ΓΡΑΨΕ 'Παραγγείλτε', πίτσες, 'πίτσες.'
+  ΓΡΑΨΕ 'Θα περισσέψουν', περισσεύουν, 'κομμάτια.'
+  ΓΡΑΨΕ 'Πληρώνει ο καθένας', μερίδιο, '€'
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Πίτσες</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> 5 <span class="nw">άτομα × 3</span> <span class="nw">κομμάτια = 15</span> κομμάτια.</span><span class="ln li"><span class="nw">(15 + 7) div 8</span> = <b>2</b> πίτσες</span><span class="ln li">περισσεύει <b>1</b> κομμάτι</span><span class="ln li"><span class="nw">23 / 5</span> = <b>4.6</b> €</span><span class="ln">Ειδική περίπτωση: <span class="nw">4 × 4 = 16</span> κομμάτια, <span class="nw">(16 + 7) div 8 = 2,</span> περισσεύουν 0 ✓. Με απλό <span class="nw">σύνολο div 8 + 1</span> θα έβγαιναν 3 πίτσες, άρα λάθος.</span></div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 3 · Από το διάγραμμα ροής στο πρόγραμμα</div>
+<p>Το διάγραμμα ροής υπολογίζει πόσες κιλοβατώρες (kWh) καταναλώνει μια συσκευή και πόσο κοστίζει. Να γραφτεί το αντίστοιχο πρόγραμμα σε ΓΛΩΣΣΑ.</p>
+<div class="grid g2" style="align-items:start">
+<div class="figure narrow">
+<svg aria-label="Διάγραμμα ροής: Αρχή, Διάβασε watt, ώρες, τιμή, kwh ← watt * ώρες / 1000, κόστος ← kwh * τιμή, Εμφάνισε kwh, κόστος, Τέλος" font-size="11" role="img" viewbox="0 0 260 378">
+<defs><marker id="arF9a" markerheight="7" markerwidth="7" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="f-arrow" d="M0 0L10 5L0 10z"></path></marker></defs>
+<ellipse class="f-paper st-ink" cx="130" cy="27" rx="48" ry="17" stroke-width="1.6"></ellipse>
+<polygon class="f-paper st-ink" points="36,70 239,70 225,110 22,110" stroke-width="1.6"></polygon>
+<rect class="f-paper st-ink" height="40" rx="2" stroke-width="1.6" width="217" x="22" y="136"></rect>
+<rect class="f-paper st-ink" height="40" rx="2" stroke-width="1.6" width="180" x="40" y="202"></rect>
+<polygon class="f-paper st-ink" points="50,268 224,268 210,308 36,308" stroke-width="1.6"></polygon>
+<ellipse class="f-paper st-ink" cx="130" cy="351" rx="48" ry="17" stroke-width="1.6"></ellipse>
+<g class="st-ink" fill="none" stroke-width="1.6"><path d="M130 44V68" marker-end="url(#arF9a)"></path><path d="M130 110V134" marker-end="url(#arF9a)"></path><path d="M130 176V200" marker-end="url(#arF9a)"></path><path d="M130 242V266" marker-end="url(#arF9a)"></path><path d="M130 308V332" marker-end="url(#arF9a)"></path></g>
+<g class="f-text" text-anchor="middle"><text font-weight="700" x="130" y="31">Αρχή</text><text x="130" y="94">Διάβασε watt, ώρες, τιμή</text><text x="130" y="160">kwh ← watt * ώρες / 1000</text><text x="130" y="226">κόστος ← kwh * τιμή</text><text x="130" y="292">Εμφάνισε kwh, κόστος</text><text font-weight="700" x="130" y="355">Τέλος</text></g>
+</svg>
+</div>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><span class="ln"><b>Κατανοώ.</b> Κάθε σχήμα γίνεται <b>μία εντολή</b>:</span><span class="ln li">πλάγιο: ΔΙΑΒΑΣΕ ή ΓΡΑΨΕ,</span><span class="ln li">ορθογώνιο: εκχώρηση,</span><span class="ln li">έλλειψη: ΑΡΧΗ / ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ.</span></div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Το διάγραμμα δεν έχει δηλώσεις: τις προσθέτω εγώ. <span class="nw">Η / δίνει</span> πραγματικό, άρα kwh και κόστος πραγματικές. Watt, ώρες, τιμή μπορεί να έχουν δεκαδικά.</div></div>
+</div>
+</div>
+<div class="steps">
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ρεύμα
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: watt, ώρες, τιμή, kwh, κόστος
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ watt, ώρες, τιμή
+  kwh ← watt * ώρες / 1000
+  κόστος ← kwh * τιμή
+  ΓΡΑΨΕ kwh, κόστος
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ρεύμα</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Μετράω: 6 σχήματα, άρα <span class="nw">ΑΡΧΗ + 4</span> <span class="nw">εντολές + ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ.</span> Για θερμοσίφωνα 2000 W, 1.5 ώρα, 0.18 €/kWh: kwh = <b>3</b>, κόστος = <b>0.54</b> €.</div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 4 · «Δίνεται…»: από τα Δεδομένα // // στη ΓΛΩΣΣΑ</div>
+<p>Στο Μάθημα 3 (Λυμένο 7) γράψαμε τον αλγόριθμο «Λογαριασμός_Παρέας» με <b>Δεδομένα // Χ, ν //</b> και <b>Αποτελέσματα // φιλ, σύνολο, ανά //</b>. Να γραφτεί το αντίστοιχο πρόγραμμα σε ΓΛΩΣΣΑ.</p>
+<pre class="code">Αλγόριθμος Λογαριασμός_Παρέας
+Δεδομένα // Χ, ν //
+φιλ ← Α_Μ(Χ * 0.1 * 100 + 0.5) / 100
+σύνολο ← Χ + φιλ
+ανά ← Α_Μ(σύνολο / ν * 100 + 0.5) / 100
+Αποτελέσματα // φιλ, σύνολο, ανά //
+Τέλος Λογαριασμός_Παρέας</pre>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Η ΓΛΩΣΣΑ <b>δεν έχει</b> Δεδομένα και Αποτελέσματα. Ένα πρόγραμμα παίρνει τις τιμές του από τον χρήστη και του δείχνει τα αποτελέσματα.</div></div>
+<div class="step"><span class="stepn">2</span><div><span class="ln"><b>Αναλύω.</b></span><span class="ln li">Δεδομένα // Χ, ν // γίνεται <b>ΔΙΑΒΑΣΕ Χ, ν</b> (με μήνυμα πριν).</span><span class="ln li">Αποτελέσματα // … // γίνεται <b>ΓΡΑΨΕ</b> για καθένα.</span><span class="ln">Τύποι: οι Χ, φιλ, σύνολο, ανά είναι πραγματικές (ευρώ). Η ν είναι ακέραια (άτομα).</span></div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Λογαριασμός_Παρέας
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: ν
+  ΠΡΑΓΜΑΤΙΚΕΣ: Χ, φιλ, σύνολο, ανά
+ΑΡΧΗ
+  ΓΡΑΨΕ 'Ποσό λογαριασμού και αριθμός ατόμων:'
+  ΔΙΑΒΑΣΕ Χ, ν
+  φιλ ← Α_Μ(Χ * 0.1 * 100 + 0.5) / 100
+  σύνολο ← Χ + φιλ
+  ανά ← Α_Μ(σύνολο / ν * 100 + 0.5) / 100
+  ΓΡΑΨΕ 'Φιλοδώρημα:', φιλ
+  ΓΡΑΨΕ 'Σύνολο:', σύνολο
+  ΓΡΑΨΕ 'Ανά άτομο:', ανά
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Λογαριασμός_Παρέας</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Με <span class="nw">Χ = 86.20</span> και <span class="nw">ν = 3</span> βγαίνουν <b>8.62</b>, <b>94.82</b>, <b>31.61</b>, ίδια με τον αλγόριθμο. Οι υπολογισμοί δεν άλλαξαν καθόλου. Άλλαξαν μόνο η «πόρτα εισόδου» και η «πόρτα εξόδου».</div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 5 · Πότε φτάνει το πλοίο;</div>
+<p>Ένα πλοίο φεύγει από τον Πειραιά σε συγκεκριμένη ώρα και λεπτά, διανύει μια απόσταση σε ναυτικά μίλια με σταθερή ταχύτητα σε κόμβους (ναυτικά μίλια την ώρα). Να γραφτεί πρόγραμμα που διαβάζει ώρα και λεπτά αναχώρησης, απόσταση και ταχύτητα, και εμφανίζει τη διάρκεια του ταξιδιού σε ώρες και λεπτά (με τα λεπτά στρογγυλεμένα), την ώρα άφιξης και αν το πλοίο φτάνει την επόμενη μέρα.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Δεδομένα: ώρα, λεπτά (ακέραια), μίλια, κόμβοι (πραγματικά). Ζητούμενα: διάρκεια, ώρα και λεπτά άφιξης (ακέραια), «επόμενη μέρα» (λογική).</div></div>
+<div class="step"><span class="stepn">2</span><div><span class="ln li"><b>Αναλύω.</b> Το «κόλπο» είναι να δουλέψω <b>όλα σε λεπτά από τα μεσάνυχτα</b> (Μάθημα 3, Εργαλεία 5 και 10): <span class="nw">διάρκεια = Α_Μ(μίλια / κόμβοι</span></span><span class="ln li"><span class="nw">60 + 0.5).</span> <span class="nw">Άφιξη = ώρα</span></span><span class="ln li"><span class="nw">60 + λεπτά + διάρκεια.</span> Αν η άφιξη είναι 1440 ή περισσότερο (24</span><span class="ln li">60), περάσαμε στην επόμενη μέρα. Το <b>mod 1440</b> «γυρίζει το ρολόι». <span class="nw">Μετά div 60</span> <span class="nw">και mod 60</span> για ώρες και λεπτά.</span></div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Πλοίο
+ΣΤΑΘΕΡΕΣ
+  ΜΕΡΑ = 1440
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: ώρα, λεπτά, διάρκεια, άφιξη, ώρα_άφ, λεπτά_άφ
+  ΠΡΑΓΜΑΤΙΚΕΣ: μίλια, κόμβοι
+  ΛΟΓΙΚΕΣ: επόμενη_μέρα
+ΑΡΧΗ
+  ΓΡΑΨΕ 'Ώρα και λεπτά αναχώρησης:'
+  ΔΙΑΒΑΣΕ ώρα, λεπτά
+  ΓΡΑΨΕ 'Απόσταση σε ναυτικά μίλια και ταχύτητα σε κόμβους:'
+  ΔΙΑΒΑΣΕ μίλια, κόμβοι
+  διάρκεια ← Α_Μ(μίλια / κόμβοι * 60 + 0.5)
+  άφιξη ← ώρα * 60 + λεπτά + διάρκεια
+  επόμενη_μέρα ← άφιξη &gt;= ΜΕΡΑ
+  άφιξη ← άφιξη mod ΜΕΡΑ
+  ώρα_άφ ← άφιξη div 60
+  λεπτά_άφ ← άφιξη mod 60
+  ΓΡΑΨΕ 'Διάρκεια ταξιδιού:', διάρκεια div 60, 'ώρες και',
+  &amp; διάρκεια mod 60, 'λεπτά'
+  ΓΡΑΨΕ 'Άφιξη:', ώρα_άφ, ':', λεπτά_άφ
+  ΓΡΑΨΕ 'Την επόμενη μέρα;', επόμενη_μέρα
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Πλοίο</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> Αναχώρηση 21:30, 152 ναυτικά μίλια, 19 κόμβοι:</span><span class="ln li"><span class="nw">διάρκεια = 152 / 19 · 60</span> = <b>480</b> λεπτά (8 ώρες)</span><span class="ln li"><span class="nw">άφιξη = 1290 + 480 = 1770,</span> άρα επόμενη μέρα <b>ΑΛΗΘΗΣ</b></span><span class="ln li"><span class="nw">1770 mod 1440 = 330,</span> δηλαδή <b>5:30</b></span><span class="ln">Προσοχή στη σειρά: η επόμενη_μέρα υπολογίζεται <b>πριν</b> το mod, αλλιώς η πληροφορία χάνεται.</span></div></div>
+</div>
+</div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Η ταχύτητα των πλοίων μετριέται σε <b>κόμβους</b> γιατί οι παλιοί ναυτικοί έριχναν στη θάλασσα ένα κομμάτι ξύλο δεμένο σε σκοινί με <b>κόμπους</b> σε ίσες αποστάσεις, και μετρούσαν πόσοι κόμποι ξετυλίγονταν σε ορισμένο χρόνο, μετρημένο με κλεψύδρα. Σήμερα 1 <span class="nw">κόμβος = 1</span> ναυτικό μίλι την <span class="nw">ώρα = 1852</span> μέτρα την ώρα.</p>
+<p class="talk">Σκέψου: Στο πρόγραμμα του πλοίου, πώς θα δεχόσουν την ταχύτητα σε km/h; Ποια μία γραμμή θα άλλαζε;</p>
+</div>
+</section>
+
+<section class="cards" id="s-cards">
+<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2><span class="ref">Ορισμοί για απομνημόνευση</span></div>
+<p class="small">Διάβασε τον όρο, πες τον ορισμό από μέσα σου και πάτα την κάρτα για να τον δεις.</p>
+<div class="deck">
+<button aria-live="polite" class="card" id="card" type="button">
+<span class="face front"><span class="ck">Όρος</span><span class="term" id="c-term"></span><span class="tap">Πάτα για τον ορισμό</span></span>
+<span class="face back"><span class="ck">Ορισμός</span><span class="cdef" id="c-def"></span><span class="tap" id="c-ref"></span></span>
+</button>
+<div class="deckbar">
+<button aria-label="Προηγούμενη κάρτα" class="btn" id="c-prev" type="button">←</button>
+<span class="count" id="c-count"></span>
+<button aria-label="Επόμενη κάρτα" class="btn" id="c-next" type="button">→</button>
+<button class="btn" id="c-shuf" type="button">Ανακάτεμα</button>
+</div>
+</div>
+</section><section class="exercises">
+<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2><span class="ref">Από τα εύκολα στα δύσκολα</span></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div>
+<div class="q"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Γράψε Σ ή Λ.
+<table class="tf">
+<tbody><tr><td>α. Στην εντολή εκχώρησης υπολογίζεται πρώτα η έκφραση του δεξιού μέρους.</td><td class="b">____</td></tr>
+<tr><td>β. Η εντολή <span class="nw">α + β ← γ</span> είναι σωστή, αν οι α, β, γ είναι ακέραιες.</td><td class="b">____</td></tr>
+<tr><td>γ. Η εντολή ΔΙΑΒΑΣΕ διακόπτει την εκτέλεση του προγράμματος μέχρι να δοθούν τιμές από το πληκτρολόγιο.</td><td class="b">____</td></tr>
+<tr><td>δ. Η εντολή ΔΙΑΒΑΣΕ μπορεί να εμφανίσει μήνυμα στον χρήστη.</td><td class="b">____</td></tr>
+<tr><td>ε. Η ΓΡΑΨΕ μπορεί να εμφανίσει σταθερές τιμές, τιμές μεταβλητών και αποτελέσματα εκφράσεων.</td><td class="b">____</td></tr>
+<tr><td>στ. Η εντολή ΓΡΑΨΕ 'Σύνολο' εμφανίζει την τιμή της μεταβλητής Σύνολο.</td><td class="b">____</td></tr>
+<tr><td>ζ. Η πρώτη εντολή κάθε προγράμματος είναι υποχρεωτικά η επικεφαλίδα του.</td><td class="b">____</td></tr>
+<tr><td>η. Οι εκτελέσιμες εντολές γράφονται ανάμεσα στις λέξεις ΑΡΧΗ και ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ.</td><td class="b">____</td></tr>
+<tr><td>θ. Στη ΓΛΩΣΣΑ μπορούμε να γράψουμε Δεδομένα // α, β // για να πάρουμε τιμές.</td><td class="b">____</td></tr>
+<tr><td>ι. Η εντολή <span class="nw">μετρητής ← μετρητής + 1</span> αυξάνει την τιμή του μετρητή κατά 1.</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Σ, β Λ, γ Σ, δ Λ, ε Σ, στ Λ, ζ Σ, η Σ, θ Λ, ι Σ</span>
+<p class="small">β: αριστερά από <span class="nw">το ← μπαίνει</span> μόνο όνομα μεταβλητής. δ: η ΔΙΑΒΑΣΕ ακολουθείται μόνο από ονόματα μεταβλητών. Τα μηνύματα τα εμφανίζει η ΓΡΑΨΕ. στ: με εισαγωγικά εμφανίζεται η λέξη «Σύνολο», όχι η τιμή. θ: η ΓΛΩΣΣΑ δεν έχει Δεδομένα. Οι τιμές διαβάζονται με ΔΙΑΒΑΣΕ.</p></div></details></div>
+<div class="q"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
+<p>α) Να περιγράψετε τη σύνταξη και τη λειτουργία της εντολής εκχώρησης. Γιατί δεν πρέπει να εκλαμβάνεται ως εξίσωση;<br/>β) Να περιγράψετε τη λειτουργία της εντολής ΔΙΑΒΑΣΕ.<br/>γ) Να περιγράψετε τη λειτουργία της εντολής ΓΡΑΨΕ. Τι μπορεί να περιέχει η λίστα της;<br/>δ) Να περιγράψετε τη δομή ενός προγράμματος σε ΓΛΩΣΣΑ.<br/>ε) Τι σημαίνουν οι χαρακτήρες ! και &amp; στην αρχή μιας γραμμής;</p>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p>α) Σύνταξη: <span class="nw">Όνομα_Μεταβλητής ← έκφραση.</span> Υπολογίζεται η τιμή της έκφρασης στη δεξιά πλευρά και εκχωρείται στη μεταβλητή της αριστερής πλευράς. Δεν είναι εξίσωση: στην εξίσωση το αριστερό μέλος ισούται με το δεξί, ενώ στην εκχώρηση η τιμή του δεξιού μέλους μεταβιβάζεται στη μεταβλητή του αριστερού. Γι' αυτό χρησιμοποιείται <span class="nw">το ← και</span> όχι το =.</p>
+<p>β) Οδηγεί στην είσοδο τιμών από το πληκτρολόγιο και την εκχώρησή τους στις μεταβλητές που αναφέρονται (μία ή περισσότερες, χωρισμένες με κόμμα). Διακόπτει την εκτέλεση. Το πρόγραμμα περιμένει τις τιμές και μετά συνεχίζει με την επόμενη εντολή.</p>
+<p>γ) Εμφανίζει στη μονάδα εξόδου (εδώ την οθόνη) σταθερές τιμές και τιμές μεταβλητών. Για κάθε μεταβλητή ανακτάται πρώτα η τιμή της και μετά εμφανίζεται. Η λίστα περιέχει σταθερές (π.χ. μηνύματα σε εισαγωγικά) και ονόματα μεταβλητών (και εκφράσεις).</p>
+<p><span class="ln">δ) Από πάνω προς τα κάτω:</span><span class="ln li">Επικεφαλίδα (ΠΡΟΓΡΑΜΜΑ όνομα).</span><span class="ln li">Τμήμα δήλωσης σταθερών (αν υπάρχουν).</span><span class="ln li">Τμήμα δήλωσης μεταβλητών (υποχρεωτικά όλες, με τον τύπο τους).</span><span class="ln li">Κύριο μέρος ανάμεσα σε ΑΡΧΗ και ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ.</span><span class="ln li">Διαδικασίες, αν υπάρχουν.</span><span class="ln">Κάθε εντολή γράφεται σε ξεχωριστή γραμμή.</span></p>
+<p>ε) ! : η γραμμή είναι σχόλιο και δεν εκτελείται. &amp; : η εντολή της προηγούμενης γραμμής συνεχίζεται.</p></div></details></div>
+<div class="q"><span class="qn">3</span><b>Τι θα εμφανιστεί;</b> Έστω ότι <span class="nw">α = 7,</span> <span class="nw">β = 2</span> και <span class="nw">όνομα = 'Άννα'.</span> Γράψε τι εμφανίζει κάθε εντολή.
+<pre class="code">α) ΓΡΑΨΕ 'α + β'
+β) ΓΡΑΨΕ α + β
+γ) ΓΡΑΨΕ 'Η', όνομα, 'έχει', α, 'βαθμούς'
+δ) ΓΡΑΨΕ 'όνομα'
+ε) ΓΡΑΨΕ α / β, α div β
+στ) ΓΡΑΨΕ α &gt; β</pre>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p><span class="ln li">α) <b><span class="nw">α + β</span></b></span><span class="ln li">β) <b>9</b></span><span class="ln li">γ) <b>Η Άννα έχει 7 βαθμούς</b></span><span class="ln li">δ) <b>όνομα</b></span><span class="ln li">ε) <b>3.5 3</b></span><span class="ln li">στ) <b>ΑΛΗΘΗΣ</b></span></p></div></details></div>
+<div class="q"><span class="qn">4</span><b>Ποια εντολή;</b> Για κάθε περιγραφή γράψε το γράμμα της εντολής που χρειάζεται.
+<ul class="legend tight">
+<li data-v="Α"><b>Α</b> ΔΙΑΒΑΣΕ</li>
+<li data-v="Β"><b>Β</b> ΓΡΑΨΕ</li>
+<li data-v="Γ"><b>Γ</b> Εκχώρηση (←)</li>
+</ul>
+<table class="tf">
+<tbody><tr><td>α. Ο χρήστης πληκτρολογεί την ηλικία του.</td><td class="b">____</td></tr>
+<tr><td>β. Εμφανίζεται το μήνυμα «Δώσε όνομα».</td><td class="b">____</td></tr>
+<tr><td>γ. Υπολογίζεται ο ΦΠΑ ενός ποσού.</td><td class="b">____</td></tr>
+<tr><td>δ. Το πρόγραμμα σταματά και περιμένει τον χρήστη.</td><td class="b">____</td></tr>
+<tr><td>ε. Εμφανίζεται η τιμή μιας μεταβλητής.</td><td class="b">____</td></tr>
+<tr><td>στ. Η τιμή μιας μεταβλητής αυξάνεται κατά 1.</td><td class="b">____</td></tr>
+<tr><td>ζ. Η μεταβλητή μήνας παίρνει την τιμή 'Ιανουάριος'.</td><td class="b">____</td></tr>
+<tr><td>η. Μια λογική μεταβλητή παίρνει την τιμή της σύγκρισης <span class="nw">βαθμός &gt;= 10.</span></td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Α, β Β, γ Γ, δ Α, ε Β, στ Γ, ζ Γ, η Γ</span>
+<p class="small">δ: η ΔΙΑΒΑΣΕ είναι η εντολή που διακόπτει την εκτέλεση. η: η τιμή μιας σύγκρισης εκχωρείται σε λογική μεταβλητή με ←.</p></div></details></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div>
+<div class="q"><span class="qn">5</span><b>Πίνακας τιμών με οθόνη.</b> Συμπλήρωσε τον πίνακα, αν ο χρήστης δώσει 17 και 5.
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ανταλλαγή
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: α, β, γ
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ α, β
+  γ ← α mod β
+  α ← β
+  β ← γ
+  ΓΡΑΨΕ 'α =', α, 'β =', β
+  γ ← α * 2 + β
+  ΓΡΑΨΕ γ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ανταλλαγή</pre>
+<div class="tablewrap"><table class="t blank"><tbody><tr><th>Εντολή</th><th>α</th><th>β</th><th>γ</th><th>Οθόνη</th></tr>
+<tr><td>ΔΙΑΒΑΣΕ α, β</td><td></td><td></td><td></td><td></td></tr>
+<tr><td><span class="nw">γ ← α mod β</span></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><span class="nw">α ← β</span></td><td></td><td></td><td></td><td></td></tr>
+<tr><td><span class="nw">β ← γ</span></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>ΓΡΑΨΕ 'α =', α, 'β =', β</td><td></td><td></td><td></td><td></td></tr>
+<tr><td><span class="nw">γ ← α * 2 + β</span></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>ΓΡΑΨΕ γ</td><td></td><td></td><td></td><td></td></tr></tbody></table></div><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><div class="tablewrap"><table class="t"><tbody><tr><th>Εντολή</th><th>α</th><th>β</th><th>γ</th><th>Οθόνη</th></tr>
+<tr><td>ΔΙΑΒΑΣΕ α, β</td><td>17</td><td>5</td><td></td><td></td></tr>
+<tr><td><span class="nw">γ ← α mod β</span></td><td>17</td><td>5</td><td>2</td><td></td></tr>
+<tr><td><span class="nw">α ← β</span></td><td>5</td><td>5</td><td>2</td><td></td></tr>
+<tr><td><span class="nw">β ← γ</span></td><td>5</td><td>2</td><td>2</td><td></td></tr>
+<tr><td>ΓΡΑΨΕ 'α =', α, 'β =', β</td><td>5</td><td>2</td><td>2</td><td><span class="nw">α = 5</span> <span class="nw">β = 2</span></td></tr>
+<tr><td><span class="nw">γ ← α * 2 + β</span></td><td>5</td><td>2</td><td>12</td><td></td></tr>
+<tr><td>ΓΡΑΨΕ γ</td><td>5</td><td>2</td><td>12</td><td>12</td></tr></tbody></table></div>
+<p class="small">Οι τρεις πρώτες εκχωρήσεις είναι ένα βήμα του αλγορίθμου του Ευκλείδη για τον ΜΚΔ, που θα δούμε με τις επαναλήψεις.</p></div></details></div>
+<div class="q"><span class="qn">6</span><b>Συμπλήρωση κενών.</b><span class="theme">Σχολείο</span>
+<p>Το πρόγραμμα διαβάζει το όνομα ενός μαθητή και τους βαθμούς του σε τρία διαγωνίσματα, και εμφανίζει τον μέσο όρο του με ένα δεκαδικό και αν προάγεται (μέσος όρος τουλάχιστον 10).</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Βαθμοί
+ΜΕΤΑΒΛΗΤΕΣ
+  ΧΑΡΑΚΤΗΡΕΣ: ____(1)____
+  ____(2)____: β1, β2, β3, μο
+  ΛΟΓΙΚΕΣ: προάγεται
+____(3)____
+  ΓΡΑΨΕ 'Δώσε όνομα και τρεις βαθμούς:'
+  ____(4)____ όνομα, β1, β2, β3
+  μο ← ____(5)____ / 3
+  μο ← Α_Μ(μο * 10 + 0.5) / ____(6)____
+  προάγεται ← ____(7)____
+  ΓΡΑΨΕ όνομα, 'έχει μέσο όρο', μο
+  ΓΡΑΨΕ 'Προάγεται:', προάγεται
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ ____(8)____</pre>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p><span class="ln li">(1) όνομα</span><span class="ln li">(2) ΠΡΑΓΜΑΤΙΚΕΣ</span><span class="ln li">(3) ΑΡΧΗ</span><span class="ln li">(4) ΔΙΑΒΑΣΕ</span><span class="ln li">(5) <span class="nw">(β1 + β2 + β3)</span></span><span class="ln li">(6) 10</span><span class="ln li">(7) <span class="nw">μο &gt;= 10</span></span><span class="ln li">(8) Βαθμοί</span></p>
+<p class="small">Έλεγχος: Άρης με 12.5, 9, 14. Μέσος όρος 11.8, Προάγεται: ΑΛΗΘΗΣ.</p></div></details></div>
+<div class="q hw"><span class="qn">7</span><b>Βρες τα λάθη.</b><span class="theme">Αυτοκίνητο</span>
+<p>Το πρόγραμμα θέλει να διαβάζει τα λίτρα βενζίνης που έβαλε ένας οδηγός, την τιμή ανά λίτρο και τα χιλιόμετρα που έκανε, και να εμφανίζει το κόστος και την κατανάλωση ανά 100 χιλιόμετρα. Έχει <b>έξι λάθη</b>. Να τα βρείτε, να εξηγήσετε το καθένα και να γράψετε το σωστό πρόγραμμα.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Βενζίνη
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: λίτρα, τιμή, κόστος
+  ΑΚΕΡΑΙΕΣ: χλμ
+ΑΡΧΗ
+  ΓΡΑΨΕ Δώσε λίτρα και τιμή
+  ΔΙΑΒΑΣΕ λίτρα, τιμή
+  τιμή * λίτρα ← κόστος
+  ΔΙΑΒΑΣΕ 'χιλιόμετρα'
+  κατανάλωση ← λίτρα / χλμ * 100
+  ΓΡΑΨΕ 'Κόστος:' κόστος
+  ΓΡΑΨΕ 'Κατανάλωση:', κατανάλωση
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Καύσιμα</pre>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">8</span><b>Από το διάγραμμα ροής στο πρόγραμμα.</b><span class="theme">Ποδόσφαιρο</span>
+<p>Το διάγραμμα υπολογίζει το κόστος των εισιτηρίων μιας οικογένειας σε έναν αγώνα (15 € ο ενήλικας, 8 € το παιδί) και το μέσο κόστος ανά άτομο.</p>
+<div class="figure narrow">
+<svg aria-label="Διάγραμμα ροής: Αρχή, Διάβασε ενήλικες, παιδιά, κόστος ← ενήλικες * 15 + παιδιά * 8, μ ← κόστος / (ενήλικες + παιδιά), Εμφάνισε κόστος, μ, Τέλος" font-size="11" role="img" viewbox="0 0 300 378">
+<defs><marker id="arF9b" markerheight="7" markerwidth="7" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="f-arrow" d="M0 0L10 5L0 10z"></path></marker></defs>
+<ellipse class="f-paper st-ink" cx="150" cy="27" rx="48" ry="17" stroke-width="1.6"></ellipse>
+<polygon class="f-paper st-ink" points="56,70 259,70 245,110 42,110" stroke-width="1.6"></polygon>
+<rect class="f-paper st-ink" height="40" rx="2" stroke-width="1.6" width="280" x="10" y="136"></rect>
+<rect class="f-paper st-ink" height="40" rx="2" stroke-width="1.6" width="276" x="12" y="202"></rect>
+<polygon class="f-paper st-ink" points="78,268 237,268 223,308 64,308" stroke-width="1.6"></polygon>
+<ellipse class="f-paper st-ink" cx="150" cy="351" rx="48" ry="17" stroke-width="1.6"></ellipse>
+<g class="st-ink" fill="none" stroke-width="1.6"><path d="M150 44V68" marker-end="url(#arF9b)"></path><path d="M150 110V134" marker-end="url(#arF9b)"></path><path d="M150 176V200" marker-end="url(#arF9b)"></path><path d="M150 242V266" marker-end="url(#arF9b)"></path><path d="M150 308V332" marker-end="url(#arF9b)"></path></g>
+<g class="f-text" text-anchor="middle"><text font-weight="700" x="150" y="31">Αρχή</text><text x="150" y="94">Διάβασε ενήλικες, παιδιά</text><text x="150" y="160">κόστος ← ενήλικες * 15 + παιδιά * 8</text><text x="150" y="226">μ ← κόστος / (ενήλικες + παιδιά)</text><text x="150" y="292">Εμφάνισε κόστος, μ</text><text font-weight="700" x="150" y="355">Τέλος</text></g>
+</svg>
+</div>
+<p>α) Να γράψετε το αντίστοιχο πρόγραμμα σε ΓΛΩΣΣΑ, με τις τιμές των εισιτηρίων ως σταθερές και με κατάλληλα μηνύματα.<br/>β) Να κάνετε πίνακα τιμών για 2 ενήλικες και 3 παιδιά.<br/>γ) Τι θα συμβεί αν δοθούν 0 ενήλικες και 0 παιδιά; Ποιο κριτήριο αλγορίθμου παραβιάζεται;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">9</span><b>Από το πρόγραμμα στο διάγραμμα ροής.</b><span class="theme">Ταξίδια</span>
+<p>Δίνεται το παρακάτω πρόγραμμα. Να σχεδιάσετε το διάγραμμα ροής του και να γράψετε τι εμφανίζεται στην οθόνη για είσοδο 'Β', 'Γ', 'Α'. Τι κάνει το πρόγραμμα με τρεις οποιεσδήποτε τιμές;</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Κυκλική
+ΜΕΤΑΒΛΗΤΕΣ
+  ΧΑΡΑΚΤΗΡΕΣ: πρώτος, δεύτερος, τρίτος, temp
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ πρώτος, δεύτερος, τρίτος
+  temp ← πρώτος
+  πρώτος ← δεύτερος
+  δεύτερος ← τρίτος
+  τρίτος ← temp
+  ΓΡΑΨΕ πρώτος, δεύτερος, τρίτος
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Κυκλική</pre>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">10</span><b>Από τα Δεδομένα // // στη ΓΛΩΣΣΑ.</b><span class="theme">Οικόπεδο</span>
+<p>Στο Μάθημα 3 (Ασκ. 18) γράψατε αλγόριθμο για ένα οικόπεδο: <b>δίνονται</b> το μήκος, το πλάτος και η τιμή ανά τετραγωνικό μέτρο, και <b>υπολογίζονται</b> το εμβαδόν, η αξία και το κόστος περίφραξης (12 € το μέτρο).</p>
+<pre class="code">Αλγόριθμος Οικόπεδο
+Δεδομένα // μήκος, πλάτος, τιμή //
+εμβαδόν ← μήκος * πλάτος
+αξία ← εμβαδόν * τιμή
+περίφραξη ← 2 * (μήκος + πλάτος) * 12
+Αποτελέσματα // εμβαδόν, αξία, περίφραξη //
+Τέλος Οικόπεδο</pre>
+<p>α) Να γράψετε το αντίστοιχο πρόγραμμα σε ΓΛΩΣΣΑ, με το 12 ως σταθερά και με μηνύματα που εξηγούν στον χρήστη τι να δώσει και τι βλέπει.<br/>β) Να γράψετε τι θα εμφανιστεί στην οθόνη για οικόπεδο 25 × 16 μέτρα με τιμή 80 € το τετραγωνικό μέτρο.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">11</span><b>Ο κουμπαράς.</b><span class="theme">Χρήματα</span>
+<p>Ένα παιδί σπάει τον κουμπαρά του. Να γραφτεί πρόγραμμα που ρωτά πόσα κέρματα έχει από κάθε είδος: 2 €, 1 €, 50 λεπτά, 20 λεπτά και 10 λεπτά. Το πρόγραμμα εμφανίζει πόσα κέρματα είναι συνολικά και το ποσό με τη μορφή «Σύνολο: 14 ευρώ και 80 λεπτά». Υπόδειξη: υπολογίστε πρώτα όλο το ποσό σε <b>λεπτά</b> (ακέραιος αριθμός) και μετά χωρίστε το <span class="nw">με div και</span> mod. Να ελέγξετε για 3, 4, 5, 7 και 9 κέρματα αντίστοιχα.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">12</span><b>Η ψηφιακή φωτογραφία.</b><span class="theme">Τεχνολογία</span>
+<p><span class="ln li">Μια φωτογραφία έχει πλάτος και ύψος σε εικονοστοιχεία (pixels). Η ανάλυσή της σε megapixels (MP) είναι το πλήθος των εικονοστοιχείων διά 1.000.000. Χωρίς συμπίεση, κάθε εικονοστοιχείο πιάνει 3 bytes, και 1 <span class="nw">MB = 1024</span></span><span class="ln li">1024 bytes. Να γραφτεί πρόγραμμα που διαβάζει πλάτος και ύψος και εμφανίζει την ανάλυση σε MP με ένα δεκαδικό, το μέγεθος του αρχείου χωρίς συμπίεση σε MB με δύο δεκαδικά, και πόσες τέτοιες φωτογραφίες χωράνε σε μια κάρτα μνήμης 64 GB (1 <span class="nw">GB = 1024</span> MB). Έλεγχος: <span class="nw">4000 × 3000.</span></span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">13</span><b>Ο ρυθμός του μαραθωνοδρόμου.</b><span class="theme">Στίβος</span>
+<p>Οι δρομείς μιλούν για «ρυθμό»: πόσα λεπτά και δευτερόλεπτα χρειάζονται για κάθε χιλιόμετρο. Να γραφτεί πρόγραμμα που διαβάζει τον χρόνο τερματισμού ενός μαραθωνοδρόμου σε ώρες, λεπτά και δευτερόλεπτα, και εμφανίζει:</p>
+<ul class="tight"><li>τον συνολικό χρόνο σε δευτερόλεπτα,</li><li>τον ρυθμό ανά χιλιόμετρο σε λεπτά και δευτερόλεπτα (στρογγυλεμένο στο πλησιέστερο δευτερόλεπτο),</li><li>τη μέση ταχύτητα σε km/h με δύο δεκαδικά.</li></ul>
+<p>Ο μαραθώνιος είναι 42,195 km. Να ελέγξετε για χρόνο 2 ώρες, 5 λεπτά και 30 δευτερόλεπτα.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Μεγάλες ασκήσεις</h3></div>
+<div class="q hw"><span class="qn">14</span><b>Το σχολικό κυλικείο.</b><span class="theme">Σχολείο</span>
+<p>Το κυλικείο πουλά τοστ (2,20 €), κουλούρια (0,80 €) και χυμούς (1,50 €). Να γραφτεί πρόγραμμα που διαβάζει πόσα κομμάτια από το καθένα αγόρασε ένας μαθητής και το ποσό που έδωσε, και εμφανίζει:</p>
+<ul class="tight"><li>το συνολικό ποσό της αγοράς,</li><li>τα ρέστα σε ευρώ,</li><li>πόσα κέρματα των 2 €, 1 €, 50, 20, 10, 5, 2 και 1 λεπτού θα δώσει ο κυλικειάρχης (τα λιγότερα δυνατά).</li></ul>
+<p>α) Γιατί είναι ασφαλέστερο να μετατρέψετε τα ρέστα σε <b>ακέραια λεπτά</b> πριν τα χωρίσετε σε κέρματα; (Θυμήσου το <span class="nw">0.1 + 0.2</span> του Μαθήματος 8.)<br/>β) Να γράψετε το πρόγραμμα.<br/>γ) Να το ελέγξετε για 1 τοστ, 2 κουλούρια και 1 χυμό, με πληρωμή 10 €.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">15</span><b>Ταξίδι στο Λονδίνο.</b><span class="theme">Ταξίδια, Θέμα Γ</span>
+<p>Μια μαθήτρια ταξιδεύει στο Λονδίνο. Το πρόγραμμα διαβάζει πόσα ευρώ θέλει να αλλάξει σε λίρες, την ισοτιμία (πόσες λίρες δίνει 1 €) και την προμήθεια του ανταλλακτηρίου ως ποσοστό. Διαβάζει επίσης την ώρα και τα λεπτά αναχώρησης της πτήσης (ώρα Ελλάδας) και τη διάρκεια της πτήσης σε λεπτά. Το Λονδίνο είναι <b>2 ώρες πίσω</b> από την Ελλάδα. Το πρόγραμμα εμφανίζει:</p>
+<ul class="tight"><li>πόσες λίρες θα πάρει μετά την προμήθεια, με δύο δεκαδικά,</li><li>την ώρα άφιξης σε ώρα Λονδίνου (ώρα και λεπτά).</li></ul>
+<p>α) Να γράψετε σε πίνακα δεδομένα, σταθερές και ζητούμενα με τύπους.<br/>β) Να γράψετε το πρόγραμμα. Προσοχή: η ώρα άφιξης πρέπει να βγαίνει σωστή ακόμα κι αν η πτήση περνά τα μεσάνυχτα.<br/>γ) Να το ελέγξετε για 500 €, ισοτιμία 0,85, προμήθεια 2%, αναχώρηση 7:45 και πτήση 225 λεπτών, και για αναχώρηση 23:10 με πτήση 230 λεπτών.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">16</span><b>Φωτοβολταϊκά στη στέγη.</b><span class="theme">Περιβάλλον, Θέμα Δ</span>
+<p><span class="ln li">Μια οικογένεια σκέφτεται να βάλει φωτοβολταϊκά. Το πρόγραμμα διαβάζει το πλήθος των πάνελ, την ισχύ κάθε πάνελ σε W, τις μέσες ώρες ηλιοφάνειας τη μέρα, την τιμή της κιλοβατώρας (kWh) και το κόστος εγκατάστασης. Η ενέργεια της μέρας σε kWh είναι πάνελ</span><span class="ln li">ισχύς</span><span class="ln li"><span class="nw">ώρες / 1000.</span> Θεωρούμε έτος 365 ημερών και ότι κάθε kWh από τον ήλιο γλιτώνει 0,5 kg διοξειδίου του άνθρακα. Το πρόγραμμα εμφανίζει:</span></p>
+<ul class="tight"><li>την ενέργεια του έτους σε kWh,</li><li>την εξοικονόμηση του έτους σε €, με δύο δεκαδικά,</li><li>σε πόσα <b>χρόνια και μήνες</b> αποσβένεται η εγκατάσταση (ολόκληρα χρόνια και ολόκληροι μήνες),</li><li>πόσα kg διοξειδίου του άνθρακα γλιτώνει τον χρόνο,</li><li>αν η απόσβεση γίνεται σε λιγότερο από 10 χρόνια.</li></ul>
+<p>α) Να γράψετε σε πίνακα δεδομένα, σταθερές και ζητούμενα με τύπους.<br/>β) Να γράψετε το πρόγραμμα, με όλες τις γνωστές τιμές ως σταθερές.<br/>γ) Να το ελέγξετε για 10 πάνελ των 400 W, 5 ώρες ηλιοφάνειας, 0,15 € την kWh και κόστος 8000 €.<br/>δ) Ένας συμμαθητής υπολόγισε τους μήνες με <b><span class="nw">απόσβεση mod 12</span></b>. Γιατί είναι λάθος;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+</section>
+
+</main><div class="syn-foot"><div class="syn-nav"><a href="08.html"><small>&#8592; Μάθημα 8</small>Τελεστές, συναρτήσεις, εκφράσεις</a><a class="next" href="10.html"><small>Μάθημα 10 &#8594;</small>Δομή επιλογής: ΑΝ … ΤΟΤΕ … ΑΛΛΙΩΣ</a></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
+<script>
+(function(){
+  var CARDS = [{"term": "Δομή ακολουθίας.", "def": "Δομή ακολουθίας. Η ακολουθιακή δομή εντολών (σειριακών βημάτων) χρησιμοποιείται πρακτικά για την αντιμετώπιση απλών προβλημάτων, όπου είναι δεδομένη η σειρά εκτέλεσης ενός συνόλου ενεργειών.", "ref": "Σχολικό βιβλίο, §2.4.1"}, {"term": "Εντολή εκχώρησης.", "def": "Εντολή εκχώρησης. Η εντολή εκχώρησης χρησιμοποιείται για την απόδοση τιμών στις μεταβλητές κατά τη διάρκεια εκτέλεσης του προγράμματος. Σύνταξη: Όνομα-Μεταβλητής ← έκφραση.", "ref": "Σχολικό βιβλίο, §7.8"}, {"term": "Λειτουργία εκχώρησης.", "def": "Λειτουργία εκχώρησης. Υπολογίζεται η τιμή της έκφρασης στη δεξιά πλευρά και εκχωρείται η τιμή αυτή στη μεταβλητή, που αναφέρεται στην αριστερή πλευρά.", "ref": "Σχολικό βιβλίο, §7.8"}, {"term": "ΔΙΑΒΑΣΕ.", "def": "ΔΙΑΒΑΣΕ. Η εκτέλεση της εντολής οδηγεί στην είσοδο τιμών από το πληκτρολόγιο και την εκχώρησή τους στις μεταβλητές που αναφέρονται. Ακολουθείται πάντοτε από ένα ή περισσότερα ονόματα μεταβλητών, που χωρίζονται με κόμμα. Κατά την εκτέλεση η εντολή διακόπτει το πρόγραμμα, που περιμένει την εισαγωγή τιμών.", "ref": "Σχολικό βιβλίο, §7.9"}, {"term": "ΓΡΑΨΕ.", "def": "ΓΡΑΨΕ. Χρησιμοποιείται για την εμφάνιση σταθερών τιμών καθώς και των τιμών των μεταβλητών που αναφέρονται στη λίστα. Όταν κάποιο όνομα μεταβλητής περιέχεται στη λίστα, αρχικά ανακτάται η τιμή της και στη συνέχεια η τιμή αυτή εμφανίζεται στην οθόνη.", "ref": "Σχολικό βιβλίο, §7.9"}, {"term": "Εκχώρηση:", "def": "Εκχώρηση: μεταβλητή ← έκφραση· υπολογίζεται το δεξί μέρος και η τιμή πηγαίνει στη μεταβλητή. Ίδιος τύπος.", "ref": "Σύνοψη"}, {"term": "ΔΙΑΒΑΣΕ:", "def": "ΔΙΑΒΑΣΕ: σταματά το πρόγραμμα μέχρι ο χρήστης να δώσει τιμές από το πληκτρολόγιο, που εκχωρούνται στις μεταβλητές.", "ref": "Σύνοψη"}, {"term": "ΓΡΑΨΕ:", "def": "ΓΡΑΨΕ: εμφανίζει στην οθόνη σταθερές (π.χ. μηνύματα σε εισαγωγικά) και τιμές μεταβλητών ή εκφράσεων.", "ref": "Σύνοψη"}, {"term": "Πρόγραμμα:", "def": "Πρόγραμμα: επικεφαλίδα → σταθερές → μεταβλητές → ΑΡΧΗ … ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ.", "ref": "Σύνοψη"}, {"term": "Μετρητής", "def": "μετρητής ← μετρητής + 1: η νέα τιμή είναι η παλιά συν ένα.", "ref": "Οδηγίες Μελέτης §1.6"}, {"term": "Αθροιστής", "def": "άθροισμα ← άθροισμα + χ: η νέα τιμή είναι η παλιά συν την τιμή του χ.", "ref": "Οδηγίες Μελέτης §1.6"}, {"term": "ΓΡΑΨΕ 'α' ή ΓΡΑΨΕ α;", "def": "Με εισαγωγικά εμφανίζεται το γράμμα α· χωρίς εισαγωγικά εμφανίζεται η τιμή της μεταβλητής α.", "ref": "§7.9"}, {"term": "Δεδομένα // // στη ΓΛΩΣΣΑ;", "def": "Η ΓΛΩΣΣΑ δεν έχει Δεδομένα / Αποτελέσματα: γίνονται ΔΙΑΒΑΣΕ και ΓΡΑΨΕ.", "ref": "Μάθημα 3 · Μάθημα 9"}];
+  // ---- quiz ----
+  document.querySelectorAll('.quiz').forEach(function(quiz){
+    var items = quiz.querySelectorAll('.qi');
+    var score = quiz.querySelector('.score');
+    function update(){
+      var done = quiz.querySelectorAll('.qi.ok, .qi.no').length;
+      if (done < items.length){ score.hidden = true; return; }
+      var ok = quiz.querySelectorAll('.qi.ok').length;
+      score.hidden = false;
+      score.innerHTML = '';
+      var t = document.createElement('span');
+      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? ' · Τέλεια!' : ok >= items.length * 0.7 ? ' · Πολύ καλά' : ' · Ξαναδιάβασε τη θεωρία');
+      var r = document.createElement('button'); r.type = 'button'; r.className = 'btn'; r.textContent = 'Ξανά από την αρχή';
+      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); }); update(); };
+      score.append(t, r);
+    }
+    items.forEach(function(it){
+      var ans = it.getAttribute('data-ans');
+      it.querySelectorAll('.qb button').forEach(function(b){
+        b.addEventListener('click', function(){
+          var v = b.getAttribute('data-v');
+          it.querySelectorAll('.qb button').forEach(function(x){ x.disabled = true; if (x.getAttribute('data-v') === ans) x.classList.add('right'); });
+          b.classList.add('pick');
+          it.classList.add(v === ans ? 'ok' : 'no');
+          var f = document.createElement('span'); f.className = 'fb';
+          f.textContent = v === ans ? '✓ Σωστά' : '✗ Η σωστή απάντηση είναι: ' + (it.querySelector('.qb button[data-v="' + ans + '"]') || {}).textContent;
+          it.appendChild(f);
+          update();
+        });
+      });
+    });
+  });
+  // ---- flashcards ----
+  var order = CARDS.map(function(_, i){ return i; }), pos = 0;
+  var card = document.getElementById('card');
+  if (!card || !CARDS.length) return;
+  function show(){
+    var c = CARDS[order[pos]];
+    card.classList.remove('flipped');
+    document.getElementById('c-term').textContent = c.term;
+    document.getElementById('c-def').textContent = c.def;
+    document.getElementById('c-ref').textContent = c.ref;
+    document.getElementById('c-count').textContent = (pos + 1) + ' / ' + CARDS.length;
+  }
+  card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+  document.getElementById('c-next').onclick = function(){ pos = (pos + 1) % CARDS.length; show(); };
+  document.getElementById('c-prev').onclick = function(){ pos = (pos - 1 + CARDS.length) % CARDS.length; show(); };
+  document.getElementById('c-shuf').onclick = function(){
+    for (var i = order.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+    pos = 0; show();
+  };
+  show();
+})();
+</script>
+<style id="kitcss">/*KIT>*//* ==== kit: θέμα, προβολή, «Δείξε λύση» ==== */
+body{font-size:16px}
+.kit-btn{font:600 13px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 12px;border-radius:999px;cursor:pointer}
+.kit-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.kit-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#kitfloat{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:30;display:flex;gap:6px;padding:5px;border-radius:999px;background:var(--ground);border:1px solid var(--line);box-shadow:0 4px 16px rgba(10,20,40,.12)}
+.rt-ans{margin:-2px 0 14px}
+.rt-show{font:600 13.5px/1 var(--body);border:1.5px solid var(--s-teal);background:var(--teal-bg);color:var(--teal);padding:9px 14px;border-radius:999px;cursor:pointer}
+.rt-show:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.rt-body{display:none;margin-top:10px;border-left:4px solid var(--s-teal);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 16px}
+.rt-body .q{margin:0;border:0;padding:0;background:none}
+.rt-open > .rt-body, body.rt-all .rt-body{display:block}
+.rt-open > .rt-show{background:var(--paper)}
+body:not(.rt-all):not(.editing) .solved:not(.rt-open) .rt-hide{display:none}
+body.rt-all .rt-showstep{display:none}
+.solved.rt-open .rt-showstep{display:none}
+.rt-showstep{margin:4px 0 6px}
+body.student .rt-ans{display:none}
+body.editing .rt, body.editing .rt-showstep{display:none}
+/* Λειτουργία προβολής */
+body.proj #bar,body.proj #nav{zoom:1.25}
+body.proj{--muted:#3a4254;--line:#b5bfd2}
+:root[data-theme="dark"] body.proj{--muted:#b9c1d4;--line:#3b465e}
+@media print{#kitfloat,.rt,.rt-showstep,.kit-btn{display:none!important}.rt-hide{display:grid!important}}
+/* Καθαρές γραμμές */
+body{font-size:17px;line-height:1.68}
+.ln{display:block;margin:.22em 0}
+.ln.li{position:relative;padding-left:1.25em}
+.ln.li::before{content:"•";position:absolute;left:.35em;color:var(--muted)}
+.kvs{display:inline-flex;flex-wrap:wrap;gap:.2em 1.2em;vertical-align:top}
+.kv,.nw{white-space:nowrap}
+p,li,td{text-wrap:pretty}
+.ln.cd{font-family:var(--mono);font-size:.92em}
+.cdcols{display:inline-flex;flex-wrap:wrap;gap:4px 28px;vertical-align:top}
+.cdcol{display:inline-block;padding-left:10px;border-left:2px solid var(--line)}/*<KIT*/</style>
+<script id="kitjs">/*KITJS>*/(function(){
+  /* kit: θέμα (φωτεινό/σκοτεινό), προβολή, «Δείξε λύση» */
+  var root = document.documentElement, body = document.body, doc = document.getElementById('doc');
+  if (!doc || body.getAttribute('data-kit')) return;
+  body.setAttribute('data-kit', '1');
+  function get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function put(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+  var theme = get('synapsi-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  var proj = get('aepp-proj') === '1';
+  function mk(id, txt){ var b = document.createElement('button'); b.type = 'button'; b.id = id; b.className = 'kit-btn'; b.textContent = txt; return b; }
+  var bTheme = mk('k-theme', ''), bProj = mk('k-proj', 'Προβολή'), bAll = null;
+  function applyTheme(){ root.setAttribute('data-theme', theme); bTheme.textContent = theme === 'dark' ? '☀ Φωτεινό' : '☾ Σκοτεινό'; bTheme.setAttribute('aria-label', theme === 'dark' ? 'Φωτεινό θέμα' : 'Σκοτεινό θέμα'); }
+  function fit(){
+    if (!proj){ doc.style.zoom = ''; doc.style.maxWidth = ''; return; }
+    var W = window.innerWidth, z = W < 700 ? 1.12 : 1.38;
+    doc.style.zoom = z; doc.style.maxWidth = Math.max(300, Math.min(900, (W - 36) / z)) + 'px';
+  }
+  function applyProj(){ body.classList.toggle('proj', proj); bProj.setAttribute('aria-pressed', String(proj)); fit(); }
+  window.addEventListener('resize', fit);
+  bTheme.onclick = function(){ theme = theme === 'dark' ? 'light' : 'dark'; put('synapsi-theme', theme); applyTheme(); };
+  bProj.onclick = function(){ proj = !proj; put('aepp-proj', proj ? '1' : '0'); applyProj(); };
+  applyTheme(); applyProj();
+
+  var bar = document.getElementById('bar');
+  var teacherSec = doc.querySelector('section.teacher');
+  if (bar){
+    var anchor = document.getElementById('status') || null;
+    if (teacherSec){ bAll = mk('k-all', 'Όλες οι λύσεις'); bar.insertBefore(bAll, anchor); }
+    bar.insertBefore(bProj, anchor); bar.insertBefore(bTheme, anchor);
+  } else {
+    var f = document.createElement('div'); f.id = 'kitfloat';
+    f.appendChild(bTheme); body.appendChild(f); proj = false; applyProj();
+  }
+  if (bAll){
+    bAll.onclick = function(){ var on = !body.classList.contains('rt-all'); body.classList.toggle('rt-all', on); bAll.setAttribute('aria-pressed', String(on)); };
+  }
+
+  /* λυμένα: φαίνεται η εκφώνηση και το «Κατανοώ», τα υπόλοιπα με κουμπί */
+  doc.querySelectorAll('.box.solved').forEach(function(box){
+    var steps = box.querySelector('.steps');
+    if (!steps) return;
+    var st = steps.querySelectorAll(':scope > .step');
+    if (st.length < 2) return;
+    box.classList.add('rt-closed');
+    for (var i = 1; i < st.length; i++) st[i].classList.add('rt-hide');
+    var w = document.createElement('div'); w.className = 'rt-showstep'; w.contentEditable = 'false';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε τη λύση';
+    b.onclick = function(){ box.classList.add('rt-open'); };
+    w.appendChild(b); st[0].after(w);
+  });
+
+  /* ασκήσεις: η απάντηση από τη σελίδα καθηγητή, κρυμμένη κάτω από την εκφώνηση */
+  if (teacherSec){
+    var ans = {};
+    teacherSec.querySelectorAll('.ans .q').forEach(function(q){ var n = q.querySelector('.qn'); if (n) ans[n.textContent.trim()] = q; });
+    doc.querySelectorAll('.exercises .q').forEach(function(q){
+      var n = q.querySelector(':scope > .qn'); if (!n) return;
+      var a = ans[n.textContent.trim()]; if (!a) return;
+      var w = document.createElement('div'); w.className = 'rt rt-ans'; w.contentEditable = 'false';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε λύση';
+      var bodyEl = document.createElement('div'); bodyEl.className = 'rt-body ans';
+      var c = a.cloneNode(true); var qn = c.querySelector('.qn'); if (qn) qn.remove();
+      bodyEl.appendChild(c);
+      b.onclick = function(){ var on = !w.classList.contains('rt-open'); w.classList.toggle('rt-open', on); b.textContent = on ? 'Κρύψε λύση' : 'Δείξε λύση'; };
+      w.appendChild(b); w.appendChild(bodyEl);
+      q.after(w);
+    });
+  }
+})();/*<KITJS*/</script>
+
+</body></html>

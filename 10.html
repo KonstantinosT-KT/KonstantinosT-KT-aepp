@@ -1,0 +1,1064 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Μάθημα 10 · Δομή επιλογής: ΑΝ … ΤΟΤΕ … ΑΛΛΙΩΣ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
+<style>
+/* Layout: one A4-like sheet centred on a cool ground; coloured callouts by role (ορισμός, ήξερες ότι, παγίδα, παράδειγμα) */
+:root{
+  --ground:#e9edf4; --paper:#ffffff; --ink:#172036; --muted:#5a6377; --line:#d9dfea; --soft:#f3f5f9;
+  --blue:#2457d6; --blue-bg:#e9efff; --teal:#0b7f72; --teal-bg:#e2f4f1;
+  --amber:#a65400; --amber-bg:#fff3df; --amber-line:#e2ad62;
+  --coral:#b93b12; --coral-bg:#fcebe4; --violet:#6534c9; --violet-bg:#efe8fd;
+  --s-blue:#2457d6; --s-teal:#0b8174; --s-violet:#6534c9; --s-ink:#172036; --on-solid:#ffffff; --on-solid-2:#d8e1ff;
+  --hero:#172036; --hero-fg:#ffffff; --hero-sub:#c4cef0; --hero-kick:#a9bcff;
+  --mark:#ffe28a;
+  --display:"Commissioner","Noto Sans",system-ui,sans-serif;
+  --body:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0 0 8px}
+
+/* Toolbar */
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:10px 0;background:var(--ground)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:3px}
+.seg button,.btn{font:600 13px/1 var(--body);border:0;background:none;color:var(--muted);padding:8px 13px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid)}
+.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.spacer{flex:1}
+#status{font-size:12.5px;color:var(--muted)}
+.edit-only{display:none}
+body.editing .edit-only{display:inline-block}
+body.editing .view-only{display:none}
+body.editing #doc{outline:2px dashed var(--blue);outline-offset:6px}
+body.editing #doc [contenteditable="false"]{cursor:default}
+
+/* Sheet */
+#doc{max-width:860px;margin:0 auto;background:var(--paper);border-radius:14px;padding:clamp(18px,4vw,44px);box-shadow:0 1px 2px rgba(10,20,40,.06),0 8px 30px rgba(10,20,40,.06)}
+body.student .teacher{display:none}
+
+.hero{background:var(--hero);color:var(--hero-fg);border-radius:14px;padding:22px 24px 24px;position:relative;overflow:hidden}
+.hero .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--hero-kick);font-weight:700}
+.hero h1{font-size:clamp(28px,5vw,40px);font-weight:800;margin:6px 0 8px;letter-spacing:-.01em}
+.hero .sub{color:var(--hero-sub);max-width:34em}
+.hero .sub b{color:var(--hero-fg)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.12);color:var(--hero-fg)}
+.hero .deco{position:absolute;right:-10px;top:-6px;opacity:.16;width:220px;height:auto}
+.hero .deco *{stroke:var(--hero-fg)}
+
+.goals{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 18px;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px}
+.goals h3{grid-column:1/-1;font-size:13px;color:var(--blue);text-transform:uppercase;letter-spacing:.08em}
+.goals div{padding-left:20px;position:relative;font-size:14px}
+.goals div::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:800}
+
+.glance{margin-top:14px;background:var(--soft);border-radius:12px;padding:14px 16px}
+.glance h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.figure{overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:520px;height:auto;font-family:var(--body)}
+
+.sec{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:5px;margin:30px 0 12px;break-after:avoid}
+.sec .num{font-family:var(--display);font-weight:800;font-size:22px;color:var(--blue);font-variant-numeric:tabular-nums}
+.sec h2{font-size:22px;font-weight:800}
+.sec .ref{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;break-inside:avoid}
+.tag{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.def{background:var(--blue-bg);border-left:4px solid var(--blue)} .def .tag{color:var(--blue)}
+.src{font-size:12px;color:var(--muted);margin:2px 0 0}
+.trivia{background:var(--amber-bg);border:1.5px dashed var(--amber-line)} .trivia .tag{color:var(--amber)}
+.talk{margin-top:6px;font-size:14px;color:var(--amber);font-weight:600}
+.talk span{font-weight:400}
+.trap{background:var(--coral-bg);border-left:4px solid var(--coral)} .trap .tag{color:var(--coral)}
+.ex{background:var(--teal-bg);border-left:4px solid var(--teal)} .ex .tag{color:var(--teal)}
+.plain{background:var(--soft)} .plain .tag{color:var(--ink)}
+.hl{background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 1px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:10px 0}
+.grid .box{margin:0}
+ul.tight{margin:4px 0 8px;padding-left:20px} ul.tight li{margin:3px 0}
+.small{font-size:13px;color:var(--muted)}
+.cap{font-size:13.5px;font-weight:700;margin-bottom:6px}
+
+.tablewrap{overflow-x:auto;margin:10px 0}
+table.t{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
+table.t th{background:var(--s-ink);color:var(--paper);text-align:left;padding:7px 10px;font-weight:600}
+table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:top}
+
+.exhead{display:flex;align-items:center;gap:10px;margin:22px 0 8px}
+.lvl{display:inline-flex;gap:4px}
+.lvl i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}
+.lvl i.on{background:var(--violet)}
+.exhead h3{font-size:17px}
+.q{margin:10px 0 14px;break-inside:avoid}
+.qn{display:inline-block;min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:7px;background:var(--violet-bg);color:var(--violet);font-weight:800;font-size:13px;margin-right:8px}
+.theme{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-left:6px}
+table.tf{width:100%;border-collapse:collapse;margin-top:6px;font-size:14.5px}
+table.tf td{padding:6px 8px;border-bottom:1px solid var(--line)}
+table.tf td.b{width:70px;text-align:center;color:var(--muted)}
+.lines{height:var(--h,44px);background:repeating-linear-gradient(transparent 0 27px,var(--line) 27px 28px);margin-top:6px}
+.drawbox{height:180px;border:1.5px dashed var(--line);border-radius:10px;margin-top:8px}
+.indent{margin-left:34px}
+.sol{color:var(--teal);font-weight:700}
+.ans .q{margin:8px 0}
+.teacher .sec{border-color:var(--teal)} .teacher .sec .num{color:var(--teal)}
+
+/* SVG roles */
+.f-blue{fill:var(--s-blue)} .f-teal{fill:var(--s-teal)} .f-violet{fill:var(--s-violet)} .f-ink{fill:var(--s-ink)}
+.f-paper{fill:var(--paper)} .f-on{fill:var(--on-solid)} .f-on2{fill:var(--on-solid-2)} .f-text{fill:var(--ink)} .f-muted{fill:var(--muted)} .f-onink{fill:var(--paper)}
+.st-ink{stroke:var(--ink)} .st-blue{stroke:var(--blue)} .st-teal{stroke:var(--teal)} .st-violet{stroke:var(--violet)}
+.f-arrow{fill:var(--ink)}
+
+
+/* v2 additions: code, narrow flowcharts, legends */
+:root{--mono:ui-monospace,"Cascadia Mono","Consolas","DejaVu Sans Mono",monospace}
+pre.code{font-family:var(--mono);font-size:14px;line-height:1.55;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:6px 0 8px;overflow-x:auto;white-space:pre}
+.figure.narrow svg{min-width:0;max-width:250px;margin:4px auto}
+.grid.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+ul.legend{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0 2px}
+ul.legend li{font-size:14px}
+ul.legend b{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:6px;background:var(--violet-bg);color:var(--violet);margin-right:4px}
+
+
+/* v3 additions: solved examples step by step, blank value tables */
+.solved{border:1.5px solid var(--teal);background:var(--paper)} .solved .tag{color:var(--teal)}
+.steps{display:grid;gap:14px;margin-top:10px}
+.step{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.stepn{width:30px;height:30px;border-radius:50%;background:var(--s-teal);color:var(--on-solid);font:800 14px/30px var(--display);text-align:center}
+table.t.blank td{height:34px;border:1px solid var(--line)}
+
+/* v4: graphs */
+.figure.narrow.graph svg{max-width:380px}
+
+/* v5: toolbox subsections */
+h3.tool{font-size:17px;margin:24px 0 8px;padding-top:4px;border-top:1px solid var(--line)}
+
+/* homework vs self-check */
+.q.hw::before{content:"Για το σπίτι";display:block;width:max-content;font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:99px;padding:4px 9px;margin-bottom:6px}
+body.editing .q.hw::before{display:none}
+.hwtoggle{display:block;margin-bottom:6px;font:600 12px/1 var(--body);padding:6px 10px;border-radius:99px;border:1.5px dashed var(--line);background:var(--paper);color:var(--muted);cursor:pointer}
+.hwtoggle[aria-pressed="true"]{border-style:solid;border-color:var(--amber-line);color:var(--amber);background:var(--amber-bg)}
+.hwnote{font-size:13px;color:var(--amber);font-weight:600}
+
+@media (max-width:520px){ .indent{margin-left:0} .hero .deco{display:none} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* v4: math notation (fractions, roots) */
+.mx{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:1.06em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 2px;line-height:1.25}
+.frac>span{padding:0 4px}
+.frac>span:first-child{border-bottom:1.3px solid currentColor}
+.rt{border-top:1.3px solid currentColor;padding:0 2px 0 1px;margin-left:1px}
+
+/* student additions */
+#doc{margin-top:0}
+#nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ground);max-width:860px;margin:0 auto;padding-block:10px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.navin{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.navin::-webkit-scrollbar{display:none}
+#nav a{flex:none;font:600 13px/1 var(--body);color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
+#nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
+.btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.quiz{display:grid;gap:10px;margin-top:10px}
+.qi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:8px}
+.qi .qs{margin:0}
+.qb{display:flex;gap:8px;flex-wrap:wrap}
+.qb button{font:600 14px/1 var(--body);padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;min-width:96px}
+.qb button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.qi.ok{border-color:var(--teal);background:var(--teal-bg)}
+.qi.no{border-color:var(--coral);background:var(--coral-bg)}
+.qi .qb button.pick{border-color:currentColor}
+.qi.ok .qb button.pick{background:var(--s-teal);border-color:var(--s-teal);color:var(--on-solid)}
+.qi.no .qb button.pick{background:var(--coral);border-color:var(--coral);color:var(--paper)}
+.qi.no .qb button.right{border-color:var(--teal);color:var(--teal)}
+.fb{font-size:13px;font-weight:700}
+.qi.ok .fb{color:var(--teal)} .qi.no .fb{color:var(--coral)}
+.score{font:700 15px/1.4 var(--display);padding:10px 14px;border-radius:10px;background:var(--violet-bg);color:var(--violet);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.score .btn{font-size:13px;padding:8px 12px}
+
+details.reveal{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+details.reveal summary{cursor:pointer;font-weight:700;color:var(--teal);padding:10px 14px;list-style:none}
+details.reveal summary::-webkit-details-marker{display:none}
+details.reveal summary::before{content:"▸ ";}
+details.reveal[open] summary::before{content:"▾ ";}
+details.reveal .rv{padding:0 14px 12px}
+
+.deck{display:grid;gap:12px;margin-top:10px}
+.card{position:relative;display:block;width:100%;min-height:220px;border:0;padding:0;background:none;cursor:pointer;perspective:1200px;font:inherit;color:inherit;text-align:left}
+.card .face{position:absolute;inset:0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;backface-visibility:hidden;transition:transform .45s ease}
+.card .front{background:var(--hero);color:var(--hero-fg);justify-content:center}
+.card .back{background:var(--blue-bg);color:var(--ink);border:1.5px solid var(--blue);transform:rotateY(180deg);overflow:auto}
+.card.flipped .front{transform:rotateY(-180deg)}
+.card.flipped .back{transform:rotateY(0)}
+.card:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:14px}
+.ck{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.term{font:800 clamp(24px,6vw,34px)/1.15 var(--display)}
+.cdef{font-size:15.5px;line-height:1.55}
+.tap{font-size:12.5px;opacity:.7;margin-top:auto}
+.deckbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.count{font:700 14px var(--display);min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.card .face{transition:none}}
+@media (max-width:520px){ #doc{border-radius:12px} .card{min-height:260px} }
+</style>
+<style id="synapsi-brand">
+:root{--ground:#F7F6F0;--ink:#2B3722;--muted:#5E6253;--line:#E1E1D7;--soft:#F3F2EA;--blue:#4F6230;--blue-bg:#EEF0E2;--s-blue:#4F6230;--s-ink:#2B3722;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D;--on-solid-2:#E6E0CC}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}}
+:root[data-theme="dark"]{--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}
+body::before{background:var(--ground)}
+.syn-bar{max-width:860px;margin:0 auto;padding-top:12px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
+.syn-bar a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--hero);color:#fff;text-decoration:none}
+.syn-bar span{color:var(--muted)}
+.syn-foot{max-width:860px;margin:18px auto 0;display:flex;flex-direction:column;gap:12px}
+.syn-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.syn-nav a,.syn-nav span{min-height:52px;padding:8px 14px;border-radius:12px;display:flex;flex-direction:column;justify-content:center;gap:2px;text-decoration:none;font:700 14px/1.3 var(--display);background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.syn-nav small{font:600 11.5px var(--body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.syn-nav .next{text-align:right;background:var(--hero);color:#fff;border-color:var(--hero)}
+.syn-nav .next small{color:var(--hero-kick)}
+.syn-nav .off{opacity:.6}
+.syn-note{font-size:13px;color:var(--muted);padding:12px 14px;border-radius:10px;background:var(--soft)}
+.syn-copy{font-size:12px;color:var(--muted)}
+</style>
+<script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<div class="syn-bar"><a href="../index.html">&#8592; Διαδρομή</a><span>Μάθημα 10 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-2-4-2">2.4.2</a><a href="#s-8-1">8.1</a><a href="#s-8-1-1">8.1.1</a><a href="#s-tools">Εργαλειοθήκη</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a></div></nav>
+<main id="doc" lang="el">
+<section class="hero">
+<svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
+<path d="M150 6v20"></path>
+<polygon points="150,26 192,52 150,78 108,52"></polygon>
+<path d="M192 52h20v40M108 52H88v40"></path>
+<rect height="22" rx="3" width="44" x="66" y="92"></rect>
+<rect height="22" rx="3" width="30" x="190" y="92"></rect>
+<path d="M88 114v24h117v-24M150 138v18"></path>
+</svg>
+<div class="kicker">Μέρος Γ · Επιλογή και επανάληψη</div>
+<h1>Δομή επιλογής: ΑΝ … ΤΟΤΕ … ΑΛΛΙΩΣ</h1>
+<p class="sub">Μέχρι τώρα κάθε εντολή εκτελούνταν πάντα. Από σήμερα το πρόγραμμα <b>αποφασίζει</b>: κάνει κάτι <b>μόνο αν</b> ισχύει μια συνθήκη, ή διαλέγει <b>ανάμεσα σε δύο δρόμους</b>.</p>
+<div class="chips"><span class="chip">Βιβλίο §2.4.2, 8.1, 8.1.1 · σελ. 38–40, 139–142</span><span class="chip">Οδηγίες Μελέτης §2.1–2.2</span><span class="chip">3 διδακτικές ώρες</span><span class="chip">Θέματα Β, Γ, Δ</span></div>
+</section>
+<div class="goals">
+<h3>Στο τέλος του μαθήματος θα μπορείς να…</h3>
+<div>γράφεις <b>απλή</b> και <b>σύνθετη επιλογή</b> σε ψευδογλώσσα, διάγραμμα ροής και ΓΛΩΣΣΑ</div>
+<div>διατυπώνεις <b>συνθήκες</b> με συγκρίσεις αριθμών και <b>χαρακτήρων</b> και με ΚΑΙ, Η, ΟΧΙ</div>
+<div>προστατεύεις το πρόγραμμα από <b>λάθος δεδομένα</b> και διαίρεση με το μηδέν</div>
+<div>βρίσκεις τον <b>μεγαλύτερο</b> από δύο ή τρεις τιμές και βάζεις δύο τιμές σε <b>σειρά</b></div>
+<div>ξεχωρίζεις <b>διαδοχικά ΑΝ</b> από ένα <b>ΑΝ … ΑΛΛΙΩΣ</b></div>
+<div>κάνεις <b>πίνακα τιμών</b> με συνθήκες</div>
+</div>
+<div class="glance">
+<h3>Όλο το μάθημα με μια ματιά: οι δύο μορφές της επιλογής</h3>
+<div class="grid g2" style="align-items:start">
+<div><p class="small" style="text-align:center"><span class="ln li"><b>Απλή επιλογή</b></span><span class="ln li">κάνε κάτι <b>μόνο αν</b> ισχύει</span></p>
+<div class="figure narrow graph">
+<svg aria-label="Απλή επιλογή: αν a &lt; 0 τότε a ← a * (-1), αλλιώς τίποτα· μετά Εκτύπωσε a." font-size="11" role="img" viewbox="0 0 360 320">
+<defs><marker id="arG10a" markerheight="7" markerwidth="7" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="f-arrow" d="M0 0L10 5L0 10z"></path></marker></defs>
+<ellipse class="f-paper st-ink" cx="122" cy="24" rx="44" ry="16" stroke-width="1.6"></ellipse>
+<polygon class="f-paper st-ink" points="86,62 170,62 158,100 74,100" stroke-width="1.6"></polygon>
+<polygon class="f-paper st-ink" points="122,122 182,149 122,176 62,149" stroke-width="1.6"></polygon>
+<rect class="f-paper st-ink" height="38" rx="2" stroke-width="1.6" width="109" x="212" y="130"></rect>
+<polygon class="f-paper st-ink" points="86,220 170,220 158,258 74,258" stroke-width="1.6"></polygon>
+<ellipse class="f-paper st-ink" cx="122" cy="296" rx="44" ry="16" stroke-width="1.6"></ellipse>
+<g class="st-ink" fill="none" stroke-width="1.6"><path d="M122 40V60" marker-end="url(#arG10a)"></path><path d="M122 100V120" marker-end="url(#arG10a)"></path><path d="M182 149H210" marker-end="url(#arG10a)"></path><path d="M122 176V204"></path><path d="M320 149H352"></path><path d="M352 149V204H125" marker-end="url(#arG10a)"></path><path d="M122 204V218" marker-end="url(#arG10a)"></path><path d="M122 258V278" marker-end="url(#arG10a)"></path></g>
+<g class="f-text" text-anchor="middle"><text font-weight="700" x="122" y="28">Αρχή</text><text x="122" y="85">Διάβασε a</text><text x="122" y="153">a &lt; 0</text><text x="266" y="153">a ← a * (-1)</text><text class="f-muted" font-size="10" x="197" y="143">ΝΑΙ</text><text class="f-muted" font-size="10" text-anchor="start" x="128" y="189">ΟΧΙ</text><text x="122" y="243">Εκτύπωσε a</text><text font-weight="700" x="122" y="300">Τέλος</text></g>
+</svg>
+</div></div>
+<div><p class="small" style="text-align:center"><span class="ln li"><b>Σύνθετη επιλογή</b></span><span class="ln li">διάλεξε έναν από <b>δύο δρόμους</b></span></p>
+<div class="figure narrow graph">
+<svg aria-label="Σύνθετη επιλογή: αν a &lt; b τότε c ← a + b, αλλιώς c ← a * b· μετά Εκτύπωσε c." font-size="11" role="img" viewbox="0 0 360 380">
+<defs><marker id="arG10b" markerheight="7" markerwidth="7" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="f-arrow" d="M0 0L10 5L0 10z"></path></marker></defs>
+<ellipse class="f-paper st-ink" cx="122" cy="24" rx="44" ry="16" stroke-width="1.6"></ellipse>
+<polygon class="f-paper st-ink" points="80,62 177,62 165,100 68,100" stroke-width="1.6"></polygon>
+<polygon class="f-paper st-ink" points="122,122 182,149 122,176 62,149" stroke-width="1.6"></polygon>
+<rect class="f-paper st-ink" height="38" rx="2" stroke-width="1.6" width="96" x="218" y="130"></rect>
+<rect class="f-paper st-ink" height="38" rx="2" stroke-width="1.6" width="96" x="74" y="198"></rect>
+<polygon class="f-paper st-ink" points="86,280 170,280 158,318 74,318" stroke-width="1.6"></polygon>
+<ellipse class="f-paper st-ink" cx="122" cy="356" rx="44" ry="16" stroke-width="1.6"></ellipse>
+<g class="st-ink" fill="none" stroke-width="1.6"><path d="M122 40V60" marker-end="url(#arG10b)"></path><path d="M122 100V120" marker-end="url(#arG10b)"></path><path d="M182 149H216" marker-end="url(#arG10b)"></path><path d="M122 176V196" marker-end="url(#arG10b)"></path><path d="M122 236V256"></path><path d="M314 149H352"></path><path d="M352 149V264H125" marker-end="url(#arG10b)"></path><path d="M122 236V264"></path><path d="M122 264V278" marker-end="url(#arG10b)"></path><path d="M122 318V338" marker-end="url(#arG10b)"></path></g>
+<g class="f-text" text-anchor="middle"><text font-weight="700" x="122" y="28">Αρχή</text><text x="122" y="85">Διάβασε a, b</text><text x="122" y="153">a &lt; b</text><text x="266" y="153">c ← a + b</text><text class="f-muted" font-size="10" x="200" y="143">ΝΑΙ</text><text class="f-muted" font-size="10" text-anchor="start" x="128" y="189">ΟΧΙ</text><text x="122" y="221">c ← a * b</text><text x="122" y="303">Εκτύπωσε c</text><text font-weight="700" x="122" y="360">Τέλος</text></g>
+</svg>
+</div></div>
+</div>
+<p class="small">Τα δύο διαγράμματα είναι τα Παραδείγματα 2 και 3 του βιβλίου (§2.4.2). Ο <b>ρόμβος</b> έχει πάντα μία είσοδο και δύο εξόδους, ΝΑΙ και ΟΧΙ. Οι δύο δρόμοι <b>ξαναενώνονται</b> πριν από την επόμενη εντολή.</p>
+</div>
+<div class="sec" id="s-2-4-2"><span class="num">2.4.2</span><h2>Η δομή επιλογής</h2><span class="ref">Βιβλίο σελ. 38–40</span></div>
+<p>«Αν βρέχει, θα πάρω ομπρέλα, αλλιώς θα πάρω καπέλο». Αυτό το παράδειγμα του βιβλίου είναι μια <b>επιλογή</b>: υπάρχει μια <b>συνθήκη</b> («βρέχει») που είναι είτε αληθής είτε ψευδής, και ανάλογα με την τιμή της γίνεται μια ενέργεια.</p>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση</div>
+<p><b>Δομή επιλογής.</b> Γενικά η διαδικασία της επιλογής περιλαμβάνει τον έλεγχο κάποιας συνθήκης που μπορεί να έχει δύο τιμές (Αληθής ή Ψευδής) και ακολουθεί η απόφαση εκτέλεσης κάποιας ενέργειας με βάση την τιμή της λογικής αυτής συνθήκης.</p>
+<p class="src">Σχολικό βιβλίο, §2.4.2</p>
+</div>
+<div class="grid g2" style="align-items:start">
+<div class="box plain"><div class="tag">Απλή επιλογή στην ψευδογλώσσα</div>
+<pre class="code">Αν συνθήκη τότε εντολή</pre>
+<p>ή, για περισσότερες εντολές, σε εσοχή:</p>
+<pre class="code">Αν συνθήκη τότε
+  εντολή_1
+  …
+  εντολή_ν
+Τέλος_αν</pre>
+<p class="small">Αν η συνθήκη είναι αληθής εκτελούνται οι εντολές. Σε κάθε περίπτωση το πρόγραμμα συνεχίζει με ό,τι ακολουθεί. Η μορφή «σε μία γραμμή» υπάρχει <b>μόνο στην ψευδογλώσσα</b>.</p></div>
+<div class="box plain"><div class="tag">Σύνθετη επιλογή στην ψευδογλώσσα</div>
+<pre class="code">Αν συνθήκη τότε
+  εντολή ή εντολές
+αλλιώς
+  εντολή ή εντολές
+Τέλος_αν</pre>
+<p class="small">Εκτελείται <b>ακριβώς ένα</b> από τα δύο τμήματα: το πρώτο αν η συνθήκη είναι αληθής, το δεύτερο αν είναι ψευδής. Το <b>αλλιώς</b> δεν έχει δική του συνθήκη.</p></div>
+</div>
+<div class="sec" id="s-8-1"><span class="num">8.1</span><h2>Συνθήκες: συγκρίσεις και λογικές εκφράσεις</h2><span class="ref">Βιβλίο σελ. 139–140</span></div>
+<p><span class="ln">Η συνθήκη μιας επιλογής είναι μια <b>λογική έκφραση</b>:</span><span class="ln li">μια σύγκριση ή συνδυασμός συγκρίσεων με ΚΑΙ, Η, ΟΧΙ (Μάθημα 3, Εργαλείο 8</span><span class="ln li">Μάθημα 8). Το αποτέλεσμα είναι πάντα ΑΛΗΘΗΣ ή ΨΕΥΔΗΣ.</span></p>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση</div>
+<p><b>Λογική έκφραση.</b> Για τη σύνταξη μιας λογικής έκφρασης ή συνθήκης χρησιμοποιούνται σταθερές, μεταβλητές, αριθμητικές παραστάσεις, συγκριτικοί και λογικοί τελεστές, καθώς και παρενθέσεις. Το αποτέλεσμα είναι μία λογική τιμή ΑΛΗΘΗΣ ή ΨΕΥΔΗΣ.</p>
+<p class="src">Σχολικό βιβλίο, §8.1</p>
+</div>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th>Τι συγκρίνουμε</th><th>Πώς γίνεται η σύγκριση</th><th>Παράδειγμα</th></tr>
+<tr><td><b>Αριθμούς</b></td><td>με τον γνωστό τρόπο</td><td><span class="nw">Β ^ 2 - 4 * Α * Γ &lt; 0</span></td></tr>
+<tr><td><b>Χαρακτήρες</b></td><td>με την <b>αλφαβητική σειρά</b>, χαρακτήρα προς χαρακτήρα, μέχρι να βρεθεί διαφορά</td><td><span class="ln li"><span class="nw">'α' &lt; 'β'</span></span><span class="ln li"><span class="nw">'κακός' &lt; 'καλός'</span> (το κ προηγείται του λ)</span></td></tr>
+<tr><td><b>Λογικές τιμές</b></td><td>έχουν νόημα μόνο τα <b>=</b> και <b>&lt;&gt;</b></td><td><span class="nw">εντάξει = ΑΛΗΘΗΣ</span></td></tr>
+</tbody></table></div>
+<div class="grid g2">
+<div class="box ex"><div class="tag">Από τα μαθηματικά στη συνθήκη</div>
+<p><b><span class="nw">0 &lt; Χ &lt; 5</span></b> γράφεται <span class="nw">Χ &gt; 0</span> ΚΑΙ <span class="nw">Χ &lt; 5</span></p>
+<p><b><span class="nw">Χ = 1</span> ή 2 ή 3</b> γράφεται <span class="nw">Χ = 1</span> Η <span class="nw">Χ = 2</span> Η <span class="nw">Χ = 3</span></p>
+<p><b>Χ εκτός [0, 20]</b> γράφεται <span class="nw">Χ &lt; 0</span> Η <span class="nw">Χ &gt; 20</span></p>
+<p class="src">Σχολικό βιβλίο, §8.1 (σελ. 140)</p></div>
+<div class="box ex"><div class="tag">Λογική μεταβλητή ως συνθήκη</div>
+<p>Αν η εντάξει είναι ΛΟΓΙΚΗ, το <b>ΑΝ εντάξει ΤΟΤΕ</b> αρκεί. Το «= ΑΛΗΘΗΣ» δεν είναι λάθος, αλλά περισσεύει. Αντίστοιχα <b>ΑΝ ΟΧΙ εντάξει ΤΟΤΕ</b>.</p>
+<p>Μια συνθήκη μπορεί να «φυλαχτεί» για αργότερα: <b><span class="nw">ενήλικας ← ηλικία &gt;= 18</span></b>.</p></div>
+</div>
+<div class="sec" id="s-8-1-1"><span class="num">8.1.1</span><h2>Η εντολή ΑΝ στη ΓΛΩΣΣΑ</h2><span class="ref">Βιβλίο σελ. 140–142</span></div>
+<div class="grid g2" style="align-items:start">
+<div class="box def" style="margin:0">
+<div class="tag">Ορισμός · απομνημόνευση · ΑΝ … ΤΟΤΕ</div>
+<pre class="code">ΑΝ συνθήκη ΤΟΤΕ
+  εντολή-1
+  …
+  εντολή-ν
+ΤΕΛΟΣ_ΑΝ</pre>
+<p><b>Λειτουργία ΑΝ … ΤΟΤΕ.</b> Αν η συνθήκη ισχύει, τότε εκτελούνται οι εντολές που βρίσκονται μεταξύ των λέξεων ΤΟΤΕ και ΤΕΛΟΣ_ΑΝ, σε αντίθετη περίπτωση οι εντολές αυτές αγνοούνται. Η εκτέλεση του προγράμματος συνεχίζεται με την εντολή που ακολουθεί τη δήλωση ΤΕΛΟΣ_ΑΝ.</p>
+<p class="src">Σχολικό βιβλίο, §8.1.1</p>
+</div>
+<div class="box def" style="margin:0">
+<div class="tag">Ορισμός · απομνημόνευση · ΑΝ … ΤΟΤΕ … ΑΛΛΙΩΣ</div>
+<pre class="code">ΑΝ συνθήκη ΤΟΤΕ
+  εντολές
+ΑΛΛΙΩΣ
+  εντολές
+ΤΕΛΟΣ_ΑΝ</pre>
+<p><b>Λειτουργία ΑΝ … ΤΟΤΕ … ΑΛΛΙΩΣ.</b> Αν η συνθήκη ισχύει, τότε εκτελούνται οι εντολές που βρίσκονται μεταξύ των λέξεων ΤΟΤΕ και ΑΛΛΙΩΣ, διαφορετικά εκτελούνται οι εντολές μεταξύ ΑΛΛΙΩΣ και ΤΕΛΟΣ_ΑΝ. Η εκτέλεση του προγράμματος συνεχίζεται με την εντολή που ακολουθεί τη δήλωση ΤΕΛΟΣ_ΑΝ.</p>
+<p class="src">Σχολικό βιβλίο, §8.1.1</p>
+</div>
+</div>
+<p>Στη ΓΛΩΣΣΑ <b>κάθε ΑΝ κλείνει με ΤΕΛΟΣ_ΑΝ</b>, ακόμα κι αν έχει μία μόνο εντολή. Οι εντολές μέσα στο ΑΝ γράφονται με <b>εσοχή</b>: ο υπολογιστής δεν τη χρειάζεται, ο αναγνώστης όμως ναι.</p>
+<div class="grid g2" style="align-items:start">
+<pre class="code">ΔΙΑΒΑΣΕ α
+ΑΝ α &gt;= 0 ΤΟΤΕ
+  Ρίζα ← Τ_Ρ(α)
+  ΓΡΑΨΕ Ρίζα
+ΑΛΛΙΩΣ
+  ΓΡΑΨΕ 'Αρνητικός: δεν έχει ρίζα'
+ΤΕΛΟΣ_ΑΝ</pre>
+<div class="box plain" style="margin:0"><div class="tag">Ένα ΑΝ μέσα σε άλλο</div>
+<p>Μέσα σε ένα ΑΝ μπορεί να υπάρχει και άλλο ΑΝ: τα λέμε <b>εμφωλευμένα</b>. Συχνά όμως γράφονται πιο απλά με <b>ΚΑΙ</b>:</p>
+<pre class="code">ΑΝ Βάρος &lt; 80 ΤΟΤΕ           ΑΝ Βάρος &lt; 80 ΚΑΙ
+  ΑΝ Ύψος &lt; 1.70 ΤΟΤΕ           &amp;  Ύψος &lt; 1.70 ΤΟΤΕ
+    ΓΡΑΨΕ 'Ελαφρύς, κοντός'     ΓΡΑΨΕ 'Ελαφρύς, κοντός'
+  ΤΕΛΟΣ_ΑΝ                    ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΑΝ</pre>
+<p class="small">Παράδειγμα του βιβλίου, §8.1.1. Τα εμφωλευμένα ΑΝ θα τα δούμε αναλυτικά στο Μάθημα 11.</p></div>
+</div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Στις 15 Ιουνίου 2014, στον αγώνα Γαλλία–Ονδούρα του Παγκοσμίου Κυπέλλου της Βραζιλίας, ένα γκολ κατοχυρώθηκε για πρώτη φορά σε Μουντιάλ με τη βοήθεια της <b>τεχνολογίας γραμμής τέρματος</b>. Κάμερες γύρω από το γήπεδο παρακολουθούν την μπάλα και, μόλις αυτή περάσει <b>ολόκληρη</b> τη γραμμή, το ρολόι του διαιτητή δονείται και γράφει «GOAL». Στην καρδιά του συστήματος υπάρχει μια απλή επιλογή: ΑΝ η μπάλα πέρασε ολόκληρη τη γραμμή ΤΟΤΕ ειδοποίησε τον διαιτητή.</p>
+<p class="talk">Σκέψου: Ποια θα ήταν η συνθήκη, αν η μπάλα περιγραφόταν από τη θέση του κέντρου της (x) και την ακτίνα της (r), και η γραμμή βρισκόταν στο <span class="nw">x = 0</span>;</p>
+</div>
+<div class="sec" id="s-tools"><span class="num">⚙</span><h2>Η εργαλειοθήκη της επιλογής</h2><span class="ref">Μοτίβα που επανέρχονται</span></div>
+<p>Κάποια «κομμάτια» επιλογής εμφανίζονται σε σχεδόν κάθε άσκηση. Μάθε τα σαν εργαλεία: όταν τα αναγνωρίσεις στην εκφώνηση, ξέρεις ήδη τι θα γράψεις.</p>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th>Θέλω να…</th><th>Γράφω</th></tr>
+<tr><td><b>Ε1. Ελέγξω τα δεδομένα</b> πριν τα χρησιμοποιήσω</td><td><code>ΑΝ ν &gt; 0 ΤΟΤΕ … ΑΛΛΙΩΣ ΓΡΑΨΕ 'Λάθος δεδομένα' ΤΕΛΟΣ_ΑΝ</code></td></tr>
+<tr><td><b>Ε2. Αποφύγω διαίρεση με το 0</b> ή ρίζα αρνητικού</td><td><code>ΑΝ β &lt;&gt; 0 ΤΟΤΕ π ← α / β … ΤΕΛΟΣ_ΑΝ</code></td></tr>
+<tr><td><b>Ε3. Βρω τον μεγαλύτερο</b> από α, β, γ</td><td><span class="ln cd"><code>μεγ ← α</code></span><span class="ln cd"><code>ΑΝ β &gt; μεγ ΤΟΤΕ μεγ ← β</code></span><span class="ln cd"><code>ΑΝ γ &gt; μεγ ΤΟΤΕ μεγ ← γ</code></span></td></tr>
+<tr><td><b>Ε4. Βάλω δύο τιμές σε σειρά</b> <span class="nw">(α &lt;= β)</span></td><td><code>ΑΝ α &gt; β ΤΟΤΕ temp ← α; α ← β; β ← temp ΤΕΛΟΣ_ΑΝ</code></td></tr>
+<tr><td><b>Ε5. Ελέγξω <span class="nw">άρτιο / πολλαπλάσιο</span></b></td><td><code>ΑΝ ν mod 2 = 0 ΤΟΤΕ …</code> (Μάθημα 3, Εργαλείο 3)</td></tr>
+<tr><td><b>Ε6. Κάνω <span class="nw">έκπτωση / χρέωση</span></b> πάνω από ένα όριο</td><td><code>ΑΝ ποσό &gt; 50 ΤΟΤΕ ποσό ← ποσό * 0.9 ΤΕΛΟΣ_ΑΝ</code></td></tr>
+<tr><td><b>Ε7. Βάλω ταβάνι</b> (μέγιστη χρέωση)</td><td><code>ΑΝ χρέωση &gt; 15 ΤΟΤΕ χρέωση ← 15 ΤΕΛΟΣ_ΑΝ</code></td></tr>
+<tr><td><b>Ε8. Στρογγυλέψω προς τα πάνω πραγματικό</b> x</td><td><span class="ln cd"><code>ν ← Α_Μ(x)</code></span><span class="ln cd"><code>ΑΝ ν &lt; x ΤΟΤΕ ν ← ν + 1 ΤΕΛΟΣ_ΑΝ</code></span></td></tr>
+</tbody></table></div>
+<p class="small">Στον πίνακα, για συντομία, κάποιες εντολές γράφονται στην ίδια γραμμή. Στο πρόγραμμα κάθε εντολή γράφεται σε <b>δική της γραμμή</b>. Η Ε8 συμπληρώνει το Εργαλείο 10 του Μαθήματος 3, που δουλεύει μόνο με ακεραίους.</p>
+<div class="grid g2">
+<div class="box ex"><div class="tag">Διαδοχικά ΑΝ ή ΑΝ … ΑΛΛΙΩΣ;</div>
+<p>Δύο ξεχωριστά ΑΝ <b>ελέγχονται και τα δύο</b>: μπορεί να εκτελεστούν και τα δύο, κανένα ή ένα. Ένα ΑΝ … ΑΛΛΙΩΣ εκτελεί <b>πάντα ακριβώς ένα</b> τμήμα. Αν οι περιπτώσεις <b>αποκλείουν</b> η μία την άλλη, προτίμησε το ΑΛΛΙΩΣ.</p></div>
+<div class="box ex"><div class="tag">Περιττοί έλεγχοι</div>
+<p>Στο <b>ΑΝ <span class="nw">x &gt; 0</span> ΤΟΤΕ … ΑΛΛΙΩΣ</b> το πρόγραμμα ξέρει ήδη ότι στο ΑΛΛΙΩΣ ισχύει <span class="nw">x &lt;= 0.</span> Ένας νέος έλεγχος «ΑΝ <span class="nw">x &lt;= 0</span>» εκεί είναι <b>περιττός</b>: δεν είναι συντακτικό λάθος, αλλά κάνει το πρόγραμμα πιο πολύπλοκο.</p></div>
+</div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Στις 26 Σεπτεμβρίου 1983 το σοβιετικό σύστημα έγκαιρης προειδοποίησης έδειξε ότι οι ΗΠΑ είχαν εκτοξεύσει πυρηνικούς πυραύλους. Ο αξιωματικός υπηρεσίας <b>Στανισλάβ Πετρόφ</b> έκρινε ότι ήταν ψευδής συναγερμός και δεν το ανέφερε ως επίθεση. Είχε δίκιο: οι δορυφόροι είχαν «δει» την αντανάκλαση του ήλιου πάνω σε σύννεφα. Η συνθήκη του προγράμματος ήταν σωστή για τα δεδομένα που περίμεναν οι σχεδιαστές του, όχι όμως για ένα σπάνιο φαινόμενο που δεν είχαν προβλέψει.</p>
+<p class="talk">Σκέψου: Γιατί ο έλεγχος των δεδομένων (Ε1) είναι τόσο σημαντικός; Ποια «απρόβλεπτη» είσοδος θα μπορούσε να «ξεγελάσει» ένα πρόγραμμα της τάξης σας;</p>
+</div>
+<div class="box trap">
+<div class="tag">Παγίδες που κοστίζουν μονάδες</div>
+<ul class="tight">
+<li>Στη συνθήκη το <b>=</b> είναι σύγκριση. Μέσα στις εντολές η εκχώρηση γράφεται με <b>←</b>.</li>
+<li>Στη ΓΛΩΣΣΑ <b>κάθε ΑΝ θέλει ΤΟΤΕ και ΤΕΛΟΣ_ΑΝ</b>. Το ΑΛΛΙΩΣ <b>δεν έχει συνθήκη</b>.</li>
+<li>Το «<span class="nw">0 &lt; x &lt; 5</span>» γράφεται <b><span class="nw">x &gt; 0</span> ΚΑΙ <span class="nw">x &lt; 5</span></b>. Το «x μεγαλύτερο ή ίσο του 5» γράφεται <b><span class="nw">x &gt;= 5</span></b>.</li>
+<li>Οι χαρακτήρες στις συγκρίσεις θέλουν <b>εισαγωγικά</b>: ΑΝ <span class="nw">απάντηση = 'Ν'</span> ΤΟΤΕ.</li>
+<li>«Ούτε … ούτε» θέλει <b>ΚΑΙ</b>: <span class="nw">όνομα &lt;&gt; 'Α'</span> ΚΑΙ <span class="nw">όνομα &lt;&gt; 'Β'.</span></li>
+<li>Μια μεταβλητή που παίρνει τιμή <b>μόνο μέσα σε ένα ΑΝ</b> μπορεί να μείνει χωρίς τιμή, αν η συνθήκη είναι ψευδής. Δώσε της τιμή πριν από το ΑΝ ή και στο ΑΛΛΙΩΣ.</li>
+<li>Στις εκφωνήσεις «πάνω από» σημαίνει <b>&gt;</b>, «τουλάχιστον» σημαίνει <b>&gt;=</b>, «το πολύ» σημαίνει <b>&lt;=</b>.</li>
+</ul>
+</div>
+<div class="box def">
+<div class="tag">Σύνοψη</div>
+<p><b>Απλή επιλογή:</b> ΑΝ συνθήκη ΤΟΤΕ εντολές ΤΕΛΟΣ_ΑΝ. Οι εντολές εκτελούνται μόνο αν η συνθήκη είναι ΑΛΗΘΗΣ.</p>
+<p><b>Σύνθετη επιλογή:</b> ΑΝ συνθήκη ΤΟΤΕ … ΑΛΛΙΩΣ … ΤΕΛΟΣ_ΑΝ. Εκτελείται ακριβώς ένα από τα δύο τμήματα.</p>
+<p><b>Συνθήκη:</b> λογική έκφραση με συγκρίσεις (αριθμών, χαρακτήρων αλφαβητικά, λογικών μόνο <span class="nw">με = και</span> &lt;&gt;) και ΚΑΙ, Η, ΟΧΙ.</p>
+<p><b>Διάγραμμα ροής:</b> ρόμβος με μία είσοδο και δύο εξόδους (ΝΑΙ, ΟΧΙ) που ξαναενώνονται.</p>
+</div>
+
+<section class="solved-wrap">
+<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένα παραδείγματα βήμα-βήμα</h2><span class="ref">Έτσι σκεφτόμαστε</span></div>
+<div class="box solved">
+<div class="tag">Λυμένο 1 · Το εισιτήριο του μουσείου: ψευδογλώσσα, διάγραμμα ροής, ΓΛΩΣΣΑ</div>
+<p>Ένα μουσείο έχει εισιτήριο 10 €. Τα παιδιά κάτω των 12 ετών και όσοι είναι 65 ετών και άνω πληρώνουν μειωμένο εισιτήριο 5 €. Να γραφτεί αλγόριθμος σε ψευδογλώσσα και διάγραμμα ροής που διαβάζει την ηλικία ενός επισκέπτη και εμφανίζει την τιμή του εισιτηρίου του, και στη συνέχεια το αντίστοιχο πρόγραμμα σε ΓΛΩΣΣΑ.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><span class="ln"><b>Κατανοώ.</b> Δύο τιμές, άρα <b>δύο δρόμοι</b>: σύνθετη επιλογή.</span><span class="ln li">«Κάτω των 12» γράφεται ηλικία <b>&lt;</b> 12.</span><span class="ln li">«65 και άνω» γράφεται ηλικία <b>&gt;=</b> 65.</span><span class="ln">Αρκεί <b>ένα</b> από τα δύο για μειωμένο εισιτήριο, άρα χρησιμοποιώ <b>ή</b>.</span></div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Η συνθήκη περιγράφει τη μειωμένη τιμή. Ό,τι δεν την ικανοποιεί πληρώνει κανονικά. Η τιμή υπολογίζεται στο ΑΝ, η εμφάνιση γίνεται <b>μία φορά</b>, μετά το ΤΕΛΟΣ_ΑΝ.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<div class="grid g2" style="align-items:start">
+<pre class="code">Αλγόριθμος Μουσείο
+Διάβασε ηλικία
+Αν ηλικία &lt; 12 ή ηλικία &gt;= 65 τότε
+  τιμή ← 5
+αλλιώς
+  τιμή ← 10
+Τέλος_αν
+Εμφάνισε τιμή
+Τέλος Μουσείο</pre>
+<div class="figure narrow graph">
+<svg aria-label="Διάγραμμα ροής του Λυμένου 1" font-size="11" role="img" viewbox="0 0 440 380">
+<defs><marker id="arM10" markerheight="7" markerwidth="7" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="f-arrow" d="M0 0L10 5L0 10z"></path></marker></defs>
+<ellipse class="f-paper st-ink" cx="150" cy="24" rx="44" ry="16" stroke-width="1.6"></ellipse>
+<polygon class="f-paper st-ink" points="101,62 211,62 199,100 89,100" stroke-width="1.6"></polygon>
+<polygon class="f-paper st-ink" points="150,122 258,149 150,176 42,149" stroke-width="1.6"></polygon>
+<rect class="f-paper st-ink" height="38" rx="2" stroke-width="1.6" width="96" x="312" y="130"></rect>
+<rect class="f-paper st-ink" height="38" rx="2" stroke-width="1.6" width="96" x="102" y="198"></rect>
+<polygon class="f-paper st-ink" points="105,280 208,280 196,318 93,318" stroke-width="1.6"></polygon>
+<ellipse class="f-paper st-ink" cx="150" cy="356" rx="44" ry="16" stroke-width="1.6"></ellipse>
+<g class="st-ink" fill="none" stroke-width="1.6"><path d="M150 40V60" marker-end="url(#arM10)"></path><path d="M150 100V120" marker-end="url(#arM10)"></path><path d="M258 149H310" marker-end="url(#arM10)"></path><path d="M150 176V196" marker-end="url(#arM10)"></path><path d="M150 236V256"></path><path d="M408 149H432"></path><path d="M432 149V264H153" marker-end="url(#arM10)"></path><path d="M150 236V264"></path><path d="M150 264V278" marker-end="url(#arM10)"></path><path d="M150 318V338" marker-end="url(#arM10)"></path></g>
+<g class="f-text" text-anchor="middle"><text font-weight="700" x="150" y="28">Αρχή</text><text x="150" y="85">Διάβασε ηλικία</text><text x="150" y="153">ηλικία &lt; 12 ή ηλικία &gt;= 65</text><text x="360" y="153">τιμή ← 5</text><text class="f-muted" font-size="10" x="285" y="143">ΝΑΙ</text><text class="f-muted" font-size="10" text-anchor="start" x="156" y="189">ΟΧΙ</text><text x="150" y="221">τιμή ← 10</text><text x="150" y="303">Εμφάνισε τιμή</text><text font-weight="700" x="150" y="360">Τέλος</text></g>
+</svg>
+</div>
+</div>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Μουσείο
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: ηλικία, τιμή
+ΑΡΧΗ
+  ΓΡΑΨΕ 'Δώσε την ηλικία σου:'
+  ΔΙΑΒΑΣΕ ηλικία
+  ΑΝ ηλικία &lt; 12 Η ηλικία &gt;= 65 ΤΟΤΕ
+    τιμή ← 5
+  ΑΛΛΙΩΣ
+    τιμή ← 10
+  ΤΕΛΟΣ_ΑΝ
+  ΓΡΑΨΕ 'Εισιτήριο:', τιμή, '€'
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Μουσείο</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> Δοκιμάζω τα <b>όρια</b>, γιατί εκεί γίνονται τα λάθη:</span><span class="ln li">11 ετών: <b>5</b></span><span class="ln li">12 ετών: <b>10</b></span><span class="ln li">64 ετών: <b>10</b></span><span class="ln li">65 ετών: <b>5</b></span><span class="ln">Αν είχα γράψει <span class="nw">ηλικία &gt; 65,</span> ο 65χρονος θα πλήρωνε λάθος τιμή.</span></div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 2 · Το καλύτερο από τρία άλματα</div>
+<p>Στο άλμα εις μήκος κάθε αθλητής κάνει τρεις προσπάθειες. Να γραφτεί πρόγραμμα που διαβάζει τις τρεις επιδόσεις σε μέτρα και εμφανίζει την καλύτερη και σε ποια προσπάθεια έγινε. Αν δύο προσπάθειες είναι ίσες, μετράει η πρώτη.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Ψάχνω τον <b>μεγαλύτερο</b> από τρεις αριθμούς (Εργαλείο Ε3) και <b>πού</b> βρίσκεται. «Μετράει η πρώτη» σημαίνει ότι η νέα τιμή αλλάζει το καλύτερο μόνο αν είναι <b>αυστηρά</b> μεγαλύτερη.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Υποθέτω ότι καλύτερο είναι το 1ο άλμα. Μετά συγκρίνω το 2ο με το «μέχρι τώρα καλύτερο» και, αν είναι μεγαλύτερο, το κρατάω. Το ίδιο για το 3ο. Δύο <b>διαδοχικά</b> ΑΝ, όχι ΑΝ … ΑΛΛΙΩΣ: πρέπει να ελεγχθούν και τα δύο.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Άλματα
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: α1, α2, α3, καλύτερο
+  ΑΚΕΡΑΙΕΣ: προσπάθεια
+ΑΡΧΗ
+  ΓΡΑΨΕ 'Δώσε τα τρία άλματα σε μέτρα:'
+  ΔΙΑΒΑΣΕ α1, α2, α3
+  καλύτερο ← α1
+  προσπάθεια ← 1
+  ΑΝ α2 &gt; καλύτερο ΤΟΤΕ
+    καλύτερο ← α2
+    προσπάθεια ← 2
+  ΤΕΛΟΣ_ΑΝ
+  ΑΝ α3 &gt; καλύτερο ΤΟΤΕ
+    καλύτερο ← α3
+    προσπάθεια ← 3
+  ΤΕΛΟΣ_ΑΝ
+  ΓΡΑΨΕ 'Καλύτερο άλμα:', καλύτερο, 'στην προσπάθεια', προσπάθεια
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Άλματα</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b></span><span class="ln li">Για 7.45, 7.81, 7.62 βγαίνει <b>7.81 στην προσπάθεια 2</b>.</span><span class="ln li">Για την ισοπαλία 7.81, 7.81, 7.50 βγαίνει <b>προσπάθεια 1</b>, γιατί το <span class="nw">7.81 &gt; 7.81</span> είναι ΨΕΥΔΗΣ.</span><span class="ln"><span class="nw">Με &gt;= θα</span> κέρδιζε η 2η, αντίθετα με την εκφώνηση. Η ίδια ιδέα, «κράτα το καλύτερο μέχρι τώρα», θα γίνει ο βασικός αλγόριθμος <b>μεγίστου</b> στις επαναλήψεις.</span></div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 3 · Θωρακίζω το πρόγραμμα: έλεγχος δεδομένων</div>
+<p>Στο Μάθημα 9 (Ασκ. 8) γράψαμε πρόγραμμα για τα εισιτήρια μιας οικογένειας σε αγώνα (15 € ο ενήλικας, 8 € το παιδί) και το μέσο κόστος ανά άτομο. Για 0 ενήλικες και 0 παιδιά γινόταν διαίρεση με το μηδέν. Να διορθωθεί το πρόγραμμα, ώστε να εμφανίζει μήνυμα λάθους όταν τα δεδομένα δεν έχουν νόημα.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Το πρόγραμμα παραβίαζε την <b>καθοριστικότητα</b>: για κάποια δεδομένα μια εντολή δεν μπορούσε να εκτελεστεί. Τι «δεν έχει νόημα»; Αρνητικός αριθμός ατόμων, ή κανένα άτομο.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Εργαλείο Ε1: <b>ΑΝ τα δεδομένα είναι σωστά ΤΟΤΕ υπολογισμοί ΑΛΛΙΩΣ μήνυμα</b>. Η συνθήκη «σωστά» είναι τρεις απαιτήσεις μαζί, άρα ΚΑΙ: <span class="nw">ενήλικες &gt;= 0</span> ΚΑΙ <span class="nw">παιδιά &gt;= 0</span> ΚΑΙ <span class="nw">ενήλικες + παιδιά &gt; 0.</span></div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Εισιτήρια
+ΣΤΑΘΕΡΕΣ
+  ΕΝΗΛΙΚΑΣ = 15
+  ΠΑΙΔΙ = 8
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: ενήλικες, παιδιά, κόστος
+  ΠΡΑΓΜΑΤΙΚΕΣ: μ
+ΑΡΧΗ
+  ΓΡΑΨΕ 'Πόσοι ενήλικες και πόσα παιδιά;'
+  ΔΙΑΒΑΣΕ ενήλικες, παιδιά
+  ΑΝ ενήλικες &gt;= 0 ΚΑΙ παιδιά &gt;= 0 ΚΑΙ ενήλικες + παιδιά &gt; 0 ΤΟΤΕ
+    κόστος ← ενήλικες * ΕΝΗΛΙΚΑΣ + παιδιά * ΠΑΙΔΙ
+    μ ← κόστος / (ενήλικες + παιδιά)
+    ΓΡΑΨΕ 'Κόστος:', κόστος, '€ · Ανά άτομο:', μ, '€'
+  ΑΛΛΙΩΣ
+    ΓΡΑΨΕ 'Λάθος δεδομένα: πρέπει να υπάρχει τουλάχιστον ένα άτομο'
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Εισιτήρια</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b></span><span class="ln li">2 και 3: <b>54 €, 10.8 €</b></span><span class="ln li">0 και 0: <b>μήνυμα</b></span><span class="ln li">−1 και 3: <b>μήνυμα</b>. Χωρίς τον έλεγχο θα έβγαινε κόστος 9 € για «2 άτομα».</span><span class="ln">Η ΓΡΑΨΕ των αποτελεσμάτων είναι <b>μέσα</b> στο ΤΟΤΕ. Αν ήταν μετά το ΤΕΛΟΣ_ΑΝ, στην περίπτωση λάθους θα εμφάνιζε μεταβλητές χωρίς τιμή.</span></div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 4 · Δύο δρομείς σε σειρά κατάταξης</div>
+<p>Να γραφτεί πρόγραμμα που διαβάζει το όνομα και τον χρόνο (σε δευτερόλεπτα) δύο δρομέων στα 100 μέτρα και τους εμφανίζει με σειρά κατάταξης: πρώτα ο ταχύτερος.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Ταχύτερος = <b>μικρότερος</b> χρόνος. Ο χρόνος και το όνομα κάθε δρομέα «πάνε μαζί»: αν αλλάξουν θέση οι χρόνοι, πρέπει να αλλάξουν θέση και τα ονόματα.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Εργαλείο Ε4: αν ο 2ος χρόνος είναι μικρότερος, <b>αντιμεταθέτω</b> (Μάθημα 3, Λυμένο 2). Χρειάζομαι δύο βοηθητικές μεταβλητές, μία για κάθε τύπο: ο χρόνος είναι πραγματικός, το όνομα χαρακτήρες.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Δρομείς
+ΜΕΤΑΒΛΗΤΕΣ
+  ΧΑΡΑΚΤΗΡΕΣ: όνομα1, όνομα2, temp_όνομα
+  ΠΡΑΓΜΑΤΙΚΕΣ: χρόνος1, χρόνος2, temp_χρόνος
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ όνομα1, χρόνος1, όνομα2, χρόνος2
+  ΑΝ χρόνος2 &lt; χρόνος1 ΤΟΤΕ
+    temp_χρόνος ← χρόνος1
+    χρόνος1 ← χρόνος2
+    χρόνος2 ← temp_χρόνος
+    temp_όνομα ← όνομα1
+    όνομα1 ← όνομα2
+    όνομα2 ← temp_όνομα
+  ΤΕΛΟΣ_ΑΝ
+  ΓΡΑΨΕ '1ος:', όνομα1, χρόνος1
+  ΓΡΑΨΕ '2ος:', όνομα2, χρόνος2
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Δρομείς</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> Νίκος 13.8, Ελένη 12.9. Βγαίνει:</span><span class="ln li"><b>1ος: Ελένη 12.9</b></span><span class="ln li"><b>2ος: Νίκος 13.8</b></span><span class="ln">Αν είχα αντιμεταθέσει μόνο τους χρόνους, θα έβγαινε «1ος: Νίκος 12.9», λάθος αποτέλεσμα που δεν φαίνεται με την πρώτη ματιά. Στην ψευδογλώσσα θα μπορούσα να γράψω <b>Αντιμετάθεσε χρόνος1, χρόνος2</b>. Στη ΓΛΩΣΣΑ όχι.</span></div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 5 · Πίνακας τιμών με συνθήκες</div>
+<p>Να γίνει πίνακας τιμών για το παρακάτω πρόγραμμα με είσοδο 4 και 12.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ίχνος
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: α, β, γ
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ α, β
+  ΑΝ α &gt; β ΤΟΤΕ
+    γ ← α - β
+  ΑΛΛΙΩΣ
+    γ ← β - α
+  ΤΕΛΟΣ_ΑΝ
+  ΑΝ γ mod 2 = 0 ΤΟΤΕ
+    γ ← γ div 2
+  ΤΕΛΟΣ_ΑΝ
+  ΑΝ γ &gt; 3 ΚΑΙ α &lt; 10 ΤΟΤΕ
+    α ← α + γ
+  ΤΕΛΟΣ_ΑΝ
+  ΓΡΑΨΕ α, β, γ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ίχνος</pre>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Σε πρόγραμμα με επιλογή, ο πίνακας τιμών γράφει και τις <b>συνθήκες</b>, με την τιμή τους (Α ή Ψ). Οι εντολές που δεν εκτελούνται <b>δεν</b> μπαίνουν στον πίνακα.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Τρία ξεχωριστά ΑΝ: ελέγχονται όλα με τη σειρά, και καθένα με τις τιμές που άφησε το προηγούμενο.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<div class="tablewrap"><table class="t"><tbody><tr><th><span class="nw">Εντολή / συνθήκη</span></th><th>α</th><th>β</th><th>γ</th><th>Έξοδος</th></tr>
+<tr><td>ΔΙΑΒΑΣΕ α, β</td><td>4</td><td>12</td><td></td><td></td></tr>
+<tr><td><span class="nw">α &gt; β</span></td><td colspan="3">Ψ</td><td></td></tr>
+<tr><td><span class="nw">γ ← β - α</span></td><td>4</td><td>12</td><td>8</td><td></td></tr>
+<tr><td><span class="nw">γ mod 2 = 0</span></td><td colspan="3">Α</td><td></td></tr>
+<tr><td><span class="nw">γ ← γ div 2</span></td><td>4</td><td>12</td><td>4</td><td></td></tr>
+<tr><td><span class="nw">γ &gt; 3</span> ΚΑΙ <span class="nw">α &lt; 10</span></td><td colspan="3">Α ΚΑΙ Α = Α</td><td></td></tr>
+<tr><td><span class="nw">α ← α + γ</span></td><td>8</td><td>12</td><td>4</td><td></td></tr>
+<tr><td>ΓΡΑΨΕ α, β, γ</td><td>8</td><td>12</td><td>4</td><td>8 12 4</td></tr>
+</tbody></table></div></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Με είσοδο 15 και 6: <span class="nw">γ = 9,</span> που είναι περιττός, άρα μένει 9. Το <span class="nw">9 &gt; 3</span> είναι Α, αλλά το <span class="nw">15 &lt; 10</span> είναι Ψ, άρα το ΚΑΙ δίνει Ψ. Έξοδος <b>15 6 9</b>. Δύο είσοδοι «περνούν» από διαφορετικούς δρόμους: έτσι ελέγχουμε όλο το πρόγραμμα.</div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 6 · Στάθμευση με χρέωση και ταβάνι (σαν Θέμα Γ)</div>
+<p>Ένας δημοτικός χώρος στάθμευσης χρεώνει 3 € την πρώτη ώρα και 2 € κάθε επόμενη ώρα. Κάθε ώρα που ξεκινά χρεώνεται ολόκληρη. Η χρέωση δεν μπορεί να ξεπεράσει τα 15 €. Οι κάτοικοι της περιοχής πληρώνουν τα μισά. Να γραφτεί πρόγραμμα που διαβάζει τα λεπτά στάθμευσης και αν ο οδηγός είναι κάτοικος (Ν/Ο), και εμφανίζει τις ώρες που χρεώνονται και το ποσό.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Δεδομένα: λεπτά (ακέραια), κάτοικος (χαρακτήρας 'Ν' ή 'Ο'). Σταθερές: 3, 2, 15. Τρεις κανόνες: <b>τιμολόγηση</b> (πρώτη <span class="nw">ώρα / επόμενες),</span> <b>ταβάνι</b>, <b>έκπτωση κατοίκου</b>.</div></div>
+<div class="step"><span class="stepn">2</span><div><span class="ln"><b>Αναλύω.</b> «Κάθε ώρα που ξεκινά» σημαίνει <span class="nw">ώρες = (λεπτά + 59) div 60</span> (Μάθημα 3, Εργαλείο 10). Οι τρεις κανόνες εφαρμόζονται <b>με αυτή τη σειρά</b>, ο καθένας πάνω στο αποτέλεσμα του προηγούμενου. Άρα γράφω τρία ΑΝ στη σειρά:</span><span class="ln li">ένα σύνθετο (πρώτη ώρα ή περισσότερες),</span><span class="ln li">δύο απλά (Ε7 ταβάνι, Ε6 έκπτωση).</span></div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Στάθμευση
+ΣΤΑΘΕΡΕΣ
+  ΠΡΩΤΗ = 3
+  ΕΠΟΜΕΝΗ = 2
+  ΜΕΓΙΣΤΟ = 15
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: λεπτά, ώρες
+  ΠΡΑΓΜΑΤΙΚΕΣ: χρέωση
+  ΧΑΡΑΚΤΗΡΕΣ: κάτοικος
+ΑΡΧΗ
+  ΓΡΑΨΕ 'Λεπτά στάθμευσης:'
+  ΔΙΑΒΑΣΕ λεπτά
+  ΓΡΑΨΕ 'Κάτοικος της περιοχής (Ν/Ο);'
+  ΔΙΑΒΑΣΕ κάτοικος
+  ώρες ← (λεπτά + 59) div 60
+  ΑΝ ώρες &lt;= 1 ΤΟΤΕ
+    χρέωση ← ΠΡΩΤΗ
+  ΑΛΛΙΩΣ
+    χρέωση ← ΠΡΩΤΗ + (ώρες - 1) * ΕΠΟΜΕΝΗ
+  ΤΕΛΟΣ_ΑΝ
+  ΑΝ χρέωση &gt; ΜΕΓΙΣΤΟ ΤΟΤΕ
+    χρέωση ← ΜΕΓΙΣΤΟ
+  ΤΕΛΟΣ_ΑΝ
+  ΑΝ κάτοικος = 'Ν' ΤΟΤΕ
+    χρέωση ← χρέωση / 2
+  ΤΕΛΟΣ_ΑΝ
+  ΓΡΑΨΕ 'Χρεώνονται', ώρες, 'ώρες. Πληρωμή:', χρέωση, '€'
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Στάθμευση</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b>
+<div class="tablewrap"><table class="t"><tbody><tr><th>Λεπτά</th><th>Κάτοικος</th><th>Ώρες</th><th>Πριν το ταβάνι</th><th>Πληρωμή</th></tr>
+<tr><td>45</td><td>Ο</td><td>1</td><td>3</td><td><b>3 €</b></td></tr>
+<tr><td>130</td><td>Ο</td><td>3</td><td><span class="nw">3 + 2 · 2 = 7</span></td><td><b>7 €</b></td></tr>
+<tr><td>130</td><td>Ν</td><td>3</td><td>7</td><td><b>3.5 €</b></td></tr>
+<tr><td>600</td><td>Ο</td><td>10</td><td><span class="nw">3 + 9 · 2 = 21,</span> άρα 15</td><td><b>15 €</b></td></tr>
+<tr><td>600</td><td>Ν</td><td>10</td><td>21, άρα 15</td><td><b>7.5 €</b></td></tr>
+</tbody></table></div>
+<p>Η σειρά μετράει: αν η έκπτωση γινόταν πριν από το ταβάνι, ο κάτοικος των 600 λεπτών θα πλήρωνε 10.5 € (κάτω από 15, άρα το ταβάνι δεν αλλάζει τίποτα) αντί για 7.5 €. Η εκφώνηση λέει ότι «οι κάτοικοι πληρώνουν τα μισά» <b>της χρέωσης</b>, άρα πρώτα το ταβάνι.</p></div></div>
+</div>
+</div>
+</section>
+
+<section class="cards" id="s-cards">
+<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2><span class="ref">Ορισμοί για απομνημόνευση</span></div>
+<p class="small">Διάβασε τον όρο, πες τον ορισμό από μέσα σου και πάτα την κάρτα για να τον δεις.</p>
+<div class="deck">
+<button aria-live="polite" class="card" id="card" type="button">
+<span class="face front"><span class="ck">Όρος</span><span class="term" id="c-term"></span><span class="tap">Πάτα για τον ορισμό</span></span>
+<span class="face back"><span class="ck">Ορισμός</span><span class="cdef" id="c-def"></span><span class="tap" id="c-ref"></span></span>
+</button>
+<div class="deckbar">
+<button aria-label="Προηγούμενη κάρτα" class="btn" id="c-prev" type="button">←</button>
+<span class="count" id="c-count"></span>
+<button aria-label="Επόμενη κάρτα" class="btn" id="c-next" type="button">→</button>
+<button class="btn" id="c-shuf" type="button">Ανακάτεμα</button>
+</div>
+</div>
+</section><section class="exercises">
+<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2><span class="ref">Από τα εύκολα στα δύσκολα</span></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div>
+<div class="q"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Γράψε Σ ή Λ.
+<table class="tf">
+<tbody><tr><td>α. Η συνθήκη μιας εντολής επιλογής έχει πάντα τιμή ΑΛΗΘΗΣ ή ΨΕΥΔΗΣ.</td><td class="b">____</td></tr>
+<tr><td>β. Στην εντολή ΑΝ … ΤΟΤΕ, αν η συνθήκη είναι ψευδής, το πρόγραμμα σταματά.</td><td class="b">____</td></tr>
+<tr><td>γ. Στην εντολή ΑΝ … ΤΟΤΕ … ΑΛΛΙΩΣ εκτελείται πάντα ακριβώς ένα από τα δύο τμήματα εντολών.</td><td class="b">____</td></tr>
+<tr><td>δ. Στη ΓΛΩΣΣΑ κάθε εντολή ΑΝ κλείνει με ΤΕΛΟΣ_ΑΝ.</td><td class="b">____</td></tr>
+<tr><td>ε. Το ΑΛΛΙΩΣ ακολουθείται από μια συνθήκη.</td><td class="b">____</td></tr>
+<tr><td>στ. Η σύγκριση χαρακτήρων στηρίζεται στην αλφαβητική σειρά.</td><td class="b">____</td></tr>
+<tr><td>ζ. Η έκφραση <span class="nw">'κακός' &lt; 'καλός'</span> είναι ΨΕΥΔΗΣ.</td><td class="b">____</td></tr>
+<tr><td>η. Για λογικές τιμές έχουν νόημα μόνο οι <span class="nw">συγκρίσεις = και</span> &lt;&gt;.</td><td class="b">____</td></tr>
+<tr><td>θ. Η συνθήκη <span class="nw">0 &lt; x &lt; 5</span> γράφεται στη ΓΛΩΣΣΑ <span class="nw">x &gt; 0</span> ΚΑΙ <span class="nw">x &lt; 5.</span></td><td class="b">____</td></tr>
+<tr><td>ι. Στο διάγραμμα ροής η επιλογή παριστάνεται με ορθογώνιο.</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Σ, β Λ, γ Σ, δ Σ, ε Λ, στ Σ, ζ Λ, η Σ, θ Σ, ι Λ</span>
+<p class="small">β: οι εντολές του ΑΝ αγνοούνται και η εκτέλεση συνεχίζεται μετά το ΤΕΛΟΣ_ΑΝ. ε: το ΑΛΛΙΩΣ δεν έχει συνθήκη. ζ: το κ προηγείται του λ, άρα είναι ΑΛΗΘΗΣ. ι: η επιλογή παριστάνεται με ρόμβο.</p></div></details></div>
+<div class="q"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
+<p>α) Τι περιλαμβάνει γενικά η διαδικασία της επιλογής;<br/>β) Να γράψετε τη σύνταξη και να περιγράψετε τη λειτουργία της εντολής ΑΝ … ΤΟΤΕ και της εντολής ΑΝ … ΤΟΤΕ … ΑΛΛΙΩΣ.<br/>γ) Τι χρησιμοποιείται για τη σύνταξη μιας λογικής έκφρασης;<br/>δ) Πώς γίνεται η σύγκριση αριθμών, χαρακτήρων και λογικών τιμών;<br/>ε) Τι ονομάζουμε εμφωλευμένα ΑΝ; Γιατί καλό είναι να αποφεύγονται;</p>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p>α) Τον έλεγχο κάποιας συνθήκης που μπορεί να έχει δύο τιμές (Αληθής ή Ψευδής) και την απόφαση εκτέλεσης κάποιας ενέργειας με βάση την τιμή της συνθήκης.</p>
+<p>β) ΑΝ συνθήκη ΤΟΤΕ εντολές ΤΕΛΟΣ_ΑΝ: αν η συνθήκη ισχύει, εκτελούνται οι εντολές μεταξύ ΤΟΤΕ και ΤΕΛΟΣ_ΑΝ, αλλιώς αγνοούνται. Η εκτέλεση συνεχίζεται μετά το ΤΕΛΟΣ_ΑΝ. ΑΝ συνθήκη ΤΟΤΕ εντολές ΑΛΛΙΩΣ εντολές ΤΕΛΟΣ_ΑΝ: αν η συνθήκη ισχύει, εκτελούνται οι εντολές μεταξύ ΤΟΤΕ και ΑΛΛΙΩΣ, διαφορετικά οι εντολές μεταξύ ΑΛΛΙΩΣ και ΤΕΛΟΣ_ΑΝ. Η εκτέλεση συνεχίζεται μετά το ΤΕΛΟΣ_ΑΝ.</p>
+<p>γ) Σταθερές, μεταβλητές, αριθμητικές παραστάσεις, συγκριτικοί και λογικοί τελεστές, καθώς και παρενθέσεις.</p>
+<p>δ) Αριθμοί: με τον προφανή τρόπο. Χαρακτήρες: με βάση την αλφαβητική σειρά, χαρακτήρα προς χαρακτήρα σε κάθε θέση μέχρι να βρεθεί διαφορά. Λογικές τιμές: έχουν νόημα μόνο <span class="nw">το = και</span> το &lt;&gt;.</p>
+<p>ε) Δύο ή περισσότερες εντολές ΑΝ … ΤΟΤΕ … ΑΛΛΙΩΣ που περιέχονται η μία μέσα στην άλλη. Οδηγούν σε πολύπλοκες δομές, που αυξάνουν την πιθανότητα λάθους και τη δυσκολία κατανόησης του προγράμματος.</p></div></details></div>
+<div class="q"><span class="qn">3</span><b>Αληθής ή ψευδής;</b> Γράψε Α αν η έκφραση είναι ΑΛΗΘΗΣ ή Β αν είναι ΨΕΥΔΗΣ.
+<ul class="legend tight">
+<li data-v="Α"><b>Α</b> ΑΛΗΘΗΣ</li>
+<li data-v="Β"><b>Β</b> ΨΕΥΔΗΣ</li>
+</ul>
+<table class="tf">
+<tbody><tr><td>α. <span class="nw">'α' &lt; 'β'</span></td><td class="b">____</td></tr>
+<tr><td>β. <span class="nw">'Μαρία' &gt; 'Μανώλης'</span></td><td class="b">____</td></tr>
+<tr><td>γ. <span class="nw">'Άρης' = 'Αρης'</span></td><td class="b">____</td></tr>
+<tr><td>δ. <span class="nw">15 &gt; 7</span> ΚΑΙ <span class="nw">'Ζ' &lt; 'Α'</span></td><td class="b">____</td></tr>
+<tr><td>ε. <span class="nw">ΑΛΗΘΗΣ &lt;&gt; ΨΕΥΔΗΣ</span></td><td class="b">____</td></tr>
+<tr><td>στ. <span class="nw">10 mod 3 = 1</span> Η <span class="nw">5 &lt; 2</span></td><td class="b">____</td></tr>
+<tr><td>ζ. ΟΧΙ <span class="nw">(4 &gt;= 4)</span></td><td class="b">____</td></tr>
+<tr><td>η. <span class="nw">2 + 3 * 4 = 20</span> Η ΟΧΙ <span class="nw">(3 &gt; 5)</span></td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Α, β Α, γ Β, δ Β, ε Α, στ Α, ζ Β, η Α</span>
+<p class="small">β: Μ = Μ, <span class="nw">α = α,</span> και το ρ έρχεται μετά το ν στο αλφάβητο. γ: το Ά με τόνο είναι διαφορετικός χαρακτήρας από το Α. δ: Α ΚΑΙ Ψ = Ψ. η: <span class="nw">2 + 12 = 14,</span> άρα η σύγκριση είναι Ψ. ΟΧΙ (Ψ) = Α. Ψ Η Α = Α.</p></div></details></div>
+<div class="q"><span class="qn">4</span><b>Τι θα εμφανιστεί;</b> Γράψε τι εμφανίζει κάθε τμήμα προγράμματος.
+<pre class="code">α) x ← 7
+   ΑΝ x mod 2 = 0 ΤΟΤΕ
+     ΓΡΑΨΕ 'άρτιος'
+   ΑΛΛΙΩΣ
+     ΓΡΑΨΕ 'περιττός'
+   ΤΕΛΟΣ_ΑΝ
+
+β) α ← 5
+   β ← 8
+   ΑΝ α &gt; β ΤΟΤΕ
+     ΓΡΑΨΕ α
+   ΤΕΛΟΣ_ΑΝ
+   ΓΡΑΨΕ β
+
+γ) κ ← 3
+   ΑΝ κ &gt; 2 ΤΟΤΕ
+     κ ← κ * 2
+   ΤΕΛΟΣ_ΑΝ
+   ΑΝ κ &gt; 5 ΤΟΤΕ
+     κ ← κ + 1
+   ΤΕΛΟΣ_ΑΝ
+   ΓΡΑΨΕ κ
+
+δ) σημαία ← ΨΕΥΔΗΣ
+   ΑΝ ΟΧΙ σημαία ΤΟΤΕ
+     ΓΡΑΨΕ 'ναι'
+   ΑΛΛΙΩΣ
+     ΓΡΑΨΕ 'όχι'
+   ΤΕΛΟΣ_ΑΝ</pre>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p><span class="ln">α) <b>περιττός</b></span><span class="ln">β) <b>8</b> (το <span class="nw">5 &gt; 8</span> είναι ψευδές, άρα η πρώτη ΓΡΑΨΕ δεν εκτελείται)</span><span class="ln">γ) <b>7</b> (το 3 γίνεται 6, και αφού <span class="nw">6 &gt; 5,</span> γίνεται 7)</span><span class="ln">δ) <b>ναι</b> (ΟΧΙ ΨΕΥΔΗΣ = ΑΛΗΘΗΣ)</span></p></div></details></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div>
+<div class="q"><span class="qn">5</span><b>Πίνακας τιμών.</b><span class="theme">Διαγωνισμός</span> Σε έναν διαγωνισμό ο τελικός βαθμός είναι ο μέσος όρος δύο γραπτών, αλλά αν κάποιο γραπτό είναι κάτω από τη βάση αφαιρείται 1 μονάδα. Να κάνετε πίνακα τιμών για είσοδο 14, 9 και για είσοδο 12, 9.
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Διαγωνισμός
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: β1, β2
+  ΠΡΑΓΜΑΤΙΚΕΣ: μ
+  ΧΑΡΑΚΤΗΡΕΣ: αποτ
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ β1, β2
+  μ ← (β1 + β2) / 2
+  ΑΝ β1 &lt; 10 Η β2 &lt; 10 ΤΟΤΕ
+    μ ← μ - 1
+  ΤΕΛΟΣ_ΑΝ
+  ΑΝ μ &gt;= 10 ΤΟΤΕ
+    αποτ ← 'ΠΕΡΝΑΕΙ'
+  ΑΛΛΙΩΣ
+    αποτ ← 'ΔΕΝ ΠΕΡΝΑΕΙ'
+  ΤΕΛΟΣ_ΑΝ
+  ΓΡΑΨΕ μ, αποτ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Διαγωνισμός</pre>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><div class="tablewrap"><table class="t"><tbody><tr><th><span class="nw">Εντολή / συνθήκη</span></th><th>β1</th><th>β2</th><th>μ</th><th>αποτ</th><th>Έξοδος</th></tr>
+<tr><td>ΔΙΑΒΑΣΕ β1, β2</td><td>14</td><td>9</td><td></td><td></td><td></td></tr>
+<tr><td><span class="nw">μ ← (β1 + β2) / 2</span></td><td>14</td><td>9</td><td>11.5</td><td></td><td></td></tr>
+<tr><td><span class="nw">β1 &lt; 10</span> Η <span class="nw">β2 &lt; 10</span></td><td colspan="4">Ψ Η Α = Α</td><td></td></tr>
+<tr><td><span class="nw">μ ← μ - 1</span></td><td>14</td><td>9</td><td>10.5</td><td></td><td></td></tr>
+<tr><td><span class="nw">μ &gt;= 10</span></td><td colspan="4">Α</td><td></td></tr>
+<tr><td><span class="nw">αποτ ← 'ΠΕΡΝΑΕΙ'</span></td><td>14</td><td>9</td><td>10.5</td><td>ΠΕΡΝΑΕΙ</td><td></td></tr>
+<tr><td>ΓΡΑΨΕ μ, αποτ</td><td>14</td><td>9</td><td>10.5</td><td>ΠΕΡΝΑΕΙ</td><td>10.5 ΠΕΡΝΑΕΙ</td></tr></tbody></table></div>
+<p><span class="ln">Για 12, 9:</span><span class="ln li"><span class="nw">μ = 10.5</span></span><span class="ln li">ισχύει η συνθήκη Α, άρα <span class="nw">μ = 9.5</span></span><span class="ln li"><span class="nw">μ &gt;= 10</span> είναι Ψ, άρα <span class="nw">αποτ = 'ΔΕΝ</span> ΠΕΡΝΑΕΙ'</span><span class="ln">Έξοδος: <b>9.5 ΔΕΝ ΠΕΡΝΑΕΙ</b>.</span></p></div></details></div>
+<div class="q"><span class="qn">6</span><b>Από το διάγραμμα ροής στην ψευδογλώσσα.</b><span class="theme">Αγορές</span> Να γράψετε τον αλγόριθμο σε ψευδογλώσσα που αντιστοιχεί στο διάγραμμα και να βρείτε τι εμφανίζει για ποσό 80 και για ποσό 40.
+<div class="figure narrow graph">
+<svg aria-label="Διάγραμμα ροής της άσκησης 6" font-size="11" role="img" viewbox="0 0 420 440">
+<defs><marker id="arE10" markerheight="7" markerwidth="7" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="f-arrow" d="M0 0L10 5L0 10z"></path></marker></defs>
+<ellipse class="f-paper st-ink" cx="142" cy="24" rx="44" ry="16" stroke-width="1.6"></ellipse>
+<polygon class="f-paper st-ink" points="100,62 197,62 185,100 88,100" stroke-width="1.6"></polygon>
+<polygon class="f-paper st-ink" points="142,122 202,149 142,176 82,149" stroke-width="1.6"></polygon>
+<rect class="f-paper st-ink" height="38" rx="2" stroke-width="1.6" width="162" x="229" y="130"></rect>
+<rect class="f-paper st-ink" height="38" rx="2" stroke-width="1.6" width="102" x="91" y="198"></rect>
+<rect class="f-paper st-ink" height="38" rx="2" stroke-width="1.6" width="181" x="52" y="280"></rect>
+<polygon class="f-paper st-ink" points="90,340 207,340 195,378 78,378" stroke-width="1.6"></polygon>
+<ellipse class="f-paper st-ink" cx="142" cy="416" rx="44" ry="16" stroke-width="1.6"></ellipse>
+<g class="st-ink" fill="none" stroke-width="1.6"><path d="M142 40V60" marker-end="url(#arE10)"></path><path d="M142 100V120" marker-end="url(#arE10)"></path><path d="M202 149H227" marker-end="url(#arE10)"></path><path d="M142 176V196" marker-end="url(#arE10)"></path><path d="M142 236V256"></path><path d="M391 149H412"></path><path d="M412 149V264H145" marker-end="url(#arE10)"></path><path d="M142 236V264"></path><path d="M142 264V278" marker-end="url(#arE10)"></path><path d="M142 318V338" marker-end="url(#arE10)"></path><path d="M142 378V398" marker-end="url(#arE10)"></path></g>
+<g class="f-text" text-anchor="middle"><text font-weight="700" x="142" y="28">Αρχή</text><text x="142" y="85">Διάβασε ποσό</text><text x="142" y="153">ποσό &gt; 50</text><text x="310" y="153">έκπτωση ← ποσό * 0.1</text><text class="f-muted" font-size="10" x="215" y="143">ΝΑΙ</text><text class="f-muted" font-size="10" text-anchor="start" x="148" y="189">ΟΧΙ</text><text x="142" y="221">έκπτωση ← 0</text><text x="142" y="303">τελικό ← ποσό - έκπτωση</text><text x="142" y="363">Εμφάνισε τελικό</text><text font-weight="700" x="142" y="420">Τέλος</text></g>
+</svg>
+</div>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><pre class="code">Αλγόριθμος Έκπτωση
+Διάβασε ποσό
+Αν ποσό &gt; 50 τότε
+  έκπτωση ← ποσό * 0.1
+αλλιώς
+  έκπτωση ← 0
+Τέλος_αν
+τελικό ← ποσό - έκπτωση
+Εμφάνισε τελικό
+Τέλος Έκπτωση</pre>
+<p>Για 80: έκπτωση 8, εμφανίζει <b>72</b>. Για 40: έκπτωση 0, εμφανίζει <b>40</b>.</p></div></details></div>
+<div class="q hw"><span class="qn">7</span><b>Συμπλήρωση κενών.</b> Το πρόγραμμα διαβάζει έναν ακέραιο, εμφανίζει αν είναι άρτιος ή περιττός και, αν είναι μη μηδενικό πολλαπλάσιο του 5, εμφανίζει επιπλέον «και πολλαπλάσιο του 5». Συμπλήρωσε τα κενά.
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Αριθμός
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: ν
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ ν
+  ΑΝ ν ____(1)____ 2 = 0 ____(2)____
+    ΓΡΑΨΕ ν, 'άρτιος'
+  ____(3)____
+    ΓΡΑΨΕ ν, 'περιττός'
+  ____(4)____
+  ΑΝ ν mod 5 = 0 ____(5)____ ν &lt;&gt; 0 ΤΟΤΕ
+    ΓΡΑΨΕ 'και πολλαπλάσιο του 5'
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Αριθμός</pre>
+<p>Τι θα εμφανίσει για <span class="nw">ν = 15,</span> <span class="nw">ν = 8</span> και <span class="nw">ν = 0</span>;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">8</span><b>Βρες τα λάθη.</b><span class="theme">Σινεμά</span>
+<p>Μια ταινία είναι κατάλληλη για 15 ετών και άνω. Το πρόγραμμα θέλει να διαβάζει την ηλικία ενός θεατή και να εμφανίζει «Επιτρέπεται» ή «Απαγορεύεται», αλλά έχει <b>έξι λάθη</b>. Να τα βρείτε και να γράψετε το σωστό πρόγραμμα.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Σινεμά
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: ηλικία
+  ΧΑΡΑΚΤΗΡΕΣ: απάντηση
+ΑΡΧΗ
+  ΔΙΑΒΑΣΕ ηλικία
+  ΑΝ ηλικία =&gt; 15
+    απάντηση = 'Επιτρέπεται'
+  ΑΛΛΙΩΣ ηλικία &lt; 15 ΤΟΤΕ
+    απάντηση ← Απαγορεύεται
+  ΓΡΑΨΕ απάντηση
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Σινεμά</pre>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">9</span><b>Μετατροπή: από εμφωλευμένα ΑΝ σε σύνθετη συνθήκη και αντίστροφα.</b>
+<p>α) Να γράψετε το παρακάτω τμήμα με <b>ένα μόνο</b> ΑΝ:</p>
+<pre class="code">ΑΝ βαθμός &gt;= 10 ΤΟΤΕ
+  ΑΝ απουσίες &lt;= ΟΡΙΟ ΤΟΤΕ
+    ΓΡΑΨΕ 'Προάγεται'
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΑΝ</pre>
+<p>β) Να γράψετε το παρακάτω τμήμα με <b>δύο διαδοχικά</b> ΑΝ, χωρίς τον τελεστή Η:</p>
+<pre class="code">ΑΝ θ &lt; 0 Η θ &gt; 40 ΤΟΤΕ
+  ΓΡΑΨΕ 'Ακραία θερμοκρασία'
+ΤΕΛΟΣ_ΑΝ</pre>
+<p>γ) Η μετατροπή του (β) δούλεψε επειδή οι δύο συνθήκες δεν μπορούν να ισχύουν ταυτόχρονα. Να δώσετε παράδειγμα συνθήκης «Σ1 Η Σ2» για την οποία δύο διαδοχικά ΑΝ θα έδιναν <b>διαφορετικό</b> αποτέλεσμα, και να εξηγήσετε γιατί.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">10</span><b>Διαδοχικά ΑΝ ή ΑΝ … ΑΛΛΙΩΣ;</b>
+<pre class="code">Τμήμα Α                        Τμήμα Β
+ΑΝ x &gt; 0 ΤΟΤΕ                  ΑΝ x &gt; 0 ΤΟΤΕ
+  x ← x - 10                     x ← x - 10
+ΤΕΛΟΣ_ΑΝ                       ΑΛΛΙΩΣ
+ΑΝ x &lt;= 0 ΤΟΤΕ                   x ← x + 100
+  x ← x + 100                  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΑΝ</pre>
+<p>α) Να βρείτε την τελική τιμή του x σε κάθε τμήμα για <span class="nw">x = 25,</span> <span class="nw">x = 5</span> και x = −3.<br/>β) Για ποιες ακέραιες τιμές του x τα δύο τμήματα δίνουν διαφορετικό αποτέλεσμα; Γιατί;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">11</span><b>«Δίνεται ένα έτος…»</b><span class="theme">Ημερολόγιο</span>
+<p>α) Δίνεται ένα έτος. Να γραφτεί αλγόριθμος σε ψευδογλώσσα που υπολογίζει πόσες μέρες έχει ο Φεβρουάριος εκείνου του έτους. (Δίσεκτο: Μάθημα 8, Λυμένο 4. Προσοχή στη μορφή των δεδομένων και των αποτελεσμάτων: Μάθημα 3.)<br/>β) Να γραφτεί πρόγραμμα σε ΓΛΩΣΣΑ που διαβάζει ένα έτος και εμφανίζει κατάλληλο μήνυμα, π.χ. «Το 2000 είναι δίσεκτο: ο Φεβρουάριος έχει 29 μέρες».<br/>γ) Να ελέγξετε για 2024, 1900, 2000 και 2026.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">12</span><b>Υπάρχει τρίγωνο;</b><span class="theme">Γεωμετρία</span>
+<p><span class="ln li">Στο Μάθημα 8 (Ασκ. 16) είδαμε ότι ο τύπος του Ήρωνα «σπάει» όταν τα μήκη δεν σχηματίζουν τρίγωνο. Να γραφτεί πρόγραμμα που διαβάζει τρία μήκη και, αν σχηματίζουν τρίγωνο (κάθε πλευρά μικρότερη από το άθροισμα των άλλων δύο), υπολογίζει και εμφανίζει το εμβαδόν με τον τύπο του Ήρωνα, αλλιώς εμφανίζει «Δεν σχηματίζεται τρίγωνο». Έλεγχος: 3, 4, 5</span><span class="ln li">1, 2, 3</span><span class="ln li">5, 5, 8. Μπορεί η συνθήκη να είναι αληθής με κάποιο αρνητικό μήκος;</span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">13</span><b>Ταξί ή μετρό;</b><span class="theme">Πόλη</span>
+<p><span class="ln li">Μια παρέα θέλει να πάει στο κέντρο. Το ταξί χρεώνει 1,85 € «σημαία» και 0,90 € ανά χιλιόμετρο για όλη την παρέα. Το εισιτήριο του μετρό είναι 1,20 € το άτομο (υποθετικές τιμές). Να γραφτεί πρόγραμμα που διαβάζει πόσα άτομα είναι και την απόσταση σε km και εμφανίζει τον φθηνότερο τρόπο και το κόστος του. Αν φθηνότερο είναι το ταξί, να εμφανίζει και πόσο πληρώνει ο καθένας (με 2 δεκαδικά). Αν το κόστος είναι ίδιο, προτιμάται το μετρό. Έλεγχος: 3 άτομα, 4 km</span><span class="ln li">4 άτομα, 2 km.</span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">14</span><b>Το πακέτο δεδομένων.</b><span class="theme">Κινητό</span>
+<p>Ένα πακέτο κινητής κοστίζει 10 € τον μήνα και περιλαμβάνει 5000 MB. Κάθε MB πάνω από τα 5000 χρεώνεται 0,01 €. Να γράψετε αλγόριθμο σε ψευδογλώσσα <b>και</b> διάγραμμα ροής που διαβάζει τα MB του μήνα και εμφανίζει τη χρέωση. Τι εμφανίζεται για 6200 MB και για 3000 MB;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">15</span><b>«Έστω η εξίσωση…»</b><span class="theme">Μαθηματικά</span>
+<p><span class="ln li">Έστω η εξίσωση αx<sup>2</sup> + <span class="nw">βx + γ = 0</span> με <span class="nw">α &lt;&gt; 0.</span> Να γραφτεί αλγόριθμος σε ψευδογλώσσα που, για <b>δεδομένους</b> συντελεστές α, β, γ, υπολογίζει τη διακρίνουσα και, αν η εξίσωση έχει πραγματικές ρίζες, τις υπολογίζει και τις εμφανίζει, αλλιώς εμφανίζει «Δεν έχει πραγματικές ρίζες». (Ο τύπος σε μία γραμμή: Μάθημα 3, Εργαλείο 9.) Έλεγχος: 1, −3, 2</span><span class="ln li">1, 2, 5</span><span class="ln li">1, −4, 4. Τι παρατηρείτε στην τρίτη περίπτωση;</span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Μεγάλες ασκήσεις</h3></div>
+<div class="q hw"><span class="qn">16</span><b>Η παραγγελία φαγητού.</b><span class="theme">Delivery, Θέμα Γ</span>
+<p>Μια εφαρμογή παραγγελιών φαγητού κάνει τις εξής χρεώσεις:</p>
+<ul class="tight">
+<li>Αν η αξία της παραγγελίας είναι κάτω από 10 €, προστίθεται χρέωση μικρής παραγγελίας 1,50 €.</li>
+<li>Τα πρώτα 3 km μεταφοράς είναι δωρεάν. Για κάθε km πέρα από τα 3, χρεώνονται 0,50 €. Κάθε km που <b>ξεκινά</b> χρεώνεται ολόκληρο.</li>
+<li>Τα μέλη της εφαρμογής δεν πληρώνουν μεταφορικά.</li>
+</ul>
+<p>Να γραφτεί πρόγραμμα που διαβάζει την αξία της παραγγελίας, την απόσταση σε km (πραγματικός αριθμός) και αν ο πελάτης είναι μέλος (Ν/Ο), και εμφανίζει τα μεταφορικά και το συνολικό ποσό. Αν η αξία δεν είναι θετική ή η απόσταση είναι αρνητική, εμφανίζει «Λάθος δεδομένα» και δεν κάνει υπολογισμούς.</p>
+<p><span class="ln li">α) Να καταγράψετε δεδομένα, σταθερές και ζητούμενα με τύπους.<br/>β) Πώς θα βρείτε τα «km που ξεκινούν» από μια πραγματική απόσταση; (Εργαλείο Ε8)<br/>γ) Να γράψετε το πρόγραμμα.<br/>δ) Να το ελέγξετε για: 8 €, 4.2 km, Ο</span><span class="ln li">25 €, 2 km, Ο</span><span class="ln li">12 €, 7 km, Ν</span><span class="ln li">−5 €, 1 km, Ο.</span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">17</span><b>Βενζίνη ή ηλεκτρικό;</b><span class="theme">Περιβάλλον, Θέμα Δ</span>
+<p>Μια οικογένεια διαλέγει ανάμεσα σε ένα βενζινοκίνητο και ένα ηλεκτρικό αυτοκίνητο. Το πρόγραμμα διαβάζει τις τιμές αγοράς των δύο αυτοκινήτων, την κατανάλωση του βενζινοκίνητου (λίτρα ανά 100 km) και του ηλεκτρικού (kWh ανά 100 km), την τιμή του λίτρου βενζίνης, την τιμή της kWh και πόσα χιλιόμετρα θα κάνει η οικογένεια τον χρόνο (ακέραιος). Το ετήσιο κόστος κάθε αυτοκινήτου είναι το κόστος ενέργειας συν σταθερό κόστος συντήρησης: 400 € τον χρόνο για το βενζινοκίνητο, 150 € για το ηλεκτρικό. Το πρόγραμμα:</p>
+<ul class="tight">
+<li>εμφανίζει το ετήσιο κόστος κάθε αυτοκινήτου,</li>
+<li>αν το ηλεκτρικό δεν είναι ακριβότερο στην αγορά, εμφανίζει «Το ηλεκτρικό είναι ήδη φθηνότερο στην αγορά»,</li>
+<li>αλλιώς, αν το ετήσιο κόστος του ηλεκτρικού δεν είναι μικρότερο, εμφανίζει «Το ηλεκτρικό δεν κάνει ποτέ απόσβεση»,</li>
+<li>αλλιώς υπολογίζει σε πόσα <b>ολόκληρα χρόνια</b> (προς τα πάνω) καλύπτεται η διαφορά της τιμής αγοράς από την ετήσια εξοικονόμηση, το εμφανίζει, και εμφανίζει «Συμφέρει το ηλεκτρικό» αν τα χρόνια είναι το πολύ 8, αλλιώς «Δεν συμφέρει το ηλεκτρικό».</li>
+</ul>
+<p>α) Να καταγράψετε δεδομένα, σταθερές και ζητούμενα με τύπους.<br/>β) Να σχεδιάσετε τη δομή των επιλογών (ποιο ΑΝ είναι μέσα σε ποιο) πριν γράψετε κώδικα.<br/>γ) Να γράψετε το πρόγραμμα.<br/>δ) Να το ελέγξετε για τιμές αγοράς 22000 € και 32000 €, καταναλώσεις 6,5 λίτρα και 16 kWh, 1,85 € το λίτρο, 0,22 € την kWh, και για 15000 km και 5000 km τον χρόνο.<br/>ε) Γιατί ο έλεγχος «δεν κάνει ποτέ απόσβεση» πρέπει να γίνει <b>πριν</b> από τη διαίρεση;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+</section>
+
+</main><div class="syn-foot"><div class="syn-nav"><a href="09.html"><small>&#8592; Μάθημα 9</small>Το πρώτο σου πρόγραμμα: εκχώρηση, είσοδος, έξοδος</a><a class="next" href="11.html"><small>Μάθημα 11 &#8594;</small>Πολλαπλή επιλογή: ΑΛΛΙΩΣ_ΑΝ, εμφωλευμένα ΑΝ, ΕΠΙΛΕΞΕ</a></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
+<script>
+(function(){
+  var CARDS = [{"term": "Δομή επιλογής.", "def": "Δομή επιλογής. Γενικά η διαδικασία της επιλογής περιλαμβάνει τον έλεγχο κάποιας συνθήκης που μπορεί να έχει δύο τιμές (Αληθής ή Ψευδής) και ακολουθεί η απόφαση εκτέλεσης κάποιας ενέργειας με βάση την τιμή της λογικής αυτής συνθήκης.", "ref": "Σχολικό βιβλίο, §2.4.2"}, {"term": "Λογική έκφραση.", "def": "Λογική έκφραση. Για τη σύνταξη μιας λογικής έκφρασης ή συνθήκης χρησιμοποιούνται σταθερές, μεταβλητές, αριθμητικές παραστάσεις, συγκριτικοί και λογικοί τελεστές, καθώς και παρενθέσεις. Το αποτέλεσμα είναι μία λογική τιμή ΑΛΗΘΗΣ ή ΨΕΥΔΗΣ.", "ref": "Σχολικό βιβλίο, §8.1"}, {"term": "Λειτουργία ΑΝ … ΤΟΤΕ.", "def": "Λειτουργία ΑΝ … ΤΟΤΕ. Αν η συνθήκη ισχύει, τότε εκτελούνται οι εντολές που βρίσκονται μεταξύ των λέξεων ΤΟΤΕ και ΤΕΛΟΣ_ΑΝ, σε αντίθετη περίπτωση οι εντολές αυτές αγνοούνται. Η εκτέλεση του προγράμματος συνεχίζεται με την εντολή που ακολουθεί τη δήλωση ΤΕΛΟΣ_ΑΝ.", "ref": "Σχολικό βιβλίο, §8.1.1"}, {"term": "Λειτουργία ΑΝ … ΤΟΤΕ … ΑΛΛΙΩΣ.", "def": "Λειτουργία ΑΝ … ΤΟΤΕ … ΑΛΛΙΩΣ. Αν η συνθήκη ισχύει, τότε εκτελούνται οι εντολές που βρίσκονται μεταξύ των λέξεων ΤΟΤΕ και ΑΛΛΙΩΣ, διαφορετικά εκτελούνται οι εντολές μεταξύ ΑΛΛΙΩΣ και ΤΕΛΟΣ_ΑΝ. Η εκτέλεση του προγράμματος συνεχίζεται με την εντολή που ακολουθεί τη δήλωση ΤΕΛΟΣ_ΑΝ.", "ref": "Σχολικό βιβλίο, §8.1.1"}, {"term": "Απλή επιλογή:", "def": "Απλή επιλογή: ΑΝ συνθήκη ΤΟΤΕ εντολές ΤΕΛΟΣ_ΑΝ· οι εντολές εκτελούνται μόνο αν η συνθήκη είναι ΑΛΗΘΗΣ.", "ref": "Σύνοψη"}, {"term": "Σύνθετη επιλογή:", "def": "Σύνθετη επιλογή: ΑΝ συνθήκη ΤΟΤΕ … ΑΛΛΙΩΣ … ΤΕΛΟΣ_ΑΝ· εκτελείται ακριβώς ένα από τα δύο τμήματα.", "ref": "Σύνοψη"}, {"term": "Συνθήκη:", "def": "Συνθήκη: λογική έκφραση με συγκρίσεις (αριθμών, χαρακτήρων αλφαβητικά, λογικών μόνο με = και <>) και ΚΑΙ, Η, ΟΧΙ.", "ref": "Σύνοψη"}, {"term": "Διάγραμμα ροής:", "def": "Διάγραμμα ροής: ρόμβος με μία είσοδο και δύο εξόδους (ΝΑΙ, ΟΧΙ) που ξαναενώνονται.", "ref": "Σύνοψη"}, {"term": "Σύγκριση χαρακτήρων", "def": "Αλφαβητικά, χαρακτήρα προς χαρακτήρα μέχρι την πρώτη διαφορά: 'κακός' < 'καλός'.", "ref": "§8.1"}, {"term": "Ο μεγαλύτερος από τρεις", "def": "μεγ ← α · ΑΝ β > μεγ ΤΟΤΕ μεγ ← β · ΑΝ γ > μεγ ΤΟΤΕ μεγ ← γ.", "ref": "Εργαλείο Ε3"}, {"term": "Διαδοχικά ΑΝ ή ΑΝ … ΑΛΛΙΩΣ", "def": "Διαδοχικά ΑΝ: ελέγχονται όλα, μπορεί να εκτελεστούν πολλά. ΑΝ … ΑΛΛΙΩΣ: εκτελείται πάντα ακριβώς ένα τμήμα.", "ref": "Εργαλειοθήκη επιλογής"}, {"term": "Προς τα πάνω για πραγματικό", "def": "ν ← Α_Μ(x) · ΑΝ ν < x ΤΟΤΕ ν ← ν + 1.", "ref": "Εργαλείο Ε8"}];
+  // ---- quiz ----
+  document.querySelectorAll('.quiz').forEach(function(quiz){
+    var items = quiz.querySelectorAll('.qi');
+    var score = quiz.querySelector('.score');
+    function update(){
+      var done = quiz.querySelectorAll('.qi.ok, .qi.no').length;
+      if (done < items.length){ score.hidden = true; return; }
+      var ok = quiz.querySelectorAll('.qi.ok').length;
+      score.hidden = false;
+      score.innerHTML = '';
+      var t = document.createElement('span');
+      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? ' · Τέλεια!' : ok >= items.length * 0.7 ? ' · Πολύ καλά' : ' · Ξαναδιάβασε τη θεωρία');
+      var r = document.createElement('button'); r.type = 'button'; r.className = 'btn'; r.textContent = 'Ξανά από την αρχή';
+      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); }); update(); };
+      score.append(t, r);
+    }
+    items.forEach(function(it){
+      var ans = it.getAttribute('data-ans');
+      it.querySelectorAll('.qb button').forEach(function(b){
+        b.addEventListener('click', function(){
+          var v = b.getAttribute('data-v');
+          it.querySelectorAll('.qb button').forEach(function(x){ x.disabled = true; if (x.getAttribute('data-v') === ans) x.classList.add('right'); });
+          b.classList.add('pick');
+          it.classList.add(v === ans ? 'ok' : 'no');
+          var f = document.createElement('span'); f.className = 'fb';
+          f.textContent = v === ans ? '✓ Σωστά' : '✗ Η σωστή απάντηση είναι: ' + (it.querySelector('.qb button[data-v="' + ans + '"]') || {}).textContent;
+          it.appendChild(f);
+          update();
+        });
+      });
+    });
+  });
+  // ---- flashcards ----
+  var order = CARDS.map(function(_, i){ return i; }), pos = 0;
+  var card = document.getElementById('card');
+  if (!card || !CARDS.length) return;
+  function show(){
+    var c = CARDS[order[pos]];
+    card.classList.remove('flipped');
+    document.getElementById('c-term').textContent = c.term;
+    document.getElementById('c-def').textContent = c.def;
+    document.getElementById('c-ref').textContent = c.ref;
+    document.getElementById('c-count').textContent = (pos + 1) + ' / ' + CARDS.length;
+  }
+  card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+  document.getElementById('c-next').onclick = function(){ pos = (pos + 1) % CARDS.length; show(); };
+  document.getElementById('c-prev').onclick = function(){ pos = (pos - 1 + CARDS.length) % CARDS.length; show(); };
+  document.getElementById('c-shuf').onclick = function(){
+    for (var i = order.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+    pos = 0; show();
+  };
+  show();
+})();
+</script>
+<style id="kitcss">/*KIT>*//* ==== kit: θέμα, προβολή, «Δείξε λύση» ==== */
+body{font-size:16px}
+.kit-btn{font:600 13px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 12px;border-radius:999px;cursor:pointer}
+.kit-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.kit-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#kitfloat{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:30;display:flex;gap:6px;padding:5px;border-radius:999px;background:var(--ground);border:1px solid var(--line);box-shadow:0 4px 16px rgba(10,20,40,.12)}
+.rt-ans{margin:-2px 0 14px}
+.rt-show{font:600 13.5px/1 var(--body);border:1.5px solid var(--s-teal);background:var(--teal-bg);color:var(--teal);padding:9px 14px;border-radius:999px;cursor:pointer}
+.rt-show:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.rt-body{display:none;margin-top:10px;border-left:4px solid var(--s-teal);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 16px}
+.rt-body .q{margin:0;border:0;padding:0;background:none}
+.rt-open > .rt-body, body.rt-all .rt-body{display:block}
+.rt-open > .rt-show{background:var(--paper)}
+body:not(.rt-all):not(.editing) .solved:not(.rt-open) .rt-hide{display:none}
+body.rt-all .rt-showstep{display:none}
+.solved.rt-open .rt-showstep{display:none}
+.rt-showstep{margin:4px 0 6px}
+body.student .rt-ans{display:none}
+body.editing .rt, body.editing .rt-showstep{display:none}
+/* Λειτουργία προβολής */
+body.proj #bar,body.proj #nav{zoom:1.25}
+body.proj{--muted:#3a4254;--line:#b5bfd2}
+:root[data-theme="dark"] body.proj{--muted:#b9c1d4;--line:#3b465e}
+@media print{#kitfloat,.rt,.rt-showstep,.kit-btn{display:none!important}.rt-hide{display:grid!important}}
+/* Καθαρές γραμμές */
+body{font-size:17px;line-height:1.68}
+.ln{display:block;margin:.22em 0}
+.ln.li{position:relative;padding-left:1.25em}
+.ln.li::before{content:"•";position:absolute;left:.35em;color:var(--muted)}
+.kvs{display:inline-flex;flex-wrap:wrap;gap:.2em 1.2em;vertical-align:top}
+.kv,.nw{white-space:nowrap}
+p,li,td{text-wrap:pretty}
+.ln.cd{font-family:var(--mono);font-size:.92em}
+.cdcols{display:inline-flex;flex-wrap:wrap;gap:4px 28px;vertical-align:top}
+.cdcol{display:inline-block;padding-left:10px;border-left:2px solid var(--line)}/*<KIT*/</style>
+<script id="kitjs">/*KITJS>*/(function(){
+  /* kit: θέμα (φωτεινό/σκοτεινό), προβολή, «Δείξε λύση» */
+  var root = document.documentElement, body = document.body, doc = document.getElementById('doc');
+  if (!doc || body.getAttribute('data-kit')) return;
+  body.setAttribute('data-kit', '1');
+  function get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function put(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+  var theme = get('synapsi-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  var proj = get('aepp-proj') === '1';
+  function mk(id, txt){ var b = document.createElement('button'); b.type = 'button'; b.id = id; b.className = 'kit-btn'; b.textContent = txt; return b; }
+  var bTheme = mk('k-theme', ''), bProj = mk('k-proj', 'Προβολή'), bAll = null;
+  function applyTheme(){ root.setAttribute('data-theme', theme); bTheme.textContent = theme === 'dark' ? '☀ Φωτεινό' : '☾ Σκοτεινό'; bTheme.setAttribute('aria-label', theme === 'dark' ? 'Φωτεινό θέμα' : 'Σκοτεινό θέμα'); }
+  function fit(){
+    if (!proj){ doc.style.zoom = ''; doc.style.maxWidth = ''; return; }
+    var W = window.innerWidth, z = W < 700 ? 1.12 : 1.38;
+    doc.style.zoom = z; doc.style.maxWidth = Math.max(300, Math.min(900, (W - 36) / z)) + 'px';
+  }
+  function applyProj(){ body.classList.toggle('proj', proj); bProj.setAttribute('aria-pressed', String(proj)); fit(); }
+  window.addEventListener('resize', fit);
+  bTheme.onclick = function(){ theme = theme === 'dark' ? 'light' : 'dark'; put('synapsi-theme', theme); applyTheme(); };
+  bProj.onclick = function(){ proj = !proj; put('aepp-proj', proj ? '1' : '0'); applyProj(); };
+  applyTheme(); applyProj();
+
+  var bar = document.getElementById('bar');
+  var teacherSec = doc.querySelector('section.teacher');
+  if (bar){
+    var anchor = document.getElementById('status') || null;
+    if (teacherSec){ bAll = mk('k-all', 'Όλες οι λύσεις'); bar.insertBefore(bAll, anchor); }
+    bar.insertBefore(bProj, anchor); bar.insertBefore(bTheme, anchor);
+  } else {
+    var f = document.createElement('div'); f.id = 'kitfloat';
+    f.appendChild(bTheme); body.appendChild(f); proj = false; applyProj();
+  }
+  if (bAll){
+    bAll.onclick = function(){ var on = !body.classList.contains('rt-all'); body.classList.toggle('rt-all', on); bAll.setAttribute('aria-pressed', String(on)); };
+  }
+
+  /* λυμένα: φαίνεται η εκφώνηση και το «Κατανοώ», τα υπόλοιπα με κουμπί */
+  doc.querySelectorAll('.box.solved').forEach(function(box){
+    var steps = box.querySelector('.steps');
+    if (!steps) return;
+    var st = steps.querySelectorAll(':scope > .step');
+    if (st.length < 2) return;
+    box.classList.add('rt-closed');
+    for (var i = 1; i < st.length; i++) st[i].classList.add('rt-hide');
+    var w = document.createElement('div'); w.className = 'rt-showstep'; w.contentEditable = 'false';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε τη λύση';
+    b.onclick = function(){ box.classList.add('rt-open'); };
+    w.appendChild(b); st[0].after(w);
+  });
+
+  /* ασκήσεις: η απάντηση από τη σελίδα καθηγητή, κρυμμένη κάτω από την εκφώνηση */
+  if (teacherSec){
+    var ans = {};
+    teacherSec.querySelectorAll('.ans .q').forEach(function(q){ var n = q.querySelector('.qn'); if (n) ans[n.textContent.trim()] = q; });
+    doc.querySelectorAll('.exercises .q').forEach(function(q){
+      var n = q.querySelector(':scope > .qn'); if (!n) return;
+      var a = ans[n.textContent.trim()]; if (!a) return;
+      var w = document.createElement('div'); w.className = 'rt rt-ans'; w.contentEditable = 'false';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε λύση';
+      var bodyEl = document.createElement('div'); bodyEl.className = 'rt-body ans';
+      var c = a.cloneNode(true); var qn = c.querySelector('.qn'); if (qn) qn.remove();
+      bodyEl.appendChild(c);
+      b.onclick = function(){ var on = !w.classList.contains('rt-open'); w.classList.toggle('rt-open', on); b.textContent = on ? 'Κρύψε λύση' : 'Δείξε λύση'; };
+      w.appendChild(b); w.appendChild(bodyEl);
+      q.after(w);
+    });
+  }
+})();/*<KITJS*/</script>
+
+</body></html>

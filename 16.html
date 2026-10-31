@@ -1,0 +1,1111 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Μάθημα 16 · Μετατροπές μεταξύ δομών επανάληψης</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
+<style>
+/* Layout: one A4-like sheet centred on a cool ground; coloured callouts by role (ορισμός, ήξερες ότι, παγίδα, παράδειγμα) */
+:root{
+  --ground:#e9edf4; --paper:#ffffff; --ink:#172036; --muted:#5a6377; --line:#d9dfea; --soft:#f3f5f9;
+  --blue:#2457d6; --blue-bg:#e9efff; --teal:#0b7f72; --teal-bg:#e2f4f1;
+  --amber:#a65400; --amber-bg:#fff3df; --amber-line:#e2ad62;
+  --coral:#b93b12; --coral-bg:#fcebe4; --violet:#6534c9; --violet-bg:#efe8fd;
+  --s-blue:#2457d6; --s-teal:#0b8174; --s-violet:#6534c9; --s-ink:#172036; --on-solid:#ffffff; --on-solid-2:#d8e1ff;
+  --hero:#172036; --hero-fg:#ffffff; --hero-sub:#c4cef0; --hero-kick:#a9bcff;
+  --mark:#ffe28a;
+  --display:"Commissioner","Noto Sans",system-ui,sans-serif;
+  --body:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0 0 8px}
+
+/* Toolbar */
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:10px 0;background:var(--ground)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:3px}
+.seg button,.btn{font:600 13px/1 var(--body);border:0;background:none;color:var(--muted);padding:8px 13px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid)}
+.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.spacer{flex:1}
+#status{font-size:12.5px;color:var(--muted)}
+.edit-only{display:none}
+body.editing .edit-only{display:inline-block}
+body.editing .view-only{display:none}
+body.editing #doc{outline:2px dashed var(--blue);outline-offset:6px}
+body.editing #doc [contenteditable="false"]{cursor:default}
+
+/* Sheet */
+#doc{max-width:860px;margin:0 auto;background:var(--paper);border-radius:14px;padding:clamp(18px,4vw,44px);box-shadow:0 1px 2px rgba(10,20,40,.06),0 8px 30px rgba(10,20,40,.06)}
+body.student .teacher{display:none}
+
+.hero{background:var(--hero);color:var(--hero-fg);border-radius:14px;padding:22px 24px 24px;position:relative;overflow:hidden}
+.hero .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--hero-kick);font-weight:700}
+.hero h1{font-size:clamp(28px,5vw,40px);font-weight:800;margin:6px 0 8px;letter-spacing:-.01em}
+.hero .sub{color:var(--hero-sub);max-width:34em}
+.hero .sub b{color:var(--hero-fg)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.12);color:var(--hero-fg)}
+.hero .deco{position:absolute;right:-10px;top:-6px;opacity:.16;width:220px;height:auto}
+.hero .deco *{stroke:var(--hero-fg)}
+
+.goals{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 18px;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px}
+.goals h3{grid-column:1/-1;font-size:13px;color:var(--blue);text-transform:uppercase;letter-spacing:.08em}
+.goals div{padding-left:20px;position:relative;font-size:14px}
+.goals div::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:800}
+
+.glance{margin-top:14px;background:var(--soft);border-radius:12px;padding:14px 16px}
+.glance h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.figure{overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:520px;height:auto;font-family:var(--body)}
+
+.sec{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:5px;margin:30px 0 12px;break-after:avoid}
+.sec .num{font-family:var(--display);font-weight:800;font-size:22px;color:var(--blue);font-variant-numeric:tabular-nums}
+.sec h2{font-size:22px;font-weight:800}
+.sec .ref{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;break-inside:avoid}
+.tag{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.def{background:var(--blue-bg);border-left:4px solid var(--blue)} .def .tag{color:var(--blue)}
+.src{font-size:12px;color:var(--muted);margin:2px 0 0}
+.trivia{background:var(--amber-bg);border:1.5px dashed var(--amber-line)} .trivia .tag{color:var(--amber)}
+.talk{margin-top:6px;font-size:14px;color:var(--amber);font-weight:600}
+.talk span{font-weight:400}
+.trap{background:var(--coral-bg);border-left:4px solid var(--coral)} .trap .tag{color:var(--coral)}
+.ex{background:var(--teal-bg);border-left:4px solid var(--teal)} .ex .tag{color:var(--teal)}
+.plain{background:var(--soft)} .plain .tag{color:var(--ink)}
+.hl{background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 1px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:10px 0}
+.grid .box{margin:0}
+ul.tight{margin:4px 0 8px;padding-left:20px} ul.tight li{margin:3px 0}
+.small{font-size:13px;color:var(--muted)}
+.cap{font-size:13.5px;font-weight:700;margin-bottom:6px}
+
+.tablewrap{overflow-x:auto;margin:10px 0}
+table.t{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
+table.t th{background:var(--s-ink);color:var(--paper);text-align:left;padding:7px 10px;font-weight:600}
+table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:top}
+
+.exhead{display:flex;align-items:center;gap:10px;margin:22px 0 8px}
+.lvl{display:inline-flex;gap:4px}
+.lvl i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}
+.lvl i.on{background:var(--violet)}
+.exhead h3{font-size:17px}
+.q{margin:10px 0 14px;break-inside:avoid}
+.qn{display:inline-block;min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:7px;background:var(--violet-bg);color:var(--violet);font-weight:800;font-size:13px;margin-right:8px}
+.theme{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-left:6px}
+table.tf{width:100%;border-collapse:collapse;margin-top:6px;font-size:14.5px}
+table.tf td{padding:6px 8px;border-bottom:1px solid var(--line)}
+table.tf td.b{width:70px;text-align:center;color:var(--muted)}
+.lines{height:var(--h,44px);background:repeating-linear-gradient(transparent 0 27px,var(--line) 27px 28px);margin-top:6px}
+.drawbox{height:180px;border:1.5px dashed var(--line);border-radius:10px;margin-top:8px}
+.indent{margin-left:34px}
+.sol{color:var(--teal);font-weight:700}
+.ans .q{margin:8px 0}
+.teacher .sec{border-color:var(--teal)} .teacher .sec .num{color:var(--teal)}
+
+/* SVG roles */
+.f-blue{fill:var(--s-blue)} .f-teal{fill:var(--s-teal)} .f-violet{fill:var(--s-violet)} .f-ink{fill:var(--s-ink)}
+.f-paper{fill:var(--paper)} .f-on{fill:var(--on-solid)} .f-on2{fill:var(--on-solid-2)} .f-text{fill:var(--ink)} .f-muted{fill:var(--muted)} .f-onink{fill:var(--paper)}
+.st-ink{stroke:var(--ink)} .st-blue{stroke:var(--blue)} .st-teal{stroke:var(--teal)} .st-violet{stroke:var(--violet)}
+.f-arrow{fill:var(--ink)}
+
+
+/* v2 additions: code, narrow flowcharts, legends */
+:root{--mono:ui-monospace,"Cascadia Mono","Consolas","DejaVu Sans Mono",monospace}
+pre.code{font-family:var(--mono);font-size:14px;line-height:1.55;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:6px 0 8px;overflow-x:auto;white-space:pre}
+.figure.narrow svg{min-width:0;max-width:250px;margin:4px auto}
+.grid.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+ul.legend{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0 2px}
+ul.legend li{font-size:14px}
+ul.legend b{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:6px;background:var(--violet-bg);color:var(--violet);margin-right:4px}
+
+
+/* v3 additions: solved examples step by step, blank value tables */
+.solved{border:1.5px solid var(--teal);background:var(--paper)} .solved .tag{color:var(--teal)}
+.steps{display:grid;gap:14px;margin-top:10px}
+.step{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.stepn{width:30px;height:30px;border-radius:50%;background:var(--s-teal);color:var(--on-solid);font:800 14px/30px var(--display);text-align:center}
+table.t.blank td{height:34px;border:1px solid var(--line)}
+
+/* v4: graphs */
+.figure.narrow.graph svg{max-width:380px}
+
+/* v5: toolbox subsections */
+h3.tool{font-size:17px;margin:24px 0 8px;padding-top:4px;border-top:1px solid var(--line)}
+
+/* homework vs self-check */
+.q.hw::before{content:"Για το σπίτι";display:block;width:max-content;font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:99px;padding:4px 9px;margin-bottom:6px}
+body.editing .q.hw::before{display:none}
+.hwtoggle{display:block;margin-bottom:6px;font:600 12px/1 var(--body);padding:6px 10px;border-radius:99px;border:1.5px dashed var(--line);background:var(--paper);color:var(--muted);cursor:pointer}
+.hwtoggle[aria-pressed="true"]{border-style:solid;border-color:var(--amber-line);color:var(--amber);background:var(--amber-bg)}
+.hwnote{font-size:13px;color:var(--amber);font-weight:600}
+
+@media (max-width:520px){ .indent{margin-left:0} .hero .deco{display:none} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* v4: math notation (fractions, roots) */
+.mx{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:1.06em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 2px;line-height:1.25}
+.frac>span{padding:0 4px}
+.frac>span:first-child{border-bottom:1.3px solid currentColor}
+.rt{border-top:1.3px solid currentColor;padding:0 2px 0 1px;margin-left:1px}
+
+/* student additions */
+#doc{margin-top:0}
+#nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ground);max-width:860px;margin:0 auto;padding-block:10px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.navin{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.navin::-webkit-scrollbar{display:none}
+#nav a{flex:none;font:600 13px/1 var(--body);color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
+#nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
+.btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.quiz{display:grid;gap:10px;margin-top:10px}
+.qi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:8px}
+.qi .qs{margin:0}
+.qb{display:flex;gap:8px;flex-wrap:wrap}
+.qb button{font:600 14px/1 var(--body);padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;min-width:96px}
+.qb button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.qi.ok{border-color:var(--teal);background:var(--teal-bg)}
+.qi.no{border-color:var(--coral);background:var(--coral-bg)}
+.qi .qb button.pick{border-color:currentColor}
+.qi.ok .qb button.pick{background:var(--s-teal);border-color:var(--s-teal);color:var(--on-solid)}
+.qi.no .qb button.pick{background:var(--coral);border-color:var(--coral);color:var(--paper)}
+.qi.no .qb button.right{border-color:var(--teal);color:var(--teal)}
+.fb{font-size:13px;font-weight:700}
+.qi.ok .fb{color:var(--teal)} .qi.no .fb{color:var(--coral)}
+.score{font:700 15px/1.4 var(--display);padding:10px 14px;border-radius:10px;background:var(--violet-bg);color:var(--violet);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.score .btn{font-size:13px;padding:8px 12px}
+
+details.reveal{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+details.reveal summary{cursor:pointer;font-weight:700;color:var(--teal);padding:10px 14px;list-style:none}
+details.reveal summary::-webkit-details-marker{display:none}
+details.reveal summary::before{content:"▸ ";}
+details.reveal[open] summary::before{content:"▾ ";}
+details.reveal .rv{padding:0 14px 12px}
+
+.deck{display:grid;gap:12px;margin-top:10px}
+.card{position:relative;display:block;width:100%;min-height:220px;border:0;padding:0;background:none;cursor:pointer;perspective:1200px;font:inherit;color:inherit;text-align:left}
+.card .face{position:absolute;inset:0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;backface-visibility:hidden;transition:transform .45s ease}
+.card .front{background:var(--hero);color:var(--hero-fg);justify-content:center}
+.card .back{background:var(--blue-bg);color:var(--ink);border:1.5px solid var(--blue);transform:rotateY(180deg);overflow:auto}
+.card.flipped .front{transform:rotateY(-180deg)}
+.card.flipped .back{transform:rotateY(0)}
+.card:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:14px}
+.ck{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.term{font:800 clamp(24px,6vw,34px)/1.15 var(--display)}
+.cdef{font-size:15.5px;line-height:1.55}
+.tap{font-size:12.5px;opacity:.7;margin-top:auto}
+.deckbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.count{font:700 14px var(--display);min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.card .face{transition:none}}
+@media (max-width:520px){ #doc{border-radius:12px} .card{min-height:260px} }
+</style>
+<style id="synapsi-brand">
+:root{--ground:#F7F6F0;--ink:#2B3722;--muted:#5E6253;--line:#E1E1D7;--soft:#F3F2EA;--blue:#4F6230;--blue-bg:#EEF0E2;--s-blue:#4F6230;--s-ink:#2B3722;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D;--on-solid-2:#E6E0CC}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}}
+:root[data-theme="dark"]{--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}
+body::before{background:var(--ground)}
+.syn-bar{max-width:860px;margin:0 auto;padding-top:12px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
+.syn-bar a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--hero);color:#fff;text-decoration:none}
+.syn-bar span{color:var(--muted)}
+.syn-foot{max-width:860px;margin:18px auto 0;display:flex;flex-direction:column;gap:12px}
+.syn-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.syn-nav a,.syn-nav span{min-height:52px;padding:8px 14px;border-radius:12px;display:flex;flex-direction:column;justify-content:center;gap:2px;text-decoration:none;font:700 14px/1.3 var(--display);background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.syn-nav small{font:600 11.5px var(--body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.syn-nav .next{text-align:right;background:var(--hero);color:#fff;border-color:var(--hero)}
+.syn-nav .next small{color:var(--hero-kick)}
+.syn-nav .off{opacity:.6}
+.syn-note{font-size:13px;color:var(--muted);padding:12px 14px;border-radius:10px;background:var(--soft)}
+.syn-copy{font-size:12px;color:var(--muted)}
+</style>
+<script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<div class="syn-bar"><a href="../index.html">&#8592; Διαδρομή</a><span>Μάθημα 16 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-8-2">8.2</a><a href="#s-1">Η άρνηση</a><a href="#s-1-2">Κ1</a><a href="#s-2">Κ2</a><a href="#s-3">Κ3</a><a href="#s-4">Κ4</a><a href="#s-5">Κ5</a><a href="#s-tools">Εργαλειοθήκη</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a></div></nav>
+<main id="doc" lang="el">
+<section class="hero">
+<svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
+<circle cx="60" cy="50" r="22"></circle><circle cx="160" cy="50" r="22"></circle><circle cx="110" cy="128" r="22"></circle>
+<path d="M84 44h50M136 58H86M72 70l26 38M122 108l26-38"></path>
+</svg>
+<div class="kicker">Μέρος Γ · Επιλογή και επανάληψη</div>
+<h1>Μετατροπές μεταξύ δομών επανάληψης</h1>
+<p class="sub">Τρεις εντολές, ένας βρόχος. Μαθαίνουμε να γράφουμε την ίδια επανάληψη με ΟΣΟ, ΜΕΧΡΙΣ_ΟΤΟΥ και ΓΙΑ, χωρίς να αλλάξει <b>ούτε μία</b> εκτέλεση. Κλασικό θέμα των εξετάσεων.</p>
+<div class="chips"><span class="chip">Βιβλίο κεφ. 8 · §8.2</span><span class="chip">Οδηγίες Μελέτης §3.6</span><span class="chip">3 διδακτικές ώρες</span></div>
+</section>
+<div class="goals">
+<h3>Στο τέλος του μαθήματος θα μπορείς να…</h3>
+<div>θυμάσαι τις <b>ομοιότητες και διαφορές</b> των τριών δομών και πότε ταιριάζει η καθεμία</div>
+<div>γράφεις την <b>άρνηση</b> μιας συνθήκης χωρίς λάθος</div>
+<div>μετατρέπεις <b>ΜΕΧΡΙΣ_ΟΤΟΥ ↔ ΟΣΟ</b> με τους δύο κανόνες των Οδηγιών</div>
+<div>μετατρέπεις <b>ΓΙΑ σε ΟΣΟ / ΜΕΧΡΙΣ_ΟΤΟΥ</b> με θετικό, αρνητικό ή πραγματικό βήμα</div>
+<div>αναγνωρίζεις πότε ένα ΟΣΟ <b>μπορεί</b> να γίνει ΓΙΑ και πότε όχι</div>
+<div>ελέγχεις ότι δύο μορφές είναι <b>ισοδύναμες</b> με ακραία σενάρια</div>
+</div>
+<div class="glance">
+<h3>Όλο το μάθημα με μια ματιά: ο χάρτης των μετατροπών</h3>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th>Από (γραμμή) σε (στήλη)</th><th>ΟΣΟ</th><th>ΜΕΧΡΙΣ_ΟΤΟΥ</th><th>ΓΙΑ</th></tr>
+<tr><td><b>ΟΣΟ</b></td><td>–</td><td><b>Κ2:</b> ΑΝ συνθήκη ΤΟΤΕ + ΜΕΧΡΙΣ_ΟΤΟΥ ΟΧΙ συνθήκη</td><td><b>Κ5:</b> μόνο αν είναι βρόχος μετρητή</td></tr>
+<tr><td><b>ΜΕΧΡΙΣ_ΟΤΟΥ</b></td><td><b>Κ1:</b> εντολές μία φορά <span class="nw">πριν + ΟΣΟ</span> ΟΧΙ συνθήκη</td><td>–</td><td><b>Κ5:</b> μόνο αν είναι βρόχος μετρητή</td></tr>
+<tr><td><b>ΓΙΑ</b></td><td><b>Κ3:</b> αρχική τιμή, σύγκριση, αύξηση</td><td><b>Κ4:</b> όπως Κ3, με ΑΝ αν μπορεί να εκτελεστεί 0 φορές</td><td>–</td></tr>
+</tbody></table></div>
+<p class="small">Τέσσερα κελιά δουλεύουν <b>πάντα</b>. Τα δύο της στήλης ΓΙΑ μόνο όταν ο αριθμός επαναλήψεων είναι γνωστός πριν από τον βρόχο. Σε κάθε μετατροπή ρωτάμε δύο πράγματα: <b>1)</b> ποια είναι η νέα συνθήκη (συχνά η άρνηση της παλιάς) και <b>2)</b> τι γίνεται με την <b>πρώτη</b> εκτέλεση (0 ή 1 φορά τουλάχιστον;).</p>
+</div>
+<div class="sec" id="s-8-2"><span class="num">8.2</span><h2>Τρεις δομές δίπλα δίπλα</h2><span class="ref">Επανάληψη από τα Μαθήματα 12–14</span></div>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th></th><th>ΟΣΟ</th><th>ΜΕΧΡΙΣ_ΟΤΟΥ</th><th>ΓΙΑ</th></tr>
+<tr><td>Έλεγχος</td><td>στην αρχή</td><td>στο τέλος</td><td>στην αρχή (αυτόματα)</td></tr>
+<tr><td>Ελάχιστες εκτελέσεις</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>Συνεχίζει όσο η συνθήκη</td><td>Αληθής</td><td>Ψευδής</td><td>μεταβλητή μέσα στα όρια</td></tr>
+<tr><td>Αριθμός επαναλήψεων</td><td>άγνωστος</td><td>άγνωστος</td><td>γνωστός πριν από τον βρόχο</td></tr>
+<tr><td>Ποιος αλλάζει τη συνθήκη</td><td>εντολή μέσα στον βρόχο</td><td>εντολή μέσα στον βρόχο</td><td>η ίδια η ΓΙΑ (το βήμα)</td></tr>
+</tbody></table></div>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση · από το βιβλίο</div>
+<p><b>Μετατροπή ΓΙΑ.</b> Κάθε επανάληψη που εκτελείται με μία εντολή ΓΙΑ..ΑΠΟ..ΜΕΧΡΙ, μπορεί να υλοποιηθεί και με τη χρήση των βασικών εντολών επανάληψης ΟΣΟ..ΕΠΑΝΑΛΑΒΕ και ΜΕΧΡΙΣ..ΟΤΟΥ.</p>
+<p class="src">Σχολικό βιβλίο, §8.2.3</p>
+<p><b>ΟΣΟ και ΜΕΧΡΙΣ_ΟΤΟΥ.</b> Πολύ συχνά η ίδια επαναληπτική διαδικασία μπορεί να γραφεί εξίσου σωστά χρησιμοποιώντας είτε τη δομή ΟΣΟ...ΕΠΑΝΑΛΑΒΕ είτε τη δομή ΜΕΧΡΙΣ_ΟΤΟΥ και είναι προσωπική επιλογή του προγραμματιστή ποια από τις δυο θα χρησιμοποιήσει.</p>
+<p class="src">Σχολικό βιβλίο, §8.2.2</p>
+</div>
+<div class="sec" id="s-1"><span class="num">¬</span><h2>Η άρνηση</h2><span class="ref">Μάθημα 10, νόμοι του De Morgan</span></div>
+<div class="grid g2" style="align-items:start">
+<div class="tablewrap"><table class="t"><tbody><tr><th>Συνθήκη</th><th>Άρνηση</th></tr>
+<tr><td><code>x &lt; 10</code></td><td><code>x &gt;= 10</code></td></tr>
+<tr><td><code>x &gt; 10</code></td><td><code>x &lt;= 10</code></td></tr>
+<tr><td><code>x = 0</code></td><td><code>x &lt;&gt; 0</code></td></tr>
+<tr><td><code>Α ΚΑΙ Β</code></td><td><code>ΟΧΙ Α Η ΟΧΙ Β</code></td></tr>
+<tr><td><code>Α Η Β</code></td><td><code>ΟΧΙ Α ΚΑΙ ΟΧΙ Β</code></td></tr>
+<tr><td><code>x &gt;= 1 ΚΑΙ x &lt;= 12</code></td><td><code>x &lt; 1 Η x &gt; 12</code></td></tr>
+</tbody></table></div>
+<div class="box ex" style="margin:0"><div class="tag">Δύο τρόποι, ίδια βαθμολογία</div>
+<p>Οι Οδηγίες δέχονται είτε να γράψουμε την άρνηση, είτε απλώς να βάλουμε <code>ΟΧΙ</code> μπροστά σε όλη τη συνθήκη σε παρένθεση: <code>ΟΣΟ ΟΧΙ (x = 0) ΕΠΑΝΑΛΑΒΕ</code>. Η δεύτερη μορφή είναι πιο ασφαλής όταν η συνθήκη είναι σύνθετη. Παγίδα: η άρνηση του <code>&lt;</code> είναι <code>&gt;=</code>, <b>όχι</b> <code>&gt;</code>.</p></div>
+</div>
+<div class="sec" id="s-1-2"><span class="num">Κ1</span><h2>ΜΕΧΡΙΣ_ΟΤΟΥ → ΟΣΟ</h2><span class="ref">Οδηγίες Μελέτης §3.6, περίπτωση 1</span></div>
+<div class="grid g2" style="align-items:start">
+<pre class="code">ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+  εντολές
+ΜΕΧΡΙΣ_ΟΤΟΥ συνθήκη</pre>
+<pre class="code">εντολές
+ΟΣΟ ΟΧΙ συνθήκη ΕΠΑΝΑΛΑΒΕ
+  εντολές
+ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</pre>
+</div>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση · κανόνας 1</div>
+<p>Οι εντολές στη δομή επανάληψης «ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ…ΜΕΧΡΙΣ_ΟΤΟΥ», εκτελούνται όσο η &lt;συνθήκη&gt; μετά το ΜΕΧΡΙΣ_ΟΤΟΥ είναι Ψευδής, ενώ στη δομή επανάληψης «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ», εκτελούνται όσο η &lt;συνθήκη&gt; ανάμεσα στο ΟΣΟ και το ΕΠΑΝΑΛΑΒΕ είναι Αληθής. Γι’ αυτό, κατά τη μετατροπή από τη μια δομή επανάληψης στην άλλη, αρκεί να γράφουμε την άρνηση της &lt;συνθήκη&gt; της πρώτης στη δεύτερη ή να προτάξουμε τον τελεστή ΟΧΙ στη &lt;συνθήκη&gt;.</p>
+<p>Επίσης, η «ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ…ΜΕΧΡΙΣ_ΟΤΟΥ» εκτελεί τουλάχιστον μία φορά όλες τις εντολές της, γι’ αυτό όταν τη μετατρέπουμε στην «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» πρέπει όλες τις εντολές που περιέχει να τις γράψουμε δύο φορές, μία πριν την «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» και άλλη μία μέσα σ’ αυτήν.</p>
+<p class="src">Οδηγίες Μελέτης, §3.6</p>
+</div>
+<p class="small"><b>Συντόμευση</b> (όχι στις Οδηγίες, αλλά σωστή): αν η συνθήκη του ΟΣΟ είναι <b>σίγουρα αληθής</b> την πρώτη φορά (π.χ. <span class="nw">σ ← 0</span> και ΟΣΟ <span class="nw">σ &lt; 100),</span> το αντίγραφο πριν από το ΟΣΟ μπορεί να παραλειφθεί (Λυμένο 1). Στις εξετάσεις, αν δεν είσαι σίγουρος, γράψε τον κανόνα όπως είναι.</p>
+<div class="sec" id="s-2"><span class="num">Κ2</span><h2>ΟΣΟ → ΜΕΧΡΙΣ_ΟΤΟΥ</h2><span class="ref">Οδηγίες Μελέτης §3.6, περίπτωση 2</span></div>
+<div class="grid g2" style="align-items:start">
+<pre class="code">ΟΣΟ συνθήκη ΕΠΑΝΑΛΑΒΕ
+  εντολές
+ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</pre>
+<pre class="code">ΑΝ συνθήκη ΤΟΤΕ
+  ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+    εντολές
+  ΜΕΧΡΙΣ_ΟΤΟΥ ΟΧΙ συνθήκη
+ΤΕΛΟΣ_ΑΝ</pre>
+</div>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση · κανόνας 2</div>
+<p>Η «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» μπορεί να μην εκτελεστεί καμία φορά σε αντίθεση με την «ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ…ΜΕΧΡΙΣ_ΟΤΟΥ», η οποία θα εκτελεστεί τουλάχιστον μία φορά, γι’ αυτό πριν τη δομή «ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ…ΜΕΧΡΙΣ_ΟΤΟΥ» θα χρησιμοποιηθεί μια εντολή ελέγχου, που αν ισχύει η &lt;συνθήκη&gt; θα εκτελεστεί η «ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ…ΜΕΧΡΙΣ_ΟΤΟΥ».</p>
+<p class="src">Οδηγίες Μελέτης, §3.6</p>
+</div>
+<p class="small"><span class="ln cd">Οι Οδηγίες δίνουν και μια <b>μη βέλτιστη</b> λύση, «διότι η συνθήκη ελέγχεται δύο φορές»: το ΑΝ μπαίνει <b>μέσα</b> στο ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ (ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ</span><span class="ln cd">ΑΝ συνθήκη ΤΟΤΕ εντολές ΤΕΛΟΣ_ΑΝ</span><span class="ln cd">ΜΕΧΡΙΣ_ΟΤΟΥ ΟΧΙ συνθήκη). Δουλεύει, αλλά προτιμάμε την πρώτη.</span></p>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Ο κανόνας 2 δεν είναι μόνο σχολική άσκηση: τον εφαρμόζουν <b>αυτόματα</b> οι μεταγλωττιστές. Η βελτιστοποίηση λέγεται <b>loop inversion</b> («αναστροφή βρόχου»): ένας βρόχος while (ΟΣΟ) ξαναγράφεται ως ένα if (ΑΝ) που περιέχει έναν do-while (ΜΕΧΡΙΣ_ΟΤΟΥ). Οι δύο μορφές κάνουν ακριβώς το ίδιο, αλλά η δεύτερη γλιτώνει ένα «άλμα» στο τέλος του βρόχου, και τα άλματα καθυστερούν τους σύγχρονους επεξεργαστές. Ο υπολογιστής σου τρέχει κάθε μέρα προγράμματα που έχουν περάσει από αυτή τη μετατροπή.</p>
+<p class="talk">Σκέψου: Αν ο μεταγλωττιστής μπορεί να κάνει μόνος του τις μετατροπές, γιατί έχει σημασία να τις ξέρει ο προγραμματιστής;</p>
+</div>
+<div class="sec" id="s-3"><span class="num">Κ3</span><h2>ΓΙΑ → ΟΣΟ</h2><span class="ref">Οδηγίες Μελέτης §3.6</span></div>
+<div class="grid g2" style="align-items:start">
+<pre class="code">ΓΙΑ i ΑΠΟ τ1 ΜΕΧΡΙ τ2 ΜΕ_ΒΗΜΑ β
+  εντολές
+ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</pre>
+<pre class="code">i ← τ1
+ΟΣΟ i &lt;= τ2 ΕΠΑΝΑΛΑΒΕ    ! β &gt; 0
+  εντολές
+  i ← i + β
+ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</pre>
+</div>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση · κανόνας 3</div>
+<p>Πριν την εντολή «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» εκχωρούμε στη &lt;μεταβλητή&gt; την αρχική τιμή της «ΓΙΑ…ΑΠΟ…ΜΕΧΡΙ…», δηλ. την τιμή1. Στη συνθήκη της «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» συγκρίνουμε τη &lt;μεταβλητή&gt; με την τιμή2. Η σύγκριση εξαρτάται από το βήμα αν είναι θετικό ή αρνητικό. Πριν το ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ της «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» αυξάνουμε την τιμή της μεταβλητής κατά την τιμή του βήματος. Στην περίπτωση που το βήμα δεν υπάρχει, τότε η &lt;μεταβλητή&gt; αυξάνεται κατά 1.</p>
+<p class="src">Οδηγίες Μελέτης, §3.6</p>
+</div>
+<div class="grid g2">
+<div class="box ex"><div class="tag">Θετικό ή αρνητικό βήμα</div>
+<p><span class="ln li">Βήμα <b>θετικό</b>: <code>ΟΣΟ i &lt;= τ2</code>.</span><span class="ln li">Βήμα <b>αρνητικό</b>: <code>ΟΣΟ i &gt;= τ2</code>, και η αύξηση γίνεται μείωση: <code>i ← i + β</code> με β αρνητικό, π.χ. <code>i ← i - 1</code>.</span><span class="ln">Η αύξηση μπαίνει <b>τελευταία</b> στον βρόχο, αλλιώς οι εντολές βλέπουν λάθος τιμή του i.</span></p></div>
+<div class="box ex"><div class="tag">Ακριβώς ισοδύναμη, και μετά τον βρόχο</div>
+<p>Η μορφή ΟΣΟ αφήνει το i με την <b>ίδια</b> τιμή που αφήνει και η ΓΙΑ <span class="nw">(τελευταία + βήμα,</span> ή τ1 αν δεν εκτελεστεί). Γι' αυτό ο πίνακας τιμών των δύο προγραμμάτων είναι ίδιος γραμμή προς γραμμή.</p></div>
+</div>
+<div class="sec" id="s-4"><span class="num">Κ4</span><h2>ΓΙΑ → ΜΕΧΡΙΣ_ΟΤΟΥ</h2><span class="ref">Κ3 και Κ2 μαζί</span></div>
+<div class="grid g2" style="align-items:start">
+<pre class="code">i ← τ1
+ΑΝ i &lt;= τ2 ΤΟΤΕ
+  ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+    εντολές
+    i ← i + β
+  ΜΕΧΡΙΣ_ΟΤΟΥ i &gt; τ2
+ΤΕΛΟΣ_ΑΝ</pre>
+<div class="box ex" style="margin:0"><div class="tag">Πότε φεύγει το ΑΝ</div>
+<p>Η ΓΙΑ μπορεί να μην εκτελεστεί (π.χ. ΑΠΟ 1 ΜΕΧΡΙ ν με <span class="nw">ν = 0),</span> ενώ το ΜΕΧΡΙΣ_ΟΤΟΥ εκτελείται σίγουρα μία φορά. Το ΑΝ «προστατεύει» αυτή την περίπτωση (Κ2). Αν τα όρια είναι <b>σταθερές</b> και ξέρουμε ότι ο βρόχος εκτελείται (π.χ. ΑΠΟ 3 ΜΕΧΡΙ 30), το ΑΝ μπορεί να παραλειφθεί.</p></div>
+</div>
+<div class="sec" id="s-5"><span class="num">Κ5</span><h2>ΟΣΟ ή ΜΕΧΡΙΣ_ΟΤΟΥ → ΓΙΑ: μόνο για βρόχους μετρητή</h2><span class="ref">Οδηγίες Μελέτης §3.6</span></div>
+<div class="box def">
+<div class="tag">Ορισμός · απομνημόνευση · κανόνας 5</div>
+<p>Η μετατροπή της «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» σε «ΓΙΑ...ΑΠΟ…ΜΕΧΡΙ…», γίνεται μόνο στην περίπτωση που στην «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» είναι γνωστός ο αριθμός των επαναλήψεων, σε οποιαδήποτε άλλη περίπτωση δεν είναι δυνατή η μετατροπή της «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» σε «ΓΙΑ...ΑΠΟ…ΜΕΧΡΙ…».</p>
+<p class="src">Οδηγίες Μελέτης, §3.6</p>
+</div>
+<div class="grid g2">
+<div class="box ex"><div class="tag">Το «διαβατήριο» για ΓΙΑ: 4 ελέγχους</div>
+<p><span class="ln li">✓ μία μεταβλητή παίρνει αρχική τιμή πριν από τον βρόχο</span><span class="ln li">✓ η συνθήκη τη συγκρίνει με ένα όριο που <b>δεν αλλάζει</b></span><span class="ln li">✓ αλλάζει κατά <b>σταθερό</b> βήμα, μία φορά, <b>στο τέλος</b> του βρόχου</span><span class="ln li">✓ καμία άλλη εντολή δεν την πειράζει. Αν λείπει έστω ένα, η μετατροπή δεν γίνεται (π.χ. τιμή φρουρός, «μέχρι το άθροισμα να φτάσει 100», Ευκλείδης).</span></p></div>
+<div class="box ex"><div class="tag">Αυστηρή ανισότητα: προσοχή στο όριο</div>
+<p><code>ΟΣΟ κ &lt; 50</code> με ακέραιο κ σημαίνει «μέχρι και 49»: <code>ΓΙΑ κ ΑΠΟ … ΜΕΧΡΙ 49</code>. Με βήμα 3 από το 2 οι τιμές είναι 2, 5, …, 47. Και το <code>ΜΕΧΡΙ 49</code> και το <code>ΜΕΧΡΙ 47</code> δίνουν τις ίδιες. Αν η μεταβλητή είναι πραγματική, κράτα την ίδια σύγκριση με ένα όριο που δεν πιάνεται (π.χ. ΜΕΧΡΙ 49.9).</p></div>
+</div>
+<div class="sec" id="s-tools"><span class="num">⚙</span><h2>Η εργαλειοθήκη των μετατροπών</h2><span class="ref">Η διαδικασία βήμα βήμα</span></div>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th>Βήμα</th><th>Τι κάνω</th></tr>
+<tr><td><b>Τ1. Βρίσκω τα τρία κομμάτια</b></td><td>Αρχικοποίηση (τι γίνεται πριν), συνθήκη, ενημέρωση (τι αλλάζει τη συνθήκη μέσα στον βρόχο).</td></tr>
+<tr><td><b>Τ2. Γράφω τη νέα συνθήκη</b></td><td><span class="ln li">Από ΟΣΟ σε ΜΕΧΡΙΣ_ΟΤΟΥ (και αντίστροφα): γράφουμε την <b>άρνηση</b> της συνθήκης (ή ΟΧΙ (…)).</span><span class="ln li">Από ΓΙΑ σε ΟΣΟ: &lt;= τ2 <span class="nw">ή &gt;= τ2,</span> ανάλογα με το πρόσημο του βήματος.</span></td></tr>
+<tr><td><b>Τ3. Φροντίζω την πρώτη εκτέλεση</b></td><td>Από «τουλάχιστον 1» σε «ίσως 0»: αντίγραφο των εντολών πριν (Κ1). Από «ίσως 0» σε «τουλάχιστον 1»: ΑΝ γύρω από τον βρόχο (Κ2, Κ4).</td></tr>
+<tr><td><b>Τ4. Εμφωλευμένοι βρόχοι</b></td><td>Η αρχική τιμή του <b>εσωτερικού</b> μετρητή μπαίνει <b>μέσα</b> στον εξωτερικό βρόχο, ακριβώς πριν από τον εσωτερικό. Η ΓΙΑ το έκανε αυτόματα. Το ΟΣΟ όχι (Λυμένο 6).</td></tr>
+<tr><td><b>Τ5. Ελέγχω την ισοδυναμία</b></td><td>Τρέχω και τις δύο μορφές με: την κανονική περίπτωση, την περίπτωση <b>0 εκτελέσεων</b>, την περίπτωση <b>1 εκτέλεσης</b>. Ίδια έξοδος και ίδιες τελικές τιμές.</td></tr>
+</tbody></table></div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Στο πρότυπο της FORTRAN του 1966, ο βρόχος DO (ο «πρόγονος» της ΓΙΑ) εκτελούνταν <b>τουλάχιστον μία φορά</b>, ακόμα κι αν η αρχική τιμή ξεπερνούσε την τελική: ήταν, ουσιαστικά, ένα ΜΕΧΡΙΣ_ΟΤΟΥ. Τα νεότερα πρότυπα τον έκαναν να μπορεί να εκτελεστεί καμία φορά, όπως η ΓΙΑ της ΓΛΩΣΣΑΣ. Για να μη «χαλάσουν» τα παλιά προγράμματα, μεταγλωττιστές της Fortran έχουν μέχρι σήμερα ειδική επιλογή (onetrip) που επαναφέρει την παλιά συμπεριφορά. Μια διαφορά «0 ή 1 φορά» κράτησε απασχολημένους τους προγραμματιστές για δεκαετίες.</p>
+<p class="talk">Σκέψου: Αν ένα παλιό πρόγραμμα βασιζόταν στο ότι ο βρόχος εκτελείται μία φορά, τι θα έπρεπε να προσθέσουμε όταν το μεταφέρουμε σε γλώσσα με ΓΙΑ «0 φορές»; (Σκέψου τον κανόνα Κ1.)</p>
+</div>
+<div class="box trap">
+<div class="tag">Παγίδες που κοστίζουν μονάδες</div>
+<ul class="tight">
+<li>Κ1: ξεχνάς να γράψεις τις εντολές <b>και πριν</b> από το ΟΣΟ. Τότε το ΟΣΟ μπορεί να μην εκτελεστεί καθόλου.</li>
+<li>Κ2: ξεχνάς το <b>ΑΝ</b>. Τότε το ΜΕΧΡΙΣ_ΟΤΟΥ εκτελείται μία φορά παραπάνω όταν δεν έπρεπε (π.χ. προσθέτει τον φρουρό).</li>
+<li>Λάθος άρνηση: <code>&lt;</code> ↔ <code>&gt;</code> αντί για <code>&gt;=</code>. ΚΑΙ χωρίς να γίνει Η.</li>
+<li>Κ3: η <code>i ← i + β</code> μπαίνει στην αρχή του βρόχου αντί για το τέλος, ή ξεχνιέται τελείως (ατέρμων).</li>
+<li>Αρνητικό βήμα με <code>&lt;=</code>: το ΟΣΟ δεν εκτελείται ποτέ.</li>
+<li>Εμφωλευμένα: αν το <code>j ← 1</code> είναι έξω από τον εξωτερικό βρόχο, ο εσωτερικός τρέχει μόνο την πρώτη φορά.</li>
+<li>Κ5: μετατρέπεις σε ΓΙΑ έναν βρόχο με φρουρό ή με αλλαγή του μετρητή μέσα σε ΑΝ. Δεν επιτρέπεται.</li>
+</ul>
+</div>
+<div class="box def">
+<div class="tag">Σύνοψη</div>
+<p><b>Από ΜΕΧΡΙΣ_ΟΤΟΥ σε ΟΣΟ:</b> οι εντολές μία φορά πριν, και ΟΣΟ με την άρνηση της συνθήκης.</p>
+<p><span class="ln"><b>Από ΟΣΟ σε ΜΕΧΡΙΣ_ΟΤΟΥ:</b></span><span class="ln li">ΑΝ συνθήκη ΤΟΤΕ</span><span class="ln li">ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ … ΜΕΧΡΙΣ_ΟΤΟΥ ΟΧΙ συνθήκη</span><span class="ln li">ΤΕΛΟΣ_ΑΝ</span></p>
+<p><span class="ln"><b>Από ΓΙΑ σε ΟΣΟ:</b></span><span class="ln li"><span class="nw">i ← τ1</span></span><span class="ln li">ΟΣΟ <span class="nw">i &lt;= τ2</span> <span class="nw">(ή &gt;= για</span> αρνητικό βήμα)</span><span class="ln li">τελευταία εντολή μέσα στον βρόχο: <span class="nw">i ← i + β</span></span></p>
+<p><b>Μετατροπή σε ΓΙΑ:</b> μόνο όταν ο αριθμός επαναλήψεων είναι γνωστός (βρόχος μετρητή).</p>
+</div>
+
+<section class="solved-wrap">
+<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένα παραδείγματα βήμα-βήμα</h2><span class="ref">Έτσι σκεφτόμαστε</span></div>
+<div class="box solved">
+<div class="tag">Λυμένο 1 · Κ1: ΜΕΧΡΙΣ_ΟΤΟΥ → ΟΣΟ (ο στόχος των 100 €)</div>
+<p>Το πρόγραμμα διαβάζει καταθέσεις μέχρι το σύνολο να φτάσει τουλάχιστον τα 100 € και εμφανίζει πόσες καταθέσεις χρειάστηκαν και το σύνολο. Να γραφτεί με ΟΣΟ.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Στόχος
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: πλ
+  ΠΡΑΓΜΑΤΙΚΕΣ: ποσό, σ
+ΑΡΧΗ
+  σ &lt;- 0
+  πλ &lt;- 0
+  ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+    ΔΙΑΒΑΣΕ ποσό
+    σ &lt;- σ + ποσό
+    πλ &lt;- πλ + 1
+  ΜΕΧΡΙΣ_ΟΤΟΥ σ &gt;= 100
+  ΓΡΑΨΕ πλ, σ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Στόχος</pre>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Τ1: αρχικοποίηση <span class="nw">σ ← 0,</span> <span class="nw">πλ ← 0.</span> Συνθήκη τερματισμού <code>σ &gt;= 100</code>. Ενημέρωση: η ΔΙΑΒΑΣΕ και η πρόσθεση μέσα στον βρόχο.</div></div>
+<div class="step"><span class="stepn">2</span><div><span class="ln"><b>Αναλύω.</b></span><span class="ln li">Τ2: η άρνηση του <code>σ &gt;= 100</code> είναι <code>σ &lt; 100</code>.</span><span class="ln li">Τ3: το ΜΕΧΡΙΣ_ΟΤΟΥ εκτελείται τουλάχιστον μία φορά. Άρα, κατά τον Κ1, οι τρεις εντολές γράφονται μία φορά πριν από το ΟΣΟ και μία μέσα.</span></div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Στόχος
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: πλ
+  ΠΡΑΓΜΑΤΙΚΕΣ: ποσό, σ
+ΑΡΧΗ
+  σ &lt;- 0
+  πλ &lt;- 0
+  ΔΙΑΒΑΣΕ ποσό
+  σ &lt;- σ + ποσό
+  πλ &lt;- πλ + 1
+  ΟΣΟ σ &lt; 100 ΕΠΑΝΑΛΑΒΕ
+    ΔΙΑΒΑΣΕ ποσό
+    σ &lt;- σ + ποσό
+    πλ &lt;- πλ + 1
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ πλ, σ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Στόχος</pre>
+    Εδώ όμως το σ ξεκινά από 0, άρα η <code>σ &lt; 100</code> είναι <b>σίγουρα</b> αληθής την πρώτη φορά: το ΟΣΟ θα εκτελεστεί έτσι κι αλλιώς μία φορά, και το αντίγραφο μπορεί να φύγει:
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Στόχος
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: πλ
+  ΠΡΑΓΜΑΤΙΚΕΣ: ποσό, σ
+ΑΡΧΗ
+  σ &lt;- 0
+  πλ &lt;- 0
+  ΟΣΟ σ &lt; 100 ΕΠΑΝΑΛΑΒΕ
+    ΔΙΑΒΑΣΕ ποσό
+    σ &lt;- σ + ποσό
+    πλ &lt;- πλ + 1
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ πλ, σ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Στόχος</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω</b> το Τ5 και στις τρεις μορφές:</span><span class="ln li">30, 50, 40: <b>3 120</b></span><span class="ln li">150: <b>1 150</b> (μία μόνο εκτέλεση)</span><span class="ln li">100: 1 100 (όριο)</span><span class="ln li">20 πέντε φορές: 5 100</span><span class="ln">Ίδια έξοδος παντού.</span></div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 2 · Κ2: ΟΣΟ → ΜΕΧΡΙΣ_ΟΤΟΥ (βροχόπτωση με φρουρό)</div>
+<p>Το πρόγραμμα διαβάζει τα χιλιοστά βροχής κάθε μέρας μέχρι να δοθεί αρνητικός αριθμός και εμφανίζει τις μέρες και το σύνολο. Να γραφτεί με ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ … ΜΕΧΡΙΣ_ΟΤΟΥ.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Βροχή
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: μέρες
+  ΠΡΑΓΜΑΤΙΚΕΣ: mm, σ
+ΑΡΧΗ
+  σ &lt;- 0
+  μέρες &lt;- 0
+  ΔΙΑΒΑΣΕ mm
+  ΟΣΟ mm &gt;= 0 ΕΠΑΝΑΛΑΒΕ
+    σ &lt;- σ + mm
+    μέρες &lt;- μέρες + 1
+    ΔΙΑΒΑΣΕ mm
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ μέρες, σ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Βροχή</pre>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Τιμή φρουρός (Β5): ο βρόχος μπορεί να μην εκτελεστεί καμία φορά (αν η πρώτη τιμή είναι αρνητική). Το ΜΕΧΡΙΣ_ΟΤΟΥ εκτελείται σίγουρα μία φορά.</div></div>
+<div class="step"><span class="stepn">2</span><div><span class="ln"><b>Αναλύω.</b></span><span class="ln li">Τ2: η άρνηση του <code>mm &gt;= 0</code> είναι <code>mm &lt; 0</code>.</span><span class="ln li">Τ3: χρειάζεται το «προστατευτικό» <code>ΑΝ mm &gt;= 0 ΤΟΤΕ</code> (Κ2).</span><span class="ln">Η πρώτη ΔΙΑΒΑΣΕ μένει έξω.</span></div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<div class="grid g2" style="align-items:start">
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Βροχή
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: μέρες
+  ΠΡΑΓΜΑΤΙΚΕΣ: mm, σ
+ΑΡΧΗ
+  σ &lt;- 0
+  μέρες &lt;- 0
+  ΔΙΑΒΑΣΕ mm
+  ΑΝ mm &gt;= 0 ΤΟΤΕ
+    ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+      σ &lt;- σ + mm
+      μέρες &lt;- μέρες + 1
+      ΔΙΑΒΑΣΕ mm
+    ΜΕΧΡΙΣ_ΟΤΟΥ mm &lt; 0
+  ΤΕΛΟΣ_ΑΝ
+  ΓΡΑΨΕ μέρες, σ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Βροχή</pre>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Βροχή
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: μέρες
+  ΠΡΑΓΜΑΤΙΚΕΣ: mm, σ
+ΑΡΧΗ
+  σ &lt;- 0
+  μέρες &lt;- 0
+  ΔΙΑΒΑΣΕ mm
+  ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+    ΑΝ mm &gt;= 0 ΤΟΤΕ
+      σ &lt;- σ + mm
+      μέρες &lt;- μέρες + 1
+      ΔΙΑΒΑΣΕ mm
+    ΤΕΛΟΣ_ΑΝ
+  ΜΕΧΡΙΣ_ΟΤΟΥ mm &lt; 0
+  ΓΡΑΨΕ μέρες, σ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Βροχή</pre>
+</div>
+    Αριστερά η βέλτιστη λύση των Οδηγιών. Δεξιά η «μη βέλτιστη» (το ΑΝ μέσα στον βρόχο, η συνθήκη ελέγχεται δύο φορές σε κάθε γύρο).</div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b></span><span class="ln li">3, 0, 12.5, −1: <b>3 15.5</b></span><span class="ln li">αμέσως −1: <b>0 0</b>. Το ΑΝ έσωσε την κατάσταση: χωρίς αυτό θα μετρούσε μία μέρα με −1 mm.</span><span class="ln li">0, −5: 1 0</span><span class="ln">Ίδια και στις τρεις μορφές.</span></div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 3 · Κ3 και Κ4: ΓΙΑ → ΟΣΟ και ΜΕΧΡΙΣ_ΟΤΟΥ (περιττοί έως ν)</div>
+<p>Ο αλγόριθμος αθροίζει τους περιττούς από 1 έως ν. Να γραφτεί με Όσο και με Αρχή_επανάληψης, ώστε να εμφανίζει τα ίδια (και την τελική τιμή του i).</p>
+<pre class="code">Αλγόριθμος Περιττοί_Για
+Διάβασε ν
+σ ← 0
+Για i από 1 μέχρι ν με_βήμα 2
+  σ ← σ + i
+Τέλος_επανάληψης
+Εμφάνισε σ, i
+Τέλος Περιττοί_Για</pre>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> <span class="nw">τ1 = 1,</span> <span class="nw">τ2 = ν,</span> <span class="nw">β = 2</span> (θετικό). Το ν διαβάζεται: για <span class="nw">ν = 0</span> η Για δεν εκτελείται.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Κ3: <span class="nw">i ← 1,</span> Όσο <span class="nw">i &lt;= ν,</span> τελευταία εντολή <span class="nw">i ← i + 2.</span> Κ4: επιπλέον Αν <span class="nw">i &lt;= ν</span> γύρω από το Αρχή_επανάληψης και τερματισμός Μέχρις_ότου <span class="nw">i &gt; ν.</span></div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<div class="grid g2" style="align-items:start">
+<pre class="code">Αλγόριθμος Περιττοί_Όσο
+Διάβασε ν
+σ ← 0
+i ← 1
+Όσο i &lt;= ν επανάλαβε
+  σ ← σ + i
+  i ← i + 2
+Τέλος_επανάληψης
+Εμφάνισε σ, i
+Τέλος Περιττοί_Όσο</pre>
+<pre class="code">Αλγόριθμος Περιττοί_Μέχρις
+Διάβασε ν
+σ ← 0
+i ← 1
+Αν i &lt;= ν τότε
+  Αρχή_επανάληψης
+    σ ← σ + i
+    i ← i + 2
+  Μέχρις_ότου i &gt; ν
+Τέλος_αν
+Εμφάνισε σ, i
+Τέλος Περιττοί_Μέχρις</pre>
+</div></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b>
+<div class="tablewrap"><table class="t"><tbody><tr><th>ν</th><th>Για</th><th>Όσο</th><th>Μέχρις_ότου</th></tr>
+<tr><td>9</td><td>25 11</td><td>25 11</td><td>25 11</td></tr>
+<tr><td>10</td><td>25 11</td><td>25 11</td><td>25 11</td></tr>
+<tr><td>1</td><td>1 3</td><td>1 3</td><td>1 3</td></tr>
+<tr><td><b>0</b></td><td>0 1</td><td>0 1</td><td>0 1</td></tr></tbody></table></div>
+    Το σενάριο <span class="nw">ν = 0</span> είναι αυτό που δικαιώνει το Αν: χωρίς αυτό το Μέχρις_ότου θα έδινε 1 3.</div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 4 · Αρνητικό και πραγματικό βήμα: ελεύθερη πτώση</div>
+<p>Το πρόγραμμα εμφανίζει τον δρόμο <span class="nw">h = 5t²</span> που διανύει ένα σώμα σε ελεύθερη πτώση, για t από 2 s μέχρι 0 s, ανά 0.5 s. Να γραφτεί με ΟΣΟ.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Αντίστροφη_Για
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: t, h
+ΑΡΧΗ
+  ΓΙΑ t ΑΠΟ 2 ΜΕΧΡΙ 0 ΜΕ_ΒΗΜΑ -0.5
+    h &lt;- 5 * t ^ 2
+    ΓΡΑΨΕ t, h
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ 'Τελικό t:', t
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Αντίστροφη_Για</pre>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Βήμα <b>αρνητικό</b> (−0.5) και <b>πραγματικό</b>: η t είναι ΠΡΑΓΜΑΤΙΚΗ.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Με αρνητικό βήμα η σύγκριση γίνεται <code>&gt;=</code> (περίπτωση 2 των Οδηγιών). Ενημέρωση: <code>t ← t - 0.5</code>.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Αντίστροφη_Όσο
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: t, h
+ΑΡΧΗ
+  t &lt;- 2
+  ΟΣΟ t &gt;= 0 ΕΠΑΝΑΛΑΒΕ
+    h &lt;- 5 * t ^ 2
+    ΓΡΑΨΕ t, h
+    t &lt;- t - 0.5
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ 'Τελικό t:', t
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Αντίστροφη_Όσο</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> Και τα δύο:</span><span class="ln li">2 20</span><span class="ln li">1.5 11.25</span><span class="ln li">1 5</span><span class="ln li">0.5 1.25</span><span class="ln li">0 0</span><span class="ln li"><b>Τελικό t: −0.5</b>. Φορές: <span class="nw">(0 − 2) / (</span>−<span class="nw">0.5) + 1 = 5</span> ✓. Με <code>ΟΣΟ t &lt;= 0</code> το πρόγραμμα δεν θα εμφάνιζε τίποτα.</span></div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 5 · Κ5: πότε ένα Όσο γίνεται Για;</div>
+<p>Να ελεγχθεί αν ο αλγόριθμος μπορεί να γραφτεί με Για και, αν ναι, να γραφτεί.</p>
+<pre class="code">Αλγόριθμος Όσο_μετρητής
+κ ← 2
+Όσο κ &lt; 50 επανάλαβε
+  Εμφάνισε κ
+  κ ← κ + 3
+Τέλος_επανάληψης
+Τέλος Όσο_μετρητής</pre>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><span class="ln"><b>Κατανοώ.</b> Ελέγχω το «διαβατήριο» του Κ5:</span><span class="ln li">αρχική τιμή <span class="nw">κ ← 2</span> ✓</span><span class="ln li">σύγκριση με σταθερό όριο 50 ✓</span><span class="ln li">σταθερό βήμα 3, στο τέλος του βρόχου ✓</span><span class="ln li">καμία άλλη αλλαγή του κ ✓</span><span class="ln">Είναι βρόχος μετρητή, άρα η μετατροπή γίνεται.</span></div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Το κ είναι ακέραιο και η σύγκριση αυστηρή: <span class="nw">κ &lt; 50</span> σημαίνει <span class="nw">κ &lt;= 49.</span> Τιμές: 2, 5, 8, …, 47 (16 τιμές).</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">Αλγόριθμος Για_μετρητής
+Για κ από 2 μέχρι 49 με_βήμα 3
+  Εμφάνισε κ
+Τέλος_επανάληψης
+Τέλος Για_μετρητής</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Και οι δύο εμφανίζουν 2, 5, …, 44, 47 ✓. <b>Αντιπαράδειγμα:</b> το Όσο του Λυμένου 2 (βροχή) <b>δεν</b> γίνεται Για: δεν ξέρουμε από πριν πόσες μέρες θα δοθούν. Ούτε το Όσο <span class="nw">ν &lt;&gt; 1</span> του Collatz, ούτε ο Ευκλείδης.</div></div>
+</div>
+</div>
+<div class="box solved">
+<div class="tag">Λυμένο 6 · Εμφωλευμένοι βρόχοι: η παγίδα του εσωτερικού μετρητή</div>
+<p>Να γραφτεί ο αλγόριθμος με Όσο. Ένας μαθητής έγραψε τη μεσαία μορφή και πήρε 4 αντί για 12. Πού είναι το λάθος;</p>
+<div class="grid g2" style="align-items:start">
+<pre class="code">Αλγόριθμος Ζεύγη_Για
+πλ ← 0
+Για i από 1 μέχρι 3
+  Για j από 1 μέχρι 4
+    πλ ← πλ + 1
+  Τέλος_επανάληψης
+Τέλος_επανάληψης
+Εμφάνισε πλ
+Τέλος Ζεύγη_Για</pre>
+<pre class="code">Αλγόριθμος Ζεύγη_λάθος
+πλ ← 0
+i ← 1
+j ← 1
+Όσο i &lt;= 3 επανάλαβε
+  Όσο j &lt;= 4 επανάλαβε
+    πλ ← πλ + 1
+    j ← j + 1
+  Τέλος_επανάληψης
+  i ← i + 1
+Τέλος_επανάληψης
+Εμφάνισε πλ
+Τέλος Ζεύγη_λάθος</pre>
+</div>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Η εσωτερική Για <b>ξαναρχίζει</b> από <span class="nw">j = 1</span> κάθε φορά που ξεκινά. Στη μορφή Όσο αυτό πρέπει να το γράψουμε εμείς (Τ4).</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Στη λάθος μορφή: για <span class="nw">i = 1</span> ο εσωτερικός τρέχει 4 φορές και αφήνει <span class="nw">j = 5.</span> Για <span class="nw">i = 2</span> και <span class="nw">i = 3</span> η <code>j &lt;= 4</code> είναι ήδη ψευδής: καμία εκτέλεση. Σύνολο 4.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b> Το <code>j ← 1</code> μπαίνει <b>μέσα</b> στον εξωτερικό βρόχο, ακριβώς πριν από τον εσωτερικό:
+<pre class="code">Αλγόριθμος Ζεύγη_Όσο
+πλ ← 0
+i ← 1
+Όσο i &lt;= 3 επανάλαβε
+  j ← 1
+  Όσο j &lt;= 4 επανάλαβε
+    πλ ← πλ + 1
+    j ← j + 1
+  Τέλος_επανάληψης
+  i ← i + 1
+Τέλος_επανάληψης
+Εμφάνισε πλ
+Τέλος Ζεύγη_Όσο</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> Για:</span><span class="ln li"><b>12</b></span><span class="ln li">λάθος: 4</span><span class="ln li">σωστό Όσο: <b>12</b> ✓ (3</span><span class="ln li">4).</span></div></div>
+</div>
+</div>
+</section>
+
+<section class="cards" id="s-cards">
+<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2><span class="ref">Ορισμοί για απομνημόνευση</span></div>
+<p class="small">Διάβασε τον όρο, πες τον ορισμό από μέσα σου και πάτα την κάρτα για να τον δεις.</p>
+<div class="deck">
+<button aria-live="polite" class="card" id="card" type="button">
+<span class="face front"><span class="ck">Όρος</span><span class="term" id="c-term"></span><span class="tap">Πάτα για τον ορισμό</span></span>
+<span class="face back"><span class="ck">Ορισμός</span><span class="cdef" id="c-def"></span><span class="tap" id="c-ref"></span></span>
+</button>
+<div class="deckbar">
+<button aria-label="Προηγούμενη κάρτα" class="btn" id="c-prev" type="button">←</button>
+<span class="count" id="c-count"></span>
+<button aria-label="Επόμενη κάρτα" class="btn" id="c-next" type="button">→</button>
+<button class="btn" id="c-shuf" type="button">Ανακάτεμα</button>
+</div>
+</div>
+</section><section class="exercises">
+<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2><span class="ref">Από τα εύκολα στα δύσκολα</span></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div>
+<div class="q"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Γράψε Σ ή Λ.
+<table class="tf">
+<tbody><tr><td>α. Κάθε ΓΙΑ μπορεί να γραφεί με ΟΣΟ.</td><td class="b">____</td></tr>
+<tr><td>β. Κάθε ΟΣΟ μπορεί να γραφεί με ΓΙΑ.</td><td class="b">____</td></tr>
+<tr><td>γ. Κάθε ΟΣΟ μπορεί να γραφεί με ΜΕΧΡΙΣ_ΟΤΟΥ.</td><td class="b">____</td></tr>
+<tr><td>δ. Στη μετατροπή από ΜΕΧΡΙΣ_ΟΤΟΥ σε ΟΣΟ η συνθήκη μένει ίδια.</td><td class="b">____</td></tr>
+<tr><td>ε. Στη μετατροπή από ΟΣΟ σε ΜΕΧΡΙΣ_ΟΤΟΥ χρειάζεται εντολή ΑΝ πριν από τον βρόχο.</td><td class="b">____</td></tr>
+<tr><td>στ. Η άρνηση της <span class="nw">x &lt; 5</span> είναι <span class="nw">x &gt; 5.</span></td><td class="b">____</td></tr>
+<tr><td>ζ. Στη μετατροπή από ΓΙΑ σε ΟΣΟ με αρνητικό βήμα η συνθήκη είναι <span class="nw">μεταβλητή &gt;= τιμή2.</span></td><td class="b">____</td></tr>
+<tr><td>η. Στη μετατροπή από ΓΙΑ σε ΟΣΟ η αύξηση της μεταβλητής γράφεται ως πρώτη εντολή του βρόχου.</td><td class="b">____</td></tr>
+<tr><td>θ. Ένας βρόχος με τιμή φρουρό μπορεί να γραφεί με ΓΙΑ.</td><td class="b">____</td></tr>
+<tr><td>ι. Η ΓΙΑ και η ΟΣΟ που προκύπτει από αυτήν αφήνουν τη μεταβλητή με την ίδια τελική τιμή.</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Σ, β Λ, γ Σ, δ Λ, ε Σ, στ Λ, ζ Σ, η Λ, θ Λ, ι Σ</span>
+<p class="small">β, θ: μόνο αν ο αριθμός επαναλήψεων είναι γνωστός. δ: γράφεται η άρνησή της. στ: <span class="nw">x &gt;= 5.</span> η: τελευταία.</p></div></details></div>
+<div class="q"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
+<p>α) Να περιγράψετε τη μετατροπή από ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ … ΜΕΧΡΙΣ_ΟΤΟΥ σε ΟΣΟ … ΕΠΑΝΑΛΑΒΕ και να εξηγήσετε γιατί οι εντολές γράφονται δύο φορές.<br/>β) Να περιγράψετε τη μετατροπή από ΟΣΟ σε ΜΕΧΡΙΣ_ΟΤΟΥ. Ποια λύση θεωρείται μη βέλτιστη και γιατί;<br/>γ) Ποια βήματα ακολουθούμε για να μετατρέψουμε μια ΓΙΑ σε ΟΣΟ; Τι αλλάζει με αρνητικό βήμα;<br/>δ) Πότε επιτρέπεται η μετατροπή μιας ΟΣΟ σε ΓΙΑ;</p>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p><span class="ln cd">α) Οι εντολές γράφονται μία φορά πριν από το ΟΣΟ και μία μέσα, και η συνθήκη του ΟΣΟ είναι η άρνηση (ή ΟΧΙ) της συνθήκης του ΜΕΧΡΙΣ_ΟΤΟΥ. Το ΜΕΧΡΙΣ_ΟΤΟΥ εκτελείται τουλάχιστον μία φορά, ενώ το ΟΣΟ ίσως καμία: το αντίγραφο εξασφαλίζει την πρώτη εκτέλεση. β) ΑΝ συνθήκη ΤΟΤΕ</span><span class="ln cd">ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ εντολές ΜΕΧΡΙΣ_ΟΤΟΥ ΟΧΙ συνθήκη</span><span class="ln cd">ΤΕΛΟΣ_ΑΝ. Μη βέλτιστη: το ΑΝ μέσα στο ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ, γιατί η συνθήκη ελέγχεται δύο φορές. γ) Αρχική τιμή τιμή1 πριν από το ΟΣΟ. Συνθήκη <span class="nw">μεταβλητή &lt;= τιμή2</span> (&gt;= αν το βήμα είναι αρνητικό). Τελευταία εντολή του βρόχου η αύξηση κατά το βήμα (1 αν παραλείπεται). δ) Μόνο όταν ο αριθμός των επαναλήψεων είναι γνωστός.</span></p></div></details></div>
+<div class="q"><span class="qn">3</span><b>Η άρνηση.</b> Να γράψετε την άρνηση κάθε συνθήκης χωρίς τον τελεστή ΟΧΙ.
+<div class="tablewrap"><table class="t"><tbody><tr><th></th><th>Συνθήκη</th><th>Άρνηση</th></tr>
+<tr><td>α</td><td><code>x &gt;= 0</code></td><td></td></tr>
+<tr><td>β</td><td><code>ν = 1</code></td><td></td></tr>
+<tr><td>γ</td><td><code>i &lt;= 100</code></td><td></td></tr>
+<tr><td>δ</td><td><code>β &gt;= 0 ΚΑΙ β &lt;= 20</code></td><td></td></tr>
+<tr><td>ε</td><td><code>απ = 'Ν' Η απ = 'Ο'</code></td><td></td></tr>
+<tr><td>στ</td><td><code>pin = 4821 Η πρ = 3</code></td><td></td></tr>
+<tr><td>ζ</td><td><code>σ &gt; 100 ΚΑΙ πλ &lt; 10</code></td><td></td></tr>
+<tr><td>η</td><td><code>x &lt; 0 Η x &gt; 23</code></td><td></td></tr>
+</tbody></table></div><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p><span class="ln li">α) <code>x &lt; 0</code></span><span class="ln li">β) <code>ν &lt;&gt; 1</code></span><span class="ln li">γ) <code>i &gt; 100</code></span><span class="ln li">δ) <code>β &lt; 0 Η β &gt; 20</code></span><span class="ln li">ε) <code>απ &lt;&gt; 'Ν' ΚΑΙ απ &lt;&gt; 'Ο'</code></span><span class="ln li">στ) <code>pin &lt;&gt; 4821 ΚΑΙ πρ &lt;&gt; 3</code></span><span class="ln li">ζ) <code>σ &lt;= 100 Η πλ &gt;= 10</code></span><span class="ln li">η) <code>x &gt;= 0 ΚΑΙ x &lt;= 23</code></span></p></div></details></div>
+<div class="q"><span class="qn">4</span><b>Πόσες φορές;</b> Βρες πόσες φορές εκτελείται κάθε βρόχος και την τελική τιμή της μεταβλητής.
+<pre class="code">α) ΓΙΑ i ΑΠΟ -2 ΜΕΧΡΙ 4 ΜΕ_ΒΗΜΑ 2     β) ΓΙΑ i ΑΠΟ 7 ΜΕΧΡΙ -2 ΜΕ_ΒΗΜΑ -3
+
+γ) α ← 1                              δ) α ← 30
+   ΟΣΟ α &lt; 20 ΕΠΑΝΑΛΑΒΕ                  ΟΣΟ α &lt; 20 ΕΠΑΝΑΛΑΒΕ
+     α ← α * 3                             α ← α * 3
+   ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ                      ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+
+ε) β ← 30                             στ) β ← 0
+   ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ                       ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+     β ← β + 5                             β ← β + 4
+   ΜΕΧΡΙΣ_ΟΤΟΥ β &gt; 20                    ΜΕΧΡΙΣ_ΟΤΟΥ β &gt;= 20</pre>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p><span class="ln">α) −2, 0, 2, 4: <b>4</b> φορές, <span class="nw">i = 6</span></span><span class="ln">β) 7, 4, 1, −2: <b>4</b> φορές, i = −5</span><span class="ln">γ) α: 3, 9, 27: <b>3</b> φορές, <span class="nw">α = 27</span></span><span class="ln">δ) <b>0</b> φορές, <span class="nw">α = 30</span></span><span class="ln">ε) <b>1</b> φορά, <span class="nw">β = 35</span> (η συνθήκη ήταν «ήδη» αληθής)</span><span class="ln">στ) 4, 8, 12, 16, 20: <b>5</b> φορές, <span class="nw">β = 20</span></span></p></div></details></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div>
+<div class="q"><span class="qn">5</span><b>Ισοδύναμα ή όχι;</b> Για κάθε ζευγάρι (κάθε εντολή είναι σε δική της γραμμή), γράψε αν τα δύο τμήματα κάνουν ακριβώς το ίδιο για <b>κάθε</b> είσοδο.
+<ul class="legend tight">
+<li data-v="Α"><b>Α</b> Ισοδύναμα</li>
+<li data-v="Β"><b>Β</b> Όχι ισοδύναμα</li>
+</ul>
+<table class="tf">
+<tbody><tr><td><span class="cdcols"><span class="cdcol"><span class="ln cd">α. ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 5</span><span class="ln cd">ΓΡΑΨΕ i</span></span><span class="cdcol"><span class="ln cd"><span class="nw">i ← 1</span></span><span class="ln cd">ΟΣΟ <span class="nw">i &lt;= 5</span> ΕΠΑΝΑΛΑΒΕ</span><span class="ln cd">ΓΡΑΨΕ i</span><span class="ln cd"><span class="nw">i ← i + 1</span></span></span></span></td><td class="b">____</td></tr>
+<tr><td><span class="cdcols"><span class="cdcol"><span class="ln cd">β. ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 5</span><span class="ln cd">ΓΡΑΨΕ i</span></span><span class="cdcol"><span class="ln cd"><span class="nw">i ← 1</span></span><span class="ln cd">ΟΣΟ <span class="nw">i &lt; 5</span> ΕΠΑΝΑΛΑΒΕ</span><span class="ln cd">ΓΡΑΨΕ i</span><span class="ln cd"><span class="nw">i ← i + 1</span></span></span></span></td><td class="b">____</td></tr>
+<tr><td><span class="cdcols"><span class="cdcol"><span class="ln cd">γ. ΔΙΑΒΑΣΕ x</span><span class="ln cd">ΟΣΟ <span class="nw">x &gt; 0</span> ΕΠΑΝΑΛΑΒΕ</span><span class="ln cd">ΓΡΑΨΕ x</span><span class="ln cd">ΔΙΑΒΑΣΕ x</span></span><span class="cdcol"><span class="ln cd">ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ</span><span class="ln cd">ΔΙΑΒΑΣΕ x</span><span class="ln cd">ΓΡΑΨΕ x</span><span class="ln cd">ΜΕΧΡΙΣ_ΟΤΟΥ <span class="nw">x &lt;= 0</span></span></span></span></td><td class="b">____</td></tr>
+<tr><td><span class="cdcols"><span class="cdcol"><span class="ln cd">δ. ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ</span><span class="ln cd">ΔΙΑΒΑΣΕ x</span><span class="ln cd">ΜΕΧΡΙΣ_ΟΤΟΥ <span class="nw">x &gt; 0</span></span></span><span class="cdcol"><span class="ln cd">ΔΙΑΒΑΣΕ x</span><span class="ln cd">ΟΣΟ <span class="nw">x &lt;= 0</span> ΕΠΑΝΑΛΑΒΕ</span><span class="ln cd">ΔΙΑΒΑΣΕ x</span></span></span></td><td class="b">____</td></tr>
+<tr><td><span class="cdcols"><span class="cdcol"><span class="ln cd">ε. ΓΙΑ i ΑΠΟ 10 ΜΕΧΡΙ 1 ΜΕ_ΒΗΜΑ -1</span><span class="ln cd">ΓΡΑΨΕ i</span></span><span class="cdcol"><span class="ln cd"><span class="nw">i ← 10</span></span><span class="ln cd">ΟΣΟ <span class="nw">i &lt;= 1</span> ΕΠΑΝΑΛΑΒΕ</span><span class="ln cd">ΓΡΑΨΕ i</span><span class="ln cd"><span class="nw">i ← i - 1</span></span></span></span></td><td class="b">____</td></tr>
+<tr><td><span class="cdcols"><span class="cdcol"><span class="ln cd">στ. ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ ν</span><span class="ln cd">ΓΡΑΨΕ i</span></span><span class="cdcol"><span class="ln cd"><span class="nw">i ← 1</span></span><span class="ln cd">ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ</span><span class="ln cd">ΓΡΑΨΕ i</span><span class="ln cd"><span class="nw">i ← i + 1</span></span><span class="ln cd">ΜΕΧΡΙΣ_ΟΤΟΥ <span class="nw">i &gt; ν</span></span></span></span></td><td class="b">____</td></tr>
+<tr><td><span class="cdcols"><span class="cdcol"><span class="ln cd">ζ. <span class="nw">σ ← 0</span></span><span class="ln cd">ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 10</span><span class="ln cd"><span class="nw">σ ← σ + i</span></span></span><span class="cdcol"><span class="ln cd"><span class="nw">σ ← 0</span></span><span class="ln cd"><span class="nw">i ← 1</span></span><span class="ln cd">ΟΣΟ <span class="nw">i &lt;= 10</span> ΕΠΑΝΑΛΑΒΕ</span><span class="ln cd"><span class="nw">σ ← σ + i</span></span><span class="ln cd"><span class="nw">i ← i + 1</span></span></span></span></td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Α, β Β, γ Β, δ Α, ε Β, στ Β, ζ Α</span>
+<p class="small">β: 4 φορές αντί για 5. γ: το δεξί εμφανίζει και τον τελευταίο (μη θετικό) αριθμό. ε: <span class="nw">με &lt;= 1</span> δεν εκτελείται ποτέ (σωστό: &gt;= 1). στ: για <span class="nw">ν = 0</span> το δεξί εμφανίζει 1 (λείπει το ΑΝ).</p></div></details></div>
+<div class="q"><span class="qn">6</span><b>Συμπλήρωση κενών.</b> Να συμπληρώσετε τα κενά, ώστε και οι τρεις μορφές να είναι ισοδύναμες.
+<pre class="code">ΓΙΑ κ ΑΠΟ 20 ΜΕΧΡΙ 2 ΜΕ_ΒΗΜΑ -2      κ ← __(1)__
+  ΓΡΑΨΕ κ                            ΟΣΟ κ __(2)__ __(3)__ ΕΠΑΝΑΛΑΒΕ
+ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ                       ΓΡΑΨΕ κ
+                                       κ ← __(4)__
+                                     ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+
+κ ← 20
+ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ κ
+  κ ← κ - 2
+ΜΕΧΡΙΣ_ΟΤΟΥ κ __(5)__ __(6)__</pre>
+<p>Γιατί στη μορφή ΜΕΧΡΙΣ_ΟΤΟΥ δεν χρειάζεται ΑΝ;</p>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p><span class="ln li">(1) 20</span><span class="ln li">(2) &gt;=</span><span class="ln li">(3) 2</span><span class="ln li">(4) <span class="nw">κ − 2</span></span><span class="ln li">(5) &lt;</span><span class="ln li">(6) 2. Και οι τρεις εμφανίζουν 20, 18, …, 2. Δεν χρειάζεται ΑΝ γιατί τα όρια είναι σταθερές και <span class="nw">20 &gt;= 2</span>: ο βρόχος σίγουρα εκτελείται.</span></p></div></details></div>
+<div class="q hw"><span class="qn">7</span><b>ΓΙΑ σε δύο μορφές.</b>
+<pre class="code">Αλγόριθμος Άσκηση_7
+σ ← 0
+Για κ από 3 μέχρι 30 με_βήμα 3
+  σ ← σ + κ
+Τέλος_επανάληψης
+Εμφάνισε σ, κ
+Τέλος Άσκηση_7</pre>
+<p>α) Τι εμφανίζει;<br/>β) Να το γράψετε με Όσο και με Αρχή_επανάληψης. Χρειάζεται Αν στη δεύτερη; Γιατί;<br/>γ) Αν το «από 3» γινόταν «από α», με α που διαβάζεται, τι θα άλλαζε στη μορφή Αρχή_επανάληψης;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">8</span><b>Έλεγχος ώρας με ΟΣΟ.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ώρα
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: ώρα
+ΑΡΧΗ
+  ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+    ΓΡΑΨΕ 'Ώρα (0-23):'
+    ΔΙΑΒΑΣΕ ώρα
+    ΑΝ ώρα &lt; 0 Η ώρα &gt; 23 ΤΟΤΕ
+      ΓΡΑΨΕ 'Λάθος ώρα'
+    ΤΕΛΟΣ_ΑΝ
+  ΜΕΧΡΙΣ_ΟΤΟΥ ώρα &gt;= 0 ΚΑΙ ώρα &lt;= 23
+  ΓΡΑΨΕ 'Δεκτή:', ώρα
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ώρα</pre>
+<p>Να γραφτεί ισοδύναμο πρόγραμμα με ΟΣΟ (κανόνας 1). Να ελεγχθεί με είσοδο 25, −1, 7 και με είσοδο 5. Μπορεί να γίνει απλούστερο; (Βοήθεια: σύγκρινε με το Β9 του Μαθήματος 12.)</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">9</span><b>Μέγιστο με φρουρό, με ΜΕΧΡΙΣ_ΟΤΟΥ.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Μεγαλύτερο
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: x, μεγ, πλ
+ΑΡΧΗ
+  πλ &lt;- 0
+  ΔΙΑΒΑΣΕ x
+  μεγ &lt;- x
+  ΟΣΟ x &lt;&gt; 0 ΕΠΑΝΑΛΑΒΕ
+    πλ &lt;- πλ + 1
+    ΑΝ x &gt; μεγ ΤΟΤΕ
+      μεγ &lt;- x
+    ΤΕΛΟΣ_ΑΝ
+    ΔΙΑΒΑΣΕ x
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΑΝ πλ &gt; 0 ΤΟΤΕ
+    ΓΡΑΨΕ πλ, μεγ
+  ΑΛΛΙΩΣ
+    ΓΡΑΨΕ 'Κανένας αριθμός'
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Μεγαλύτερο</pre>
+<p><span class="ln li">Να γραφτεί ισοδύναμο πρόγραμμα με ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ … ΜΕΧΡΙΣ_ΟΤΟΥ (κανόνας 2). Έλεγχος: 3, −2, 8, 5, 0</span><span class="ln li">0</span><span class="ln li">−4, −9, 0.</span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">10</span><b>Γίνεται ΓΙΑ;</b> Για κάθε τμήμα, αν γίνεται, γράψτε το με ΓΙΑ. Αν όχι, εξηγήστε γιατί.
+<pre class="code">α) i ← 5                     β) κ ← 100                  γ) ΔΙΑΒΑΣΕ x
+   ΟΣΟ i &lt;= 50 ΕΠΑΝΑΛΑΒΕ        ΟΣΟ κ &gt; 0 ΕΠΑΝΑΛΑΒΕ          ΟΣΟ x &lt;&gt; 0 ΕΠΑΝΑΛΑΒΕ
+     ΓΡΑΨΕ i                     ΓΡΑΨΕ κ                      ΓΡΑΨΕ x * 2
+     i ← i + 5                   κ ← κ - 7                    ΔΙΑΒΑΣΕ x
+   ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ            ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ             ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+
+δ) i ← 1                     ε) ν ← 1
+   ΟΣΟ i &lt;= 20 ΕΠΑΝΑΛΑΒΕ        ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+     ΑΝ i mod 3 = 0 ΤΟΤΕ          ΓΡΑΨΕ ν
+       i ← i + 1                  ν ← ν + 2
+     ΤΕΛΟΣ_ΑΝ                   ΜΕΧΡΙΣ_ΟΤΟΥ ν &gt; 9
+     ΓΡΑΨΕ i
+     i ← i + 1
+   ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</pre>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">11</span><b>Αρνητικά και πραγματικά βήματα.</b>
+<p>α) Να γράψετε με ΟΣΟ: <code>ΓΙΑ x ΑΠΟ 1 ΜΕΧΡΙ 0 ΜΕ_ΒΗΜΑ -0.25 · ΓΡΑΨΕ x, x ^ 2</code>. Πόσες φορές εκτελείται; Τελική τιμή του x;<br/>β) Να γράψετε με ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ … ΜΕΧΡΙΣ_ΟΤΟΥ: <code>γ ← 1 · ΓΙΑ i ΑΠΟ ν ΜΕΧΡΙ 2 ΜΕ_ΒΗΜΑ -1 · γ ← γ * i</code> (ν διαβάζεται). Τι υπολογίζει; Τι γίνεται για <span class="nw">ν = 1</span>;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">12</span><b>Εμφωλευμένα, με ΟΣΟ.</b>
+<pre class="code">πλ ← 0
+ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 4
+  ΓΙΑ j ΑΠΟ i ΜΕΧΡΙ 4
+    πλ ← πλ + 1
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+ΓΡΑΨΕ πλ</pre>
+<p>α) Τι εμφανίζει;<br/>β) Να το γράψετε μόνο με ΟΣΟ.<br/>γ) Ένας μαθητής έγραψε <code>j ← i</code> <b>πριν</b> από τον εξωτερικό ΟΣΟ (με <span class="nw">i ← 1</span> από πάνω). Τι θα εμφάνιζε;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">13</span><b>Βρες τα λάθη στη μετατροπή.</b> Το αρχικό τμήμα (αριστερά) μετατράπηκε από μαθητή σε ΟΣΟ (δεξιά). Να βρείτε <b>τρία</b> λάθη και να γράψετε τη σωστή μετατροπή.
+<pre class="code">πλ ← 0                                  πλ ← 0
+ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ                         ΟΣΟ β &lt; 0 ΚΑΙ β &gt; 20 ΕΠΑΝΑΛΑΒΕ
+  ΔΙΑΒΑΣΕ β                               ΔΙΑΒΑΣΕ β
+  πλ ← πλ + 1                           ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+ΜΕΧΡΙΣ_ΟΤΟΥ β &gt;= 0 ΚΑΙ β &lt;= 20          ΓΡΑΨΕ β, πλ
+ΓΡΑΨΕ β, πλ</pre>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">14</span><b>Collatz με ΜΕΧΡΙΣ_ΟΤΟΥ.</b><span class="theme">Μαθηματικά</span>
+<pre class="code">Αλγόριθμος Collatz_Όσο
+Διάβασε ν
+βήματα ← 0
+Όσο ν &lt;&gt; 1 επανάλαβε
+  Αν ν mod 2 = 0 τότε
+    ν ← ν div 2
+  αλλιώς
+    ν ← 3 * ν + 1
+  Τέλος_αν
+  βήματα ← βήματα + 1
+Τέλος_επανάληψης
+Εμφάνισε βήματα
+Τέλος Collatz_Όσο</pre>
+<p>α) Να γράψετε ισοδύναμο αλγόριθμο με Αρχή_επανάληψης … Μέχρις_ότου.<br/>β) Ένας συμμαθητής ξέχασε το «Αν». Τι εμφανίζει ο αλγόριθμός του για <span class="nw">ν = 1</span>; Είναι σωστό;<br/>γ) Μπορεί να γραφτεί με Για; Γιατί;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">15</span><b>Δύο λόγοι τερματισμού, με ΟΣΟ.</b>
+<pre class="code">Αλγόριθμος PIN_Μέχρις
+πρ ← 0
+Αρχή_επανάληψης
+  Διάβασε pin
+  πρ ← πρ + 1
+Μέχρις_ότου pin = 4821 ή πρ = 3
+Αν pin = 4821 τότε
+  Εμφάνισε 'Μπήκες'
+αλλιώς
+  Εμφάνισε 'Κλείδωσε'
+Τέλος_αν
+Τέλος PIN_Μέχρις</pre>
+<p><span class="ln li">Να γραφτεί ισοδύναμος αλγόριθμος με Όσο. Προσοχή στην άρνηση της σύνθετης συνθήκης. Έλεγχος: 1, 4821</span><span class="ln li">1, 2, 3</span><span class="ln li">4821.</span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Μεγάλες ασκήσεις</h3></div>
+<div class="q hw"><span class="qn">16</span><b>Σκυταλοδρομίες μόνο με ΟΣΟ.</b><span class="theme">Στίβος, Θέμα Γ</span>
+<p>Το πρόγραμμα διαβάζει για καθεμία από 3 ομάδες το πλήθος των δρομέων και τους χρόνους τους (θετικοί, με έλεγχο) και εμφανίζει τον μέσο χρόνο κάθε ομάδας και την ταχύτερη ομάδα.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Σκυταλοδρομίες
+ΣΤΑΘΕΡΕΣ
+  ΟΜΑΔΕΣ = 3
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: ομ, ν, i, καλύτερη
+  ΠΡΑΓΜΑΤΙΚΕΣ: χρ, σ, μο, μοΚαλ
+ΑΡΧΗ
+  ΓΙΑ ομ ΑΠΟ 1 ΜΕΧΡΙ ΟΜΑΔΕΣ
+    ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+      ΔΙΑΒΑΣΕ ν
+    ΜΕΧΡΙΣ_ΟΤΟΥ ν &gt; 0
+    σ &lt;- 0
+    ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ ν
+      ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+        ΔΙΑΒΑΣΕ χρ
+      ΜΕΧΡΙΣ_ΟΤΟΥ χρ &gt; 0
+      σ &lt;- σ + χρ
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+    μο &lt;- σ / ν
+    ΓΡΑΨΕ 'Ομάδα', ομ, ':', μο
+    ΑΝ ομ = 1 ΤΟΤΕ
+      μοΚαλ &lt;- μο
+      καλύτερη &lt;- ομ
+    ΑΛΛΙΩΣ_ΑΝ μο &lt; μοΚαλ ΤΟΤΕ
+      μοΚαλ &lt;- μο
+      καλύτερη &lt;- ομ
+    ΤΕΛΟΣ_ΑΝ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ 'Ταχύτερη ομάδα:', καλύτερη
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Σκυταλοδρομίες</pre>
+<p><span class="ln li">α) Πόσοι βρόχοι υπάρχουν, τι είδους, και ποιος είναι μέσα σε ποιον;<br/>β) Να γράψετε ισοδύναμο πρόγραμμα που χρησιμοποιεί <b>μόνο</b> ΟΣΟ … ΕΠΑΝΑΛΑΒΕ.<br/>γ) Έλεγχος και των δύο: ομάδα 1: 2 δρομείς, 50, 55</span><span class="ln li">ομάδα 2: 0 (απορρίπτεται), 3 δρομείς, 48, −1 (απορρίπτεται), 50, 52</span><span class="ln li">ομάδα 3: 1 δρομέας, 60.</span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">17</span><b>Οι βαθμοί των τμημάτων με τρεις τρόπους.</b><span class="theme">Σχολείο, Θέμα Δ</span>
+<p>Ένα σχολείο έχει 3 τμήματα (σταθερά). Για κάθε τμήμα διαβάζονται βαθμοί μέχρι να δοθεί αρνητικός αριθμός (μπορεί να μη δοθεί κανένας). Το πρόγραμμα εμφανίζει τον μέσο όρο κάθε τμήματος (ή «κανένας βαθμός»), πόσοι άριστοι (από 18.5) υπάρχουν συνολικά, και το τμήμα με τον μεγαλύτερο μέσο όρο (αν υπάρχει).</p>
+<p><span class="ln li">α) Να γράψετε το πρόγραμμα με τις δομές που ταιριάζουν καλύτερα. Ποια για τα τμήματα και ποια για τους βαθμούς;<br/>β) Να το ξαναγράψετε με μόνο ΟΣΟ.<br/>γ) Να το ξαναγράψετε με μόνο ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ … ΜΕΧΡΙΣ_ΟΤΟΥ.<br/>δ) Έλεγχος και των τριών: τμήμα 1: 15, 19, 12, −1</span><span class="ln li">τμήμα 2: −1</span><span class="ln li">τμήμα 3: 18.5, 20, −5. Και: −1, −1, −1.</span></p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">18</span><b>Βήμα με άγνωστο πρόσημο.</b><span class="theme">Πρόκληση</span>
+<p>Στο τμήμα <code>ΓΙΑ i ΑΠΟ α ΜΕΧΡΙ β ΜΕ_ΒΗΜΑ γ</code> τα α, β, γ διαβάζονται, με <span class="nw">γ &lt;&gt; 0.</span> Δεν ξέρουμε αν το γ είναι θετικό ή αρνητικό.</p>
+<p>α) Γιατί δεν μπορούμε να χρησιμοποιήσουμε ούτε <code>ΟΣΟ i &lt;= β</code> ούτε <code>ΟΣΟ i &gt;= β</code>;<br/>β) Να γράψετε <b>μία</b> συνθήκη για το ΟΣΟ που δουλεύει και για τα δύο πρόσημα, και τον πλήρη αλγόριθμο που μετρά τις επαναλήψεις και εμφανίζει την τελική τιμή του i.<br/>γ) Έλεγχος με (1, 10, 3), (10, 1, −3), (1, 10, −1), (5, 5, 2), (10, 1, 2).</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+</section>
+
+</main><div class="syn-foot"><div class="syn-nav"><a href="15.html"><small>&#8592; Μάθημα 15</small>Λάθη και εκσφαλμάτωση</a><a class="next" href="17.html"><small>Μάθημα 17 &#8594;</small>Γενικές ασκήσεις: όλα μαζί</a></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
+<script>
+(function(){
+  var CARDS = [{"term": "Μετατροπή ΓΙΑ.", "def": "Μετατροπή ΓΙΑ. Κάθε επανάληψη που εκτελείται με μία εντολή ΓΙΑ..ΑΠΟ..ΜΕΧΡΙ, μπορεί να υλοποιηθεί και με τη χρήση των βασικών εντολών επανάληψης ΟΣΟ..ΕΠΑΝΑΛΑΒΕ και ΜΕΧΡΙΣ..ΟΤΟΥ.", "ref": "Σχολικό βιβλίο, §8.2.3"}, {"term": "ΟΣΟ και ΜΕΧΡΙΣ_ΟΤΟΥ.", "def": "ΟΣΟ και ΜΕΧΡΙΣ_ΟΤΟΥ. Πολύ συχνά η ίδια επαναληπτική διαδικασία μπορεί να γραφεί εξίσου σωστά χρησιμοποιώντας είτε τη δομή ΟΣΟ...ΕΠΑΝΑΛΑΒΕ είτε τη δομή ΜΕΧΡΙΣ_ΟΤΟΥ και είναι προσωπική επιλογή του προγραμματιστή ποια από τις δυο θα χρησιμοποιήσει.", "ref": "Σχολικό βιβλίο, §8.2.3"}, {"term": "ΜΕΧΡΙΣ_ΟΤΟΥ → ΟΣΟ:", "def": "ΜΕΧΡΙΣ_ΟΤΟΥ → ΟΣΟ: οι εντολές μία φορά πριν, και ΟΣΟ με την άρνηση της συνθήκης.", "ref": "Σύνοψη"}, {"term": "ΟΣΟ → ΜΕΧΡΙΣ_ΟΤΟΥ:", "def": "ΟΣΟ → ΜΕΧΡΙΣ_ΟΤΟΥ: ΑΝ συνθήκη ΤΟΤΕ · ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ … ΜΕΧΡΙΣ_ΟΤΟΥ ΟΧΙ συνθήκη · ΤΕΛΟΣ_ΑΝ.", "ref": "Σύνοψη"}, {"term": "ΓΙΑ → ΟΣΟ:", "def": "ΓΙΑ → ΟΣΟ: i ← τ1 · ΟΣΟ i <= τ2 (ή >= για αρνητικό βήμα) · τελευταία εντολή i ← i + β.", "ref": "Σύνοψη"}, {"term": "→ ΓΙΑ:", "def": "→ ΓΙΑ: μόνο όταν ο αριθμός επαναλήψεων είναι γνωστός (βρόχος μετρητή).", "ref": "Σύνοψη"}, {"term": "ΜΕΧΡΙΣ_ΟΤΟΥ → ΟΣΟ", "def": "Εντολές μία φορά πριν · ΟΣΟ ΟΧΙ συνθήκη ΕΠΑΝΑΛΑΒΕ εντολές.", "ref": "Κ1"}, {"term": "ΟΣΟ → ΜΕΧΡΙΣ_ΟΤΟΥ", "def": "ΑΝ συνθήκη ΤΟΤΕ · ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ εντολές ΜΕΧΡΙΣ_ΟΤΟΥ ΟΧΙ συνθήκη · ΤΕΛΟΣ_ΑΝ.", "ref": "Κ2"}, {"term": "ΓΙΑ → ΟΣΟ", "def": "i ← τ1 · ΟΣΟ i <= τ2 · … · i ← i + β (αρνητικό βήμα: >=).", "ref": "Κ3"}, {"term": "Πότε ΟΣΟ → ΓΙΑ;", "def": "Μόνο αν ο αριθμός επαναλήψεων είναι γνωστός (βρόχος μετρητή).", "ref": "Κ5"}, {"term": "Άρνηση του x < 10", "def": "x >= 10", "ref": "¬"}];
+  // ---- quiz ----
+  document.querySelectorAll('.quiz').forEach(function(quiz){
+    var items = quiz.querySelectorAll('.qi');
+    var score = quiz.querySelector('.score');
+    function update(){
+      var done = quiz.querySelectorAll('.qi.ok, .qi.no').length;
+      if (done < items.length){ score.hidden = true; return; }
+      var ok = quiz.querySelectorAll('.qi.ok').length;
+      score.hidden = false;
+      score.innerHTML = '';
+      var t = document.createElement('span');
+      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? ' · Τέλεια!' : ok >= items.length * 0.7 ? ' · Πολύ καλά' : ' · Ξαναδιάβασε τη θεωρία');
+      var r = document.createElement('button'); r.type = 'button'; r.className = 'btn'; r.textContent = 'Ξανά από την αρχή';
+      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); }); update(); };
+      score.append(t, r);
+    }
+    items.forEach(function(it){
+      var ans = it.getAttribute('data-ans');
+      it.querySelectorAll('.qb button').forEach(function(b){
+        b.addEventListener('click', function(){
+          var v = b.getAttribute('data-v');
+          it.querySelectorAll('.qb button').forEach(function(x){ x.disabled = true; if (x.getAttribute('data-v') === ans) x.classList.add('right'); });
+          b.classList.add('pick');
+          it.classList.add(v === ans ? 'ok' : 'no');
+          var f = document.createElement('span'); f.className = 'fb';
+          f.textContent = v === ans ? '✓ Σωστά' : '✗ Η σωστή απάντηση είναι: ' + (it.querySelector('.qb button[data-v="' + ans + '"]') || {}).textContent;
+          it.appendChild(f);
+          update();
+        });
+      });
+    });
+  });
+  // ---- flashcards ----
+  var order = CARDS.map(function(_, i){ return i; }), pos = 0;
+  var card = document.getElementById('card');
+  if (!card || !CARDS.length) return;
+  function show(){
+    var c = CARDS[order[pos]];
+    card.classList.remove('flipped');
+    document.getElementById('c-term').textContent = c.term;
+    document.getElementById('c-def').textContent = c.def;
+    document.getElementById('c-ref').textContent = c.ref;
+    document.getElementById('c-count').textContent = (pos + 1) + ' / ' + CARDS.length;
+  }
+  card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+  document.getElementById('c-next').onclick = function(){ pos = (pos + 1) % CARDS.length; show(); };
+  document.getElementById('c-prev').onclick = function(){ pos = (pos - 1 + CARDS.length) % CARDS.length; show(); };
+  document.getElementById('c-shuf').onclick = function(){
+    for (var i = order.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+    pos = 0; show();
+  };
+  show();
+})();
+</script>
+<style id="kitcss">/*KIT>*//* ==== kit: θέμα, προβολή, «Δείξε λύση» ==== */
+body{font-size:16px}
+.kit-btn{font:600 13px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 12px;border-radius:999px;cursor:pointer}
+.kit-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.kit-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#kitfloat{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:30;display:flex;gap:6px;padding:5px;border-radius:999px;background:var(--ground);border:1px solid var(--line);box-shadow:0 4px 16px rgba(10,20,40,.12)}
+.rt-ans{margin:-2px 0 14px}
+.rt-show{font:600 13.5px/1 var(--body);border:1.5px solid var(--s-teal);background:var(--teal-bg);color:var(--teal);padding:9px 14px;border-radius:999px;cursor:pointer}
+.rt-show:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.rt-body{display:none;margin-top:10px;border-left:4px solid var(--s-teal);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 16px}
+.rt-body .q{margin:0;border:0;padding:0;background:none}
+.rt-open > .rt-body, body.rt-all .rt-body{display:block}
+.rt-open > .rt-show{background:var(--paper)}
+body:not(.rt-all):not(.editing) .solved:not(.rt-open) .rt-hide{display:none}
+body.rt-all .rt-showstep{display:none}
+.solved.rt-open .rt-showstep{display:none}
+.rt-showstep{margin:4px 0 6px}
+body.student .rt-ans{display:none}
+body.editing .rt, body.editing .rt-showstep{display:none}
+/* Λειτουργία προβολής */
+body.proj #bar,body.proj #nav{zoom:1.25}
+body.proj{--muted:#3a4254;--line:#b5bfd2}
+:root[data-theme="dark"] body.proj{--muted:#b9c1d4;--line:#3b465e}
+@media print{#kitfloat,.rt,.rt-showstep,.kit-btn{display:none!important}.rt-hide{display:grid!important}}
+/* Καθαρές γραμμές */
+body{font-size:17px;line-height:1.68}
+.ln{display:block;margin:.22em 0}
+.ln.li{position:relative;padding-left:1.25em}
+.ln.li::before{content:"•";position:absolute;left:.35em;color:var(--muted)}
+.kvs{display:inline-flex;flex-wrap:wrap;gap:.2em 1.2em;vertical-align:top}
+.kv,.nw{white-space:nowrap}
+p,li,td{text-wrap:pretty}
+.ln.cd{font-family:var(--mono);font-size:.92em}
+.cdcols{display:inline-flex;flex-wrap:wrap;gap:4px 28px;vertical-align:top}
+.cdcol{display:inline-block;padding-left:10px;border-left:2px solid var(--line)}/*<KIT*/</style>
+<script id="kitjs">/*KITJS>*/(function(){
+  /* kit: θέμα (φωτεινό/σκοτεινό), προβολή, «Δείξε λύση» */
+  var root = document.documentElement, body = document.body, doc = document.getElementById('doc');
+  if (!doc || body.getAttribute('data-kit')) return;
+  body.setAttribute('data-kit', '1');
+  function get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function put(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+  var theme = get('synapsi-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  var proj = get('aepp-proj') === '1';
+  function mk(id, txt){ var b = document.createElement('button'); b.type = 'button'; b.id = id; b.className = 'kit-btn'; b.textContent = txt; return b; }
+  var bTheme = mk('k-theme', ''), bProj = mk('k-proj', 'Προβολή'), bAll = null;
+  function applyTheme(){ root.setAttribute('data-theme', theme); bTheme.textContent = theme === 'dark' ? '☀ Φωτεινό' : '☾ Σκοτεινό'; bTheme.setAttribute('aria-label', theme === 'dark' ? 'Φωτεινό θέμα' : 'Σκοτεινό θέμα'); }
+  function fit(){
+    if (!proj){ doc.style.zoom = ''; doc.style.maxWidth = ''; return; }
+    var W = window.innerWidth, z = W < 700 ? 1.12 : 1.38;
+    doc.style.zoom = z; doc.style.maxWidth = Math.max(300, Math.min(900, (W - 36) / z)) + 'px';
+  }
+  function applyProj(){ body.classList.toggle('proj', proj); bProj.setAttribute('aria-pressed', String(proj)); fit(); }
+  window.addEventListener('resize', fit);
+  bTheme.onclick = function(){ theme = theme === 'dark' ? 'light' : 'dark'; put('synapsi-theme', theme); applyTheme(); };
+  bProj.onclick = function(){ proj = !proj; put('aepp-proj', proj ? '1' : '0'); applyProj(); };
+  applyTheme(); applyProj();
+
+  var bar = document.getElementById('bar');
+  var teacherSec = doc.querySelector('section.teacher');
+  if (bar){
+    var anchor = document.getElementById('status') || null;
+    if (teacherSec){ bAll = mk('k-all', 'Όλες οι λύσεις'); bar.insertBefore(bAll, anchor); }
+    bar.insertBefore(bProj, anchor); bar.insertBefore(bTheme, anchor);
+  } else {
+    var f = document.createElement('div'); f.id = 'kitfloat';
+    f.appendChild(bTheme); body.appendChild(f); proj = false; applyProj();
+  }
+  if (bAll){
+    bAll.onclick = function(){ var on = !body.classList.contains('rt-all'); body.classList.toggle('rt-all', on); bAll.setAttribute('aria-pressed', String(on)); };
+  }
+
+  /* λυμένα: φαίνεται η εκφώνηση και το «Κατανοώ», τα υπόλοιπα με κουμπί */
+  doc.querySelectorAll('.box.solved').forEach(function(box){
+    var steps = box.querySelector('.steps');
+    if (!steps) return;
+    var st = steps.querySelectorAll(':scope > .step');
+    if (st.length < 2) return;
+    box.classList.add('rt-closed');
+    for (var i = 1; i < st.length; i++) st[i].classList.add('rt-hide');
+    var w = document.createElement('div'); w.className = 'rt-showstep'; w.contentEditable = 'false';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε τη λύση';
+    b.onclick = function(){ box.classList.add('rt-open'); };
+    w.appendChild(b); st[0].after(w);
+  });
+
+  /* ασκήσεις: η απάντηση από τη σελίδα καθηγητή, κρυμμένη κάτω από την εκφώνηση */
+  if (teacherSec){
+    var ans = {};
+    teacherSec.querySelectorAll('.ans .q').forEach(function(q){ var n = q.querySelector('.qn'); if (n) ans[n.textContent.trim()] = q; });
+    doc.querySelectorAll('.exercises .q').forEach(function(q){
+      var n = q.querySelector(':scope > .qn'); if (!n) return;
+      var a = ans[n.textContent.trim()]; if (!a) return;
+      var w = document.createElement('div'); w.className = 'rt rt-ans'; w.contentEditable = 'false';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε λύση';
+      var bodyEl = document.createElement('div'); bodyEl.className = 'rt-body ans';
+      var c = a.cloneNode(true); var qn = c.querySelector('.qn'); if (qn) qn.remove();
+      bodyEl.appendChild(c);
+      b.onclick = function(){ var on = !w.classList.contains('rt-open'); w.classList.toggle('rt-open', on); b.textContent = on ? 'Κρύψε λύση' : 'Δείξε λύση'; };
+      w.appendChild(b); w.appendChild(bodyEl);
+      q.after(w);
+    });
+  }
+})();/*<KITJS*/</script>
+
+</body></html>

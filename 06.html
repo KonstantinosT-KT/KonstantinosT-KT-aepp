@@ -1,0 +1,663 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Μάθημα 6 · Γλώσσες και προγραμματιστικά περιβάλλοντα</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
+<style>
+/* Layout: one A4-like sheet centred on a cool ground; coloured callouts by role (ορισμός, ήξερες ότι, παγίδα, παράδειγμα) */
+:root{
+  --ground:#e9edf4; --paper:#ffffff; --ink:#172036; --muted:#5a6377; --line:#d9dfea; --soft:#f3f5f9;
+  --blue:#2457d6; --blue-bg:#e9efff; --teal:#0b7f72; --teal-bg:#e2f4f1;
+  --amber:#a65400; --amber-bg:#fff3df; --amber-line:#e2ad62;
+  --coral:#b93b12; --coral-bg:#fcebe4; --violet:#6534c9; --violet-bg:#efe8fd;
+  --s-blue:#2457d6; --s-teal:#0b8174; --s-violet:#6534c9; --s-ink:#172036; --on-solid:#ffffff; --on-solid-2:#d8e1ff;
+  --hero:#172036; --hero-fg:#ffffff; --hero-sub:#c4cef0; --hero-kick:#a9bcff;
+  --mark:#ffe28a;
+  --display:"Commissioner","Noto Sans",system-ui,sans-serif;
+  --body:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0 0 8px}
+
+/* Toolbar */
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:10px 0;background:var(--ground)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:3px}
+.seg button,.btn{font:600 13px/1 var(--body);border:0;background:none;color:var(--muted);padding:8px 13px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid)}
+.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.spacer{flex:1}
+#status{font-size:12.5px;color:var(--muted)}
+.edit-only{display:none}
+body.editing .edit-only{display:inline-block}
+body.editing .view-only{display:none}
+body.editing #doc{outline:2px dashed var(--blue);outline-offset:6px}
+body.editing #doc [contenteditable="false"]{cursor:default}
+
+/* Sheet */
+#doc{max-width:860px;margin:0 auto;background:var(--paper);border-radius:14px;padding:clamp(18px,4vw,44px);box-shadow:0 1px 2px rgba(10,20,40,.06),0 8px 30px rgba(10,20,40,.06)}
+body.student .teacher{display:none}
+
+.hero{background:var(--hero);color:var(--hero-fg);border-radius:14px;padding:22px 24px 24px;position:relative;overflow:hidden}
+.hero .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--hero-kick);font-weight:700}
+.hero h1{font-size:clamp(28px,5vw,40px);font-weight:800;margin:6px 0 8px;letter-spacing:-.01em}
+.hero .sub{color:var(--hero-sub);max-width:34em}
+.hero .sub b{color:var(--hero-fg)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.12);color:var(--hero-fg)}
+.hero .deco{position:absolute;right:-10px;top:-6px;opacity:.16;width:220px;height:auto}
+.hero .deco *{stroke:var(--hero-fg)}
+
+.goals{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 18px;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px}
+.goals h3{grid-column:1/-1;font-size:13px;color:var(--blue);text-transform:uppercase;letter-spacing:.08em}
+.goals div{padding-left:20px;position:relative;font-size:14px}
+.goals div::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:800}
+
+.glance{margin-top:14px;background:var(--soft);border-radius:12px;padding:14px 16px}
+.glance h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.figure{overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:520px;height:auto;font-family:var(--body)}
+
+.sec{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:5px;margin:30px 0 12px;break-after:avoid}
+.sec .num{font-family:var(--display);font-weight:800;font-size:22px;color:var(--blue);font-variant-numeric:tabular-nums}
+.sec h2{font-size:22px;font-weight:800}
+.sec .ref{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;break-inside:avoid}
+.tag{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.def{background:var(--blue-bg);border-left:4px solid var(--blue)} .def .tag{color:var(--blue)}
+.src{font-size:12px;color:var(--muted);margin:2px 0 0}
+.trivia{background:var(--amber-bg);border:1.5px dashed var(--amber-line)} .trivia .tag{color:var(--amber)}
+.talk{margin-top:6px;font-size:14px;color:var(--amber);font-weight:600}
+.talk span{font-weight:400}
+.trap{background:var(--coral-bg);border-left:4px solid var(--coral)} .trap .tag{color:var(--coral)}
+.ex{background:var(--teal-bg);border-left:4px solid var(--teal)} .ex .tag{color:var(--teal)}
+.plain{background:var(--soft)} .plain .tag{color:var(--ink)}
+.hl{background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 1px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:10px 0}
+.grid .box{margin:0}
+ul.tight{margin:4px 0 8px;padding-left:20px} ul.tight li{margin:3px 0}
+.small{font-size:13px;color:var(--muted)}
+.cap{font-size:13.5px;font-weight:700;margin-bottom:6px}
+
+.tablewrap{overflow-x:auto;margin:10px 0}
+table.t{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
+table.t th{background:var(--s-ink);color:var(--paper);text-align:left;padding:7px 10px;font-weight:600}
+table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:top}
+
+.exhead{display:flex;align-items:center;gap:10px;margin:22px 0 8px}
+.lvl{display:inline-flex;gap:4px}
+.lvl i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}
+.lvl i.on{background:var(--violet)}
+.exhead h3{font-size:17px}
+.q{margin:10px 0 14px;break-inside:avoid}
+.qn{display:inline-block;min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:7px;background:var(--violet-bg);color:var(--violet);font-weight:800;font-size:13px;margin-right:8px}
+.theme{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-left:6px}
+table.tf{width:100%;border-collapse:collapse;margin-top:6px;font-size:14.5px}
+table.tf td{padding:6px 8px;border-bottom:1px solid var(--line)}
+table.tf td.b{width:70px;text-align:center;color:var(--muted)}
+.lines{height:var(--h,44px);background:repeating-linear-gradient(transparent 0 27px,var(--line) 27px 28px);margin-top:6px}
+.drawbox{height:180px;border:1.5px dashed var(--line);border-radius:10px;margin-top:8px}
+.indent{margin-left:34px}
+.sol{color:var(--teal);font-weight:700}
+.ans .q{margin:8px 0}
+.teacher .sec{border-color:var(--teal)} .teacher .sec .num{color:var(--teal)}
+
+/* SVG roles */
+.f-blue{fill:var(--s-blue)} .f-teal{fill:var(--s-teal)} .f-violet{fill:var(--s-violet)} .f-ink{fill:var(--s-ink)}
+.f-paper{fill:var(--paper)} .f-on{fill:var(--on-solid)} .f-on2{fill:var(--on-solid-2)} .f-text{fill:var(--ink)} .f-muted{fill:var(--muted)} .f-onink{fill:var(--paper)}
+.st-ink{stroke:var(--ink)} .st-blue{stroke:var(--blue)} .st-teal{stroke:var(--teal)} .st-violet{stroke:var(--violet)}
+.f-arrow{fill:var(--ink)}
+
+
+/* v2 additions: code, narrow flowcharts, legends */
+:root{--mono:ui-monospace,"Cascadia Mono","Consolas","DejaVu Sans Mono",monospace}
+pre.code{font-family:var(--mono);font-size:14px;line-height:1.55;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:6px 0 8px;overflow-x:auto;white-space:pre}
+.figure.narrow svg{min-width:0;max-width:250px;margin:4px auto}
+.grid.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+ul.legend{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0 2px}
+ul.legend li{font-size:14px}
+ul.legend b{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:6px;background:var(--violet-bg);color:var(--violet);margin-right:4px}
+
+
+/* v3 additions: solved examples step by step, blank value tables */
+.solved{border:1.5px solid var(--teal);background:var(--paper)} .solved .tag{color:var(--teal)}
+.steps{display:grid;gap:14px;margin-top:10px}
+.step{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.stepn{width:30px;height:30px;border-radius:50%;background:var(--s-teal);color:var(--on-solid);font:800 14px/30px var(--display);text-align:center}
+table.t.blank td{height:34px;border:1px solid var(--line)}
+
+/* v4: graphs */
+.figure.narrow.graph svg{max-width:380px}
+
+/* homework vs self-check */
+.q.hw::before{content:"Για το σπίτι";display:block;width:max-content;font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:99px;padding:4px 9px;margin-bottom:6px}
+body.editing .q.hw::before{display:none}
+.hwtoggle{display:block;margin-bottom:6px;font:600 12px/1 var(--body);padding:6px 10px;border-radius:99px;border:1.5px dashed var(--line);background:var(--paper);color:var(--muted);cursor:pointer}
+.hwtoggle[aria-pressed="true"]{border-style:solid;border-color:var(--amber-line);color:var(--amber);background:var(--amber-bg)}
+.hwnote{font-size:13px;color:var(--amber);font-weight:600}
+
+@media (max-width:520px){ .indent{margin-left:0} .hero .deco{display:none} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* student additions */
+#doc{margin-top:0}
+#nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ground);max-width:860px;margin:0 auto;padding-block:10px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.navin{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.navin::-webkit-scrollbar{display:none}
+#nav a{flex:none;font:600 13px/1 var(--body);color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
+#nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
+.btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.quiz{display:grid;gap:10px;margin-top:10px}
+.qi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:8px}
+.qi .qs{margin:0}
+.qb{display:flex;gap:8px;flex-wrap:wrap}
+.qb button{font:600 14px/1 var(--body);padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;min-width:96px}
+.qb button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.qi.ok{border-color:var(--teal);background:var(--teal-bg)}
+.qi.no{border-color:var(--coral);background:var(--coral-bg)}
+.qi .qb button.pick{border-color:currentColor}
+.qi.ok .qb button.pick{background:var(--s-teal);border-color:var(--s-teal);color:var(--on-solid)}
+.qi.no .qb button.pick{background:var(--coral);border-color:var(--coral);color:var(--paper)}
+.qi.no .qb button.right{border-color:var(--teal);color:var(--teal)}
+.fb{font-size:13px;font-weight:700}
+.qi.ok .fb{color:var(--teal)} .qi.no .fb{color:var(--coral)}
+.score{font:700 15px/1.4 var(--display);padding:10px 14px;border-radius:10px;background:var(--violet-bg);color:var(--violet);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.score .btn{font-size:13px;padding:8px 12px}
+
+details.reveal{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+details.reveal summary{cursor:pointer;font-weight:700;color:var(--teal);padding:10px 14px;list-style:none}
+details.reveal summary::-webkit-details-marker{display:none}
+details.reveal summary::before{content:"▸ ";}
+details.reveal[open] summary::before{content:"▾ ";}
+details.reveal .rv{padding:0 14px 12px}
+
+.deck{display:grid;gap:12px;margin-top:10px}
+.card{position:relative;display:block;width:100%;min-height:220px;border:0;padding:0;background:none;cursor:pointer;perspective:1200px;font:inherit;color:inherit;text-align:left}
+.card .face{position:absolute;inset:0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;backface-visibility:hidden;transition:transform .45s ease}
+.card .front{background:var(--hero);color:var(--hero-fg);justify-content:center}
+.card .back{background:var(--blue-bg);color:var(--ink);border:1.5px solid var(--blue);transform:rotateY(180deg);overflow:auto}
+.card.flipped .front{transform:rotateY(-180deg)}
+.card.flipped .back{transform:rotateY(0)}
+.card:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:14px}
+.ck{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.term{font:800 clamp(24px,6vw,34px)/1.15 var(--display)}
+.cdef{font-size:15.5px;line-height:1.55}
+.tap{font-size:12.5px;opacity:.7;margin-top:auto}
+.deckbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.count{font:700 14px var(--display);min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.card .face{transition:none}}
+@media (max-width:520px){ #doc{border-radius:12px} .card{min-height:260px} }
+</style>
+<style id="synapsi-brand">
+:root{--ground:#F7F6F0;--ink:#2B3722;--muted:#5E6253;--line:#E1E1D7;--soft:#F3F2EA;--blue:#4F6230;--blue-bg:#EEF0E2;--s-blue:#4F6230;--s-ink:#2B3722;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D;--on-solid-2:#E6E0CC}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}}
+:root[data-theme="dark"]{--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}
+body::before{background:var(--ground)}
+.syn-bar{max-width:860px;margin:0 auto;padding-top:12px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
+.syn-bar a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--hero);color:#fff;text-decoration:none}
+.syn-bar span{color:var(--muted)}
+.syn-foot{max-width:860px;margin:18px auto 0;display:flex;flex-direction:column;gap:12px}
+.syn-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.syn-nav a,.syn-nav span{min-height:52px;padding:8px 14px;border-radius:12px;display:flex;flex-direction:column;justify-content:center;gap:2px;text-decoration:none;font:700 14px/1.3 var(--display);background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.syn-nav small{font:600 11.5px var(--body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.syn-nav .next{text-align:right;background:var(--hero);color:#fff;border-color:var(--hero)}
+.syn-nav .next small{color:var(--hero-kick)}
+.syn-nav .off{opacity:.6}
+.syn-note{font-size:13px;color:var(--muted);padding:12px 14px;border-radius:10px;background:var(--soft)}
+.syn-copy{font-size:12px;color:var(--muted)}
+</style>
+<script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<div class="syn-bar"><a href="../index.html">&#8592; Διαδρομή</a><span>Μάθημα 6 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-6-3">6.3</a><a href="#s-6-7">6.7</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a></div></nav>
+<main id="doc" lang="el">
+<section class="hero">
+<svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
+<rect height="54" rx="4" width="44" x="96" y="20"></rect><path d="M104 34h28M104 44h28M104 54h18"></path>
+<path d="M144 47h20"></path><path d="M158 41l8 6-8 6"></path>
+<rect height="38" rx="6" width="44" x="170" y="28"></rect>
+<path d="M110 96h90M110 108h70M110 120h84M110 132h50"></path>
+</svg>
+<div class="kicker">Κεφάλαιο 6 · Εισαγωγή στον προγραμματισμό</div>
+<h1>Γλώσσες και προγραμματιστικά περιβάλλοντα</h1>
+<p class="sub">Ο υπολογιστής καταλαβαίνει μόνο 0 και 1. Ποιος <b>μεταφράζει</b> αυτά που γράφουμε εμείς, και πώς;</p>
+<div class="chips"><span class="chip">Βιβλίο §6.3, §6.7</span><span class="chip">3 διδακτικές ώρες</span><span class="chip">Θεωρία · Θέμα Α</span></div>
+</section>
+<div class="goals">
+<h3>Στο τέλος του μαθήματος θα μπορείς να…</h3>
+<div>αναφέρεις από τι <b>προσδιορίζεται</b> μια γλώσσα</div>
+<div>συγκρίνεις <b>φυσικές</b> και <b>τεχνητές</b> γλώσσες</div>
+<div>εξηγείς τι κάνουν ο <b>μεταγλωττιστής</b> και ο <b>διερμηνευτής</b></div>
+<div>περιγράφεις τα στάδια από το <b>πηγαίο</b> στο <b>εκτελέσιμο</b> πρόγραμμα</div>
+<div>ξεχωρίζεις <b>συντακτικά</b> από <b>λογικά</b> λάθη</div>
+<div>αναφέρεις τα εργαλεία ενός <b>προγραμματιστικού περιβάλλοντος</b></div>
+</div>
+<div class="glance">
+<h3>Όλο το μάθημα με μια ματιά</h3>
+<div class="figure">
+<svg aria-label="Κάθε γλώσσα: αλφάβητο, λεξιλόγιο, γραμματική, σημασιολογία. Πηγαίο πρόγραμμα, μετάφραση, αντικείμενο, σύνδεση, εκτελέσιμο." font-size="11" role="img" viewbox="0 0 640 150">
+<defs><marker id="arG6" markerheight="7" markerwidth="7" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="f-arrow" d="M0 0L10 5L0 10z"></path></marker></defs>
+<text class="f-muted" font-weight="700" x="6" y="14">ΚΑΘΕ ΓΛΩΣΣΑ ΠΡΟΣΔΙΟΡΙΖΕΤΑΙ ΑΠΟ</text>
+<g font-weight="700" text-anchor="middle">
+<rect class="f-blue" height="30" rx="15" width="148" x="6" y="22"></rect><text class="f-on" x="80" y="41">Αλφάβητο</text>
+<rect class="f-blue" height="30" rx="15" width="148" x="166" y="22"></rect><text class="f-on" x="240" y="41">Λεξιλόγιο</text>
+<rect class="f-blue" height="30" rx="15" width="148" x="326" y="22"></rect><text class="f-on" x="400" y="41">Γραμματική</text>
+<rect class="f-blue" height="30" rx="15" width="148" x="486" y="22"></rect><text class="f-on" x="560" y="41">Σημασιολογία</text>
+</g>
+<text class="f-muted" font-weight="700" x="6" y="80">ΑΠΟ ΤΟ ΠΗΓΑΙΟ ΣΤΟ ΕΚΤΕΛΕΣΙΜΟ</text>
+<g font-weight="700" text-anchor="middle">
+<rect class="f-paper st-ink" height="44" rx="8" stroke-width="1.5" width="104" x="6" y="90"></rect><text class="f-text" x="58" y="109">Πηγαίο</text><text class="f-muted" font-size="10" font-weight="400" x="58" y="124">αυτό που γράφω</text>
+<rect class="f-teal" height="44" rx="8" width="112" x="138" y="90"></rect><text class="f-on" x="194" y="109">Μεταγλωττιστής</text><text class="f-on2" font-size="10" font-weight="400" x="194" y="124">μετάφραση</text>
+<rect class="f-paper st-ink" height="44" rx="8" stroke-width="1.5" width="104" x="278" y="90"></rect><text class="f-text" x="330" y="109">Αντικείμενο</text><text class="f-muted" font-size="10" font-weight="400" x="330" y="124">γλώσσα μηχανής</text>
+<rect class="f-teal" height="44" rx="8" width="112" x="410" y="90"></rect><text class="f-on" x="466" y="109">Συνδέτης</text><text class="f-on2" font-size="10" font-weight="400" x="466" y="124">+ βιβλιοθήκες</text>
+<rect class="f-violet" height="44" rx="8" width="84" x="550" y="90"></rect><text class="f-on" x="592" y="109">Εκτελέσιμο</text><text class="f-on2" font-size="10" font-weight="400" x="592" y="124">τρέχει!</text>
+</g>
+<g class="st-ink" stroke-width="1.8"><path d="M110 112H136" marker-end="url(#arG6)"></path><path d="M250 112H276" marker-end="url(#arG6)"></path><path d="M382 112H408" marker-end="url(#arG6)"></path><path d="M522 112H548" marker-end="url(#arG6)"></path></g>
+</svg>
+</div>
+</div>
+<div class="sec" id="s-6-3"><span class="num">6.3</span><h2>Φυσικές και τεχνητές γλώσσες</h2><span class="ref">Βιβλίο σελ. 115–116</span></div>
+<p>Οι <b>φυσικές γλώσσες</b> (ελληνικά, αγγλικά…) χρησιμεύουν στην επικοινωνία ανθρώπου με άνθρωπο. Οι <b>γλώσσες προγραμματισμού</b> είναι <b>τεχνητές</b> γλώσσες για την επικοινωνία <b>ανθρώπου και μηχανής</b>. Ακολουθούν κι αυτές τις αρχές της γλωσσολογίας, της επιστήμης που μελετά τις φυσικές γλώσσες.</p>
+<div class="box def">
+<div class="tag">Απομνημόνευση · Από τι προσδιορίζεται μια γλώσσα</div>
+<p>Μία γλώσσα προσδιορίζεται από το <b>αλφάβητό</b> της, το <b>λεξιλόγιό</b> της, τη <b>γραμματική</b> της και τέλος τη <b>σημασιολογία</b> της.</p>
+<p><b>Αλφάβητο</b> μίας γλώσσας καλείται το σύνολο των στοιχείων που χρησιμοποιείται από τη γλώσσα.</p>
+<p>Το <b>λεξιλόγιο</b> αποτελείται από ένα υποσύνολο όλων των ακολουθιών που δημιουργούνται από τα στοιχεία του αλφαβήτου, τις λέξεις που είναι δεκτές από τη γλώσσα.</p>
+<p>Η <b>Γραμματική</b> αποτελείται από το τυπικό ή τυπολογικό (accidence) και το συντακτικό (syntax). <b>Τυπικό</b> είναι το σύνολο των κανόνων που ορίζει τις μορφές με τις οποίες μία λέξη είναι αποδεκτή. <b>Συντακτικό</b> είναι το σύνολο των κανόνων που καθορίζει τη νομιμότητα της διάταξης και της σύνδεσης των λέξεων της γλώσσας για τη δημιουργία προτάσεων.</p>
+<p>Η <b>σημασιολογία</b> (Semantics) είναι το σύνολο των κανόνων που καθορίζει το νόημα των λέξεων και κατά επέκταση των εκφράσεων και προτάσεων που χρησιμοποιούνται σε μία γλώσσα.</p>
+<p class="src">Σχολικό βιβλίο, §6.3</p>
+</div>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th>Συστατικό</th><th>Στα ελληνικά</th><th>Στην ψευδογλώσσα που ξέρουμε</th></tr>
+<tr><td><b>Αλφάβητο</b></td><td>Α–Ω, α–ω, 0–9, σημεία στίξης</td><td>γράμματα, ψηφία, σύμβολα όπως + * / ← ( )</td></tr>
+<tr><td><b>Λεξιλόγιο</b></td><td>το «ΓΑΤΑ» είναι λέξη, το «ΤΓΑΑ» όχι</td><td>το «Διάβασε» υπάρχει, το «Διαβάζουμε» όχι</td></tr>
+<tr><td><b>Τυπικό</b></td><td>«γάτα, γάτας, γάτες» δεκτά, «γάταρ» όχι</td><td>σωστή μορφή κάθε λέξης-εντολής</td></tr>
+<tr><td><b>Συντακτικό</b></td><td>σωστή διάταξη λέξεων σε πρόταση</td><td>το «<span class="nw">x ← 5</span>» είναι σωστό, το «<span class="nw">5 ← x</span>» όχι</td></tr>
+<tr><td><b>Σημασιολογία</b></td><td>το νόημα κάθε λέξης και πρότασης</td><td><span class="nw">το ← σημαίνει</span> «εκχώρησε». Το <b>αποφάσισε ο δημιουργός</b> της γλώσσας</td></tr>
+</tbody></table></div>
+<div class="grid g2">
+<div class="box ex"><div class="tag">Φυσικές γλώσσες · εξελίσσονται</div><p>Αλλάζουν <b>συνεχώς</b>: νέες λέξεις, νέοι κανόνες. Τις χρησιμοποιούν άνθρωποι που αλλάζουν με τις εποχές και τον κοινωνικό περίγυρο.</p></div>
+<div class="box ex"><div class="tag">Τεχνητές γλώσσες · στασιμότητα</div><p>Κατασκευάζονται <b>συνειδητά για συγκεκριμένο σκοπό</b>. Συχνά όμως βελτιώνονται από τους δημιουργούς τους, σε επίπεδο <b>διαλέκτου</b> (π.χ. από GW-Basic σε QuickBasic) ή <b>επέκτασης</b> (π.χ. από Basic σε Visual Basic).</p></div>
+</div>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Το 2013 τα λεξικά της Οξφόρδης ανακήρυξαν λέξη της χρονιάς τη λέξη <b>«selfie»</b>, που λίγα χρόνια πριν δεν υπήρχε σε κανένα λεξικό. Μια φυσική γλώσσα αποκτά νέες λέξεις επειδή τις χρησιμοποιούν οι άνθρωποι. Σε μια γλώσσα προγραμματισμού, μια νέα λέξη υπάρχει μόνο αν την προσθέσουν οι δημιουργοί της σε νέα έκδοση.</p>
+<p class="talk">Σκέψου: Αν όλοι οι προγραμματιστές άρχιζαν να γράφουν «Τύπωσε» αντί για «Εκτύπωσε», θα το καταλάβαινε ο υπολογιστής; Γιατί;</p>
+</div>
+<div class="sec" id="s-6-7"><span class="num">6.7</span><h2>Προγραμματιστικά περιβάλλοντα</h2><span class="ref">Βιβλίο σελ. 120–122</span></div>
+<p>Ο υπολογιστής εκτελεί μόνο εντολές <b>γλώσσας μηχανής</b>, δηλαδή ακολουθίες από 0 και 1. Εμείς γράφουμε σε <b>γλώσσα υψηλού επιπέδου</b>, πιο κοντά στη δική μας γλώσσα. Κάθε πρόγραμμα λοιπόν πρέπει να <b>μεταφραστεί</b>. Τη μετάφραση την κάνουν ειδικά <b>μεταφραστικά προγράμματα</b>, που χωρίζονται σε δύο μεγάλες κατηγορίες:</p>
+<div class="box def">
+<div class="tag">Απομνημόνευση · Μεταγλωττιστής και διερμηνευτής</div>
+<p>Ο <b>μεταγλωττιστής</b> (compiler) δέχεται στην είσοδο ένα πρόγραμμα γραμμένο σε μια γλώσσα υψηλού επιπέδου και παράγει ένα ισοδύναμο πρόγραμμα σε γλώσσα μηχανής. Το τελευταίο μπορεί να εκτελείται οποτεδήποτε από τον υπολογιστή και είναι τελείως ανεξάρτητο από το αρχικό πρόγραμμα.</p>
+<p>Ο <b>διερμηνευτής</b> (interpreter) διαβάζει μία προς μία τις εντολές του αρχικού προγράμματος και για καθεμία εκτελεί αμέσως μια ισοδύναμη ακολουθία εντολών μηχανής.</p>
+<p>Το αρχικό πρόγραμμα λέγεται <b>πηγαίο πρόγραμμα</b> (source), ενώ το πρόγραμμα που παράγεται από το μεταγλωττιστή λέγεται <b>αντικείμενο πρόγραμμα</b> (object).</p>
+<p class="src">Σχολικό βιβλίο, §6.7</p>
+</div>
+<div class="tablewrap"><table class="t">
+<tbody><tr><th></th><th>Μεταγλωττιστής</th><th>Διερμηνευτής</th></tr>
+<tr><td><b>Πώς δουλεύει</b></td><td>μεταφράζει <b>όλο</b> το πρόγραμμα και μετά εκτελείται</td><td>μεταφράζει και εκτελεί <b>μία-μία</b> τις εντολές</td></tr>
+<tr><td><b>Τι παράγει</b></td><td>αντικείμενο πρόγραμμα, και μετά τη σύνδεση εκτελέσιμο</td><td>δεν παράγει ξεχωριστό πρόγραμμα</td></tr>
+<tr><td><b>Πλεονέκτημα</b></td><td><b>γρήγορη</b> εκτέλεση του τελικού προγράμματος</td><td><b>άμεση εκτέλεση</b> και άρα <b>άμεση διόρθωση</b></td></tr>
+<tr><td><b>Μειονέκτημα</b></td><td>πριν χρησιμοποιηθεί, πρέπει να περάσει από μεταγλώττιση και σύνδεση</td><td>πιο <b>αργή</b> εκτέλεση, σημαντικά μερικές φορές</td></tr>
+<tr><td><b>Σαν…</b></td><td>τον μεταφραστή που μεταφράζει ολόκληρο ένα βιβλίο, και μετά το διαβάζει όποιος θέλει, όσες φορές θέλει</td><td>τον διερμηνέα σε μια συνέντευξη, που μεταφράζει φράση-φράση την ώρα που μιλάει ο ομιλητής</td></tr>
+</tbody></table></div>
+<p>Τα σύγχρονα περιβάλλοντα έχουν συνήθως <b>μεικτές υλοποιήσεις</b>: <b>διερμηνευτή</b> όσο γράφουμε το πρόγραμμα, για να βλέπουμε αμέσως τι κάνει, και <b>μεταγλωττιστή</b> για την τελική έκδοση, για να τρέχει γρήγορα. Το κουμπί «Εκτέλεση» στις σελίδες αυτού του βοηθήματος θα είναι κι αυτό ένας μικρός διερμηνευτής.</p>
+<p class="cap">Μεταγλώττιση και σύνδεση</p>
+<div class="figure">
+<svg aria-label="Συντάκτης, πηγαίο πρόγραμμα, μεταγλωττιστής, αντικείμενο πρόγραμμα, συνδέτης-φορτωτής με βιβλιοθήκες, εκτελέσιμο πρόγραμμα. Τα συντακτικά λάθη επιστρέφουν στον συντάκτη για διόρθωση." font-size="10.5" role="img" viewbox="0 0 640 196">
+<defs><marker id="arP6" markerheight="7" markerwidth="7" orient="auto" refx="9" refy="5" viewbox="0 0 10 10"><path class="f-arrow" d="M0 0L10 5L0 10z"></path></marker></defs>
+<g font-weight="700" text-anchor="middle">
+<rect class="f-paper st-ink" height="50" rx="8" stroke-width="1.5" width="92" x="6" y="40"></rect><text class="f-text" x="52" y="62">Συντάκτης</text><text class="f-muted" font-size="9.5" font-weight="400" x="52" y="78">(editor)</text>
+<rect class="f-blue" height="50" rx="3" width="92" x="114" y="40"></rect><text class="f-on" x="160" y="62">Πηγαίο</text><text class="f-on" x="160" y="78">πρόγραμμα</text>
+<rect class="f-teal" height="50" rx="8" width="98" x="222" y="40"></rect><text class="f-on" x="271" y="70">Μεταγλωττιστής</text>
+<rect class="f-blue" height="50" rx="3" width="92" x="336" y="40"></rect><text class="f-on" x="382" y="62">Αντικείμενο</text><text class="f-on" x="382" y="78">πρόγραμμα</text>
+<rect class="f-teal" height="50" rx="8" width="92" x="444" y="40"></rect><text class="f-on" x="490" y="62">Συνδέτης –</text><text class="f-on" x="490" y="78">φορτωτής</text>
+<rect class="f-violet" height="50" rx="3" width="82" x="552" y="40"></rect><text class="f-on" x="593" y="62">Εκτελέσιμο</text><text class="f-on" x="593" y="78">πρόγραμμα</text>
+<rect class="f-paper st-teal" height="34" rx="6" stroke-width="1.5" width="92" x="444" y="138"></rect><text class="f-text" x="490" y="159">Βιβλιοθήκες</text>
+</g>
+<g class="st-ink" fill="none" stroke-width="1.7">
+<path d="M98 65H112" marker-end="url(#arP6)"></path><path d="M206 65H220" marker-end="url(#arP6)"></path><path d="M320 65H334" marker-end="url(#arP6)"></path><path d="M428 65H442" marker-end="url(#arP6)"></path><path d="M536 65H550" marker-end="url(#arP6)"></path>
+<path d="M490 138V92" marker-end="url(#arP6)"></path>
+<path class="st-violet" d="M271 90V122H52V92" marker-end="url(#arP6)" stroke-dasharray="5 4"></path>
+</g>
+<text class="f-violet" font-size="10.5" font-weight="700" text-anchor="middle" x="160" y="140">συντακτικά λάθη: διόρθωση</text>
+<text class="f-violet" font-size="10" text-anchor="middle" x="160" y="154">και ξανά μεταγλώττιση</text>
+<text class="f-muted" font-size="10.5" text-anchor="middle" x="320" y="22">Συντάκτης + μεταγλωττιστής + συνδέτης: τουλάχιστον 3 προγράμματα, που τα σύγχρονα περιβάλλοντα δίνουν μαζί.</text>
+</svg>
+</div>
+<div class="box def">
+<div class="tag">Απομνημόνευση · Συνδέτης, εκτελέσιμο, συντάκτης</div>
+<p>Το αντικείμενο πρόγραμμα είναι μεν σε μορφή κατανοητή από τον υπολογιστή, αλλά συνήθως <b>δεν είναι σε θέση να εκτελεστεί</b>. Χρειάζεται να συμπληρωθεί και να συνδεθεί με άλλα τμήματα προγράμματος απαραίτητα για την εκτέλεσή του, τμήματα που είτε τα γράφει ο προγραμματιστής είτε βρίσκονται στις <b>βιβλιοθήκες</b> (libraries) της γλώσσας. Το πρόγραμμα που επιτρέπει αυτή τη σύνδεση ονομάζεται <b>συνδέτης – φορτωτής</b> (linker-loader). Το αποτέλεσμα του συνδέτη είναι η παραγωγή του <b>εκτελέσιμου προγράμματος</b> (executable), το οποίο είναι το τελικό πρόγραμμα που εκτελείται από τον υπολογιστή. Για το λόγο αυτό η συνολική διαδικασία αποκαλείται <b>μεταγλώττιση και σύνδεση</b>.</p>
+<p>Για την αρχική σύνταξη των προγραμμάτων και τη διόρθωσή τους στη συνέχεια χρησιμοποιείται ένα ειδικό πρόγραμμα που ονομάζεται <b>συντάκτης</b> (editor). Για τη δημιουργία, τη μετάφραση και την εκτέλεση ενός προγράμματος απαιτούνται τουλάχιστον τρία προγράμματα: ο συντάκτης, ο μεταγλωττιστής και ο συνδέτης.</p>
+<p class="src">Σχολικό βιβλίο, §6.7</p>
+</div>
+<div class="grid g2">
+<div class="box ex"><div class="tag">Συντακτικά λάθη</div><p>Οφείλονται σε <b>αναγραμματισμούς</b> ονομάτων εντολών ή <b>παράλειψη δήλωσης</b> δεδομένων. Εμφανίζονται στο στάδιο της <b>μεταγλώττισης</b>, με διαγνωστικά μηνύματα, και <b>πρέπει πάντα</b> να διορθωθούν για να παραχθεί το εκτελέσιμο.</p></div>
+<div class="box trap" style="margin:0"><div class="tag">Λογικά λάθη</div><p>Οφείλονται σε σφάλματα στην <b>υλοποίηση του αλγορίθμου</b>. Εμφανίζονται <b>μόνο στην εκτέλεση</b>. Είναι τα <b>πιο σοβαρά</b> και τα πιο δύσκολα στη διόρθωση: το πρόγραμμα τρέχει κανονικά, αλλά βγάζει λάθος αποτέλεσμα.</p></div>
+</div>
+<p>Τα σύγχρονα <b>ολοκληρωμένα προγραμματιστικά περιβάλλοντα</b> δεν δίνουν μόνο έναν μεταφραστή, αλλά όλα τα εργαλεία για τη συγγραφή, την εκτέλεση και κυρίως τη διόρθωση των προγραμμάτων. Ένα περιβάλλον <b>οπτικού</b> (visual) προγραμματισμού έχει επιπλέον ειδικό συντάκτη για γραφικά αντικείμενα: φόρμες, λίστες, παράθυρα διαλόγου.</p>
+<div class="box trivia">
+<div class="tag">Ήξερες ότι;</div>
+<p>Η <b>Grace Hopper</b>, αξιωματικός του αμερικανικού ναυτικού και μαθηματικός, έφτιαξε στις αρχές της δεκαετίας του 1950 έναν από τους πρώτους μεταγλωττιστές. Πολλοί πίστευαν τότε ότι οι υπολογιστές μπορούν να κάνουν μόνο αριθμητική και όχι να «καταλαβαίνουν» εντολές με λέξεις. Το 1947 η ομάδα της είχε βρει έναν <b>σκόρο</b> παγιδευμένο σε έναν υπολογιστή και τον κόλλησε στο ημερολόγιο εργασιών με τη σημείωση «first actual case of bug being found». Από τότε η λέξη <b>bug</b> (ζουζούνι) έμεινε για τα λάθη των προγραμμάτων.</p>
+<p class="talk">Σκέψου: Ποιο είδος λάθους προκαλούσε ο σκόρος: συντακτικό, λογικό ή κανένα από τα δύο;</p>
+</div>
+<div class="box trap">
+<div class="tag">Παγίδες που κοστίζουν μονάδες</div>
+<ul class="tight">
+<li>Τα <b>λογικά</b> λάθη <b>δεν</b> τα βρίσκει ο μεταγλωττιστής. Φαίνονται μόνο στην εκτέλεση.</li>
+<li>Το <b>εκτελέσιμο</b> παράγεται μόνο αν δεν υπάρχουν <b>συντακτικά</b> λάθη.</li>
+<li>Το <b>αντικείμενο</b> πρόγραμμα συνήθως <b>δεν</b> εκτελείται: χρειάζεται τον συνδέτη.</li>
+<li>Ο διερμηνευτής εκτελεί <b>αμέσως</b> κάθε εντολή. Ο μεταγλωττιστής μεταφράζει <b>όλο</b> το πρόγραμμα πρώτα.</li>
+<li>Τα προγράμματα που χρειάζονται είναι <b>τουλάχιστον τρία</b>: συντάκτης, μεταγλωττιστής, συνδέτης.</li>
+<li>Οι τεχνητές γλώσσες χαρακτηρίζονται από <b>στασιμότητα</b>, αλλά αλλάζουν σε επίπεδο <b>διαλέκτου</b> ή <b>επέκτασης</b>.</li>
+</ul>
+</div>
+<section class="solved-wrap">
+<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένο παράδειγμα βήμα-βήμα</h2><span class="ref">Ποιος βρίσκει ποιο λάθος;</span></div>
+<div class="box solved">
+<div class="tag">Πρόβλημα · Το ταξίδι ενός προγράμματος με δύο λάθη</div>
+<p>Η Ελένη έγραψε σε μια γλώσσα που χρησιμοποιεί μεταγλωττιστή το πρόγραμμα του μέσου όρου τριών βαθμών, αλλά έκανε <b>δύο λάθη</b>:</p>
+<pre class="code">Διάβασε α, β, γ
+μ ← α + β + γ / 3
+Εκτυπωσε μ</pre>
+<p>Τι θα συμβεί σε κάθε στάδιο, ποιο εργαλείο θα εντοπίσει κάθε λάθος και πώς θα φτάσει στο σωστό εκτελέσιμο;</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Βρίσκω τα λάθη και τα χαρακτηρίζω. Το <b>«Εκτυπωσε»</b> χωρίς τόνο δεν ανήκει στο λεξιλόγιο της γλώσσας: είναι <b>αναγραμματισμός</b> ονόματος εντολής, άρα <b>συντακτικό</b> λάθος. Το <b>«<span class="nw">α + β + γ / 3</span>»</b> είναι γραμμένο σωστά, αλλά δεν υπολογίζει τον μέσο όρο: είναι <b>λογικό</b> λάθος.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω τη διαδρομή.</b> Ο συντάκτης φτιάχνει το πηγαίο πρόγραμμα και αυτό περνά στον <b>μεταγλωττιστή</b>. Εκεί σταματάει: εμφανίζει διαγνωστικό μήνυμα για το «Εκτυπωσε» και <b>δεν παράγεται</b> εκτελέσιμο. Το λογικό λάθος ο μεταγλωττιστής <b>δεν</b> το βλέπει, γιατί η εντολή είναι συντακτικά σωστή.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω τη διόρθωση.</b> Γυρίζει στον συντάκτη, διορθώνει σε «Εκτύπωσε» και ξαναμεταγλωττίζει. Τώρα παράγεται αντικείμενο πρόγραμμα, ο συνδέτης-φορτωτής το συνδέει με τις βιβλιοθήκες και βγαίνει το <b>εκτελέσιμο</b>. Το πρόγραμμα <b>τρέχει</b>, αλλά έχει ακόμα το λογικό λάθος.</div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω με δοκιμαστικά δεδομένα.</b> Με 18, 15, 18 περιμένω 17, αλλά βγαίνει <b>39</b>. Κάτι δεν πάει καλά! Μόνο η <b>εκτέλεση</b> αποκάλυψε το λογικό λάθος. Διορθώνει σε <span class="nw">μ ← (α + β + γ) / 3,</span> ξαναμεταγλωττίζει και ξαναδοκιμάζει: 17 ✓. Γι' αυτό τα λογικά λάθη είναι τα πιο επικίνδυνα: αν δεν είχε δοκιμάσει, το πρόγραμμα θα έβγαζε λάθος αποτελέσματα χωρίς κανένα μήνυμα.</div></div>
+</div>
+</div>
+</section>
+
+<section class="cards" id="s-cards">
+<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2><span class="ref">Ορισμοί για απομνημόνευση</span></div>
+<p class="small">Διάβασε τον όρο, πες τον ορισμό από μέσα σου και πάτα την κάρτα για να τον δεις.</p>
+<div class="deck">
+<button aria-live="polite" class="card" id="card" type="button">
+<span class="face front"><span class="ck">Όρος</span><span class="term" id="c-term"></span><span class="tap">Πάτα για τον ορισμό</span></span>
+<span class="face back"><span class="ck">Ορισμός</span><span class="cdef" id="c-def"></span><span class="tap" id="c-ref"></span></span>
+</button>
+<div class="deckbar">
+<button aria-label="Προηγούμενη κάρτα" class="btn" id="c-prev" type="button">←</button>
+<span class="count" id="c-count"></span>
+<button aria-label="Επόμενη κάρτα" class="btn" id="c-next" type="button">→</button>
+<button class="btn" id="c-shuf" type="button">Ανακάτεμα</button>
+</div>
+</div>
+</section><section class="exercises">
+<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2><span class="ref">Από τα εύκολα στα δύσκολα</span></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div>
+<div class="q"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Γράψε Σ ή Λ.
+<table class="tf">
+<tbody><tr><td>α. Στις γλώσσες προγραμματισμού τη σημασιολογία των λέξεων την αποφασίζει ο δημιουργός της γλώσσας.</td><td class="b">____</td></tr>
+<tr><td>β. Οι φυσικές γλώσσες χαρακτηρίζονται από στασιμότητα.</td><td class="b">____</td></tr>
+<tr><td>γ. Ο διερμηνευτής παράγει αντικείμενο πρόγραμμα.</td><td class="b">____</td></tr>
+<tr><td>δ. Το αντικείμενο πρόγραμμα συνήθως δεν είναι σε θέση να εκτελεστεί.</td><td class="b">____</td></tr>
+<tr><td>ε. Τα λογικά λάθη εμφανίζονται στο στάδιο της μεταγλώττισης.</td><td class="b">____</td></tr>
+<tr><td>στ. Η χρήση διερμηνευτή έχει το πλεονέκτημα της άμεσης εκτέλεσης και άρα της άμεσης διόρθωσης.</td><td class="b">____</td></tr>
+<tr><td>ζ. Το εκτελέσιμο πρόγραμμα παράγεται μόνο αν το αρχικό πρόγραμμα δεν περιέχει συντακτικά λάθη.</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Σ, β Λ, γ Λ, δ Σ, ε Λ, στ Σ, ζ Σ</span>
+<p class="small">β: οι φυσικές εξελίσσονται συνεχώς, στασιμότητα έχουν οι τεχνητές. γ: αντικείμενο πρόγραμμα παράγει ο μεταγλωττιστής. ε: στην εκτέλεση.</p></div></details></div>
+<div class="q"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
+<p>α) Από τι προσδιορίζεται μια γλώσσα; Τι είναι συντακτικό και τι σημασιολογία;<br/>β) Ποια είναι η βασική διαφορά φυσικών και τεχνητών γλωσσών;<br/>γ) Ποια η διαφορά μεταγλωττιστή και διερμηνευτή; Να αναφέρετε ένα πλεονέκτημα και ένα μειονέκτημα του καθενός.<br/>δ) Τι είναι το πηγαίο, το αντικείμενο και το εκτελέσιμο πρόγραμμα; Ποιος ο ρόλος του συνδέτη-φορτωτή;<br/>ε) Ποιες οι διαφορές συντακτικών και λογικών λαθών;</p>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p>α) Από το αλφάβητο, το λεξιλόγιο, τη γραμματική και τη σημασιολογία της. Συντακτικό είναι το σύνολο των κανόνων που καθορίζει τη νομιμότητα της διάταξης και της σύνδεσης των λέξεων της γλώσσας για τη δημιουργία προτάσεων. Σημασιολογία είναι το σύνολο των κανόνων που καθορίζει το νόημα των λέξεων και κατά επέκταση των εκφράσεων και προτάσεων μιας γλώσσας.</p>
+<p>β) Η δυνατότητα εξέλιξης: οι φυσικές γλώσσες εξελίσσονται συνεχώς, ενώ οι τεχνητές χαρακτηρίζονται από στασιμότητα, αφού κατασκευάζονται συνειδητά για συγκεκριμένο σκοπό.</p>
+<p>γ) Ο μεταγλωττιστής μεταφράζει όλο το πρόγραμμα σε ισοδύναμο πρόγραμμα γλώσσας μηχανής, που εκτελείται οποτεδήποτε ανεξάρτητα από το αρχικό. Ο διερμηνευτής διαβάζει μία-μία τις εντολές και εκτελεί αμέσως την καθεμία. Μεταγλωττιστής: + γρήγορη <span class="nw">εκτέλεση, − απαιτεί</span> μεταγλώττιση και σύνδεση πριν τη χρήση. Διερμηνευτής: + άμεση εκτέλεση και <span class="nw">διόρθωση, − πιο</span> αργή εκτέλεση.</p>
+<p>δ) Πηγαίο: το αρχικό πρόγραμμα. Αντικείμενο: το πρόγραμμα που παράγει ο μεταγλωττιστής. Εκτελέσιμο: το τελικό πρόγραμμα που εκτελείται. Ο συνδέτης-φορτωτής συνδέει το αντικείμενο πρόγραμμα με τμήματα του προγραμματιστή ή των βιβλιοθηκών και παράγει το εκτελέσιμο.</p>
+<p>ε) Τα συντακτικά οφείλονται σε αναγραμματισμούς ονομάτων εντολών και παράλειψη δήλωσης δεδομένων, εμφανίζονται στη μεταγλώττιση και πρέπει πάντα να διορθωθούν. Τα λογικά οφείλονται σε σφάλματα κατά την υλοποίηση του αλγορίθμου, εμφανίζονται μόνο στην εκτέλεση και είναι τα πιο σοβαρά και δύσκολα στη διόρθωση.</p></div></details></div>
+<div class="q"><span class="qn">3</span><b>Ποιο συστατικό της γλώσσας;</b> Για κάθε φράση γράψε το γράμμα του συστατικού που αφορά.
+<ul class="legend tight">
+<li data-v="Α"><b>Α</b> Αλφάβητο</li>
+<li data-v="Β"><b>Β</b> Λεξιλόγιο</li>
+<li data-v="Γ"><b>Γ</b> Τυπικό</li>
+<li data-v="Δ"><b>Δ</b> Συντακτικό</li>
+<li data-v="Ε"><b>Ε</b> Σημασιολογία</li>
+</ul>
+<table class="tf">
+<tbody><tr><td>α. «Το σύμβολο ♥ δεν ανήκει στα στοιχεία της γλώσσας.»</td><td class="b">____</td></tr>
+<tr><td>β. «Η ακολουθία ΚΛΜΞ δεν είναι λέξη της ελληνικής.»</td><td class="b">____</td></tr>
+<tr><td>γ. «Λέμε "τα παιδιά", όχι "τα παιδιάτ".»</td><td class="b">____</td></tr>
+<tr><td>δ. «Η εντολή <span class="nw">5 ← x</span> δεν είναι σωστή, γιατί αριστερά <span class="nw">του ← πρέπει</span> να υπάρχει μεταβλητή.»</td><td class="b">____</td></tr>
+<tr><td>ε. «Ο δημιουργός της γλώσσας όρισε ότι <span class="nw">το ← σημαίνει</span> εκχώρηση τιμής.»</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Α, β Β, γ Γ, δ Δ, ε Ε</span></div></details></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div>
+<div class="q"><span class="qn">4</span><b>Ποιο εργαλείο;</b> Για κάθε περιγραφή γράψε το γράμμα του προγράμματος.
+<ul class="legend tight">
+<li data-v="Α"><b>Α</b> Συντάκτης</li>
+<li data-v="Β"><b>Β</b> Μεταγλωττιστής</li>
+<li data-v="Γ"><b>Γ</b> Διερμηνευτής</li>
+<li data-v="Δ"><b>Δ</b> Συνδέτης – φορτωτής</li>
+</ul>
+<table class="tf">
+<tbody><tr><td>α. «Εδώ γράφω και διορθώνω το κείμενο του προγράμματός μου.»</td><td class="b">____</td></tr>
+<tr><td>β. «Μεταφράζει όλο το πρόγραμμα και παράγει αντικείμενο πρόγραμμα.»</td><td class="b">____</td></tr>
+<tr><td>γ. «Μεταφράζει μία εντολή και την εκτελεί αμέσως, μετά την επόμενη.»</td><td class="b">____</td></tr>
+<tr><td>δ. «Ενώνει το αντικείμενο πρόγραμμα με τμήματα από τις βιβλιοθήκες.»</td><td class="b">____</td></tr>
+<tr><td>ε. «Το αποτέλεσμά του είναι το εκτελέσιμο πρόγραμμα.»</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Α, β Β, γ Γ, δ Δ, ε Δ</span></div></details></div>
+<div class="q hw"><span class="qn">5</span><b>Συντακτικό ή λογικό;</b>
+<p>Για καθεμία από τις παρακάτω περιπτώσεις να γράψετε αν πρόκειται για <b>συντακτικό</b> ή <b>λογικό</b> λάθος και σε ποιο στάδιο θα εμφανιστεί.</p>
+<p>α) Γράφτηκε «Διαβασε α» αντί για «Διάβασε α».<br/>β) Για τον μέσο όρο γράφτηκε <span class="nw">μ ← α + β + γ / 3.</span><br/>γ) Χρησιμοποιήθηκε μια μεταβλητή που δεν δηλώθηκε.<br/>δ) Το εμβαδόν τετραγώνου υπολογίστηκε ως <span class="nw">4 * πλευρά.</span><br/>ε) Λείπει μια παρένθεση: <span class="nw">x ← (α + β * 2.</span><br/>στ) Ζητήθηκε η θερμοκρασία σε °C, αλλά το πρόγραμμα εμφανίζει °F.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q"><span class="qn">6</span><b>Βάλε τη σειρά.</b> Με ποια σειρά εμφανίζεται καθένα από τα παρακάτω στη διαδικασία μεταγλώττισης και σύνδεσης;
+<ul class="legend tight">
+<li data-v="Α"><b>Α</b> 1ο</li>
+<li data-v="Β"><b>Β</b> 2ο</li>
+<li data-v="Γ"><b>Γ</b> 3ο</li>
+<li data-v="Δ"><b>Δ</b> 4ο</li>
+<li data-v="Ε"><b>Ε</b> 5ο</li>
+</ul>
+<table class="tf">
+<tbody><tr><td>α. Εκτελέσιμο πρόγραμμα</td><td class="b">____</td></tr>
+<tr><td>β. Πηγαίο πρόγραμμα (γραμμένο στον συντάκτη)</td><td class="b">____</td></tr>
+<tr><td>γ. Αντικείμενο πρόγραμμα</td><td class="b">____</td></tr>
+<tr><td>δ. Μεταγλωττιστής</td><td class="b">____</td></tr>
+<tr><td>ε. Συνδέτης – φορτωτής</td><td class="b">____</td></tr>
+</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Ε, β Α, γ Γ, δ Β, ε Δ</span></div></details></div>
+<div class="q hw"><span class="qn">7</span><b>Φυσικές και τεχνητές γλώσσες.</b>
+<p>α) Να συγκρίνετε σε έναν πίνακα τα ελληνικά και μια γλώσσα προγραμματισμού ως προς: τον σκοπό τους, το ποιος καθορίζει τη σημασιολογία, τη δυνατότητα εξέλιξης.<br/>β) Να δώσετε δύο δικά σας παραδείγματα λέξεων που μπήκαν στην ελληνική γλώσσα τα τελευταία χρόνια.<br/>γ) Να εξηγήσετε τη διαφορά αλλαγής σε επίπεδο διαλέκτου και σε επίπεδο επέκτασης, με τα παραδείγματα του βιβλίου.</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">8</span><b>Το ίδιο πρόγραμμα, δύο μεταφραστές.</b>
+<p>Ένα πρόγραμμα 12 εντολών έχει ένα <b>συντακτικό</b> λάθος στην 5η εντολή και ένα <b>λογικό</b> λάθος στην 8η.</p>
+<p>α) Τι θα συμβεί αν το εκτελέσουμε με <b>διερμηνευτή</b>; Θα εκτελεστούν κάποιες εντολές; Ποιες;<br/>β) Τι θα συμβεί αν το δώσουμε σε <b>μεταγλωττιστή</b>; Θα εκτελεστεί κάποια εντολή;<br/>γ) Αφού διορθωθεί το συντακτικό λάθος, θα «καταλάβει» κάποιο από τα δύο μεταφραστικά προγράμματα το λογικό λάθος; Πώς θα το ανακαλύψουμε;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Μεγάλες ασκήσεις</h3></div>
+<div class="q hw"><span class="qn">9</span><b>Από το πηγαίο στο εκτελέσιμο.</b>
+<p>α) Να σχεδιάσετε το διάγραμμα της διαδικασίας μεταγλώττισης και σύνδεσης και να εξηγήσετε τι γίνεται σε κάθε στάδιο.<br/>β) Ένας μαθητής γράφει ένα πρόγραμμα που χρησιμοποιεί έτοιμη συνάρτηση της γλώσσας για την τετραγωνική ρίζα. Σε ποιο στάδιο και από ποιο πρόγραμμα «προστίθεται» ο κώδικας της συνάρτησης;<br/>γ) Το πρόγραμμά του έχει ένα συντακτικό και ένα λογικό λάθος. Να περιγράψετε τη σειρά με την οποία θα τα ανακαλύψει και θα τα διορθώσει.<br/>δ) Γιατί, κατά τη γνώμη σας, τα λογικά λάθη είναι τα πιο σοβαρά;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+<div class="q hw"><span class="qn">10</span><b>Ποιο μεταφραστικό πρόγραμμα;</b><span class="theme">Βιντεοπαιχνίδια, Σχολείο</span>
+<p>Μια εταιρεία φτιάχνει ένα <b>βιντεοπαιχνίδι</b> για κονσόλες, που πρέπει να τρέχει όσο το δυνατόν πιο γρήγορα. Ένα σχολείο θέλει ένα εργαλείο για <b>αρχάριους μαθητές</b>, που θα βλέπουν αμέσως τι κάνει κάθε εντολή που γράφουν.</p>
+<p>α) Ποιο είδος μεταφραστικού προγράμματος ταιριάζει στην καθεμία περίπτωση; Να αιτιολογήσετε.<br/>β) Τι είναι οι μεικτές υλοποιήσεις και πώς θα βοηθούσαν την εταιρεία κατά την ανάπτυξη του παιχνιδιού;<br/>γ) Η εταιρεία κυκλοφορεί νέα έκδοση της γλώσσας της, με επιπλέον εντολές για τρισδιάστατα γραφικά. Πρόκειται για αλλαγή σε επίπεδο διαλέκτου ή επέκτασης; Να εξηγήσετε τους δύο όρους με ένα παράδειγμα από το βιβλίο.<br/>δ) Γιατί, παρά τέτοιες αλλαγές, λέμε ότι οι τεχνητές γλώσσες χαρακτηρίζονται από στασιμότητα;</p>
+<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
+</section>
+
+</main><div class="syn-foot"><div class="syn-nav"><a href="05.html"><small>&#8592; Μάθημα 5</small>Το πρόγραμμα και η σχεδίασή του</a><a class="next" href="07.html"><small>Μάθημα 7 &#8594;</small>Το αλφάβητο της ΓΛΩΣΣΑΣ, τύποι, σταθερές, μεταβλητές</a></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
+<script>
+(function(){
+  var CARDS = [{"term": "αλφάβητό", "def": "Μία γλώσσα προσδιορίζεται από το αλφάβητό της, το λεξιλόγιό της, τη γραμματική της και τέλος τη σημασιολογία της.", "ref": "Σχολικό βιβλίο, §6.3"}, {"term": "Αλφάβητο", "def": "Αλφάβητο μίας γλώσσας καλείται το σύνολο των στοιχείων που χρησιμοποιείται από τη γλώσσα.", "ref": "Σχολικό βιβλίο, §6.3"}, {"term": "λεξιλόγιο", "def": "Το λεξιλόγιο αποτελείται από ένα υποσύνολο όλων των ακολουθιών που δημιουργούνται από τα στοιχεία του αλφαβήτου, τις λέξεις που είναι δεκτές από τη γλώσσα.", "ref": "Σχολικό βιβλίο, §6.3"}, {"term": "Γραμματική", "def": "Η Γραμματική αποτελείται από το τυπικό ή τυπολογικό (accidence) και το συντακτικό (syntax). Τυπικό είναι το σύνολο των κανόνων που ορίζει τις μορφές με τις οποίες μία λέξη είναι αποδεκτή. Συντακτικό είναι το σύνολο των κανόνων που καθορίζει τη νομιμότητα της διάταξης και της σύνδεσης των λέξεων της γλώσσας για τη δημιουργία προτάσεων.", "ref": "Σχολικό βιβλίο, §6.3"}, {"term": "σημασιολογία", "def": "Η σημασιολογία (Semantics) είναι το σύνολο των κανόνων που καθορίζει το νόημα των λέξεων και κατά επέκταση των εκφράσεων και προτάσεων που χρησιμοποιούνται σε μία γλώσσα.", "ref": "Σχολικό βιβλίο, §6.3"}, {"term": "μεταγλωττιστής", "def": "Ο μεταγλωττιστής (compiler) δέχεται στην είσοδο ένα πρόγραμμα γραμμένο σε μια γλώσσα υψηλού επιπέδου και παράγει ένα ισοδύναμο πρόγραμμα σε γλώσσα μηχανής. Το τελευταίο μπορεί να εκτελείται οποτεδήποτε από τον υπολογιστή και είναι τελείως ανεξάρτητο από το αρχικό πρόγραμμα.", "ref": "Σχολικό βιβλίο, §6.7"}, {"term": "διερμηνευτής", "def": "Ο διερμηνευτής (interpreter) διαβάζει μία προς μία τις εντολές του αρχικού προγράμματος και για καθεμία εκτελεί αμέσως μια ισοδύναμη ακολουθία εντολών μηχανής.", "ref": "Σχολικό βιβλίο, §6.7"}, {"term": "πηγαίο πρόγραμμα", "def": "Το αρχικό πρόγραμμα λέγεται πηγαίο πρόγραμμα (source), ενώ το πρόγραμμα που παράγεται από το μεταγλωττιστή λέγεται αντικείμενο πρόγραμμα (object).", "ref": "Σχολικό βιβλίο, §6.7"}, {"term": "δεν είναι σε θέση να εκτελεστεί", "def": "Το αντικείμενο πρόγραμμα είναι μεν σε μορφή κατανοητή από τον υπολογιστή, αλλά συνήθως δεν είναι σε θέση να εκτελεστεί . Χρειάζεται να συμπληρωθεί και να συνδεθεί με άλλα τμήματα προγράμματος απαραίτητα για την εκτέλεσή του, τμήματα που είτε τα γράφει ο προγραμματιστής είτε βρίσκονται στις βιβλιοθήκες (libraries) της γλώσσας. Το πρόγραμμα που επιτρέπει αυτή τη σύνδεση ονομάζεται συνδέτης – φορτωτής (linker-loader). Το αποτέλεσμα του συνδέτη είναι η παραγωγή του εκτελέσιμου προγράμματος (executable), το οποίο είναι το τελικό πρόγραμμα που εκτελείται από τον υπολογιστή. Για το λόγο αυτό η συνολική διαδικασία αποκαλείται μεταγλώττιση και σύνδεση .", "ref": "Σχολικό βιβλίο, §6.7"}, {"term": "συντάκτης", "def": "Για την αρχική σύνταξη των προγραμμάτων και τη διόρθωσή τους στη συνέχεια χρησιμοποιείται ένα ειδικό πρόγραμμα που ονομάζεται συντάκτης (editor). Για τη δημιουργία, τη μετάφραση και την εκτέλεση ενός προγράμματος απαιτούνται τουλάχιστον τρία προγράμματα: ο συντάκτης, ο μεταγλωττιστής και ο συνδέτης.", "ref": "Σχολικό βιβλίο, §6.7"}];
+  // ---- quiz ----
+  document.querySelectorAll('.quiz').forEach(function(quiz){
+    var items = quiz.querySelectorAll('.qi');
+    var score = quiz.querySelector('.score');
+    function update(){
+      var done = quiz.querySelectorAll('.qi.ok, .qi.no').length;
+      if (done < items.length){ score.hidden = true; return; }
+      var ok = quiz.querySelectorAll('.qi.ok').length;
+      score.hidden = false;
+      score.innerHTML = '';
+      var t = document.createElement('span');
+      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? ' · Τέλεια!' : ok >= items.length * 0.7 ? ' · Πολύ καλά' : ' · Ξαναδιάβασε τη θεωρία');
+      var r = document.createElement('button'); r.type = 'button'; r.className = 'btn'; r.textContent = 'Ξανά από την αρχή';
+      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); }); update(); };
+      score.append(t, r);
+    }
+    items.forEach(function(it){
+      var ans = it.getAttribute('data-ans');
+      it.querySelectorAll('.qb button').forEach(function(b){
+        b.addEventListener('click', function(){
+          var v = b.getAttribute('data-v');
+          it.querySelectorAll('.qb button').forEach(function(x){ x.disabled = true; if (x.getAttribute('data-v') === ans) x.classList.add('right'); });
+          b.classList.add('pick');
+          it.classList.add(v === ans ? 'ok' : 'no');
+          var f = document.createElement('span'); f.className = 'fb';
+          f.textContent = v === ans ? '✓ Σωστά' : '✗ Η σωστή απάντηση είναι: ' + (it.querySelector('.qb button[data-v="' + ans + '"]') || {}).textContent;
+          it.appendChild(f);
+          update();
+        });
+      });
+    });
+  });
+  // ---- flashcards ----
+  var order = CARDS.map(function(_, i){ return i; }), pos = 0;
+  var card = document.getElementById('card');
+  if (!card || !CARDS.length) return;
+  function show(){
+    var c = CARDS[order[pos]];
+    card.classList.remove('flipped');
+    document.getElementById('c-term').textContent = c.term;
+    document.getElementById('c-def').textContent = c.def;
+    document.getElementById('c-ref').textContent = c.ref;
+    document.getElementById('c-count').textContent = (pos + 1) + ' / ' + CARDS.length;
+  }
+  card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+  document.getElementById('c-next').onclick = function(){ pos = (pos + 1) % CARDS.length; show(); };
+  document.getElementById('c-prev').onclick = function(){ pos = (pos - 1 + CARDS.length) % CARDS.length; show(); };
+  document.getElementById('c-shuf').onclick = function(){
+    for (var i = order.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+    pos = 0; show();
+  };
+  show();
+})();
+</script>
+<style id="kitcss">/*KIT>*//* ==== kit: θέμα, προβολή, «Δείξε λύση» ==== */
+body{font-size:16px}
+.kit-btn{font:600 13px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 12px;border-radius:999px;cursor:pointer}
+.kit-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.kit-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#kitfloat{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:30;display:flex;gap:6px;padding:5px;border-radius:999px;background:var(--ground);border:1px solid var(--line);box-shadow:0 4px 16px rgba(10,20,40,.12)}
+.rt-ans{margin:-2px 0 14px}
+.rt-show{font:600 13.5px/1 var(--body);border:1.5px solid var(--s-teal);background:var(--teal-bg);color:var(--teal);padding:9px 14px;border-radius:999px;cursor:pointer}
+.rt-show:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.rt-body{display:none;margin-top:10px;border-left:4px solid var(--s-teal);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 16px}
+.rt-body .q{margin:0;border:0;padding:0;background:none}
+.rt-open > .rt-body, body.rt-all .rt-body{display:block}
+.rt-open > .rt-show{background:var(--paper)}
+body:not(.rt-all):not(.editing) .solved:not(.rt-open) .rt-hide{display:none}
+body.rt-all .rt-showstep{display:none}
+.solved.rt-open .rt-showstep{display:none}
+.rt-showstep{margin:4px 0 6px}
+body.student .rt-ans{display:none}
+body.editing .rt, body.editing .rt-showstep{display:none}
+/* Λειτουργία προβολής */
+body.proj #bar,body.proj #nav{zoom:1.25}
+body.proj{--muted:#3a4254;--line:#b5bfd2}
+:root[data-theme="dark"] body.proj{--muted:#b9c1d4;--line:#3b465e}
+@media print{#kitfloat,.rt,.rt-showstep,.kit-btn{display:none!important}.rt-hide{display:grid!important}}
+/* Καθαρές γραμμές */
+body{font-size:17px;line-height:1.68}
+.ln{display:block;margin:.22em 0}
+.ln.li{position:relative;padding-left:1.25em}
+.ln.li::before{content:"•";position:absolute;left:.35em;color:var(--muted)}
+.kvs{display:inline-flex;flex-wrap:wrap;gap:.2em 1.2em;vertical-align:top}
+.kv,.nw{white-space:nowrap}
+p,li,td{text-wrap:pretty}
+.ln.cd{font-family:var(--mono);font-size:.92em}
+.cdcols{display:inline-flex;flex-wrap:wrap;gap:4px 28px;vertical-align:top}
+.cdcol{display:inline-block;padding-left:10px;border-left:2px solid var(--line)}/*<KIT*/</style>
+<script id="kitjs">/*KITJS>*/(function(){
+  /* kit: θέμα (φωτεινό/σκοτεινό), προβολή, «Δείξε λύση» */
+  var root = document.documentElement, body = document.body, doc = document.getElementById('doc');
+  if (!doc || body.getAttribute('data-kit')) return;
+  body.setAttribute('data-kit', '1');
+  function get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function put(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+  var theme = get('synapsi-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  var proj = get('aepp-proj') === '1';
+  function mk(id, txt){ var b = document.createElement('button'); b.type = 'button'; b.id = id; b.className = 'kit-btn'; b.textContent = txt; return b; }
+  var bTheme = mk('k-theme', ''), bProj = mk('k-proj', 'Προβολή'), bAll = null;
+  function applyTheme(){ root.setAttribute('data-theme', theme); bTheme.textContent = theme === 'dark' ? '☀ Φωτεινό' : '☾ Σκοτεινό'; bTheme.setAttribute('aria-label', theme === 'dark' ? 'Φωτεινό θέμα' : 'Σκοτεινό θέμα'); }
+  function fit(){
+    if (!proj){ doc.style.zoom = ''; doc.style.maxWidth = ''; return; }
+    var W = window.innerWidth, z = W < 700 ? 1.12 : 1.38;
+    doc.style.zoom = z; doc.style.maxWidth = Math.max(300, Math.min(900, (W - 36) / z)) + 'px';
+  }
+  function applyProj(){ body.classList.toggle('proj', proj); bProj.setAttribute('aria-pressed', String(proj)); fit(); }
+  window.addEventListener('resize', fit);
+  bTheme.onclick = function(){ theme = theme === 'dark' ? 'light' : 'dark'; put('synapsi-theme', theme); applyTheme(); };
+  bProj.onclick = function(){ proj = !proj; put('aepp-proj', proj ? '1' : '0'); applyProj(); };
+  applyTheme(); applyProj();
+
+  var bar = document.getElementById('bar');
+  var teacherSec = doc.querySelector('section.teacher');
+  if (bar){
+    var anchor = document.getElementById('status') || null;
+    if (teacherSec){ bAll = mk('k-all', 'Όλες οι λύσεις'); bar.insertBefore(bAll, anchor); }
+    bar.insertBefore(bProj, anchor); bar.insertBefore(bTheme, anchor);
+  } else {
+    var f = document.createElement('div'); f.id = 'kitfloat';
+    f.appendChild(bTheme); body.appendChild(f); proj = false; applyProj();
+  }
+  if (bAll){
+    bAll.onclick = function(){ var on = !body.classList.contains('rt-all'); body.classList.toggle('rt-all', on); bAll.setAttribute('aria-pressed', String(on)); };
+  }
+
+  /* λυμένα: φαίνεται η εκφώνηση και το «Κατανοώ», τα υπόλοιπα με κουμπί */
+  doc.querySelectorAll('.box.solved').forEach(function(box){
+    var steps = box.querySelector('.steps');
+    if (!steps) return;
+    var st = steps.querySelectorAll(':scope > .step');
+    if (st.length < 2) return;
+    box.classList.add('rt-closed');
+    for (var i = 1; i < st.length; i++) st[i].classList.add('rt-hide');
+    var w = document.createElement('div'); w.className = 'rt-showstep'; w.contentEditable = 'false';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε τη λύση';
+    b.onclick = function(){ box.classList.add('rt-open'); };
+    w.appendChild(b); st[0].after(w);
+  });
+
+  /* ασκήσεις: η απάντηση από τη σελίδα καθηγητή, κρυμμένη κάτω από την εκφώνηση */
+  if (teacherSec){
+    var ans = {};
+    teacherSec.querySelectorAll('.ans .q').forEach(function(q){ var n = q.querySelector('.qn'); if (n) ans[n.textContent.trim()] = q; });
+    doc.querySelectorAll('.exercises .q').forEach(function(q){
+      var n = q.querySelector(':scope > .qn'); if (!n) return;
+      var a = ans[n.textContent.trim()]; if (!a) return;
+      var w = document.createElement('div'); w.className = 'rt rt-ans'; w.contentEditable = 'false';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε λύση';
+      var bodyEl = document.createElement('div'); bodyEl.className = 'rt-body ans';
+      var c = a.cloneNode(true); var qn = c.querySelector('.qn'); if (qn) qn.remove();
+      bodyEl.appendChild(c);
+      b.onclick = function(){ var on = !w.classList.contains('rt-open'); w.classList.toggle('rt-open', on); b.textContent = on ? 'Κρύψε λύση' : 'Δείξε λύση'; };
+      w.appendChild(b); w.appendChild(bodyEl);
+      q.after(w);
+    });
+  }
+})();/*<KITJS*/</script>
+
+</body></html>
