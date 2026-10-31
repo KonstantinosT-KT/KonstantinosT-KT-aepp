@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style id="avcss">.sos-av{float:right;width:72px;height:84px;border-radius:14px;object-position:center top;object-fit:cover;margin:0 0 8px 14px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);shape-outside:margin-box}@media(max-width:560px){.sos-av{width:56px;height:65px;border-radius:11px;margin-left:10px}}@media print{.sos-av{display:none}}</style></head><body>
 <title>Μάθημα 18 · Διαίρει και βασίλευε</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
@@ -304,13 +304,13 @@ body::before{background:var(--ground)}
 <div class="box plain" style="margin:0"><div class="tag">Δραστηριότητα: το κάλπικο νόμισμα</div>
 <p>Από 128 πανομοιότυπα χρυσά νομίσματα ένα είναι κάλπικο, λίγο πιο ελαφρύ. Έχεις μια ζυγαριά με δύο δίσκους. Βάζεις 64 στον έναν δίσκο και 64 στον άλλο: ο πιο ελαφρύς δίσκος έχει το κάλπικο. Μετά 32 με 32, 16 με 16… Με <b>7</b> ζυγίσματα το βρίσκεις, γιατί τα νομίσματα που μένουν είναι κάθε φορά τα μισά: 128, 64, 32, 16, 8, 4, 2, 1. Θα το δεις ως πρόγραμμα στο Λυμένο 6.</p></div>
 </div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · Διαίρει και βασίλευε</div>
 <p><b>Η μέθοδος.</b> Η «Διαίρει και Βασίλευε» (divide and conquer) αποτελεί μια μέθοδο σχεδίασης αλγορίθμων στην οποία εντάσσονται οι τεχνικές που υποδιαιρούν ένα πρόβλημα σε μικρότερα υποπροβλήματα, που έχουν την ίδια τυποποίηση με το αρχικό πρόβλημα, αλλά είναι μικρότερα σε μέγεθος. Με όμοιο τρόπο, τα υποπροβλήματα αυτά μπορούν να διαιρεθούν σε ακόμη μικρότερα υποπροβλήματα κ.ο.κ. Η προσέγγιση αυτή ονομάζεται «από πάνω προς τα κάτω» (top-down).</p>
 <p><b>Τα βήματα.</b> 1. Δίνεται για επίλυση ένα στιγμιότυπο ενός προβλήματος. 2. Το στιγμιότυπο του προβλήματος υποδιαιρείται σε υπο-στιγμιότυπα του ίδιου προβλήματος. 3. Δίνεται ανεξάρτητη λύση σε κάθε ένα υπο-στιγμιότυπο. 4. Συνδυάζονται όλες οι μερικές λύσεις που βρέθηκαν για τα υπο-στιγμιότυπα, έτσι ώστε να δοθεί η συνολική λύση του προβλήματος.</p>
 <p class="src">Συμπληρωματικό Εκπαιδευτικό Υλικό, §2.1</p>
 </div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av6.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · μέγιστος αριθμός επαναλήψεων</div>
 <p>Ο μέγιστος αριθμός των συγκρίσεων (επαναλήψεων) που απαιτούνται για την εύρεση ενός στοιχείου σε ένα σύνολο «n» ταξινομημένων στοιχείων, συμπεριλαμβανομένης και της περίπτωσης μη ύπαρξης του στοιχείου, δίνεται από το ακέραιο μέρος του [log<sub>2</sub>(n)+1] (με στρογγυλοποίηση προς τα κάτω). […] Για την εύρεση του μέγιστου πλήθους των επαναλήψεων θεωρείται γνωστό το log<sub>2</sub>(n).</p>
 <p class="src">Συμπληρωματικό Εκπαιδευτικό Υλικό, §2.1</p>
@@ -367,7 +367,7 @@ body::before{background:var(--ground)}
 <p>Οι προγραμματιστές χρησιμοποιούν τη διχοτόμηση για να βρίσκουν <b>ποια αλλαγή χάλασε</b> ένα πρόγραμμα. Αν η έκδοση 1 δούλευε και η 1000 όχι, δοκιμάζουν την 500. Αν δουλεύει, το λάθος μπήκε κάπου από την 501 και μετά, αλλιώς ως και την 500. Με περίπου 10 δοκιμές βρίσκουν την ένοχη έκδοση ανάμεσα σε χίλιες. Το διαδεδομένο εργαλείο εκδόσεων git έχει ειδική εντολή γι' αυτό, την <b>git bisect</b>. Θα τη γράψεις σε ΓΛΩΣΣΑ στην Ασκ. 15.</p>
 <p class="talk">Σκέψου: Τι προϋποθέτει αυτή η μέθοδος; (Βοήθεια: τι θα γινόταν αν το λάθος εμφανιζόταν και εξαφανιζόταν από έκδοση σε έκδοση;)</p>
 </div>
-<div class="box trap">
+<div class="box trap"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
 <div class="tag">Παγίδες που κοστίζουν μονάδες</div>
 <ul class="tight">
 <li>Η δυαδική αναζήτηση θέλει <b>ταξινομημένα</b> δεδομένα. Σε ανακατεμένα δίνει λάθος απαντήσεις χωρίς να «σκάσει».</li>
@@ -378,7 +378,7 @@ body::before{background:var(--ground)}
 <li>Οι λέξεις «αρχή» και «τέλος» δεν γίνονται ονόματα μεταβλητών στη ΓΛΩΣΣΑ.</li>
 </ul>
 </div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av6.jpg" alt="" loading="lazy">
 <div class="tag">Σύνοψη</div>
 <p><b>Διαίρει και βασίλευε:</b> σπάμε το πρόβλημα σε μικρότερα του ίδιου τύπου, τα λύνουμε και συνδυάζουμε τις λύσεις (από πάνω προς τα κάτω).</p>
 <p><b>Δυαδική αναζήτηση:</b> σε ταξινομημένα δεδομένα, συγκρίνουμε με το μεσαίο και κρατάμε το μισό που μπορεί να έχει τη λύση.</p>

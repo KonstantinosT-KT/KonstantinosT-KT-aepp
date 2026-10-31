@@ -45,6 +45,8 @@ button{font:inherit;color:inherit}
 .ibtn{width:44px;height:44px;border-radius:12px;border:0;background:var(--header-2);color:var(--on-header);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .logo{width:220px;max-width:100%;height:auto;display:block}
 .course{font:800 23px/1.2 var(--display);letter-spacing:-.01em}
+.av-img{object-fit:cover;object-position:center 12%;padding:0;border:2px solid var(--gold)}
+.teacher-card .av-img{width:56px;height:56px}
 .teacher-card{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;background:var(--header-2)}
 .av{flex:none;width:40px;height:40px;border-radius:50%;background:var(--gold);color:#2B3722;display:flex;align-items:center;justify-content:center;font:800 14px var(--display)}
 .teacher-card b{display:block;font:700 14px/1.3 var(--display)}
@@ -417,7 +419,7 @@ function home(){
       <button class="ibtn" data-act="theme" aria-label="${dark?'Φωτεινό θέμα':'Σκοτεινό θέμα'}">${dark?I.sun:I.moon}</button></div>
     <img class="logo" src="logo.png" alt="ΣΥΝΑΨΗ εκπαιδευτική ομάδα">
     <div class="course">Πληροφορική Γ' Λυκείου</div>
-    <div class="teacher-card"><span class="av">ΚΘ</span><span><b>Καθηγητής: Κωνσταντίνος Θεοφίλου</b><small>Συγγραφή &amp; επιστημονική επιμέλεια υλικού: Κωνσταντίνος Θεοφίλου, MSc in ICT</small></span></div>
+    <div class="teacher-card"><img class="av av-img" src="av6.jpg" alt="Κωνσταντίνος Θεοφίλου"><span><b>Καθηγητής: Κωνσταντίνος Θεοφίλου</b><small>Συγγραφή &amp; επιστημονική επιμέλεια υλικού: Κωνσταντίνος Θεοφίλου, MSc in ICT</small></span></div>
     <p class="intro">Η διαδρομή σου μέχρι τις Πανελλαδικές. Κάθε νέο μάθημα ανοίγει μόλις το δουλέψουμε στην τάξη.</p>
     <div class="prog"><div class="prog-row"><span>${openCount} από ${LESSONS.length} μαθήματα ανοιχτά</span><span>${pct}%</span></div><div class="track"><i style="width:${pct}%"></i></div></div>
   </div></header>
@@ -460,7 +462,7 @@ function about(){ return subTop('Ποιοι είμαστε') + `<main class="wra
   <p class="note">Η εφαρμογή βρίσκεται σε δοκιμαστική (beta) έκδοση. Αν βρεις κάποιο λάθος ή έχεις μια ιδέα, πες το μας. Μας βοηθάς να την κάνουμε καλύτερη.</p>
   <h3 style="font-size:16px">Η ομάδα μας</h3>
   <div class="team"><div class="person"><span class="av">ΜΜ</span><span><b>Μανάσης Μπατσιούλας</b><span>Μαθηματικά · MSc in Math</span></span></div>
-    <div class="person"><span class="av">ΚΘ</span><span><b>Κωνσταντίνος Θεοφίλου</b><span>Πληροφορική · MSc in ICT</span></span></div></div>
+    <div class="person"><img class="av av-img" src="av6.jpg" alt="Κωνσταντίνος Θεοφίλου"><span><b>Κωνσταντίνος Θεοφίλου</b><span>Πληροφορική · MSc in ICT</span></span></div></div>
   <h3 style="font-size:16px">Θα μας βρεις εδώ</h3>${contactRows()}
   <a class="btn" href="#guidance">Έλα για ένα δοκιμαστικό μάθημα</a></main>${footer()}`; }
 
@@ -553,7 +555,7 @@ function teacherBoard(){
   const log=c.log.map(e=>`<div class="log"><b>${e[0]}</b><span>${esc(e[1])}${e[2]?'<small class="lv good">Ολοκληρώθηκε</small>':''}</span></div>`).join('');
   return subTop('Πίνακας καθηγητή') + `<main class="wrap page">${soonHead('Τα τμήματά σου σε μία οθόνη')}
   <div class="demo">
-    <div class="tbh"><span class="av">ΚΘ</span><b>Κωνσταντίνος Θεοφίλου</b></div>
+    <div class="tbh"><img class="av av-img" src="av6.jpg" alt="Κωνσταντίνος Θεοφίλου"><b>Κωνσταντίνος Θεοφίλου</b></div>
     <div class="tabs">${tabs}</div>
     <div class="pv"><div class="r"><span>${c.name} · Πληροφορική</span><span class="code">${c.code}</span></div><small>${c.meta}</small>
       <span class="fake-in tall">nikos.p@gmail.com<br>maria.k@gmail.com</span><span class="fake-btn solid">Στείλε προσκλήσεις</span></div>
@@ -569,7 +571,7 @@ function teacherBoard(){
 
 function join(){ return subTop('Σύνδεση') + `<main class="wrap page">${soonHead('Σύνδεση με πρόσκληση από τον καθηγητή σου')}
   <div class="demo">
-    <div class="pv invite"><span class="av">ΚΘ</span><span><small>ΠΡΟΣΚΛΗΣΗ</small><b>Κωνσταντίνος Θεοφίλου · Γ1 Πληροφορική</b></span></div>
+    <div class="pv invite"><img class="av av-img" src="av6.jpg" alt="Κωνσταντίνος Θεοφίλου"><span><small>ΠΡΟΣΚΛΗΣΗ</small><b>Κωνσταντίνος Θεοφίλου · Γ1 Πληροφορική</b></span></div>
     <div class="pv"><small>Email</small><span class="fake-in">nikos.p@gmail.com</span><small>Συμπληρώθηκε από την πρόσκληση</small></div>
     <div class="grid2"><div class="pv"><small>Όνομα</small><span class="fake-in">Νίκος</span></div><div class="pv"><small>Επίθετο</small><span class="fake-in">Π.</span></div></div>
     <div class="pv"><small>Ομάδα προσανατολισμού</small><span class="fake-in sel">Σπουδών Οικονομίας &amp; Πληροφορικής</span>

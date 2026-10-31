@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style id="avcss">.sos-av{float:right;width:72px;height:84px;border-radius:14px;object-position:center top;object-fit:cover;margin:0 0 8px 14px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);shape-outside:margin-box}@media(max-width:560px){.sos-av{width:56px;height:65px;border-radius:11px;margin-left:10px}}@media print{.sos-av{display:none}}</style></head><body>
 <title>Μάθημα 12 · Δομή επανάληψης: ΟΣΟ … ΕΠΑΝΑΛΑΒΕ</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
@@ -301,7 +301,7 @@ body::before{background:var(--ground)}
 <p class="small">Το βέλος που <b>γυρίζει πίσω</b> στον ρόμβο είναι η επανάληψη. Ό,τι βρίσκεται ανάμεσα στον ρόμβο και στο βέλος επιστροφής είναι ο <b>βρόχος</b>. Η έξοδος (ΟΧΙ) γίνεται <b>μόνο</b> από τον ρόμβο.</p>
 </div>
 <div class="sec" id="s-2-4-5"><span class="num">2.4.5</span><h2>Η δομή επανάληψης</h2><span class="ref">Βιβλίο σελ. 44–46</span></div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av5.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση</div>
 <p><b>Δομή επανάληψης.</b> Η λογική των επαναληπτικών διαδικασιών εφαρμόζεται στις περιπτώσεις όπου μία ακολουθία εντολών πρέπει να εφαρμοσθεί σε ένα σύνολο περιπτώσεων, που έχουν κάτι κοινό.</p>
 <p><b>Βρόχος.</b> Το τμήμα του αλγορίθμου που επαναλαμβάνεται, δηλαδή από την εντολή Όσο μέχρι το Τέλος_επανάληψης, αποκαλείται βρόχος.</p>
@@ -332,7 +332,7 @@ body::before{background:var(--ground)}
 </tbody></table></div>
 <div class="sec" id="s-8-2-1"><span class="num">8.2.1</span><h2>Η εντολή ΟΣΟ … ΕΠΑΝΑΛΑΒΕ</h2><span class="ref">Βιβλίο σελ. 145–147</span></div>
 <div class="grid g2" style="align-items:start">
-<div class="box def" style="margin:0">
+<div class="box def" style="margin:0"><img class="sos-av" src="av2.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · ΟΣΟ</div>
 <pre class="code">ΟΣΟ συνθήκη ΕΠΑΝΑΛΑΒΕ
   εντολή-1
@@ -342,7 +342,7 @@ body::before{background:var(--ground)}
 <p><b>Λειτουργία ΟΣΟ.</b> Ελέγχεται η συνθήκη και αν είναι Αληθής, εκτελούνται οι εντολές που βρίσκονται ανάμεσα στις ΟΣΟ … ΕΠΑΝΑΛΑΒΕ και ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ. Στη συνέχεια ελέγχεται πάλι η συνθήκη και αν ισχύει, εκτελούνται πάλι οι ίδιες εντολές. Όταν η λογική έκφραση γίνει Ψευδής, τότε σταματάει η επανάληψη και εκτελείται η εντολή μετά το ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ.</p>
 <p class="src">Σχολικό βιβλίο, §8.2.1</p>
 </div>
-<div class="box def" style="margin:0">
+<div class="box def" style="margin:0"><img class="sos-av" src="av5.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · χαρακτηριστικά</div>
 <p><b>Η σημαντικότερη επανάληψη.</b> Με τη δομή ΟΣΟ … ΕΠΑΝΑΛΑΒΕ μπορούν να εκφραστούν όλες οι επαναλήψεις και γι' αυτό είναι η σημαντικότερη από όλες τις εντολές επανάληψης. Χαρακτηριστικό της είναι ότι ο αριθμός των επαναλήψεων δεν είναι γνωστός, ούτε μπορεί να υπολογιστεί πριν από την εκτέλεση του προγράμματος.</p>
 <p><b>Αλλαγή της συνθήκης.</b> Εφόσον μετά από κάθε επανάληψη ελέγχεται εκ νέου η συνθήκη, πρέπει υποχρεωτικά μέσα στον βρόχο να υπάρχει μία εντολή, η οποία να μεταβάλλει την τιμή της μεταβλητής που ελέγχεται με τη συνθήκη. Σε αντίθετη περίπτωση η επανάληψη δεν θα τερματίζεται.</p>
@@ -380,7 +380,7 @@ body::before{background:var(--ground)}
 <p>Πάρε οποιονδήποτε θετικό ακέραιο. Αν είναι άρτιος, διαίρεσέ τον με το 2. Αν είναι περιττός, κάν' τον <span class="nw">3ν + 1.</span> Επανάλαβε. Ξεκινώντας από το 6 παίρνουμε τη σειρά: 6, 3, 10, 5, 16, 8, 4, 2, 1. Η <b>εικασία του Collatz</b>, που διατυπώθηκε το 1937, λέει ότι <b>κάθε</b> αριθμός καταλήγει κάποτε στο 1. Οι υπολογιστές την έχουν ελέγξει για τεράστιο πλήθος αριθμών, αλλά <b>κανείς δεν έχει καταφέρει να την αποδείξει</b>. Ένας βρόχος «ΟΣΟ <span class="nw">ν &lt;&gt; 1</span>» που ίσως, για κάποιον αριθμό, δεν τελειώνει ποτέ!</p>
 <p class="talk">Σκέψου: Μπορούμε να πούμε ότι ένας τέτοιος αλγόριθμος ικανοποιεί το κριτήριο της περατότητας; Τι θα χρειαζόμασταν για να είμαστε σίγουροι; (Ασκ. 13.)</p>
 </div>
-<div class="box trap">
+<div class="box trap"><img class="sos-av" src="av2.jpg" alt="" loading="lazy">
 <div class="tag">Παγίδες που κοστίζουν μονάδες</div>
 <ul class="tight">
 <li>Κάθε ΟΣΟ κλείνει με <b>ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</b>, όχι ΤΕΛΟΣ_ΑΝ.</li>
@@ -392,7 +392,7 @@ body::before{background:var(--ground)}
 <li>Στη ΓΛΩΣΣΑ μια συνθήκη υπολογίζεται <b>ολόκληρη</b>: στο «<span class="nw">πλ = 1</span> Η <span class="nw">x &lt; μεγ</span>» η μεγ πρέπει να έχει τιμή ακόμα κι όταν <span class="nw">πλ = 1.</span></li>
 </ul>
 </div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av5.jpg" alt="" loading="lazy">
 <div class="tag">Σύνοψη</div>
 <p><b>Βρόχος:</b> το τμήμα που επαναλαμβάνεται. Η έξοδος γίνεται μόνο μέσω της συνθήκης.</p>
 <p><b>ΟΣΟ … ΕΠΑΝΑΛΑΒΕ:</b> ελέγχει τη συνθήκη στην αρχή. Όσο είναι Αληθής εκτελεί τον βρόχο. Μπορεί να μην εκτελεστεί καμία φορά.</p>

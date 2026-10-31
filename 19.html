@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style id="avcss">.sos-av{float:right;width:72px;height:84px;border-radius:14px;object-position:center top;object-fit:cover;margin:0 0 8px 14px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);shape-outside:margin-box}@media(max-width:560px){.sos-av{width:56px;height:65px;border-radius:11px;margin-left:10px}}@media print{.sos-av{display:none}}</style></head><body>
 <title>Μάθημα 19 · Δομές δεδομένων και πίνακες</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
@@ -340,14 +340,14 @@ body::before{background:var(--ground)}
 <p class="small">Στο Μάθημα 14 μείναμε με ένα ερώτημα: «πόσες μέρες είχαν θερμοκρασία πάνω από τη μέση;». Τη μέση την ξέρουμε μόνο <b>αφού</b> διαβαστούν όλες, και τότε έχουν χαθεί. Με τον πίνακα Θ οι 7 θερμοκρασίες μένουν αποθηκευμένες και τις ξαναδιαβάζουμε όσες φορές θέλουμε (Λυμένο 1).</p>
 </div>
 <div class="sec" id="s-3-1"><span class="num">3.1</span><h2>Δεδομένα</h2><span class="ref">Βιβλίο σελ. 54–55</span></div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · δεδομένα και πληροφορία</div>
 <p><b>Δεδομένα.</b> Τα δεδομένα (data) είναι η αφαιρετική αναπαράσταση της πραγματικότητας και συνεπώς μία απλοποιημένη όψη της. […] Τα δεδομένα, λοιπόν, είναι ακατέργαστα γεγονότα, και κάθε φορά η επιλογή τους εξαρτάται από τον τύπο του προβλήματος.</p>
 <p><b>Πληροφορία.</b> Η συλλογή των ακατέργαστων δεδομένων και ο συσχετισμός τους δίνει ως αποτέλεσμα την πληροφορία (information). […] Μπορεί να θεωρηθεί ότι ο αλγόριθμος είναι το μέσο για την παραγωγή πληροφορίας από τα δεδομένα.</p>
 <p class="src">Σχολικό βιβλίο, §3.1</p>
 </div>
 <div class="grid g2" style="align-items:start">
-<div class="box def" style="margin:0">
+<div class="box def" style="margin:0"><img class="sos-av" src="av6.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · οι τέσσερις σκοπιές</div>
 <p>Πληροφορική θεωρείται η επιστήμη που μελετά τα δεδομένα από τις ακόλουθες σκοπιές:</p>
 <p><b>Υλικού.</b> Το υλικό (hardware) επιτρέπει στα δεδομένα να αποθηκεύονται στην κύρια μνήμη και στις περιφερειακές συσκευές με διάφορες αναπαραστάσεις (δυαδική, ASCII, EBCDIC, συμπλήρωμα του 1 ή του 2 κ.λπ.).</p>
@@ -361,7 +361,7 @@ body::before{background:var(--ground)}
 <p class="small">Παράδειγμα δεδομένων: σε ένα αρχείο μαθητών κρατάμε ονοματεπώνυμο, ηλικία, τάξη, τμήμα, όχι όμως βάρος ή ύψος. Το ποια δεδομένα κρατάμε εξαρτάται από το πρόβλημα.</p></div>
 </div>
 <div class="sec" id="s-3-2"><span class="num">3.2</span><h2>Αλγόριθμοι + Δομές Δεδομένων = Προγράμματα</h2><span class="ref">Βιβλίο σελ. 56–57</span></div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · δομή δεδομένων και λειτουργίες</div>
 <p><b>Δομή Δεδομένων</b> είναι ένα σύνολο αποθηκευμένων δεδομένων που υφίστανται επεξεργασία από ένα σύνολο λειτουργιών. Κάθε μορφή δομής δεδομένων αποτελείται από ένα σύνολο κόμβων (nodes).</p>
 <p><span class="ln"><b>Οι βασικές λειτουργίες:</b></span><span class="ln li"><b>Προσπέλαση</b> (access), πρόσβαση σε έναν κόμβο με σκοπό να εξετασθεί ή να τροποποιηθεί το περιεχόμενό του</span><span class="ln li"><b>Εισαγωγή</b> (insertion), η προσθήκη νέων κόμβων</span><span class="ln li"><b>Διαγραφή</b> (deletion), ένας κόμβος αφαιρείται</span><span class="ln li"><b>Αναζήτηση</b> (searching), προσπελαύνονται οι κόμβοι για να εντοπιστούν ένας ή περισσότεροι που έχουν μια δεδομένη ιδιότητα</span><span class="ln li"><b>Ταξινόμηση</b> (sorting), οι κόμβοι διατάσσονται κατά αύξουσα ή φθίνουσα σειρά</span><span class="ln li"><b>Αντιγραφή</b> (copying), όλοι ή μερικοί κόμβοι αντιγράφονται σε μία άλλη δομή</span><span class="ln li"><b>Συγχώνευση</b> (merging), δύο ή περισσότερες δομές συνενώνονται σε μία</span><span class="ln li"><b>Διαχωρισμός</b> (separation), η αντίστροφη πράξη της συγχώνευσης.</span></p>
@@ -373,7 +373,7 @@ body::before{background:var(--ground)}
 <div class="box ex"><div class="tag">Το παράδειγμα του τηλεφωνικού καταλόγου</div>
 <p><b>1η λύση:</b> μια σειρά από ζεύγη (όνομα, τηλέφωνο) και σειριακή αναζήτηση: εντάξει για ένα χωριό, αργό για μια πόλη (Λυμένο 4). <b>2η λύση:</b> τα ονόματα <b>ταξινομημένα</b>, και ένας δεύτερος πίνακας που λέει για κάθε γράμμα πού αρχίζουν τα ονόματά του. Ίδιο πρόβλημα, άλλη δομή, πολύ ταχύτερος αλγόριθμος (Ασκ. 12).</p></div>
 </div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av6.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · στατικές και δυναμικές δομές</div>
 <p><b>Στατικές δομές:</b> Αποθηκεύονται σε συνεχόμενες θέσεις μνήμης και έχουν σταθερό μέγεθος, το οποίο καθορίζεται στην αρχή του προγράμματος. Οι στατικές δομές υλοποιούνται με πίνακες.</p>
 <p><b>Δυναμικές δομές:</b> Δεν αποθηκεύονται σε συνεχόμενες θέσεις μνήμης, δεν έχουν σταθερό μέγεθος, αλλά ο αριθμός των κόμβων τους αυξάνεται και μειώνεται, όταν στη δομή αντίστοιχα εισάγονται ή διαγράφονται δεδομένα. Το μέγεθος της μνήμης καθορίζεται κατά την εκτέλεση του προγράμματος. Με δυναμικές δομές υλοποιούνται οι λίστες, τα δένδρα και οι γράφοι.</p>
@@ -391,7 +391,7 @@ body::before{background:var(--ground)}
 <p class="talk">Σκέψου: Σκέψου τη λίστα επαφών του κινητού σου. Ποια δεδομένα κρατά για κάθε επαφή; Ποιες από τις οκτώ λειτουργίες κάνεις πιο συχνά;</p>
 </div>
 <div class="sec" id="s-3-3"><span class="num">3.3</span><h2>Πίνακες</h2><span class="ref">Βιβλίο σελ. 58–60, Οδηγίες Μελέτης §4</span></div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · στατική δομή και πίνακας</div>
 <p><b>Στατική δομή.</b> Με τον όρο στατική δομή δεδομένων εννοείται ότι το ακριβές μέγεθος της απαιτούμενης κύριας μνήμης καθορίζεται κατά τη στιγμή του προγραμματισμού τους, και κατά συνέπεια κατά τη στιγμή της μετάφρασής τους και όχι κατά τη στιγμή της εκτέλεσης του προγράμματος. Μία άλλη σημαντική διαφορά σε σχέση με τις δυναμικές δομές είναι ότι τα στοιχεία των στατικών δομών αποθηκεύονται σε συνεχόμενες θέσεις μνήμης.</p>
 <p><b>Πίνακας.</b> Μπορούμε να ορίσουμε τον πίνακα ως μια δομή που περιέχει στοιχεία του ίδιου τύπου (δηλαδή ακέραιους, πραγματικούς κ.λπ.). […] Η αναφορά στα στοιχεία ενός πίνακα γίνεται με τη χρήση του συμβολικού ονόματος του πίνακα ακολουθούμενου από την τιμή ενός ή περισσότερων δεικτών (indexes) σε παρένθεση ή αγκύλη.</p>
@@ -412,7 +412,7 @@ body::before{background:var(--ground)}
 <p><b>Πλεονέκτημα:</b> διαχειριζόμαστε πολλά δεδομένα του ίδιου τύπου, αποθηκευμένα για μεταγενέστερη χρήση. <b>Μειονέκτημα:</b> δεσμεύουν από την αρχή συγκεκριμένο πλήθος θέσεων μνήμης, ακόμα κι αν δεν τις χρησιμοποιήσουμε όλες (Οδηγίες Μελέτης §4).</p></div>
 </div>
 <div class="grid g2" style="align-items:start">
-<div class="box def" style="margin:0">
+<div class="box def" style="margin:0"><img class="sos-av" src="av6.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · Παράδειγμα 1 (μικρότερο στοιχείο)</div>
 <p>Δίνεται ένας μονοδιάστατος πίνακας table 100 στοιχείων. Να σχεδιασθεί αλγόριθμος που να βρίσκει το μικρότερο στοιχείο του.</p>
 <pre class="code">Αλγόριθμος Ελάχ_Πίνακα
@@ -425,7 +425,7 @@ Min ← table[1]
 Τέλος Ελάχ_Πίνακα</pre>
 <p class="src">Σχολικό βιβλίο, §3.3, Παράδειγμα 1</p>
 </div>
-<div class="box def" style="margin:0">
+<div class="box def" style="margin:0"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · Παράδειγμα 2 (αθροίσματα)</div>
 <p>Δίδεται ο δισδιάστατος πίνακας table με m γραμμές n στήλες. Να βρεθεί το άθροισμα κατά γραμμή, κατά στήλη και συνολικά.</p>
 <pre class="code">Αλγόριθμος Αθρ_Πίνακα
@@ -467,7 +467,7 @@ sum ← 0
 <p>Στη ΓΛΩΣΣΑ, όπως και στην Pascal και τη FORTRAN, η πρώτη θέση ενός πίνακα είναι η <b>1</b>. Στις C, Java και Python είναι η <b>0</b>: ένας πίνακας 10 θέσεων έχει δείκτες 0 έως 9. Το 1982 ο <b>Dijkstra</b> έγραψε ένα σύντομο σημείωμα με τίτλο «Γιατί η αρίθμηση πρέπει να ξεκινά από το μηδέν», όπου υποστήριξε ότι οι θέσεις μιας ακολουθίας Ν στοιχείων γράφονται πιο «καθαρά» ως <span class="nw">0 &lt;= i &lt; Ν.</span> Η συζήτηση συνεχίζεται ακόμα ανάμεσα στους προγραμματιστές.</p>
 <p class="talk">Σκέψου: Ο πρώτος όροφος ενός κτιρίου στην Ελλάδα είναι αυτός πάνω από το ισόγειο. Στις ΗΠΑ το ισόγειο λέγεται «first floor». Πού αλλού στη ζωή μετράμε από το 0 και πού από το 1;</p>
 </div>
-<div class="box trap">
+<div class="box trap"><img class="sos-av" src="av6.jpg" alt="" loading="lazy">
 <div class="tag">Παγίδες που κοστίζουν μονάδες</div>
 <ul class="tight">
 <li>Το μέγεθος του πίνακα στη δήλωση είναι <b>αριθμός ή σταθερά</b>: <code>ΑΚΕΡΑΙΕΣ: Α[ν]</code> με ν μεταβλητή είναι λάθος (στατική δομή).</li>
@@ -478,7 +478,7 @@ sum ← 0
 <li>Στον δισδιάστατο ο <b>πρώτος</b> δείκτης είναι η γραμμή και ο <b>δεύτερος</b> η στήλη.</li>
 </ul>
 </div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
 <div class="tag">Σύνοψη</div>
 <p><b><span class="nw">Δεδομένα / πληροφορία</span>:</b> ακατέργαστα <span class="nw">γεγονότα / το</span> αποτέλεσμα της συσχέτισής τους. Ο αλγόριθμος παράγει πληροφορία από τα δεδομένα.</p>
 <p><b>Δομή δεδομένων:</b> σύνολο αποθηκευμένων δεδομένων και λειτουργιών (προσπέλαση, εισαγωγή, διαγραφή, αναζήτηση, ταξινόμηση, αντιγραφή, συγχώνευση, διαχωρισμός).</p>

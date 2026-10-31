@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style id="avcss">.sos-av{float:right;width:72px;height:84px;border-radius:14px;object-position:center top;object-fit:cover;margin:0 0 8px 14px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);shape-outside:margin-box}@media(max-width:560px){.sos-av{width:56px;height:65px;border-radius:11px;margin-left:10px}}@media print{.sos-av{display:none}}</style></head><body>
 <title>Μάθημα 3 · Από την εκφώνηση στον αλγόριθμο</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
@@ -309,7 +309,7 @@ body::before{background:var(--ground)}
 x ← x + 1</pre>
 <p>Στα μαθηματικά το <span class="nw">x = x + 1</span> δεν έχει λύση. Εδώ σημαίνει: <b>πάρε την τιμή του x (5), πρόσθεσε 1 και βάλε το αποτέλεσμα (6) πίσω στο x</b>. Πρώτα υπολογίζεται το δεξί μέρος, μετά γεμίζει το αριστερό.</p></div>
 </div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av6.jpg" alt="" loading="lazy">
 <div class="tag">Δεύτερο καλούπι: Δεδομένα // … // και Αποτελέσματα // … //</div>
 <p>Δεν ξεκινούν όλοι οι αλγόριθμοι με <b>Διάβασε</b> ούτε τελειώνουν με <b>Εμφάνισε</b>. Όταν η εκφώνηση λέει ότι οι τιμές <b>δίνονται</b> («<b>δίνεται</b> ένα ποσό Χ», «<b>έστω</b> ότι υπάρχει…», «για έναν <b>δεδομένο</b> αριθμό…») και ζητά μόνο να <b>υπολογιστούν</b> κάποια αποτελέσματα, χωρίς να λέει ότι διαβάζονται ή ότι εμφανίζονται, τότε γράφουμε:</p>
 <pre class="code">Αλγόριθμος Όνομα
@@ -328,7 +328,7 @@ x ← x + 1</pre>
 <tr><td>«να <b>υπολογίζει</b> …» (χωρίς να λέει ότι εμφανίζεται)</td><td><b>Αποτελέσματα // … //</b></td></tr>
 </tbody></table></div>
 <p class="small">Μπορούν και να συνδυάζονται. Π.χ. στο «δίνεται ένα ποσό … να εμφανίζει …» γράφουμε Δεδομένα // … // στην αρχή και Εμφάνισε στο τέλος.</p>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμοί · απομνημόνευση</div>
 <p>Η γενική μορφή της εντολής εκχώρησης είναι <b><span class="nw">Μεταβλητή ← Έκφραση</span></b> και η λειτουργία της είναι «γίνονται οι πράξεις στην έκφραση και το αποτέλεσμα αποδίδεται, μεταβιβάζεται, εκχωρείται στη μεταβλητή».</p>
 <p><b>Σταθερές</b> (constants). Με τον όρο αυτό αναφερόμαστε σε προκαθορισμένες τιμές που παραμένουν αμετάβλητες σε όλη τη διάρκεια της εκτέλεσης ενός αλγορίθμου. Οι σταθερές διακρίνονται σε αριθμητικές, αλφαριθμητικές και λογικές.</p>
@@ -342,7 +342,7 @@ x ← x + 1</pre>
 </div>
 <div class="sec" id="s-tools"><span class="num">⚙</span><h2>Η εργαλειοθήκη των υπολογισμών</h2><span class="ref">Γύρνα εδώ όποτε χρειάζεσαι</span></div>
 <p>Σε αυτή την ενότητα μαζεύουμε όλα τα «εργαλεία» που θα χρειάζεσαι στις ασκήσεις όλης της χρονιάς: πράξεις, έτοιμες συναρτήσεις, «κόλπα» με αριθμούς, ποσοστά και λογικές εκφράσεις. Δεν χρειάζεται να τα αποστηθίσεις όλα με τη μία. Θα τα χρησιμοποιείς ξανά και ξανά, και όποτε κολλάς, γύρνα εδώ.</p>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av6.jpg" alt="" loading="lazy">
 <div class="tag">Στοιχεία ψευδογλώσσας · από το βιβλίο</div>
 <p><b>Σταθερές.</b> Αριθμητικές: σχηματίζονται από αριθμητικούς χαρακτήρες, με <span class="nw">πρόσημο + ή</span> – και δεκαδικό σημείο. Αλφαριθμητικές: σχηματίζονται από οποιουσδήποτε χαρακτήρες εντός διπλών εισαγωγικών. Λογικές: υπάρχουν δύο, οι Αληθής και Ψευδής.</p>
 <p><b>Μεταβλητές.</b> Για τη σύνθεση του ονόματος μιας μεταβλητής χρησιμοποιούνται οι αριθμητικοί χαρακτήρες, οι αλφαβητικοί χαρακτήρες πεζοί και κεφαλαίοι, καθώς και ο χαρακτήρας _ (underscore).</p>
@@ -421,7 +421,7 @@ x ← x + 1</pre>
 <tr><td>ΛΟΓ(x), Ε(x)</td><td>φυσικός λογάριθμος, e<sup>x</sup></td><td><span class="nw">Ε(0) = 1</span></td></tr>
 </tbody></table></div>
 <p class="small">Οι συναρτήσεις ορίζονται στη ΓΛΩΣΣΑ (βιβλίο §7.6) και τις χρησιμοποιούμε και στην ψευδογλώσσα. Προσοχή να μην μπερδεύεις <b>Α_Μ</b> (ακέραιο μέρος) με <b>Α_Τ</b> (απόλυτη τιμή).</p>
-<div class="box trap"><div class="tag">Η Α_Μ στους αρνητικούς</div>
+<div class="box trap"><img class="sos-av" src="av3.jpg" alt="" loading="lazy"><div class="tag">Η Α_Μ στους αρνητικούς</div>
 <p>Η Α_Μ(x) δίνει τον <b>μεγαλύτερο ακέραιο που δεν ξεπερνά</b> το x: ισχύει <span class="nw">Α_Μ(x) &lt;= x &lt; Α_Μ(x) + 1.</span> Στους θετικούς απλώς «κόβει» τα δεκαδικά. Στους <b>αρνητικούς πηγαίνει προς τα κάτω</b>:</p>
 <p><span class="ln li"><b><span class="nw">Α_Μ(3.7) = 3</span></b></span><span class="ln li"><b>Α_Μ(−3.7) = −4</b> (όχι −3!)</span><span class="ln li">Α_Μ(−3) = −3</span><span class="ln li">Α_Μ(−0.2) = −1</span></p>
 <p class="src">Ύλη και οδηγίες διδασκαλίας, ενότητα 9</p></div>
@@ -474,7 +474,7 @@ x ← x + 1</pre>
 <p class="mx">x = <span class="frac"><span>−β + √<span class="rt">β<sup>2</sup> − 4αγ</span></span><span>2α</span></span></p>
 <pre class="code">x ← (-β + Τ_Ρ(β ^ 2 - 4 * α * γ)) / (2 * α)</pre>
 <p class="small">Χωρίς την παρένθεση στο <span class="nw">(2 * α),</span> το … / <span class="nw">2 * α</span> θα <b>πολλαπλασίαζε</b> με α αντί να διαιρεί. Μέτρα: 4 αριστερές, 4 δεξιές παρενθέσεις.</p></div>
-<div class="box trap" style="margin:0"><div class="tag">Τρεις συνηθισμένες παγίδες</div>
+<div class="box trap" style="margin:0"><img class="sos-av" src="av6.jpg" alt="" loading="lazy"><div class="tag">Τρεις συνηθισμένες παγίδες</div>
 <p><b>2x</b> δεν γράφεται 2x: γράφεται <b><span class="nw">2 * x</span></b>.</p>
 <p><b><span class="nw">α + β / 2</span></b> δεν είναι ο μέσος όρος: διαιρεί μόνο το β. Σωστό: <b><span class="nw">(α + β) / 2</span></b>.</p>
 <p><b><span class="nw">x ^ 1 / 2</span></b> δεν είναι η ρίζα: <span class="nw">η ^ γίνεται</span> πρώτη, άρα δίνει <span class="nw">x / 2.</span> Σωστό: <b>Τ_Ρ(x)</b>.</p></div>
@@ -496,7 +496,7 @@ x ← x + 1</pre>
 λεπτά_τέλους ← λ mod 60</pre>
 <p class="small"><span class="ln">Ταινία στις 23:10 που κρατά 140 λεπτά:</span><span class="ln li"><span class="nw">1390 + 140 = 1530</span></span><span class="ln li"><span class="nw">1530 mod 1440 = 90,</span> δηλαδή <b>1:30</b>.</span><span class="ln">Για να πάω <b>πίσω</b> (π.χ. 2 ώρες διαφορά ώρας) γράφω <span class="nw">(λ − 120 + 1440) mod 1440,</span> ώστε να μη βγει αρνητικό.</span></p></div>
 </div>
-<div class="box trap">
+<div class="box trap"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
 <div class="tag">Παγίδες που κοστίζουν μονάδες</div>
 <ul class="tight">
 <li>Δεκαδικοί στον κώδικα με <b>τελεία</b> (4.5). Το κόμμα μόνο για να χωρίζεις μεταβλητές.</li>
