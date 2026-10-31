@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style id="avcss">.sos-av{float:right;width:72px;height:84px;border-radius:14px;object-position:center top;object-fit:cover;margin:0 0 8px 14px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);shape-outside:margin-box}@media(max-width:560px){.sos-av{width:56px;height:65px;border-radius:11px;margin-left:10px}}@media print{.sos-av{display:none}}</style></head><body>
 <title>Μάθημα 16 · Μετατροπές μεταξύ δομών επανάληψης</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
@@ -284,7 +284,7 @@ body::before{background:var(--ground)}
 <tr><td>Αριθμός επαναλήψεων</td><td>άγνωστος</td><td>άγνωστος</td><td>γνωστός πριν από τον βρόχο</td></tr>
 <tr><td>Ποιος αλλάζει τη συνθήκη</td><td>εντολή μέσα στον βρόχο</td><td>εντολή μέσα στον βρόχο</td><td>η ίδια η ΓΙΑ (το βήμα)</td></tr>
 </tbody></table></div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av5.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · από το βιβλίο</div>
 <p><b>Μετατροπή ΓΙΑ.</b> Κάθε επανάληψη που εκτελείται με μία εντολή ΓΙΑ..ΑΠΟ..ΜΕΧΡΙ, μπορεί να υλοποιηθεί και με τη χρήση των βασικών εντολών επανάληψης ΟΣΟ..ΕΠΑΝΑΛΑΒΕ και ΜΕΧΡΙΣ..ΟΤΟΥ.</p>
 <p class="src">Σχολικό βιβλίο, §8.2.3</p>
@@ -314,7 +314,7 @@ body::before{background:var(--ground)}
   εντολές
 ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</pre>
 </div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av2.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · κανόνας 1</div>
 <p>Οι εντολές στη δομή επανάληψης «ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ…ΜΕΧΡΙΣ_ΟΤΟΥ», εκτελούνται όσο η &lt;συνθήκη&gt; μετά το ΜΕΧΡΙΣ_ΟΤΟΥ είναι Ψευδής, ενώ στη δομή επανάληψης «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ», εκτελούνται όσο η &lt;συνθήκη&gt; ανάμεσα στο ΟΣΟ και το ΕΠΑΝΑΛΑΒΕ είναι Αληθής. Γι’ αυτό, κατά τη μετατροπή από τη μια δομή επανάληψης στην άλλη, αρκεί να γράφουμε την άρνηση της &lt;συνθήκη&gt; της πρώτης στη δεύτερη ή να προτάξουμε τον τελεστή ΟΧΙ στη &lt;συνθήκη&gt;.</p>
 <p>Επίσης, η «ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ…ΜΕΧΡΙΣ_ΟΤΟΥ» εκτελεί τουλάχιστον μία φορά όλες τις εντολές της, γι’ αυτό όταν τη μετατρέπουμε στην «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» πρέπει όλες τις εντολές που περιέχει να τις γράψουμε δύο φορές, μία πριν την «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» και άλλη μία μέσα σ’ αυτήν.</p>
@@ -332,7 +332,7 @@ body::before{background:var(--ground)}
   ΜΕΧΡΙΣ_ΟΤΟΥ ΟΧΙ συνθήκη
 ΤΕΛΟΣ_ΑΝ</pre>
 </div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av5.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · κανόνας 2</div>
 <p>Η «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» μπορεί να μην εκτελεστεί καμία φορά σε αντίθεση με την «ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ…ΜΕΧΡΙΣ_ΟΤΟΥ», η οποία θα εκτελεστεί τουλάχιστον μία φορά, γι’ αυτό πριν τη δομή «ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ…ΜΕΧΡΙΣ_ΟΤΟΥ» θα χρησιμοποιηθεί μια εντολή ελέγχου, που αν ισχύει η &lt;συνθήκη&gt; θα εκτελεστεί η «ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ…ΜΕΧΡΙΣ_ΟΤΟΥ».</p>
 <p class="src">Οδηγίες Μελέτης, §3.6</p>
@@ -354,7 +354,7 @@ body::before{background:var(--ground)}
   i ← i + β
 ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</pre>
 </div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av2.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · κανόνας 3</div>
 <p>Πριν την εντολή «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» εκχωρούμε στη &lt;μεταβλητή&gt; την αρχική τιμή της «ΓΙΑ…ΑΠΟ…ΜΕΧΡΙ…», δηλ. την τιμή1. Στη συνθήκη της «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» συγκρίνουμε τη &lt;μεταβλητή&gt; με την τιμή2. Η σύγκριση εξαρτάται από το βήμα αν είναι θετικό ή αρνητικό. Πριν το ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ της «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» αυξάνουμε την τιμή της μεταβλητής κατά την τιμή του βήματος. Στην περίπτωση που το βήμα δεν υπάρχει, τότε η &lt;μεταβλητή&gt; αυξάνεται κατά 1.</p>
 <p class="src">Οδηγίες Μελέτης, §3.6</p>
@@ -378,7 +378,7 @@ body::before{background:var(--ground)}
 <p>Η ΓΙΑ μπορεί να μην εκτελεστεί (π.χ. ΑΠΟ 1 ΜΕΧΡΙ ν με <span class="nw">ν = 0),</span> ενώ το ΜΕΧΡΙΣ_ΟΤΟΥ εκτελείται σίγουρα μία φορά. Το ΑΝ «προστατεύει» αυτή την περίπτωση (Κ2). Αν τα όρια είναι <b>σταθερές</b> και ξέρουμε ότι ο βρόχος εκτελείται (π.χ. ΑΠΟ 3 ΜΕΧΡΙ 30), το ΑΝ μπορεί να παραλειφθεί.</p></div>
 </div>
 <div class="sec" id="s-5"><span class="num">Κ5</span><h2>ΟΣΟ ή ΜΕΧΡΙΣ_ΟΤΟΥ → ΓΙΑ: μόνο για βρόχους μετρητή</h2><span class="ref">Οδηγίες Μελέτης §3.6</span></div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av5.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · κανόνας 5</div>
 <p>Η μετατροπή της «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» σε «ΓΙΑ...ΑΠΟ…ΜΕΧΡΙ…», γίνεται μόνο στην περίπτωση που στην «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» είναι γνωστός ο αριθμός των επαναλήψεων, σε οποιαδήποτε άλλη περίπτωση δεν είναι δυνατή η μετατροπή της «ΟΣΟ…ΕΠΑΝΑΛΑΒΕ» σε «ΓΙΑ...ΑΠΟ…ΜΕΧΡΙ…».</p>
 <p class="src">Οδηγίες Μελέτης, §3.6</p>
@@ -403,7 +403,7 @@ body::before{background:var(--ground)}
 <p>Στο πρότυπο της FORTRAN του 1966, ο βρόχος DO (ο «πρόγονος» της ΓΙΑ) εκτελούνταν <b>τουλάχιστον μία φορά</b>, ακόμα κι αν η αρχική τιμή ξεπερνούσε την τελική: ήταν, ουσιαστικά, ένα ΜΕΧΡΙΣ_ΟΤΟΥ. Τα νεότερα πρότυπα τον έκαναν να μπορεί να εκτελεστεί καμία φορά, όπως η ΓΙΑ της ΓΛΩΣΣΑΣ. Για να μη «χαλάσουν» τα παλιά προγράμματα, μεταγλωττιστές της Fortran έχουν μέχρι σήμερα ειδική επιλογή (onetrip) που επαναφέρει την παλιά συμπεριφορά. Μια διαφορά «0 ή 1 φορά» κράτησε απασχολημένους τους προγραμματιστές για δεκαετίες.</p>
 <p class="talk">Σκέψου: Αν ένα παλιό πρόγραμμα βασιζόταν στο ότι ο βρόχος εκτελείται μία φορά, τι θα έπρεπε να προσθέσουμε όταν το μεταφέρουμε σε γλώσσα με ΓΙΑ «0 φορές»; (Σκέψου τον κανόνα Κ1.)</p>
 </div>
-<div class="box trap">
+<div class="box trap"><img class="sos-av" src="av2.jpg" alt="" loading="lazy">
 <div class="tag">Παγίδες που κοστίζουν μονάδες</div>
 <ul class="tight">
 <li>Κ1: ξεχνάς να γράψεις τις εντολές <b>και πριν</b> από το ΟΣΟ. Τότε το ΟΣΟ μπορεί να μην εκτελεστεί καθόλου.</li>
@@ -415,7 +415,7 @@ body::before{background:var(--ground)}
 <li>Κ5: μετατρέπεις σε ΓΙΑ έναν βρόχο με φρουρό ή με αλλαγή του μετρητή μέσα σε ΑΝ. Δεν επιτρέπεται.</li>
 </ul>
 </div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av5.jpg" alt="" loading="lazy">
 <div class="tag">Σύνοψη</div>
 <p><b>Από ΜΕΧΡΙΣ_ΟΤΟΥ σε ΟΣΟ:</b> οι εντολές μία φορά πριν, και ΟΣΟ με την άρνηση της συνθήκης.</p>
 <p><span class="ln"><b>Από ΟΣΟ σε ΜΕΧΡΙΣ_ΟΤΟΥ:</b></span><span class="ln li">ΑΝ συνθήκη ΤΟΤΕ</span><span class="ln li">ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ … ΜΕΧΡΙΣ_ΟΤΟΥ ΟΧΙ συνθήκη</span><span class="ln li">ΤΕΛΟΣ_ΑΝ</span></p>

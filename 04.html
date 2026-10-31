@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style id="avcss">.sos-av{float:right;width:72px;height:84px;border-radius:14px;object-position:center top;object-fit:cover;margin:0 0 8px 14px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);shape-outside:margin-box}@media(max-width:560px){.sos-av{width:56px;height:65px;border-radius:11px;margin-left:10px}}@media print{.sos-av{display:none}}</style></head><body>
 <title>Μάθημα 4 · Ανάλυση προβλημάτων</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
@@ -276,13 +276,13 @@ body::before{background:var(--ground)}
 </div>
 <div class="sec" id="s-4-1"><span class="num">4.1</span><h2>Γιατί αναλύουμε ένα πρόβλημα</h2><span class="ref">Βιβλίο σελ. 77–79</span></div>
 <p>Ένα πρόβλημα <b>σπάνια έχει μία μόνο λύση</b>. Μπορεί να λυθεί με διαφορετικές προσεγγίσεις, τεχνικές και μεθόδους, και κάποιες είναι πολύ καλύτερες από άλλες. Γι' αυτό, πριν γράψουμε αλγόριθμο, κάνουμε <b>ανάλυση</b>: μελετάμε το πρόβλημα και διαλέγουμε συγκεκριμένη μεθοδολογία και σειρά βημάτων.</p>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av6.jpg" alt="" loading="lazy">
 <div class="tag">Απομνημόνευση · Τι περιλαμβάνει η ανάλυση</div>
 <p>Η ανάλυση ενός προβλήματος σε ένα σύγχρονο υπολογιστικό περιβάλλον περιλαμβάνει: την <b>καταγραφή</b> της υπάρχουσας πληροφορίας για το πρόβλημα, την <b>αναγνώριση των ιδιαιτεροτήτων</b> του προβλήματος, την <b>αποτύπωση των συνθηκών και προϋποθέσεων</b> υλοποίησής του και στη συνέχεια: την <b>πρόταση επίλυσης</b> με χρήση κάποιας μεθόδου, και την <b>τελική επίλυση</b> με χρήση υπολογιστικών συστημάτων.</p>
 <p class="src">Σχολικό βιβλίο, §4.1</p>
 </div>
 <p>Στην πράξη, η ανάλυση είναι οι απαντήσεις σε πέντε ερωτήσεις:</p>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
 <div class="tag">Απομνημόνευση · Οι 5 ερωτήσεις της ανάλυσης</div>
 <p>① Ποια είναι τα <b>δεδομένα</b> και το <b>μέγεθος</b> του προβλήματος,<br/>② Ποιες είναι οι <b>συνθήκες</b> που πρέπει να πληρούνται για την επίλυση του προβλήματος,<br/>③ Ποια είναι η πλέον <b>αποδοτική μέθοδος</b> επίλυσής τους (σχεδίαση αλγορίθμου),<br/>④ Πώς θα <b>καταγραφεί</b> η λύση σε ένα πρόβλημα (π.χ. σε ψευδογλώσσα), και<br/>⑤ Ποιος είναι ο <b>τρόπος υλοποίησης</b> στο συγκεκριμένο υπολογιστικό σύστημα (π.χ. επιλογή γλώσσας προγραμματισμού).</p>
 <p class="src">Σχολικό βιβλίο, §4.1</p>
@@ -333,12 +333,12 @@ body::before{background:var(--ground)}
 <p class="talk">Σκέψου: Αν δοκιμάζαμε μία-μία όλες τις διαδρομές, με 20 στάσεις ποια από τις 5 ερωτήσεις της ανάλυσης θα μας «έκαιγε»;</p>
 </div>
 <p>Δεν υπάρχει <b>ένας γενικός κανόνας</b> που να λύνει όλα τα προβλήματα. Υπάρχουν όμως <b>«συγγενή» προβλήματα</b>, που αναλύονται με παρόμοιο τρόπο και λύνονται με αντίστοιχες μεθόδους: ο διανομέας πίτσας, ο ταχυδρόμος και το σχολικό λεωφορείο έχουν το ίδιο πρόβλημα.</p>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av6.jpg" alt="" loading="lazy">
 <div class="tag">Απομνημόνευση · Γιατί μας ενδιαφέρουν οι μέθοδοι ανάλυσης και επίλυσης</div>
 <p>• παρέχουν ένα <b>γενικό πρότυπο</b> κατάλληλο για την επίλυση προβλημάτων ευρείας κλίμακας,<br/>• μπορούν να αναπαρασταθούν με <b>κοινές δομές δεδομένων και ελέγχου</b> (που υποστηρίζονται από τις περισσότερες σύγχρονες γλώσσες προγραμματισμού),<br/>• παρέχουν τη δυνατότητα καταγραφής των <b>χρονικών και "χωρικών" απαιτήσεων</b> της μεθόδου επίλυσης, έτσι ώστε να μπορεί να γίνει επακριβής εκτίμηση των αποτελεσμάτων.</p>
 <p class="src">Σχολικό βιβλίο, §4.1</p>
 </div>
-<div class="box trap">
+<div class="box trap"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
 <div class="tag">Παγίδες που κοστίζουν μονάδες</div>
 <ul class="tight">
 <li>«Το καλύτερο σε κάθε βήμα» <b>δεν</b> σημαίνει «το καλύτερο συνολικά».</li>

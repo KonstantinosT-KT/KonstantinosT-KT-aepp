@@ -1,4 +1,4 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style id="avcss">.sos-av{float:right;width:72px;height:84px;border-radius:14px;object-position:center top;object-fit:cover;margin:0 0 8px 14px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);shape-outside:margin-box}@media(max-width:560px){.sos-av{width:56px;height:65px;border-radius:11px;margin-left:10px}}@media print{.sos-av{display:none}}</style></head><body>
 <title>Μάθημα 9 · Το πρώτο σου πρόγραμμα: εκχώρηση, είσοδος, έξοδος</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
@@ -290,7 +290,7 @@ body::before{background:var(--ground)}
 </div>
 </div>
 <div class="sec" id="s-recap"><span class="num">⟳</span><h2>Η δομή ακολουθίας</h2><span class="ref">Βιβλίο §2.4.1, σελ. 36</span></div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av1.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση</div>
 <p><b>Δομή ακολουθίας.</b> Η ακολουθιακή δομή εντολών (σειριακών βημάτων) χρησιμοποιείται πρακτικά για την αντιμετώπιση απλών προβλημάτων, όπου είναι δεδομένη η σειρά εκτέλεσης ενός συνόλου ενεργειών.</p>
 <p class="src">Σχολικό βιβλίο, §2.4.1</p>
@@ -305,7 +305,7 @@ body::before{background:var(--ground)}
 <tr><td>Αντιμετάθεσε α, β</td><td><span class="kvs"><span class="kv">temp ← α</span><span class="kv">α ← β</span><span class="kv">β ← temp</span></span></td><td>η ΓΛΩΣΣΑ δεν έχει Αντιμετάθεσε</td></tr>
 </tbody></table></div>
 <div class="sec" id="s-7-8"><span class="num">7.8</span><h2>Εντολή εκχώρησης</h2><span class="ref">Βιβλίο σελ. 132</span></div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av4.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση</div>
 <p><b>Εντολή εκχώρησης.</b> Η εντολή εκχώρησης χρησιμοποιείται για την απόδοση τιμών στις μεταβλητές κατά τη διάρκεια εκτέλεσης του προγράμματος. Σύνταξη: Όνομα-<span class="nw">Μεταβλητής ← έκφραση.</span></p>
 <p><b>Λειτουργία εκχώρησης.</b> Υπολογίζεται η τιμή της έκφρασης στη δεξιά πλευρά και εκχωρείται η τιμή αυτή στη μεταβλητή, που αναφέρεται στην αριστερή πλευρά.</p>
@@ -325,15 +325,15 @@ body::before{background:var(--ground)}
 <p class="src">Οδηγίες Μελέτης Μαθητή, §1.6</p>
 </div>
 </div>
-<div class="box trap"><div class="tag">Δεν είναι εξίσωση</div><p>Στην εξίσωση το αριστερό μέλος <b>ισούται</b> με το δεξί. Στην εκχώρηση η τιμή του δεξιού μέλους <b>μεταβιβάζεται</b> στη μεταβλητή του αριστερού. Γι' αυτό η ΓΛΩΣΣΑ χρησιμοποιεί το σύμβολο <b>←</b> και όχι το =. Το <span class="nw">α = α + 1</span> είναι σύγκριση (πάντα ΨΕΥΔΗΣ). Το <span class="nw">α ← α + 1</span> είναι εντολή.</p></div>
+<div class="box trap"><img class="sos-av" src="av1.jpg" alt="" loading="lazy"><div class="tag">Δεν είναι εξίσωση</div><p>Στην εξίσωση το αριστερό μέλος <b>ισούται</b> με το δεξί. Στην εκχώρηση η τιμή του δεξιού μέλους <b>μεταβιβάζεται</b> στη μεταβλητή του αριστερού. Γι' αυτό η ΓΛΩΣΣΑ χρησιμοποιεί το σύμβολο <b>←</b> και όχι το =. Το <span class="nw">α = α + 1</span> είναι σύγκριση (πάντα ΨΕΥΔΗΣ). Το <span class="nw">α ← α + 1</span> είναι εντολή.</p></div>
 <div class="sec" id="s-7-9"><span class="num">7.9</span><h2>Εντολές εισόδου και εξόδου</h2><span class="ref">Βιβλίο σελ. 133–134</span></div>
 <div class="grid g2" style="align-items:start">
-<div class="box def" style="margin:0">
+<div class="box def" style="margin:0"><img class="sos-av" src="av4.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · ΔΙΑΒΑΣΕ</div>
 <p><b>ΔΙΑΒΑΣΕ.</b> Η εκτέλεση της εντολής οδηγεί στην είσοδο τιμών από το πληκτρολόγιο και την εκχώρησή τους στις μεταβλητές που αναφέρονται. Ακολουθείται πάντοτε από ένα ή περισσότερα ονόματα μεταβλητών, που χωρίζονται με κόμμα. Κατά την εκτέλεση η εντολή διακόπτει το πρόγραμμα, που περιμένει την εισαγωγή τιμών.</p>
 <p class="src">Σχολικό βιβλίο, §7.9</p>
 </div>
-<div class="box def" style="margin:0">
+<div class="box def" style="margin:0"><img class="sos-av" src="av1.jpg" alt="" loading="lazy">
 <div class="tag">Ορισμός · απομνημόνευση · ΓΡΑΨΕ</div>
 <p><b>ΓΡΑΨΕ.</b> Χρησιμοποιείται για την εμφάνιση σταθερών τιμών καθώς και των τιμών των μεταβλητών που αναφέρονται στη λίστα. Όταν κάποιο όνομα μεταβλητής περιέχεται στη λίστα, αρχικά ανακτάται η τιμή της και στη συνέχεια η τιμή αυτή εμφανίζεται στην οθόνη.</p>
 <p class="src">Σχολικό βιβλίο, §7.9</p>
@@ -353,7 +353,7 @@ body::before{background:var(--ground)}
 <pre class="code">ΓΡΑΨΕ 'Δώσε την ηλικία σου:'
 ΔΙΑΒΑΣΕ ηλικία</pre>
 <p>Χωρίς το μήνυμα, ο χρήστης βλέπει μια οθόνη που «περιμένει» και δεν ξέρει τι να πληκτρολογήσει. Στις εξετάσεις το μήνυμα <b>δεν</b> είναι υποχρεωτικό, εκτός αν το ζητά η εκφώνηση. Στο εργαστήριο βάζε το πάντα.</p></div>
-<div class="box trap" style="margin:0"><div class="tag">Μετά τη ΔΙΑΒΑΣΕ μόνο μεταβλητές</div><p><b>ΔΙΑΒΑΣΕ 'Δώσε όνομα'</b>, <b>ΔΙΑΒΑΣΕ <span class="nw">α + 1</span></b> και <b>ΔΙΑΒΑΣΕ ΦΠΑ</b> (σταθερά) είναι λάθος. Τα μηνύματα γράφονται με ΓΡΑΨΕ. Και στη ΓΡΑΨΕ το κείμενο θέλει <b>εισαγωγικά</b>: το ΓΡΑΨΕ Τέλος χωρίς εισαγωγικά ψάχνει μεταβλητή «Τέλος».</p></div>
+<div class="box trap" style="margin:0"><img class="sos-av" src="av4.jpg" alt="" loading="lazy"><div class="tag">Μετά τη ΔΙΑΒΑΣΕ μόνο μεταβλητές</div><p><b>ΔΙΑΒΑΣΕ 'Δώσε όνομα'</b>, <b>ΔΙΑΒΑΣΕ <span class="nw">α + 1</span></b> και <b>ΔΙΑΒΑΣΕ ΦΠΑ</b> (σταθερά) είναι λάθος. Τα μηνύματα γράφονται με ΓΡΑΨΕ. Και στη ΓΡΑΨΕ το κείμενο θέλει <b>εισαγωγικά</b>: το ΓΡΑΨΕ Τέλος χωρίς εισαγωγικά ψάχνει μεταβλητή «Τέλος».</p></div>
 </div>
 <div class="box trivia">
 <div class="tag">Ήξερες ότι;</div>
@@ -399,7 +399,7 @@ body::before{background:var(--ground)}
 <p>Υπάρχει μια διάσημη φωτογραφία του 1969 με τη <b>Margaret Hamilton</b>, επικεφαλής της ομάδας που έγραψε το λογισμικό πλοήγησης των αποστολών <b>Apollo</b>, να στέκεται δίπλα σε μια στοίβα με εκτυπώσεις κώδικα σχεδόν όσο ψηλή είναι η ίδια. Σε τόσο μεγάλα προγράμματα, χωρίς σταθερή δομή και σχόλια, κανείς δεν θα έβρισκε τίποτα.</p>
 <p class="talk">Σκέψου: Ποιος διαβάζει τα σχόλια ενός προγράμματος, αφού ο υπολογιστής τα αγνοεί;</p>
 </div>
-<div class="box trap">
+<div class="box trap"><img class="sos-av" src="av1.jpg" alt="" loading="lazy">
 <div class="tag">Παγίδες που κοστίζουν μονάδες</div>
 <ul class="tight">
 <li>Αριστερά από το ← <b>μόνο ένα όνομα μεταβλητής</b>. Ποτέ σταθερά, τιμή ή πράξη.</li>
@@ -411,7 +411,7 @@ body::before{background:var(--ground)}
 <li>ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ με το <b>ίδιο όνομα</b> με την επικεφαλίδα.</li>
 </ul>
 </div>
-<div class="box def">
+<div class="box def"><img class="sos-av" src="av4.jpg" alt="" loading="lazy">
 <div class="tag">Σύνοψη</div>
 <p><b>Εκχώρηση:</b> <span class="nw">μεταβλητή ← έκφραση.</span> Υπολογίζεται το δεξί μέρος και η τιμή πηγαίνει στη μεταβλητή. Ίδιος τύπος.</p>
 <p><b>ΔΙΑΒΑΣΕ:</b> σταματά το πρόγραμμα μέχρι ο χρήστης να δώσει τιμές από το πληκτρολόγιο, που εκχωρούνται στις μεταβλητές.</p>
