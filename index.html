@@ -324,7 +324,7 @@ figcaption{text-align:center;font:700 13px var(--display);color:var(--muted)}
 /* ---------- ρυθμίσεις πιλότου ---------- */
 const OPEN_UP_TO = 20;          // ανοιχτά μαθήματα 1..OPEN_UP_TO
 const NEW_LESSONS = [18,19,20]; // σήμα «ΝΕΑ»
-const SHARE_URL = "https://konstantinost-kt.github.io/aepp/";
+const SHARE_URL = "https://konstantinost-kt.github.io/KonstantinosT-KT-aepp/";
 const ORG = { phone:"2310 306051", email:"sinapsi.edu@gmail.com", address:"Ι. Πανταζίδου 36, 54352 Πυλαία Θεσσαλονίκης",
   maps:"https://www.google.com/maps/search/?api=1&query=%CE%99.+%CE%A0%CE%B1%CE%BD%CF%84%CE%B1%CE%B6%CE%AF%CE%B4%CE%BF%CF%85+36+%CE%A0%CF%85%CE%BB%CE%B1%CE%AF%CE%B1" };
 const GROUPS = [
@@ -401,7 +401,7 @@ function home(){
       const l = it.l;
       const open=isOpen(l.n), nw=open&&NEW_LESSONS.includes(l.n);
       const cls = open ? ('open'+(nw?' new':'')+(l.n===OPEN_UP_TO?' last-open':'')) : 'locked';
-      const tag = open ? `a href="lessons/${String(l.n).padStart(2,'0')}.html"` : `a href="#" data-locked="${l.n}"`;
+      const tag = open ? `a href="${String(l.n).padStart(2,'0')}.html"` : `a href="#" data-locked="${l.n}"`;
       path += `<${tag} class="st ${cls}"><span class="rail"><span class="node">${open?l.n:I.lock}</span>${end}</span>
         <span class="card">${nw?'<span class="badge">ΝΕΑ</span>':''}<span class="n">ΜΑΘΗΜΑ ${l.n}</span><span class="t">${esc(l.title)}</span></span></a>`;
     });
@@ -415,7 +415,7 @@ function home(){
   return `<header class="top"><div class="wrap">
     <div class="bar"><button class="ibtn" data-act="menu" aria-label="Μενού">${I.menu}</button>
       <button class="ibtn" data-act="theme" aria-label="${dark?'Φωτεινό θέμα':'Σκοτεινό θέμα'}">${dark?I.sun:I.moon}</button></div>
-    <img class="logo" src="assets/logo.png" alt="ΣΥΝΑΨΗ εκπαιδευτική ομάδα">
+    <img class="logo" src="logo.png" alt="ΣΥΝΑΨΗ εκπαιδευτική ομάδα">
     <div class="course">Πληροφορική Γ' Λυκείου</div>
     <div class="teacher-card"><span class="av">ΚΘ</span><span><b>Καθηγητής: Κωνσταντίνος Θεοφίλου</b><small>Συγγραφή &amp; επιστημονική επιμέλεια υλικού: Κωνσταντίνος Θεοφίλου, MSc in ICT</small></span></div>
     <p class="intro">Η διαδρομή σου μέχρι τις Πανελλαδικές. Κάθε νέο μάθημα ανοίγει μόλις το δουλέψουμε στην τάξη.</p>
@@ -452,7 +452,7 @@ function guidance(){ return subTop('Επιπλέον καθοδήγηση') + `<
   </main>${footer()}`; }
 
 function about(){ return subTop('Ποιοι είμαστε') + `<main class="wrap page">
-  <img class="photo" src="assets/storefront.jpg" alt="Η πρόσοψη της ΣΥΝΑΨΗΣ στην Πυλαία Θεσσαλονίκης">
+  <img class="photo" src="storefront.jpg" alt="Η πρόσοψη της ΣΥΝΑΨΗΣ στην Πυλαία Θεσσαλονίκης">
   <span class="beta">BETA ΕΚΔΟΣΗ</span>
   <h2 style="font-size:24px">Φτιαγμένο με μεράκι, για τον δικό σου στόχο</h2>
   <p style="color:var(--body)">Η εφαρμογή γεννήθηκε μέσα από χρόνια διδασκαλίας και αγάπης για αυτό που κάνουμε. Ξέρουμε πόσο απαιτητική είναι η χρονιά της προετοιμασίας, γιατί τη ζούμε κάθε χρόνο δίπλα στους μαθητές μας.</p>
@@ -482,7 +482,7 @@ function phone(o){
 function teacher(){
   const b=BRANDS[brand];
   const ours=phone({bg:'#2B3722',bg2:'#3C4A30',accent:'#C9AD8D',soft:'#EEF0E2',ini:'ΚΘ',teacher:'Καθηγητής: Κωνσταντίνος Θεοφίλου',
-    logo:'<img src="assets/logo.png" alt="ΣΥΝΑΨΗ" style="height:26px;width:auto;display:block">'});
+    logo:'<img src="logo.png" alt="ΣΥΝΑΨΗ" style="height:26px;width:auto;display:block">'});
   const yours=phone({...b,ini:'ΜΠ',teacher:'Καθηγήτρια: Μαρία Παπαδοπούλου',
     logo:`<span class="mono" style="background:${b.accent};color:${b.bg}">ΜΠ</span><span class="mono-t">Φροντιστήριο<br>Παπαδοπούλου</span>`});
   const sw=BRANDS.map((x,i)=>`<button class="sw" data-brand="${i}" aria-pressed="${i===brand}" aria-label="${x.name}" style="background:${x.bg}"><i style="background:${x.accent}"></i></button>`).join('');
@@ -582,7 +582,7 @@ function drawer(){
   const soon='<span class="badge soon" style="margin:0">ΣΥΝΤΟΜΑ</span>';
   const dark=curTheme()==='dark';
   return `<div class="scrim" data-act="close"></div><nav class="drawer" aria-label="Μενού">
-    <img src="assets/logo.png" alt="ΣΥΝΑΨΗ" style="width:170px;height:auto;background:#2B3722;border-radius:12px;padding:8px 10px">
+    <img src="logo.png" alt="ΣΥΝΑΨΗ" style="width:170px;height:auto;background:#2B3722;border-radius:12px;padding:8px 10px">
     <div class="dl"><span class="dh">Τα μαθήματά μου</span>
       <a class="di cur" href="#">${I.pc}Πληροφορική<span class="r" style="font-size:12px;color:var(--accent)">${OPEN_UP_TO}/${LESSONS.length}</span></a>
       <div class="di off">${I.book}Νεοελληνική Γλώσσα<span class="r">${I.lock}</span></div><div class="di off">${I.sigma}Μαθηματικά<span class="r">${I.lock}</span></div><div class="di off">${I.trend}Οικονομία<span class="r">${I.lock}</span></div></div>
@@ -612,7 +612,7 @@ function reportSheet(){
   const rows=[['Η έννοια του προβλήματος','Πολύ καλά','good'],['Τι είναι αλγόριθμος','Καλά','ok'],['Δομή επιλογής','Χρειάζεται εξάσκηση','low'],['Δομές επανάληψης','Δεν έχει διδαχθεί ακόμα','na']];
   return `<div class="scrim" data-act="close"></div><div class="sheet" role="dialog" aria-label="Αναφορά προόδου"><div class="wrap">
   <span class="grab"></span>
-  <div class="rep-h"><img src="assets/logo.png" alt="ΣΥΝΑΨΗ" style="height:30px;width:auto;background:#2B3722;border-radius:8px;padding:4px 6px"><span class="badge soon" style="margin:0">ΔΕΙΓΜΑ</span></div>
+  <div class="rep-h"><img src="logo.png" alt="ΣΥΝΑΨΗ" style="height:30px;width:auto;background:#2B3722;border-radius:8px;padding:4px 6px"><span class="badge soon" style="margin:0">ΔΕΙΓΜΑ</span></div>
   <div><small class="dh" style="padding:0">Αναφορά προόδου · Οκτώβριος 2026</small><h2 style="font-size:21px">Νίκος Π. · Πληροφορική Γ' Λυκείου</h2></div>
   <div class="est"><small>Εκτιμώμενος βαθμός σήμερα</small><div><b>14–16</b><span>/ 20 ↑</span></div><small>Σεπτέμβριος: 12–14</small></div>
   <div class="pv">${rows.map(r=>`<div class="kv"><span style="color:var(--ink)">${r[0]}</span><b class="lv ${r[2]}">${r[1]}</b></div>`).join('')}</div>
