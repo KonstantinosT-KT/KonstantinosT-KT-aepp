@@ -1,0 +1,600 @@
+<title>Επαναληπτικές 2021 · Πληροφορική</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
+<style>
+/* Layout: one A4-like sheet centred on a cool ground; coloured callouts by role (ορισμός, ήξερες ότι, παγίδα, παράδειγμα) */
+:root{
+  --ground:#e9edf4; --paper:#ffffff; --ink:#172036; --muted:#5a6377; --line:#d9dfea; --soft:#f3f5f9;
+  --blue:#2457d6; --blue-bg:#e9efff; --teal:#0b7f72; --teal-bg:#e2f4f1;
+  --amber:#a65400; --amber-bg:#fff3df; --amber-line:#e2ad62;
+  --coral:#b93b12; --coral-bg:#fcebe4; --violet:#6534c9; --violet-bg:#efe8fd;
+  --s-blue:#2457d6; --s-teal:#0b8174; --s-violet:#6534c9; --s-ink:#172036; --on-solid:#ffffff; --on-solid-2:#d8e1ff;
+  --hero:#172036; --hero-fg:#ffffff; --hero-sub:#c4cef0; --hero-kick:#a9bcff;
+  --mark:#ffe28a;
+  --display:"Commissioner","Noto Sans",system-ui,sans-serif;
+  --body:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0 0 8px}
+
+/* Toolbar */
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:10px 0;background:var(--ground)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:3px}
+.seg button,.btn{font:600 13px/1 var(--body);border:0;background:none;color:var(--muted);padding:8px 13px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid)}
+.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.spacer{flex:1}
+#status{font-size:12.5px;color:var(--muted)}
+.edit-only{display:none}
+body.editing .edit-only{display:inline-block}
+body.editing .view-only{display:none}
+body.editing #doc{outline:2px dashed var(--blue);outline-offset:6px}
+body.editing #doc [contenteditable="false"]{cursor:default}
+
+/* Sheet */
+#doc{max-width:860px;margin:0 auto;background:var(--paper);border-radius:14px;padding:clamp(18px,4vw,44px);box-shadow:0 1px 2px rgba(10,20,40,.06),0 8px 30px rgba(10,20,40,.06)}
+body.student .teacher{display:none}
+
+.hero{background:var(--hero);color:var(--hero-fg);border-radius:14px;padding:22px 24px 24px;position:relative;overflow:hidden}
+.hero .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--hero-kick);font-weight:700}
+.hero h1{font-size:clamp(28px,5vw,40px);font-weight:800;margin:6px 0 8px;letter-spacing:-.01em}
+.hero .sub{color:var(--hero-sub);max-width:34em}
+.hero .sub b{color:var(--hero-fg)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.12);color:var(--hero-fg)}
+.hero .deco{position:absolute;right:-10px;top:-6px;opacity:.16;width:220px;height:auto}
+.hero .deco *{stroke:var(--hero-fg)}
+
+.goals{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 18px;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px}
+.goals h3{grid-column:1/-1;font-size:13px;color:var(--blue);text-transform:uppercase;letter-spacing:.08em}
+.goals div{padding-left:20px;position:relative;font-size:14px}
+.goals div::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:800}
+
+.glance{margin-top:14px;background:var(--soft);border-radius:12px;padding:14px 16px}
+.glance h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.figure{overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:520px;height:auto;font-family:var(--body)}
+
+.sec{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:5px;margin:30px 0 12px;break-after:avoid}
+.sec .num{font-family:var(--display);font-weight:800;font-size:22px;color:var(--blue);font-variant-numeric:tabular-nums}
+.sec h2{font-size:22px;font-weight:800}
+.sec .ref{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;break-inside:avoid}
+.tag{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.def{background:var(--blue-bg);border-left:4px solid var(--blue)} .def .tag{color:var(--blue)}
+.src{font-size:12px;color:var(--muted);margin:2px 0 0}
+.trivia{background:var(--amber-bg);border:1.5px dashed var(--amber-line)} .trivia .tag{color:var(--amber)}
+.talk{margin-top:6px;font-size:14px;color:var(--amber);font-weight:600}
+.talk span{font-weight:400}
+.trap{background:var(--coral-bg);border-left:4px solid var(--coral)} .trap .tag{color:var(--coral)}
+.ex{background:var(--teal-bg);border-left:4px solid var(--teal)} .ex .tag{color:var(--teal)}
+.plain{background:var(--soft)} .plain .tag{color:var(--ink)}
+.hl{background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 1px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:10px 0}
+.grid .box{margin:0}
+ul.tight{margin:4px 0 8px;padding-left:20px} ul.tight li{margin:3px 0}
+.small{font-size:13px;color:var(--muted)}
+.cap{font-size:13.5px;font-weight:700;margin-bottom:6px}
+
+.tablewrap{overflow-x:auto;margin:10px 0}
+table.t{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
+table.t th{background:var(--s-ink);color:var(--paper);text-align:left;padding:7px 10px;font-weight:600}
+table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:top}
+
+.exhead{display:flex;align-items:center;gap:10px;margin:22px 0 8px}
+.lvl{display:inline-flex;gap:4px}
+.lvl i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}
+.lvl i.on{background:var(--violet)}
+.exhead h3{font-size:17px}
+.q{margin:10px 0 14px;break-inside:avoid}
+.qn{display:inline-block;min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:7px;background:var(--violet-bg);color:var(--violet);font-weight:800;font-size:13px;margin-right:8px}
+.theme{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-left:6px}
+table.tf{width:100%;border-collapse:collapse;margin-top:6px;font-size:14.5px}
+table.tf td{padding:6px 8px;border-bottom:1px solid var(--line)}
+table.tf td.b{width:70px;text-align:center;color:var(--muted)}
+.lines{height:var(--h,44px);background:repeating-linear-gradient(transparent 0 27px,var(--line) 27px 28px);margin-top:6px}
+.drawbox{height:180px;border:1.5px dashed var(--line);border-radius:10px;margin-top:8px}
+.indent{margin-left:34px}
+.sol{color:var(--teal);font-weight:700}
+.ans .q{margin:8px 0}
+.teacher .sec{border-color:var(--teal)} .teacher .sec .num{color:var(--teal)}
+
+/* SVG roles */
+.f-blue{fill:var(--s-blue)} .f-teal{fill:var(--s-teal)} .f-violet{fill:var(--s-violet)} .f-ink{fill:var(--s-ink)}
+.f-paper{fill:var(--paper)} .f-on{fill:var(--on-solid)} .f-on2{fill:var(--on-solid-2)} .f-text{fill:var(--ink)} .f-muted{fill:var(--muted)} .f-onink{fill:var(--paper)}
+.st-ink{stroke:var(--ink)} .st-blue{stroke:var(--blue)} .st-teal{stroke:var(--teal)} .st-violet{stroke:var(--violet)}
+.f-arrow{fill:var(--ink)}
+
+
+/* v2 additions: code, narrow flowcharts, legends */
+:root{--mono:ui-monospace,"Cascadia Mono","Consolas","DejaVu Sans Mono",monospace}
+pre.code{font-family:var(--mono);font-size:14px;line-height:1.55;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:6px 0 8px;overflow-x:auto;white-space:pre}
+.figure.narrow svg{min-width:0;max-width:250px;margin:4px auto}
+.grid.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+ul.legend{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0 2px}
+ul.legend li{font-size:14px}
+ul.legend b{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:6px;background:var(--violet-bg);color:var(--violet);margin-right:4px}
+
+
+/* v3 additions: solved examples step by step, blank value tables */
+.solved{border:1.5px solid var(--teal);background:var(--paper)} .solved .tag{color:var(--teal)}
+.steps{display:grid;gap:14px;margin-top:10px}
+.step{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.stepn{width:30px;height:30px;border-radius:50%;background:var(--s-teal);color:var(--on-solid);font:800 14px/30px var(--display);text-align:center}
+table.t.blank td{height:34px;border:1px solid var(--line)}
+
+/* v4: graphs */
+.figure.narrow.graph svg{max-width:380px}
+
+/* v5: toolbox subsections */
+h3.tool{font-size:17px;margin:24px 0 8px;padding-top:4px;border-top:1px solid var(--line)}
+
+/* homework vs self-check */
+.q.hw::before{content:"Για το σπίτι";display:block;width:max-content;font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:99px;padding:4px 9px;margin-bottom:6px}
+body.editing .q.hw::before{display:none}
+.hwtoggle{display:block;margin-bottom:6px;font:600 12px/1 var(--body);padding:6px 10px;border-radius:99px;border:1.5px dashed var(--line);background:var(--paper);color:var(--muted);cursor:pointer}
+.hwtoggle[aria-pressed="true"]{border-style:solid;border-color:var(--amber-line);color:var(--amber);background:var(--amber-bg)}
+.hwnote{font-size:13px;color:var(--amber);font-weight:600}
+
+@media (max-width:520px){ .indent{margin-left:0} .hero .deco{display:none} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* v4: math notation (fractions, roots) */
+.mx{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:1.06em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 2px;line-height:1.25}
+.frac>span{padding:0 4px}
+.frac>span:first-child{border-bottom:1.3px solid currentColor}
+.rt{border-top:1.3px solid currentColor;padding:0 2px 0 1px;margin-left:1px}
+
+/* student additions */
+#doc{margin-top:0}
+#nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ground);max-width:860px;margin:0 auto;padding-block:10px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.navin{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.navin::-webkit-scrollbar{display:none}
+#nav a{flex:none;font:600 13px/1 var(--body);color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
+#nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
+.btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.quiz{display:grid;gap:10px;margin-top:10px}
+.qi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:8px}
+.qi .qs{margin:0}
+.qb{display:flex;gap:8px;flex-wrap:wrap}
+.qb button{font:600 14px/1 var(--body);padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;min-width:96px}
+.qb button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.qi.ok{border-color:var(--teal);background:var(--teal-bg)}
+.qi.no{border-color:var(--coral);background:var(--coral-bg)}
+.qi .qb button.pick{border-color:currentColor}
+.qi.ok .qb button.pick{background:var(--s-teal);border-color:var(--s-teal);color:var(--on-solid)}
+.qi.no .qb button.pick{background:var(--coral);border-color:var(--coral);color:var(--paper)}
+.qi.no .qb button.right{border-color:var(--teal);color:var(--teal)}
+.fb{font-size:13px;font-weight:700}
+.qi.ok .fb{color:var(--teal)} .qi.no .fb{color:var(--coral)}
+.score{font:700 15px/1.4 var(--display);padding:10px 14px;border-radius:10px;background:var(--violet-bg);color:var(--violet);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.score .btn{font-size:13px;padding:8px 12px}
+
+details.reveal{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+details.reveal summary{cursor:pointer;font-weight:700;color:var(--teal);padding:10px 14px;list-style:none}
+details.reveal summary::-webkit-details-marker{display:none}
+details.reveal summary::before{content:"▸ ";}
+details.reveal[open] summary::before{content:"▾ ";}
+details.reveal .rv{padding:0 14px 12px}
+
+.deck{display:grid;gap:12px;margin-top:10px}
+.card{position:relative;display:block;width:100%;min-height:220px;border:0;padding:0;background:none;cursor:pointer;perspective:1200px;font:inherit;color:inherit;text-align:left}
+.card .face{position:absolute;inset:0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;backface-visibility:hidden;transition:transform .45s ease}
+.card .front{background:var(--hero);color:var(--hero-fg);justify-content:center}
+.card .back{background:var(--blue-bg);color:var(--ink);border:1.5px solid var(--blue);transform:rotateY(180deg);overflow:auto}
+.card.flipped .front{transform:rotateY(-180deg)}
+.card.flipped .back{transform:rotateY(0)}
+.card:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:14px}
+.ck{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.term{font:800 clamp(24px,6vw,34px)/1.15 var(--display)}
+.cdef{font-size:15.5px;line-height:1.55}
+.tap{font-size:12.5px;opacity:.7;margin-top:auto}
+.deckbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.count{font:700 14px var(--display);min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.card .face{transition:none}}
+@media (max-width:520px){ #doc{border-radius:12px} .card{min-height:260px} }
+</style>
+<style id="kitcss">/*KIT>*//* ==== kit: θέμα, προβολή, «Δείξε λύση» ==== */
+body{font-size:16px}
+.kit-btn{font:600 13px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 12px;border-radius:999px;cursor:pointer}
+.kit-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.kit-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#kitfloat{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:30;display:flex;gap:6px;padding:5px;border-radius:999px;background:var(--ground);border:1px solid var(--line);box-shadow:0 4px 16px rgba(10,20,40,.12)}
+.rt-ans{margin:-2px 0 14px}
+.rt-show{font:600 13.5px/1 var(--body);border:1.5px solid var(--s-teal);background:var(--teal-bg);color:var(--teal);padding:9px 14px;border-radius:999px;cursor:pointer}
+.rt-show:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.rt-body{display:none;margin-top:10px;border-left:4px solid var(--s-teal);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 16px}
+.rt-body .q{margin:0;border:0;padding:0;background:none}
+.rt-open > .rt-body, body.rt-all .rt-body{display:block}
+.rt-open > .rt-show{background:var(--paper)}
+body:not(.rt-all):not(.editing) .solved:not(.rt-open) .rt-hide{display:none}
+body.rt-all .rt-showstep{display:none}
+.solved.rt-open .rt-showstep{display:none}
+.rt-showstep{margin:4px 0 6px}
+body.student .rt-ans{display:none}
+body.editing .rt, body.editing .rt-showstep{display:none}
+/* Λειτουργία προβολής */
+body.proj #bar,body.proj #nav{zoom:1.25}
+body.proj{--muted:#3a4254;--line:#b5bfd2}
+:root[data-theme="dark"] body.proj{--muted:#b9c1d4;--line:#3b465e}
+@media print{#kitfloat,.rt,.rt-showstep,.kit-btn{display:none!important}.rt-hide{display:grid!important}}
+/* Καθαρές γραμμές */
+body{font-size:17px;line-height:1.68}
+.ln{display:block;margin:.22em 0}
+.ln.li{position:relative;padding-left:1.25em}
+.ln.li::before{content:"•";position:absolute;left:.35em;color:var(--muted)}
+.kvs{display:inline-flex;flex-wrap:wrap;gap:.2em 1.2em;vertical-align:top}
+.kv,.nw{white-space:nowrap}
+p,li,td{text-wrap:pretty}
+.ln.cd{font-family:var(--mono);font-size:.92em}
+.cdcols{display:inline-flex;flex-wrap:wrap;gap:4px 28px;vertical-align:top}
+.cdcol{display:inline-block;padding-left:10px;border-left:2px solid var(--line)}/*<KIT*/</style>
+<style id="pancss">
+.stmt{border-left:3px solid var(--line);padding:2px 0 2px 12px;margin:6px 0 8px}
+.stmt p{margin:0 0 6px}
+.where{font-size:13px;font-weight:600;color:var(--violet);margin:2px 0 6px}
+.where a,.t a.lk{color:var(--violet)}
+body:not(.rt-all) .box.solved:not(.rt-open) .steps>.step:first-child{display:none}
+.credit{font-size:13px;color:var(--hero-sub);margin-top:10px}
+.fig-exam{background:#fff;border-radius:10px;padding:10px;display:block;max-width:420px;margin:8px auto}
+.fig-exam img{display:block;width:100%;height:auto}
+.answers{display:flex;flex-wrap:wrap;gap:6px 14px;font-weight:700}
+.answers span{background:var(--soft);border-radius:8px;padding:4px 10px}
+
+.uml{margin:8px 0;display:flex;flex-direction:column;align-items:center}
+.ub{border:1.5px solid var(--ink);border-radius:8px;background:var(--paper);min-width:180px;font-size:14px;overflow:hidden}
+.ub .un{font-weight:800;text-align:center;padding:6px 10px;color:var(--on-solid)}
+.ub.sup .un{background:var(--s-violet)} .ub.sub .un{background:var(--s-teal)}
+.ub .ua,.ub .um{padding:6px 10px;border-top:1px solid var(--line)}
+.ub .um{border-top:1px dashed var(--muted)} .ub .um div{font-weight:700}
+.ub .mute{color:var(--muted)}
+.uarr{font-size:18px;line-height:1;color:var(--ink);display:flex;flex-direction:column;align-items:center}
+.uarr span{display:block;width:2px;height:14px;background:var(--ink)}
+.usubs{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;width:100%;border-top:2px solid var(--ink);padding-top:12px}
+table.mat{border-collapse:collapse;margin:6px auto}
+table.mat td{border:1px solid var(--line);width:28px;height:28px;text-align:center}
+</style>
+<nav id="nav" aria-label="Θέματα"><div class="navin"><a href="#s-a">Θέμα Α</a><a href="#s-b">Θέμα Β</a><a href="#s-c">Θέμα Γ</a><a href="#s-d">Θέμα Δ</a><a href="#s-map">Χάρτης ύλης</a></div></nav>
+<main id="doc" lang="el"><section class="hero">
+<div class="kicker">Μέρος Η · Θέματα Πανελλαδικών</div>
+<h1>Επαναληπτικές 2021: Πληροφορική</h1>
+<p class="sub">Πέμπτη 9 Σεπτεμβρίου 2021 · Ημερήσια και Εσπερινά ΓΕΛ. Λύσε πρώτα μόνος σου στο τετράδιο, σαν να είσαι στην εξέταση, και μετά άνοιξε τη <b>λύση βήμα-βήμα</b>.</p>
+<div class="chips"><span class="chip">4 θέματα · 100 μονάδες</span><span class="chip">Διάρκεια: 3 ώρες</span><span class="chip">Πηγή εκφωνήσεων: ΥΠΑΙΘΑ</span></div>
+<p class="credit"><b>Καθηγητής: Κωνσταντίνος Θεοφίλου</b> · ΣΥΝΑΨΗ Εκπαιδευτική</p>
+</section>
+<div class="glance"><h3>Πώς δουλεύεις αυτή τη σελίδα</h3>
+<p><span class="ln li">Κάθε υποερώτημα έχει την <b>εκφώνηση όπως δόθηκε</b> και το μάθημα όπου το διδαχθήκαμε. Πάτα το μάθημα για να πας κατευθείαν στη θεωρία.</span><span class="ln li">Η λύση βήμα-βήμα (Κατανοώ, Αναλύω, Γράφω, Ελέγχω) ανοίγει με το κουμπί, <b>αφού δοκιμάσεις</b> μόνος σου.</span><span class="ln li">Οι λύσεις είναι ενδεικτικές. Στις Πανελλαδικές «κάθε απάντηση επιστημονικά τεκμηριωμένη είναι αποδεκτή».</span></p><p class="small">Οι εκφωνήσεις είναι τα επίσημα θέματα των Επαναληπτικών Πανελλαδικών Εξετάσεων 2021. Οι λύσεις και τα σχόλια είναι ενδεικτικά και ανήκουν στη ΣΥΝΑΨΗ Εκπαιδευτική.</p></div>
+<div class="sec" id="s-a"><span class="num">Α</span><h2>Θέμα Α</h2><span class="ref">40 μονάδες · θεωρία</span></div>
+<div class="box solved" id="a1"><div class="tag">Α1 · Μονάδες 10</div><div class="stmt"><p>Να γράψετε στο τετράδιό σας τον αριθμό καθεμιάς από τις παρακάτω προτάσεις 1 έως 5 και δίπλα τη λέξη ΣΩΣΤΟ, αν η πρόταση είναι σωστή, ή τη λέξη ΛΑΘΟΣ, αν η πρόταση είναι λανθασμένη.</p>
+<p><span class="ln">1. Η σύγκριση ‘ΠΕΝΤΕ’ &lt; ’ΕΠΤΑ’ δίνει την τιμή ΑΛΗΘΗΣ.</span><span class="ln">2. Η δομή πολλαπλής επιλογής ΑΝ… ΤΟΤΕ… ΑΛΛΙΩΣ_ΑΝ ελέγχει υποχρεωτικά όλες τις συνθήκες.</span><span class="ln">3. Σε ένα πρόγραμμα γραμμένο σε ΓΛΩΣΣΑ η δήλωση των σταθερών προηγείται της δήλωσης των μεταβλητών.</span><span class="ln">4. Τα λογικά λάθη δεν προκαλούν τη διακοπή της εκτέλεσης του προγράμματος.</span><span class="ln">5. Η λίστα των τυπικών παραμέτρων καθορίζει τις παραμέτρους στη δήλωση του υποπρογράμματος.</span></p></div><p class="where">Πού το διδαχθήκαμε: <a href="08.html#s-3" target="_top">Μάθημα 8 · Συγκρίσεις και λογικές εκφράσεις</a>, <a href="11.html#s-8-1-1" target="_top">Μάθημα 11 · ΑΝ … ΑΛΛΙΩΣ_ΑΝ</a>, <a href="09.html#s-7-10" target="_top">Μάθημα 9 · Δομή προγράμματος</a>, <a href="15.html#s-13-1" target="_top">Μάθημα 15 · Κατηγορίες λαθών</a>, <span class="nolink">Μάθημα 32 · Πραγματικές και τυπικές παράμετροι</span></p><div class="steps"><div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Στο 1 συγκρίνονται αλφαριθμητικά: χαρακτήρας προς χαρακτήρα, με αλφαβητική σειρά. Στο 2 η λέξη-παγίδα είναι το <i>υποχρεωτικά</i>.</div></div><div class="step"><span class="stepn">2</span><div><b>Απαντώ.</b> <div class="answers"><span>1. ΛΑΘΟΣ</span><span>2. ΛΑΘΟΣ</span><span>3. ΣΩΣΤΟ</span><span>4. ΣΩΣΤΟ</span><span>5. ΣΩΣΤΟ</span></div></div></div><div class="step"><span class="stepn">3</span><div><b>Αιτιολογώ.</b> <span class="ln li"><b>1.</b> Συγκρίνονται οι πρώτοι χαρακτήρες: Π και Ε. Το Ε είναι πριν από το Π στο αλφάβητο, άρα <span class="nw">‘ΕΠΤΑ’ &lt; ‘ΠΕΝΤΕ’</span> και η σύγκριση δίνει ΨΕΥΔΗΣ.</span><span class="ln li"><b>2.</b> Οι συνθήκες ελέγχονται με τη σειρά, και μόλις βρεθεί η πρώτη αληθής εκτελούνται οι εντολές της και ο έλεγχος <b>σταματά</b>. Γι’ αυτό το ΑΛΛΙΩΣ_ΑΝ είναι πιο γρήγορο από πολλά διαδοχικά ΑΝ.</span><span class="ln li"><b>3.</b> Η σειρά στο τμήμα δηλώσεων είναι: ΣΤΑΘΕΡΕΣ, μετά ΜΕΤΑΒΛΗΤΕΣ.</span><span class="ln li"><b>4.</b> Το πρόγραμμα εκτελείται κανονικά μέχρι το τέλος, αλλά δίνει λάθος αποτελέσματα. Διακοπή προκαλούν τα λάθη κατά την εκτέλεση, π.χ. διαίρεση με το μηδέν.</span><span class="ln li"><b>5.</b> Ο ορισμός του βιβλίου αυτολεξεί. Η λίστα των πραγματικών παραμέτρων καθορίζει τις παραμέτρους στην <b>κλήση</b>.</span></div></div></div></div>
+<div class="box solved" id="a2"><div class="tag">Α2 · Μονάδες 10</div><div class="stmt"><p><span class="ln">α. Να δώσετε τον ορισμό της στοίβας και τον ορισμό της ουράς (μονάδες 4).</span><span class="ln">β. Να αναφέρετε και να περιγράψετε τα στάδια αντιμετώπισης ενός προβλήματος (μονάδες 6).</span></p></div><p class="where">Πού το διδαχθήκαμε: <span class="nolink">Μάθημα 27 · Η στοίβα</span>, <span class="nolink">Μάθημα 28 · Η ουρά</span>, <a href="01.html#s-1-2" target="_top">Μάθημα 1 · Κατανόηση προβλήματος</a>, <a href="04.html#s-4-1" target="_top">Μάθημα 4 · Ανάλυση προβλημάτων</a></p><div class="steps"><div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Δύο ορισμοί από το Συμπληρωματικό (2 μονάδες ο καθένας) και τα τρία στάδια από το Κεφάλαιο 1 (2 μονάδες το καθένα, με την περιγραφή του).</div></div><div class="step"><span class="stepn">2</span><div><b>Γράφω.</b> <span class="ln"><b>α)</b></span><span class="ln li"><b>Στοίβα</b> (stack) ονομάζεται μια δομή δεδομένων το σύνολο των στοιχείων της οποίας είναι διατεταγμένο με τέτοιο τρόπο, ώστε τα στοιχεία που βρίσκονται στην κορυφή της στοίβας λαμβάνονται πρώτα, ενώ αυτά που βρίσκονται στο βάθος της στοίβας λαμβάνονται τελευταία.</span><span class="ln li"><b>Ουρά</b> (queue) ονομάζεται μια δομή δεδομένων το σύνολο των στοιχείων της οποίας είναι διατεταγμένο με τέτοιο τρόπο, ώστε τα στοιχεία που τοποθετήθηκαν πρώτα στην ουρά να λαμβάνονται επίσης πρώτα.</span><span class="ln"><b>β)</b> Τα στάδια αντιμετώπισης ενός προβλήματος είναι τρία:</span><span class="ln li"><b>Κατανόηση</b>, όπου απαιτείται η σωστή και πλήρης αποσαφήνιση των δεδομένων και των ζητούμενων του προβλήματος.</span><span class="ln li"><b>Ανάλυση</b>, όπου το αρχικό πρόβλημα διασπάται σε άλλα επιμέρους απλούστερα προβλήματα.</span><span class="ln li"><b>Επίλυση</b>, όπου υλοποιείται η λύση του προβλήματος, μέσω της λύσης των επιμέρους προβλημάτων.</span></div></div><div class="step"><span class="stepn">3</span><div><b>Ελέγχω.</b> Στους ορισμούς μπορείς να προσθέσεις και τη μέθοδο: LIFO για τη στοίβα, FIFO για την ουρά.</div></div></div></div>
+<div class="box solved" id="a3"><div class="tag">Α3 · Μονάδες 8</div><div class="stmt"><p>Δίνονται οι παρακάτω προτάσεις σε φυσική γλώσσα:</p><p><span class="ln">1. Η μεταβλητή Α είναι πολλαπλάσιο του 3 και δεν είναι πολλαπλάσιο του 5.</span><span class="ln">2. Μείωσε τη μεταβλητή Α κατά τιμή ίση με το τελευταίο ψηφίο της.</span><span class="ln">3. Αν η μεταβλητή Α δεν έχει τιμή 0 ή 1, εμφάνισε το μήνυμα ‘Λάθος δεδομένα’.</span><span class="ln">4. Εμφάνισε τους ακέραιους αριθμούς από το 0 μέχρι και Α<sup>3</sup>.</span></p><p>Να θεωρήσετε ότι η μεταβλητή Α είναι θετικός ακέραιος αριθμός.</p><p>Να γράψετε στο τετράδιό σας τον αριθμό κάθε πρότασης και την κωδικοποίησή της σε ΓΛΩΣΣΑ.</p></div><p class="where">Πού το διδαχθήκαμε: <a href="08.html#s-7-5" target="_top">Μάθημα 8 · Ο τελεστής MOD</a>, <a href="08.html#s-3" target="_top">Μάθημα 8 · Λογικές εκφράσεις</a>, <a href="03.html#s-tools" target="_top">Μάθημα 3 · div και mod στα ψηφία</a>, <a href="14.html#s-8-2-3" target="_top">Μάθημα 14 · Η εντολή ΓΙΑ</a></p><div class="steps"><div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Τέσσερις μικρές μεταφράσεις, 2 μονάδες η καθεμία. Τα εργαλεία: MOD για «πολλαπλάσιο» και «τελευταίο ψηφίο», ΚΑΙ/ΟΧΙ για τις συνθήκες, ΓΙΑ για το «από … μέχρι».</div></div><div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> <span class="ln li"><b>1:</b> πολλαπλάσιο του 3: <span class="nw">Α MOD 3 = 0</span>. Είναι λογική έκφραση, όχι εντολή.</span><span class="ln li"><b>2:</b> το τελευταίο ψηφίο είναι <span class="nw">Α MOD 10</span>.</span><span class="ln li"><b>3:</b> «δεν έχει τιμή 0 ή 1» σημαίνει ΟΧΙ (Α = 0 Ή Α = 1), δηλαδή <span class="nw">Α &lt;&gt; 0 ΚΑΙ Α &lt;&gt; 1</span>.</span></div></div><div class="step"><span class="stepn">3</span><div><b>Γράφω.</b> <pre class="code">1.  Α MOD 3 = 0 ΚΑΙ Α MOD 5 &lt;&gt; 0
+
+2.  Α ← Α - Α MOD 10
+
+3.  ΑΝ Α &lt;&gt; 0 ΚΑΙ Α &lt;&gt; 1 ΤΟΤΕ
+      ΓΡΑΨΕ &#x27;Λάθος δεδομένα&#x27;
+    ΤΕΛΟΣ_ΑΝ
+
+4.  ΓΙΑ i ΑΠΟ 0 ΜΕΧΡΙ Α^3
+      ΓΡΑΨΕ i
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</pre></div></div><div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> <span class="ln li"><b>1:</b> Α = 9: ΑΛΗΘΗΣ. Α = 15: ΨΕΥΔΗΣ (πολλαπλάσιο και του 5).</span><span class="ln li"><b>2:</b> Α = 247 γίνεται 240. Το MOD εκτελείται πριν από την αφαίρεση, άρα δεν χρειάζεται παρένθεση.</span><span class="ln li"><b>3:</b> με Η αντί για ΚΑΙ η συνθήκη θα ήταν πάντα αληθής (κάθε αριθμός είναι διάφορος του 0 ή διάφορος του 1).</span><span class="ln li"><b>4:</b> Α = 2: εμφανίζει 0, 1, …, 8.</span></div></div></div></div>
+<div class="box solved" id="a4"><div class="tag">Α4 · Μονάδες 4</div><div class="stmt"><p>Δίνεται το παρακάτω τμήμα αλγορίθμου:</p><pre class="code">S ← 0
+ΔΙΑΒΑΣΕ Χ
+ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+  S ← S + X
+  ΔΙΑΒΑΣΕ Χ
+ΜΕΧΡΙΣ_ΟΤΟΥ Α_Μ(Χ) &lt;&gt; Χ Ή Χ = 0</pre><p>Να μετατραπεί σε ισοδύναμο με χρήση της δομής ΟΣΟ…ΕΠΑΝΑΛΑΒΕ.</p></div><p class="where">Πού το διδαχθήκαμε: <a href="16.html#s-1-2" target="_top">Μάθημα 16 · ΜΕΧΡΙΣ_ΟΤΟΥ σε ΟΣΟ</a>, <a href="16.html#s-1" target="_top">Μάθημα 16 · Η άρνηση</a></p><div class="steps"><div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Δύο βήματα: (α) το σώμα εκτελείται <b>μία φορά πριν</b> από το ΟΣΟ, γιατί το ΜΕΧΡΙΣ_ΟΤΟΥ εκτελείται τουλάχιστον μία φορά, (β) η συνθήκη γίνεται η <b>άρνησή</b> της.</div></div><div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Άρνηση του <span class="nw">Α_Μ(Χ) &lt;&gt; Χ Η Χ = 0</span>: το Η γίνεται ΚΑΙ και κάθε σύγκριση αντιστρέφεται: <span class="nw">Α_Μ(Χ) = Χ ΚΑΙ Χ &lt;&gt; 0</span>.</div></div><div class="step"><span class="stepn">3</span><div><b>Γράφω.</b> <pre class="code">S ← 0
+ΔΙΑΒΑΣΕ Χ
+S ← S + X
+ΔΙΑΒΑΣΕ Χ
+ΟΣΟ Α_Μ(Χ) = Χ ΚΑΙ Χ &lt;&gt; 0 ΕΠΑΝΑΛΑΒΕ
+  S ← S + X
+  ΔΙΑΒΑΣΕ Χ
+ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</pre></div></div><div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Είσοδος 3, 4, 2.5: και τα δύο δίνουν <span class="nw">S = 7</span> (το 2.5 δεν είναι ακέραιος και σταματά). Είσοδος 0: και στα δύο το 0 προστίθεται μία φορά, <span class="nw">S = 0</span>, και διαβάζεται ένας ακόμη αριθμός. Το πρώτο Χ προστίθεται πάντα, ό,τι κι αν είναι.</div></div></div></div>
+<div class="box solved" id="a5"><div class="tag">Α5 · Μονάδες 8</div><div class="stmt"><p>Δίνεται το παρακάτω τμήμα προγράμματος σε ΓΛΩΣΣΑ:</p><pre class="code">ΔΙΑΒΑΣΕ Χ
+ΑΝ Χ &lt;= 5 ΤΟΤΕ
+  ΓΡΑΨΕ &#x27;*&#x27;
+ΤΕΛΟΣ_ΑΝ
+ΑΝ Χ &lt;= 10 ΤΟΤΕ
+  ΓΡΑΨΕ &#x27;#&#x27;
+ΤΕΛΟΣ_ΑΝ
+ΑΝ Χ &gt; 10 ΤΟΤΕ
+  ΓΡΑΨΕ &#x27;@&#x27;
+ΤΕΛΟΣ_ΑΝ</pre><p>Να το ξαναγράψετε στο τετράδιό σας χρησιμοποιώντας μόνο μία δομή πολλαπλής επιλογής ΑΝ… ΤΟΤΕ… ΑΛΛΙΩΣ_ΑΝ, ώστε να εμφανίζονται τα ίδια αποτελέσματα.</p></div><p class="where">Πού το διδαχθήκαμε: <a href="11.html#s-8-1-1" target="_top">Μάθημα 11 · ΑΝ … ΑΛΛΙΩΣ_ΑΝ</a></p><div class="steps"><div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Τα τρία ΑΝ <b>δεν</b> είναι αμοιβαία αποκλειόμενα: για <span class="nw">Χ &lt;= 5</span> ισχύουν και τα δύο πρώτα, άρα εμφανίζονται <b>δύο</b> σύμβολα. Στο ΑΛΛΙΩΣ_ΑΝ εκτελείται μόνο ένας κλάδος, οπότε αυτός ο κλάδος πρέπει να γράφει και τα δύο.</div></div><div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> <span class="ln li"><span class="nw">Χ &lt;= 5</span>: * και #.</span><span class="ln li"><span class="nw">5 &lt; Χ &lt;= 10</span>: μόνο #.</span><span class="ln li"><span class="nw">Χ &gt; 10</span>: μόνο @.</span></div></div><div class="step"><span class="stepn">3</span><div><b>Γράφω.</b> <pre class="code">ΔΙΑΒΑΣΕ Χ
+ΑΝ Χ &lt;= 5 ΤΟΤΕ
+  ΓΡΑΨΕ &#x27;*&#x27;
+  ΓΡΑΨΕ &#x27;#&#x27;
+ΑΛΛΙΩΣ_ΑΝ Χ &lt;= 10 ΤΟΤΕ
+  ΓΡΑΨΕ &#x27;#&#x27;
+ΑΛΛΙΩΣ
+  ΓΡΑΨΕ &#x27;@&#x27;
+ΤΕΛΟΣ_ΑΝ</pre></div></div><div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Χ = 3: * #. Χ = 7: #. Χ = 12: @. Ίδια με το αρχικό σε όλες τις περιοχές, και τα όρια 5 και 10 πέφτουν στον σωστό κλάδο.</div></div></div></div>
+<div class="sec" id="s-b"><span class="num">Β</span><h2>Θέμα Β</h2><span class="ref">20 μονάδες</span></div>
+<div class="box solved" id="b1"><div class="tag">Β1 · Μονάδες 10</div><div class="stmt"><p>Δίνεται τo παρακάτω τμήμα προγράμματος σε ΓΛΩΣΣΑ:</p><pre class="code">ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+  Σ ← 0
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 10
+    ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+      ΔΙΑΒΑΣΕ Β[i]
+    ΜΕΧΡΙΣ_ΟΤΟΥ Β[i] &gt; 0
+    Σ ← Σ + Β[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+ΜΕΧΡΙΣ_ΟΤΟΥ Σ = 200</pre><p>Να σχεδιάσετε στο τετράδιό σας το αντίστοιχο διάγραμμα ροής.</p></div><p class="where">Πού το διδαχθήκαμε: <a href="02.html#s-2-3" target="_top">Μάθημα 2 · Περιγραφή και αναπαράσταση αλγορίθμων</a>, <a href="14.html#s-3" target="_top">Μάθημα 14 · Εμφωλευμένοι βρόχοι</a></p><div class="steps"><div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Τρεις βρόχοι ο ένας μέσα στον άλλο. Στο διάγραμμα ροής η ΓΙΑ «ξεδιπλώνεται» σε τρία κομμάτια: <span class="nw">i ← 1</span>, ρόμβος <span class="nw">i ≤ 10</span>, και <span class="nw">i ← i + 1</span> στο τέλος του σώματος.</div></div><div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> <span class="ln li">Τα δύο ΜΕΧΡΙΣ_ΟΤΟΥ έχουν τον ρόμβο <b>μετά</b> το σώμα τους. Το «Όχι» γυρίζει στην αρχή του σώματος (στο Διάβασε για τον εσωτερικό, στο <span class="nw">Σ ← 0</span> για τον εξωτερικό).</span><span class="ln li">Η ΓΙΑ έχει τον ρόμβο <b>πριν</b> από το σώμα. Το «Όχι» της οδηγεί στον ρόμβο του εξωτερικού ΜΕΧΡΙΣ_ΟΤΟΥ.</span></div></div><div class="step"><span class="stepn">3</span><div><b>Γράφω.</b> <div style="overflow-x:auto"><svg viewBox="0 0 345 700" style="width:100%;max-width:380px;margin:6px auto;display:block;font-family:var(--body)" role="img" aria-label="Διάγραμμα ροής: Αρχή, Σ ← 0, i ← 1. Ρόμβος i ≤ 10. Αν Ναι: Διάβασε Β[i], ρόμβος Β[i] &gt; 0 (αν Όχι, ξανά Διάβασε Β[i]), Σ ← Σ + Β[i], i ← i + 1 και επιστροφή στον ρόμβο i ≤ 10. Αν Όχι: ρόμβος Σ = 200. Αν Όχι, επιστροφή στο Σ ← 0. Αν Ναι, Τέλος."><defs><marker id="fc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" class="f-arrow"/></marker></defs><rect x="102" y="9" width="96" height="32" rx="16" class="f-paper st-ink" stroke-width="1.5"/><text x="150" y="30" font-size="14" font-weight="700" text-anchor="middle" class="f-text">Αρχή</text><rect x="105.0" y="64" width="90" height="32" class="f-paper st-ink" stroke-width="1.5"/><text x="150" y="85" font-size="14" text-anchor="middle" class="f-text">Σ ← 0</text><rect x="105.0" y="119" width="90" height="32" class="f-paper st-ink" stroke-width="1.5"/><text x="150" y="140" font-size="14" text-anchor="middle" class="f-text">i ← 1</text><path d="M150 175L212 205L150 235L88 205z" class="f-paper st-ink" stroke-width="1.5"/><text x="150" y="210" font-size="14" text-anchor="middle" class="f-text">i ≤ 10</text><path d="M100.0 264L220.0 264L200.0 296L80.0 296z" class="f-paper st-ink" stroke-width="1.5"/><text x="150" y="285" font-size="14" text-anchor="middle" class="f-text">Διάβασε Β[i]</text><path d="M150 325L216 355L150 385L84 355z" class="f-paper st-ink" stroke-width="1.5"/><text x="150" y="360" font-size="14" text-anchor="middle" class="f-text">Β[i] &gt; 0</text><rect x="85.0" y="414" width="130" height="32" class="f-paper st-ink" stroke-width="1.5"/><text x="150" y="435" font-size="14" text-anchor="middle" class="f-text">Σ ← Σ + Β[i]</text><rect x="100.0" y="469" width="100" height="32" class="f-paper st-ink" stroke-width="1.5"/><text x="150" y="490" font-size="14" text-anchor="middle" class="f-text">i ← i + 1</text><path d="M150 555L216 585L150 615L84 585z" class="f-paper st-ink" stroke-width="1.5"/><text x="150" y="590" font-size="14" text-anchor="middle" class="f-text">Σ = 200</text><rect x="102" y="654" width="96" height="32" rx="16" class="f-paper st-ink" stroke-width="1.5"/><text x="150" y="675" font-size="14" font-weight="700" text-anchor="middle" class="f-text">Τέλος</text><path d="M150 41L150 63" class="st-ink" stroke-width="1.5" fill="none" marker-end="url(#fc)"/><path d="M150 96L150 118" class="st-ink" stroke-width="1.5" fill="none" marker-end="url(#fc)"/><path d="M150 151L150 174" class="st-ink" stroke-width="1.5" fill="none" marker-end="url(#fc)"/><path d="M150 235L150 263" class="st-ink" stroke-width="1.5" fill="none" marker-end="url(#fc)"/><text x="156" y="254" font-size="12" font-weight="700" text-anchor="start" class="f-text">Ναι</text><path d="M150 296L150 324" class="st-ink" stroke-width="1.5" fill="none" marker-end="url(#fc)"/><path d="M216 355L262 355L262 280L216 280" class="st-ink" stroke-width="1.5" fill="none" marker-end="url(#fc)"/><text x="220" y="347" font-size="12" font-weight="700" text-anchor="start" class="f-text">Όχι</text><path d="M150 385L150 413" class="st-ink" stroke-width="1.5" fill="none" marker-end="url(#fc)"/><text x="156" y="404" font-size="12" font-weight="700" text-anchor="start" class="f-text">Ναι</text><path d="M150 446L150 468" class="st-ink" stroke-width="1.5" fill="none" marker-end="url(#fc)"/><path d="M150 501L150 515L42 515L42 205L87 205" class="st-ink" stroke-width="1.5" fill="none" marker-end="url(#fc)"/><path d="M212 205L325 205L325 535L150 535L150 554" class="st-ink" stroke-width="1.5" fill="none" marker-end="url(#fc)"/><text x="218" y="197" font-size="12" font-weight="700" text-anchor="start" class="f-text">Όχι</text><path d="M84 585L16 585L16 80L104 80" class="st-ink" stroke-width="1.5" fill="none" marker-end="url(#fc)"/><text x="78" y="577" font-size="12" font-weight="700" text-anchor="end" class="f-text">Όχι</text><path d="M150 615L150 653" class="st-ink" stroke-width="1.5" fill="none" marker-end="url(#fc)"/><text x="156" y="636" font-size="12" font-weight="700" text-anchor="start" class="f-text">Ναι</text></svg></div></div></div><div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Παρακολουθώ μία διαδρομή: αν τα 10 στοιχεία δεν δίνουν άθροισμα 200, το «Όχι» του <span class="nw">Σ = 200</span> πάει στο <span class="nw">Σ ← 0</span> <b>και</b> ξαναμπαίνει στο <span class="nw">i ← 1</span>, άρα ξαναδιαβάζονται και τα 10. Αυτό κάνει και το αρχικό. Αν η επιστροφή πήγαινε στο <span class="nw">i ← 1</span>, το Σ θα συνέχιζε να μαζεύει.</div></div></div></div>
+<div class="box solved" id="b2"><div class="tag">Β2 · Μονάδες 10</div><div class="stmt"><p>Το παρακάτω ημιτελές τμήμα αλγορίθμου αναζητεί την τιμή 2021 στον πίνακα ακεραίων Χ[100] σταματώντας την αναζήτηση όταν εντοπιστεί η ζητούμενη τιμή και εμφανίζει τη θέση που εντοπίστηκε, διαφορετικά το μήνυμα ‘ΔΕ ΒΡΕΘΗΚΕ’.</p><pre class="code">i ← 1
+ΟΣΟ i …(1)… 100 ΚΑΙ …(2)… &lt;&gt; …(3)… ΕΠΑΝΑΛΑΒΕ
+  i ← i + 1
+ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+ΑΝ …(4)… = …(5)… ΤΟΤΕ
+  ΓΡΑΨΕ i
+ΑΛΛΙΩΣ
+  ΓΡΑΨΕ &#x27;ΔΕ ΒΡΕΘΗΚΕ&#x27;
+ΤΕΛΟΣ_ΑΝ</pre><p>Να ξαναγράψετε στο τετράδιό σας το παραπάνω τμήμα αλγορίθμου συμπληρώνοντας ό,τι χρειάζεται ώστε να επιτελεί τη λειτουργία που περιγράφεται.</p></div><p class="where">Πού το διδαχθήκαμε: <a href="21.html#s-3" target="_top">Μάθημα 21 · Τα όρια του πίνακα</a>, <a href="21.html#s-3-6" target="_top">Μάθημα 21 · Ο αλγόριθμος του βιβλίου</a></p><div class="steps"><div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Σειριακή αναζήτηση χωρίς σημαία: ο βρόχος προχωρά όσο το τρέχον στοιχείο <b>δεν</b> είναι το 2021. Το κρίσιμο κενό είναι το (1): <span class="nw">&lt;</span> ή <span class="nw">&lt;=</span>;</div></div><div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> <span class="ln li">Στη ΓΛΩΣΣΑ υπολογίζεται όλη η συνθήκη. Με <span class="nw">i &lt;= 100</span>, όταν το 2021 δεν υπάρχει, το i γίνεται 101 και ελέγχεται το <b>Χ[101]</b>: λάθος εκτέλεσης (εκτός ορίων).</span><span class="ln li">Με <span class="nw">i &lt; 100</span> ο βρόχος σταματά το αργότερο στο <span class="nw">i = 100</span>. Το τελευταίο στοιχείο ελέγχεται από το ΑΝ μετά τον βρόχο.</span></div></div><div class="step"><span class="stepn">3</span><div><b>Γράφω.</b> <div class="answers"><span>(1) &lt;</span><span>(2) Χ[i]</span><span>(3) 2021</span><span>(4) Χ[i]</span><span>(5) 2021</span></div><pre class="code">i ← 1
+ΟΣΟ i &lt; 100 ΚΑΙ Χ[i] &lt;&gt; 2021 ΕΠΑΝΑΛΑΒΕ
+  i ← i + 1
+ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+ΑΝ Χ[i] = 2021 ΤΟΤΕ
+  ΓΡΑΨΕ i
+ΑΛΛΙΩΣ
+  ΓΡΑΨΕ &#x27;ΔΕ ΒΡΕΘΗΚΕ&#x27;
+ΤΕΛΟΣ_ΑΝ</pre></div></div><div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> <span class="ln li">2021 στη θέση 37: ο βρόχος σταματά με <span class="nw">i = 37</span>, εμφανίζεται 37.</span><span class="ln li">2021 μόνο στη θέση 100: σταματά με <span class="nw">i = 100</span> λόγω του <span class="nw">i &lt; 100</span>, το ΑΝ βρίσκει <span class="nw">Χ[100] = 2021</span> και εμφανίζει 100.</span><span class="ln li">Χωρίς 2021: <span class="nw">i = 100</span>, το ΑΝ είναι ψευδές, «ΔΕ ΒΡΕΘΗΚΕ». Κανένας δείκτης εκτός ορίων.</span></div></div></div></div>
+<div class="sec" id="s-c"><span class="num">Γ</span><h2>Θέμα Γ</h2><span class="ref">20 μονάδες · πρόγραμμα</span></div>
+<div class="box solved" id="c"><div class="tag">Θέμα Γ (Γ1–Γ5) · Μονάδες 20</div><div class="stmt"><p>Σε ένα εμβολιαστικό κέντρο που λειτουργεί κάποια μέρα τις ώρες 10:00 - 21:00 προσέρχονται οι πολίτες προκειμένου να εμβολιαστούν κατά του Covid-19. Υπάρχουν δύο τύποι εμβολίου, μονοδοσικό και διδοσικό. Κατά την προσέλευσή τους καταγράφονται:</p>
+<p><span class="ln">1. η ηλικία</span><span class="ln">2. το φύλο (Α: άνδρας, Γ: γυναίκα)</span><span class="ln">3. ο τύπος του εμβολίου (Μ: μονοδοσικό, Δ: διδοσικό)</span><span class="ln">4. η ώρα προσέλευσης ως ένας τετραψήφιος ακέραιος αριθμός. Για παράδειγμα ο αριθμός 1115 αντιπροσωπεύει την ώρα 11:15.</span></p>
+<p>Να γραφεί πρόγραμμα σε ΓΛΩΣΣΑ το οποίο:</p>
+<p><span class="ln"><b>Γ1.</b> α. Να περιλαμβάνει κατάλληλο τμήμα δηλώσεων (μονάδες 2). β. Για κάθε πολίτη να διαβάζει τα παραπάνω στοιχεία χωρίς έλεγχο εγκυρότητας. Η καταχώρηση των στοιχείων σταματά όταν δοθεί ως ώρα προσέλευσης ο αριθμός 9999 (μονάδες 2). <i>(Μονάδες 4)</i></span><span class="ln"><b>Γ2.</b> Να εμφανίζει το ποσοστό των ανδρών στο σύνολο των πολιτών που εμβολιάστηκαν τη συγκεκριμένη ημέρα. <i>(Μονάδες 3)</i></span><span class="ln"><b>Γ3.</b> Να εμφανίζει τη μικρότερη ηλικία γυναίκας που εμβολιάστηκε τη συγκεκριμένη ημέρα με μονοδοσικό εμβόλιο και έχει ηλικία &gt; 50. Αν δεν υπάρχει, να εμφανίζει κατάλληλο μήνυμα. <i>(Μονάδες 3)</i></span><span class="ln"><b>Γ4.</b> Να εμφανίζει για τη συγκεκριμένη ημέρα το πλήθος των πολιτών που εμβολιάστηκαν για καθεμία από τις παρακάτω ηλικιακές ομάδες: 1) ≤ 18 ετών 2) 19-50 ετών 3) 51 ετών και άνω <i>(Μονάδες 4)</i></span><span class="ln"><b>Γ5.</b> Για κάθε πολίτη να εμφανίζει την ώρα αποχώρησής του ως τετραψήφιο ακέραιο αριθμό. Η διάρκεια παραμονής στο εμβολιαστικό κέντρο είναι 30 λεπτά. (Για παράδειγμα ένας πολίτης που προσήλθε στις 17:48 πρέπει να αποχωρήσει στις 18:18). <i>(Μονάδες 6)</i></span></p></div><p class="where">Πού το διδαχθήκαμε: <a href="12.html#s-tools" target="_top">Μάθημα 12 · Τιμή φρουρός, μετρητές</a>, <a href="03.html#s-tools" target="_top">Μάθημα 3 · div και mod στα ψηφία</a>, <a href="11.html#s-8-1-1" target="_top">Μάθημα 11 · ΑΝ … ΑΛΛΙΩΣ_ΑΝ</a></p><div class="steps"><div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Βρόχος με τιμή φρουρό, που όμως είναι η <b>ώρα</b>, το τελευταίο στοιχείο. Για να σταματήσω πριν διαβάσω ηλικία και φύλο του «πολίτη» 9999, διαβάζω πρώτα την ώρα και μετά, μόνο αν δεν είναι 9999, τα υπόλοιπα.</div></div><div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> <span class="ln li"><b>Γ5:</b> ώρες <span class="nw">ώρα DIV 100</span>, λεπτά <span class="nw">ώρα MOD 100</span>. Προσθέτω 30 λεπτά. Αν τα λεπτά γίνουν 60 ή παραπάνω, αφαιρώ 60 και προσθέτω μία ώρα.</span><span class="ln li"><b>Γ3:</b> ελάχιστο με φίλτρο (γυναίκα, Μ, ηλικία &gt; 50). Σημαία βρέθηκε, γιατί μπορεί να μην υπάρχει καμία.</span><span class="ln li"><b>Γ2:</b> αν δεν δοθεί κανένας πολίτης, το ποσοστό δεν ορίζεται. Η εκφώνηση δεν το αποκλείει, άρα έλεγχος <span class="nw">πλ &gt; 0</span>.</span></div></div><div class="step"><span class="stepn">3</span><div><b>Γράφω.</b> <pre class="code">ΠΡΟΓΡΑΜΜΑ Εμβολιασμοί
+! Γ1α
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: ηλ, ώρα, ωρ, λεπ, πλ, πα, μικ, ν1, ν2, ν3
+  ΧΑΡΑΚΤΗΡΕΣ: φύλο, τύπος
+  ΠΡΑΓΜΑΤΙΚΕΣ: ποσ
+  ΛΟΓΙΚΕΣ: βρέθηκε
+ΑΡΧΗ
+  πλ ← 0
+  πα ← 0
+  ν1 ← 0
+  ν2 ← 0
+  ν3 ← 0
+  βρέθηκε ← ΨΕΥΔΗΣ
+  ! Γ1β
+  ΓΡΑΨΕ &#x27;Ώρα προσέλευσης (9999 για τέλος):&#x27;
+  ΔΙΑΒΑΣΕ ώρα
+  ΟΣΟ ώρα &lt;&gt; 9999 ΕΠΑΝΑΛΑΒΕ
+    ΓΡΑΨΕ &#x27;Ηλικία, φύλο (Α/Γ), τύπος εμβολίου (Μ/Δ):&#x27;
+    ΔΙΑΒΑΣΕ ηλ, φύλο, τύπος
+    πλ ← πλ + 1
+    ΑΝ φύλο = &#x27;Α&#x27; ΤΟΤΕ
+      πα ← πα + 1
+    ΤΕΛΟΣ_ΑΝ
+    ! Γ3
+    ΑΝ φύλο = &#x27;Γ&#x27; ΚΑΙ τύπος = &#x27;Μ&#x27; ΚΑΙ ηλ &gt; 50 ΤΟΤΕ
+      ΑΝ βρέθηκε = ΨΕΥΔΗΣ ΤΟΤΕ
+        μικ ← ηλ
+        βρέθηκε ← ΑΛΗΘΗΣ
+      ΑΛΛΙΩΣ_ΑΝ ηλ &lt; μικ ΤΟΤΕ
+        μικ ← ηλ
+      ΤΕΛΟΣ_ΑΝ
+    ΤΕΛΟΣ_ΑΝ
+    ! Γ4
+    ΑΝ ηλ &lt;= 18 ΤΟΤΕ
+      ν1 ← ν1 + 1
+    ΑΛΛΙΩΣ_ΑΝ ηλ &lt;= 50 ΤΟΤΕ
+      ν2 ← ν2 + 1
+    ΑΛΛΙΩΣ
+      ν3 ← ν3 + 1
+    ΤΕΛΟΣ_ΑΝ
+    ! Γ5
+    ωρ ← ώρα DIV 100
+    λεπ ← ώρα MOD 100 + 30
+    ΑΝ λεπ &gt;= 60 ΤΟΤΕ
+      λεπ ← λεπ - 60
+      ωρ ← ωρ + 1
+    ΤΕΛΟΣ_ΑΝ
+    ΓΡΑΨΕ &#x27;Ώρα αποχώρησης:&#x27;, ωρ * 100 + λεπ
+    ΓΡΑΨΕ &#x27;Ώρα προσέλευσης (9999 για τέλος):&#x27;
+    ΔΙΑΒΑΣΕ ώρα
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ! Γ2
+  ΑΝ πλ &gt; 0 ΤΟΤΕ
+    ποσ ← πα / πλ * 100
+    ΓΡΑΨΕ &#x27;Ποσοστό ανδρών:&#x27;, ποσ, &#x27;%&#x27;
+  ΤΕΛΟΣ_ΑΝ
+  ! Γ3
+  ΑΝ βρέθηκε = ΑΛΗΘΗΣ ΤΟΤΕ
+    ΓΡΑΨΕ &#x27;Μικρότερη ηλικία:&#x27;, μικ
+  ΑΛΛΙΩΣ
+    ΓΡΑΨΕ &#x27;Δεν υπάρχει γυναίκα άνω των 50 με μονοδοσικό&#x27;
+  ΤΕΛΟΣ_ΑΝ
+  ! Γ4
+  ΓΡΑΨΕ &#x27;Έως 18:&#x27;, ν1, &#x27;19-50:&#x27;, ν2, &#x27;51 και άνω:&#x27;, ν3
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Εμβολιασμοί</pre></div></div><div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> <span class="ln li">Γ5: 1748 γίνεται 17 ώρες και 78 λεπτά, δηλαδή 18 ώρες και 18 λεπτά: εμφανίζει 1818. Το 1015 γίνεται 1045. Το 2030 γίνεται 2100.</span><span class="ln li">Γ3: γυναίκες με Μ και ηλικίες 72, 55, 48. Το 48 δεν περνά το φίλτρο (&gt; 50). Αποτέλεσμα 55.</span><span class="ln li">Αν διαβάζαμε και τα τέσσερα στοιχεία μαζί με τη σειρά της εκφώνησης, ο χρήστης θα έπρεπε να δώσει «ψεύτικη» ηλικία, φύλο και τύπο για να τερματίσει. Γι’ αυτό η ώρα διαβάζεται πρώτη, όπως ακριβώς μια τιμή φρουρός.</span></div></div></div></div>
+<div class="sec" id="s-d"><span class="num">Δ</span><h2>Θέμα Δ</h2><span class="ref">20 μονάδες · πίνακας χαρακτήρων και διαδικασία</span></div>
+<div class="box solved" id="d"><div class="tag">Θέμα Δ (Δ1–Δ5) · Μονάδες 20</div><div class="stmt"><p>Ένα ξενοδοχείο αποτελείται από 10 ορόφους και κάθε όροφος έχει 30 δωμάτια. Τα δωμάτια κάθε ορόφου αριθμούνται από το 1 μέχρι το 30 και είναι συνεχόμενα. (Για παράδειγμα το δωμάτιο με αριθμό 1 είναι δίπλα στο δωμάτιο με αριθμό 2, το δωμάτιο με αριθμό 2 είναι δίπλα στο δωμάτιο με αριθμό 3 και ούτω καθεξής). Κάθε δωμάτιο μπορεί να έχει μία, δύο ή τρεις κλίνες, οπότε χαρακτηρίζεται ως προς τον τύπο του αντίστοιχα μονόκλινο (Μ), δίκλινο (Δ) ή τρίκλινο (Τ).</p>
+<p>Να γραφεί πρόγραμμα σε ΓΛΩΣΣΑ το οποίο:</p>
+<p><span class="ln"><b>Δ1.</b> α. Να περιλαμβάνει κατάλληλο τμήμα δηλώσεων (μονάδες 2). β. Για κάθε όροφο του ξενοδοχείου να διαβάζει τον τύπο κάθε δωματίου του ελέγχοντας την εγκυρότητά του και να καταχωρίζει τη σχετική πληροφορία στον πίνακα Ξ[10,30] (μονάδες 3) <i>(Μονάδες 5)</i></span><span class="ln"><b>Δ2.</b> Να καλεί τη διαδικασία ΣΥΝΟΛΟ που περιγράφεται στο ερώτημα Δ5. <i>(Μονάδες 2)</i></span><span class="ln"><b>Δ3.</b> Να εμφανίζει το μεγαλύτερο πλήθος συνεχόμενων δίκλινων δωματίων που υπάρχουν στον τρίτο όροφο του ξενοδοχείου. <i>(Μονάδες 3)</i></span><span class="ln"><b>Δ4.</b> Να ελέγχει και να εμφανίζει με κατάλληλο μήνυμα αν υπάρχει τουλάχιστον ένας αριθμός δωματίου που να είναι ίδιου τύπου σε όλους τους ορόφους. (Για παράδειγμα, αν το δωμάτιο με αριθμό 15 είναι ίδιου τύπου σε όλους τους ορόφους). <i>(Μονάδες 5)</i></span><span class="ln"><b>Δ5.</b> Να αναπτύξετε τη διαδικασία ΣΥΝΟΛΟ η οποία υπολογίζει και εμφανίζει τον συνολικό αριθμό κλινών του ξενοδοχείου. <i>(Μονάδες 5)</i></span></p></div><p class="where">Πού το διδαχθήκαμε: <span class="nolink">Μάθημα 25 · Δισδιάστατοι πίνακες</span>, <span class="nolink">Μάθημα 25 · Ανά γραμμή ή ανά στήλη</span>, <a href="21.html#s-1" target="_top">Μάθημα 21 · Η σημαία done</a>, <span class="nolink">Μάθημα 32 · Διαδικασίες και πίνακες</span></p><div class="steps"><div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Γραμμή = όροφος, στήλη = αριθμός δωματίου. Το Δ3 κοιτάζει <b>μία γραμμή</b> (την 3η), το Δ4 ψάχνει μια <b>στήλη</b> με όλα τα στοιχεία ίδια, και το Δ5 μετατρέπει κάθε γράμμα σε αριθμό κλινών.</div></div><div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> <span class="ln li"><b>Δ3:</b> όπως τα «διαδοχικά» στις Επαναληπτικές 2023: μετρητής συν +1 σε κάθε Δ, 0 σε κάθε άλλο τύπο, και μετά από κάθε αύξηση σύγκριση με το μέγιστο.</span><span class="ln li"><b>Δ4:</b> για κάθε στήλη j, «ίδιο» σημαίνει ότι κάθε Ξ[i, j] ισούται με το Ξ[1, j]. Μόλις βρεθεί μία τέτοια στήλη, σταματάω (ΟΣΟ με σημαία). Μέσα, ΟΣΟ με σημαία που σταματά στην πρώτη διαφορά.</span><span class="ln li"><b>Δ5:</b> «υπολογίζει και εμφανίζει», άρα διαδικασία που τυπώνει μόνη της. Παίρνει τον πίνακα ως παράμετρο.</span></div></div><div class="step"><span class="stepn">3</span><div><b>Γράφω.</b> <pre class="code">ΠΡΟΓΡΑΜΜΑ Ξενοδοχείο
+! Δ1α
+ΜΕΤΑΒΛΗΤΕΣ
+  ΧΑΡΑΚΤΗΡΕΣ: Ξ[10,30]
+  ΑΚΕΡΑΙΕΣ: i, j, συν, μεγσυν
+  ΛΟΓΙΚΕΣ: βρέθηκε, ίδιο
+ΑΡΧΗ
+  ! Δ1β
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 10
+    ΓΙΑ j ΑΠΟ 1 ΜΕΧΡΙ 30
+      ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+        ΓΡΑΨΕ &#x27;Όροφος&#x27;, i, &#x27;δωμάτιο&#x27;, j, &#x27;(Μ/Δ/Τ):&#x27;
+        ΔΙΑΒΑΣΕ Ξ[i, j]
+      ΜΕΧΡΙΣ_ΟΤΟΥ Ξ[i, j] = &#x27;Μ&#x27; Η Ξ[i, j] = &#x27;Δ&#x27; Η Ξ[i, j] = &#x27;Τ&#x27;
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ! Δ2
+  ΚΑΛΕΣΕ ΣΥΝΟΛΟ(Ξ)
+  ! Δ3: συνεχόμενα δίκλινα στον 3ο όροφο
+  συν ← 0
+  μεγσυν ← 0
+  ΓΙΑ j ΑΠΟ 1 ΜΕΧΡΙ 30
+    ΑΝ Ξ[3, j] = &#x27;Δ&#x27; ΤΟΤΕ
+      συν ← συν + 1
+      ΑΝ συν &gt; μεγσυν ΤΟΤΕ
+        μεγσυν ← συν
+      ΤΕΛΟΣ_ΑΝ
+    ΑΛΛΙΩΣ
+      συν ← 0
+    ΤΕΛΟΣ_ΑΝ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ &#x27;Μέγιστο πλήθος συνεχόμενων δίκλινων στον 3ο όροφο:&#x27;, μεγσυν
+  ! Δ4: στήλη με ίδιο τύπο σε όλους τους ορόφους
+  βρέθηκε ← ΨΕΥΔΗΣ
+  j ← 1
+  ΟΣΟ j &lt;= 30 ΚΑΙ βρέθηκε = ΨΕΥΔΗΣ ΕΠΑΝΑΛΑΒΕ
+    ίδιο ← ΑΛΗΘΗΣ
+    i ← 2
+    ΟΣΟ i &lt;= 10 ΚΑΙ ίδιο = ΑΛΗΘΗΣ ΕΠΑΝΑΛΑΒΕ
+      ΑΝ Ξ[i, j] &lt;&gt; Ξ[1, j] ΤΟΤΕ
+        ίδιο ← ΨΕΥΔΗΣ
+      ΤΕΛΟΣ_ΑΝ
+      i ← i + 1
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+    ΑΝ ίδιο = ΑΛΗΘΗΣ ΤΟΤΕ
+      βρέθηκε ← ΑΛΗΘΗΣ
+    ΑΛΛΙΩΣ
+      j ← j + 1
+    ΤΕΛΟΣ_ΑΝ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΑΝ βρέθηκε = ΑΛΗΘΗΣ ΤΟΤΕ
+    ΓΡΑΨΕ &#x27;Υπάρχει: το δωμάτιο&#x27;, j, &#x27;είναι ίδιου τύπου σε όλους τους ορόφους&#x27;
+  ΑΛΛΙΩΣ
+    ΓΡΑΨΕ &#x27;Δεν υπάρχει δωμάτιο ίδιου τύπου σε όλους τους ορόφους&#x27;
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ξενοδοχείο
+
+! Δ5
+ΔΙΑΔΙΚΑΣΙΑ ΣΥΝΟΛΟ(Ξ)
+ΜΕΤΑΒΛΗΤΕΣ
+  ΧΑΡΑΚΤΗΡΕΣ: Ξ[10,30]
+  ΑΚΕΡΑΙΕΣ: i, j, κλ
+ΑΡΧΗ
+  κλ ← 0
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 10
+    ΓΙΑ j ΑΠΟ 1 ΜΕΧΡΙ 30
+      ΑΝ Ξ[i, j] = &#x27;Μ&#x27; ΤΟΤΕ
+        κλ ← κλ + 1
+      ΑΛΛΙΩΣ_ΑΝ Ξ[i, j] = &#x27;Δ&#x27; ΤΟΤΕ
+        κλ ← κλ + 2
+      ΑΛΛΙΩΣ
+        κλ ← κλ + 3
+      ΤΕΛΟΣ_ΑΝ
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ &#x27;Συνολικός αριθμός κλινών:&#x27;, κλ
+ΤΕΛΟΣ_ΔΙΑΔΙΚΑΣΙΑΣ</pre></div></div><div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> <span class="ln li">Δ3: 3ος όροφος Δ, Δ, Μ, Δ, Δ, Δ, Τ, …: οι σειρές είναι 2 και 3, άρα εμφανίζεται 3. Αν ο όροφος δεν έχει κανένα Δ, εμφανίζεται 0.</span><span class="ln li">Δ4: οι εσωτερικοί δείκτες δεν βγαίνουν ποτέ εκτός ορίων: οι συνθήκες των ΟΣΟ ελέγχουν μόνο τα i, j και τις σημαίες, και το Ξ[i, j] διαβάζεται μέσα στο σώμα, όπου ήδη <span class="nw">i &lt;= 10</span>.</span><span class="ln li">Δ5: ξενοδοχείο μόνο με δίκλινα: <span class="nw">300 · 2 = 600</span> κλίνες. Το ΑΛΛΙΩΣ καλύπτει με ασφάλεια το Τ, γιατί ο Δ1 εγγυάται ότι δεν υπάρχει άλλη τιμή.</span></div></div></div></div>
+<div class="sec" id="s-map"><span class="num">⌖</span><h2>Χάρτης ύλης Επαναληπτικών 2021</h2><span class="ref">Τι εξετάστηκε και πού το διδαχθήκαμε</span></div>
+<div class="tablewrap"><table class="t"><tr><th>Ερώτημα</th><th>Τι ζητήθηκε</th><th>Μάθημα</th></tr>
+<tr><td>Α1</td><td>Σωστό/Λάθος: σύγκριση χαρακτήρων, ΑΛΛΙΩΣ_ΑΝ, δηλώσεις, λογικά λάθη, τυπικές παράμετροι</td><td><a href="08.html" target="_top">8</a>, <a href="09.html" target="_top">9</a>, <a href="11.html" target="_top">11</a>, <a href="15.html" target="_top">15</a>, <span class="nolink">32</span></td></tr>
+<tr><td>Α2</td><td>Ορισμοί στοίβας και ουράς, στάδια αντιμετώπισης προβλήματος</td><td><a href="01.html" target="_top">1</a>, <a href="04.html" target="_top">4</a>, <span class="nolink">27</span>, <span class="nolink">28</span></td></tr>
+<tr><td>Α3</td><td>Φυσική γλώσσα σε ΓΛΩΣΣΑ (MOD, λογικές εκφράσεις, ΓΙΑ)</td><td><a href="03.html" target="_top">3</a>, <a href="08.html" target="_top">8</a>, <a href="14.html" target="_top">14</a></td></tr>
+<tr><td>Α4</td><td>ΜΕΧΡΙΣ_ΟΤΟΥ σε ΟΣΟ, άρνηση σύνθετης συνθήκης</td><td><a href="16.html" target="_top">16</a></td></tr>
+<tr><td>Α5</td><td>Τρία ΑΝ σε ένα ΑΛΛΙΩΣ_ΑΝ</td><td><a href="11.html" target="_top">11</a></td></tr>
+<tr><td>Β1</td><td>Διάγραμμα ροής τριών φωλιασμένων βρόχων</td><td><a href="02.html" target="_top">2</a>, <a href="14.html" target="_top">14</a></td></tr>
+<tr><td>Β2</td><td>Σειριακή αναζήτηση χωρίς υπέρβαση ορίων (κενά)</td><td><a href="21.html" target="_top">21</a></td></tr>
+<tr><td>Γ</td><td>Τιμή φρουρός, ποσοστό, ελάχιστο με φίλτρο, ομάδες, πράξεις με ώρες</td><td><a href="03.html" target="_top">3</a>, <a href="11.html" target="_top">11</a>, <a href="12.html" target="_top">12</a></td></tr>
+<tr><td>Δ</td><td>Εγκυρότητα χαρακτήρων, διαδοχικά σε γραμμή, αναζήτηση στήλης, διαδικασία με πίνακα</td><td><a href="21.html" target="_top">21</a>, <span class="nolink">25</span>, <span class="nolink">32</span></td></tr>
+</table></div><p class="small">Οι εκφωνήσεις είναι τα επίσημα θέματα των Επαναληπτικών Πανελλαδικών Εξετάσεων 2021. Οι λύσεις και τα σχόλια είναι ενδεικτικά και ανήκουν στη ΣΥΝΑΨΗ Εκπαιδευτική. Παρά τον προσεκτικό έλεγχο, ενδέχεται να υπάρχουν τυπογραφικά λάθη. Καθηγητής: Κωνσταντίνος Θεοφίλου.</p></main>
+<script id="kitjs">/*KITJS>*/(function(){
+  /* kit: θέμα (φωτεινό/σκοτεινό), προβολή, «Δείξε λύση» */
+  var root = document.documentElement, body = document.body, doc = document.getElementById('doc');
+  if (!doc || body.getAttribute('data-kit')) return;
+  body.setAttribute('data-kit', '1');
+  function get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function put(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+  var theme = get('aepp-theme') === 'dark' ? 'dark' : 'light';
+  var proj = get('aepp-proj') === '1';
+  function mk(id, txt){ var b = document.createElement('button'); b.type = 'button'; b.id = id; b.className = 'kit-btn'; b.textContent = txt; return b; }
+  var bTheme = mk('k-theme', ''), bProj = mk('k-proj', 'Προβολή'), bAll = null;
+  function applyTheme(){ root.setAttribute('data-theme', theme); bTheme.textContent = theme === 'dark' ? '☀ Φωτεινό' : '☾ Σκοτεινό'; bTheme.setAttribute('aria-label', theme === 'dark' ? 'Φωτεινό θέμα' : 'Σκοτεινό θέμα'); }
+  function fit(){
+    if (!proj){ doc.style.zoom = ''; doc.style.maxWidth = ''; return; }
+    var W = window.innerWidth, z = W < 700 ? 1.12 : 1.38;
+    doc.style.zoom = z; doc.style.maxWidth = Math.max(300, Math.min(900, (W - 36) / z)) + 'px';
+  }
+  function applyProj(){ body.classList.toggle('proj', proj); bProj.setAttribute('aria-pressed', String(proj)); fit(); }
+  window.addEventListener('resize', fit);
+  bTheme.onclick = function(){ theme = theme === 'dark' ? 'light' : 'dark'; put('aepp-theme', theme); applyTheme(); };
+  bProj.onclick = function(){ proj = !proj; put('aepp-proj', proj ? '1' : '0'); applyProj(); };
+  applyTheme(); applyProj();
+
+  var bar = document.getElementById('bar');
+  var teacherSec = doc.querySelector('section.teacher');
+  if (bar){
+    var anchor = document.getElementById('status') || null;
+    if (teacherSec){ bAll = mk('k-all', 'Όλες οι λύσεις'); bar.insertBefore(bAll, anchor); }
+    bar.insertBefore(bProj, anchor); bar.insertBefore(bTheme, anchor);
+  } else {
+    var f = document.createElement('div'); f.id = 'kitfloat';
+    f.appendChild(bTheme); body.appendChild(f); proj = false; applyProj();
+  }
+  if (bAll){
+    bAll.onclick = function(){ var on = !body.classList.contains('rt-all'); body.classList.toggle('rt-all', on); bAll.setAttribute('aria-pressed', String(on)); };
+  }
+
+  /* λυμένα: φαίνεται η εκφώνηση και το «Κατανοώ», τα υπόλοιπα με κουμπί */
+  doc.querySelectorAll('.box.solved').forEach(function(box){
+    var steps = box.querySelector('.steps');
+    if (!steps) return;
+    var st = steps.querySelectorAll(':scope > .step');
+    if (st.length < 2) return;
+    box.classList.add('rt-closed');
+    for (var i = 1; i < st.length; i++) st[i].classList.add('rt-hide');
+    var w = document.createElement('div'); w.className = 'rt-showstep'; w.contentEditable = 'false';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε τη λύση';
+    b.onclick = function(){ box.classList.add('rt-open'); };
+    w.appendChild(b); st[0].after(w);
+  });
+
+  /* ασκήσεις: η απάντηση από τη σελίδα καθηγητή, κρυμμένη κάτω από την εκφώνηση */
+  if (teacherSec){
+    var ans = {};
+    teacherSec.querySelectorAll('.ans .q').forEach(function(q){ var n = q.querySelector('.qn'); if (n) ans[n.textContent.trim()] = q; });
+    doc.querySelectorAll('.exercises .q').forEach(function(q){
+      var n = q.querySelector(':scope > .qn'); if (!n) return;
+      var a = ans[n.textContent.trim()]; if (!a) return;
+      var w = document.createElement('div'); w.className = 'rt rt-ans'; w.contentEditable = 'false';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε λύση';
+      var bodyEl = document.createElement('div'); bodyEl.className = 'rt-body ans';
+      var c = a.cloneNode(true); var qn = c.querySelector('.qn'); if (qn) qn.remove();
+      bodyEl.appendChild(c);
+      b.onclick = function(){ var on = !w.classList.contains('rt-open'); w.classList.toggle('rt-open', on); b.textContent = on ? 'Κρύψε λύση' : 'Δείξε λύση'; };
+      w.appendChild(b); w.appendChild(bodyEl);
+      q.after(w);
+    });
+  }
+})();/*<KITJS*/</script>

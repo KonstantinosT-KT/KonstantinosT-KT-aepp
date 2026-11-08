@@ -1,0 +1,1492 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Μάθημα 21 · Σειριακή αναζήτηση</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap">
+<style>
+/* Layout: one A4-like sheet centred on a cool ground; coloured callouts by role (ορισμός, ήξερες ότι, παγίδα, παράδειγμα) */
+:root{
+  --ground:#e9edf4; --paper:#ffffff; --ink:#172036; --muted:#5a6377; --line:#d9dfea; --soft:#f3f5f9;
+  --blue:#2457d6; --blue-bg:#e9efff; --teal:#0b7f72; --teal-bg:#e2f4f1;
+  --amber:#a65400; --amber-bg:#fff3df; --amber-line:#e2ad62;
+  --coral:#b93b12; --coral-bg:#fcebe4; --violet:#6534c9; --violet-bg:#efe8fd;
+  --s-blue:#2457d6; --s-teal:#0b8174; --s-violet:#6534c9; --s-ink:#172036; --on-solid:#ffffff; --on-solid-2:#d8e1ff;
+  --hero:#172036; --hero-fg:#ffffff; --hero-sub:#c4cef0; --hero-kick:#a9bcff;
+  --mark:#ffe28a;
+  --display:"Commissioner","Noto Sans",system-ui,sans-serif;
+  --body:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0 0 8px}
+
+/* Toolbar */
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:10px 0;background:var(--ground)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:3px}
+.seg button,.btn{font:600 13px/1 var(--body);border:0;background:none;color:var(--muted);padding:8px 13px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid)}
+.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.spacer{flex:1}
+#status{font-size:12.5px;color:var(--muted)}
+.edit-only{display:none}
+body.editing .edit-only{display:inline-block}
+body.editing .view-only{display:none}
+body.editing #doc{outline:2px dashed var(--blue);outline-offset:6px}
+body.editing #doc [contenteditable="false"]{cursor:default}
+
+/* Sheet */
+#doc{max-width:860px;margin:0 auto;background:var(--paper);border-radius:14px;padding:clamp(18px,4vw,44px);box-shadow:0 1px 2px rgba(10,20,40,.06),0 8px 30px rgba(10,20,40,.06)}
+body.student .teacher{display:none}
+
+.hero{background:var(--hero);color:var(--hero-fg);border-radius:14px;padding:22px 24px 24px;position:relative;overflow:hidden}
+.hero .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--hero-kick);font-weight:700}
+.hero h1{font-size:clamp(28px,5vw,40px);font-weight:800;margin:6px 0 8px;letter-spacing:-.01em}
+.hero .sub{color:var(--hero-sub);max-width:34em}
+.hero .sub b{color:var(--hero-fg)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.12);color:var(--hero-fg)}
+.hero .deco{position:absolute;right:-10px;top:-6px;opacity:.16;width:220px;height:auto}
+.hero .deco *{stroke:var(--hero-fg)}
+
+.goals{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 18px;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px}
+.goals h3{grid-column:1/-1;font-size:13px;color:var(--blue);text-transform:uppercase;letter-spacing:.08em}
+.goals div{padding-left:20px;position:relative;font-size:14px}
+.goals div::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:800}
+
+.glance{margin-top:14px;background:var(--soft);border-radius:12px;padding:14px 16px}
+.glance h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.figure{overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:520px;height:auto;font-family:var(--body)}
+
+.sec{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:5px;margin:30px 0 12px;break-after:avoid}
+.sec .num{font-family:var(--display);font-weight:800;font-size:22px;color:var(--blue);font-variant-numeric:tabular-nums}
+.sec h2{font-size:22px;font-weight:800}
+.sec .ref{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;break-inside:avoid}
+.tag{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.def{background:var(--blue-bg);border-left:4px solid var(--blue)} .def .tag{color:var(--blue)}
+.src{font-size:12px;color:var(--muted);margin:2px 0 0}
+.trivia{background:var(--amber-bg);border:1.5px dashed var(--amber-line)} .trivia .tag{color:var(--amber)}
+.talk{margin-top:6px;font-size:14px;color:var(--amber);font-weight:600}
+.talk span{font-weight:400}
+details.trivia>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;margin:0}details.trivia>summary::-webkit-details-marker{display:none}details.trivia>summary::before{content:"▸";font-size:13px;letter-spacing:0}details.trivia[open]>summary::before{content:"▾"}details.trivia[open]>summary{margin-bottom:6px}details.trivia>summary:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}.talkans{margin-top:6px;font-size:14px;border-top:1px dashed var(--amber-line);padding-top:6px}@media print{details.trivia>summary::before{display:none}}
+.trap{background:var(--coral-bg);border-left:4px solid var(--coral)} .trap .tag{color:var(--coral)}
+.ex{background:var(--teal-bg);border-left:4px solid var(--teal)} .ex .tag{color:var(--teal)}
+.plain{background:var(--soft)} .plain .tag{color:var(--ink)}
+.hl{background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 1px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:10px 0}
+.grid .box{margin:0}
+ul.tight{margin:4px 0 8px;padding-left:20px} ul.tight li{margin:3px 0}
+.small{font-size:13px;color:var(--muted)}
+.cap{font-size:13.5px;font-weight:700;margin-bottom:6px}
+
+.tablewrap{overflow-x:auto;margin:10px 0}
+table.t{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
+table.t th{background:var(--s-ink);color:var(--paper);text-align:left;padding:7px 10px;font-weight:600}
+table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:top}
+
+.exhead{display:flex;align-items:center;gap:10px;margin:22px 0 8px}
+.lvl{display:inline-flex;gap:4px}
+.lvl i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}
+.lvl i.on{background:var(--violet)}
+.exhead h3{font-size:17px}
+.q{margin:10px 0 14px;break-inside:avoid}
+.qn{display:inline-block;min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:7px;background:var(--violet-bg);color:var(--violet);font-weight:800;font-size:13px;margin-right:8px}
+.theme{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-left:6px}
+table.tf{width:100%;border-collapse:collapse;margin-top:6px;font-size:14.5px}
+table.tf td{padding:6px 8px;border-bottom:1px solid var(--line)}
+table.tf td.b{width:70px;text-align:center;color:var(--muted)}
+.lines{height:var(--h,44px);background:repeating-linear-gradient(transparent 0 27px,var(--line) 27px 28px);margin-top:6px}
+.drawbox{height:180px;border:1.5px dashed var(--line);border-radius:10px;margin-top:8px}
+.indent{margin-left:34px}
+.sol{color:var(--teal);font-weight:700}
+.ans .q{margin:8px 0}
+.teacher .sec{border-color:var(--teal)} .teacher .sec .num{color:var(--teal)}
+
+/* SVG roles */
+.f-blue{fill:var(--s-blue)} .f-teal{fill:var(--s-teal)} .f-violet{fill:var(--s-violet)} .f-ink{fill:var(--s-ink)}
+.f-paper{fill:var(--paper)} .f-on{fill:var(--on-solid)} .f-on2{fill:var(--on-solid-2)} .f-text{fill:var(--ink)} .f-muted{fill:var(--muted)} .f-onink{fill:var(--paper)}
+.st-ink{stroke:var(--ink)} .st-blue{stroke:var(--blue)} .st-teal{stroke:var(--teal)} .st-violet{stroke:var(--violet)}
+.f-arrow{fill:var(--ink)}
+
+
+/* v2 additions: code, narrow flowcharts, legends */
+:root{--mono:ui-monospace,"Cascadia Mono","Consolas","DejaVu Sans Mono",monospace}
+pre.code{font-family:var(--mono);font-size:14px;line-height:1.55;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:6px 0 8px;overflow-x:auto;white-space:pre}
+.figure.narrow svg{min-width:0;max-width:250px;margin:4px auto}
+.grid.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+ul.legend{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0 2px}
+ul.legend li{font-size:14px}
+ul.legend b{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:6px;background:var(--violet-bg);color:var(--violet);margin-right:4px}
+
+
+/* v3 additions: solved examples step by step, blank value tables */
+.solved{border:1.5px solid var(--teal);background:var(--paper)} .solved .tag{color:var(--teal)}
+.steps{display:grid;gap:14px;margin-top:10px}
+.step{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.stepn{width:30px;height:30px;border-radius:50%;background:var(--s-teal);color:var(--on-solid);font:800 14px/30px var(--display);text-align:center}
+table.t.blank td{height:34px;border:1px solid var(--line)}
+
+/* v4: graphs */
+.figure.narrow.graph svg{max-width:380px}
+
+/* v5: toolbox subsections */
+h3.tool{font-size:17px;margin:24px 0 8px;padding-top:4px;border-top:1px solid var(--line)}
+
+/* homework vs self-check */
+.q.hw::before{content:"Για το σπίτι";display:block;width:max-content;font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:99px;padding:4px 9px;margin-bottom:6px}
+body.editing .q.hw::before{display:none}
+.hwtoggle{display:block;margin-bottom:6px;font:600 12px/1 var(--body);padding:6px 10px;border-radius:99px;border:1.5px dashed var(--line);background:var(--paper);color:var(--muted);cursor:pointer}
+.hwtoggle[aria-pressed="true"]{border-style:solid;border-color:var(--amber-line);color:var(--amber);background:var(--amber-bg)}
+.hwnote{font-size:13px;color:var(--amber);font-weight:600}
+
+@media (max-width:520px){ .indent{margin-left:0} .hero .deco{display:none} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* v4: math notation (fractions, roots) */
+.mx{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:1.06em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 2px;line-height:1.25}
+.frac>span{padding:0 4px}
+.frac>span:first-child{border-bottom:1.3px solid currentColor}
+.rt{border-top:1.3px solid currentColor;padding:0 2px 0 1px;margin-left:1px}
+
+/* student additions */
+#doc{margin-top:0}
+#nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ground);max-width:860px;margin:0 auto;padding-block:10px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.navin{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.navin::-webkit-scrollbar{display:none}
+#nav a{flex:none;font:600 13px/1 var(--body);color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
+#nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#nav a.navtest{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid,#fff)}
+.sec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
+.btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.quiz{display:grid;gap:10px;margin-top:10px}
+.qi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:8px}
+.qi .qs{margin:0}
+.qb{display:flex;gap:8px;flex-wrap:wrap}
+.qb button{font:600 14px/1 var(--body);padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;min-width:96px}
+.qb button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.qi.ok{border-color:var(--teal);background:var(--teal-bg)}
+.qi.no{border-color:var(--coral);background:var(--coral-bg)}
+.qi .qb button.pick{border-color:currentColor}
+.qi.ok .qb button.pick{background:var(--s-teal);border-color:var(--s-teal);color:var(--on-solid)}
+.qi.no .qb button.pick{background:var(--coral);border-color:var(--coral);color:var(--paper)}
+.qi.no .qb button.right{border-color:var(--teal);color:var(--teal)}
+.fb{font-size:13px;font-weight:700}
+.qwhy{margin:0;font-size:14px;line-height:1.5}
+.qi.ok .fb{color:var(--teal)} .qi.no .fb{color:var(--coral)}
+.score{font:700 15px/1.4 var(--display);padding:10px 14px;border-radius:10px;background:var(--violet-bg);color:var(--violet);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.score .btn{font-size:13px;padding:8px 12px}
+
+details.reveal{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+details.reveal summary{cursor:pointer;font-weight:700;color:var(--teal);padding:10px 14px;list-style:none}
+details.reveal summary::-webkit-details-marker{display:none}
+details.reveal summary::before{content:"▸ ";}
+details.reveal[open] summary::before{content:"▾ ";}
+details.reveal .rv{padding:0 14px 12px}
+
+.deck{display:grid;gap:12px;margin-top:10px}
+.card{position:relative;display:block;width:100%;min-height:220px;border:0;padding:0;background:none;cursor:pointer;perspective:1200px;font:inherit;color:inherit;text-align:left}
+.card .face{position:absolute;inset:0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;backface-visibility:hidden;transition:transform .45s ease}
+.card .front{background:var(--hero);color:var(--hero-fg);justify-content:center}
+.card .back{background:var(--blue-bg);color:var(--ink);border:1.5px solid var(--blue);transform:rotateY(180deg);overflow:auto}
+.card.flipped .front{transform:rotateY(-180deg)}
+.card.flipped .back{transform:rotateY(0)}
+.card:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:14px}
+.ck{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.term{font:800 clamp(24px,6vw,34px)/1.15 var(--display)}
+.cdef{font-size:15.5px;line-height:1.55}
+.tap{font-size:12.5px;opacity:.7;margin-top:auto}
+.deckbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.count{font:700 14px var(--display);min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.card .face{transition:none}}
+@media (max-width:520px){ #doc{border-radius:12px} .card{min-height:260px} }
+
+/* test */
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid,#fff);font-size:15px;padding:12px 18px;text-decoration:none;display:inline-block}
+.btn.primary:disabled,.btn.primary.off{opacity:.45;cursor:not-allowed;pointer-events:none}
+.tstart{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.tlink{font:700 14px var(--body);color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+.tlink:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.tstats{margin:0;font-size:14px;line-height:1.7}
+.tstats b{font-variant-numeric:tabular-nums;color:var(--ink)}
+.tstats .sep{color:var(--line);margin:0 8px}
+.tstats:empty{display:none}
+.tpart{margin:18px 0 6px;font:800 16px/1.3 var(--display)}
+.tpart small{font:600 12px var(--body);color:var(--muted);margin-left:6px}
+.tq{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;display:grid;gap:8px;min-width:0}
+.tq>p{margin:0}
+.tq pre.code{margin:0;font-size:13px}
+.tq.ok{border-color:var(--teal);background:var(--teal-bg)}
+.tq.no{border-color:var(--coral);background:var(--coral-bg)}
+.tq .tn{font:700 12px var(--body);color:var(--muted)}
+.topts{display:grid;gap:6px}
+.topts button{font:500 14.5px/1.35 var(--body);text-align:left;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;display:flex;gap:8px;align-items:flex-start;min-width:0}
+.topts button .ol{font-weight:800;flex:none}
+.topts button pre.code{flex:1;min-width:0;background:none;border:0;padding:0;overflow-x:auto}
+.topts button.sel{border-color:var(--blue);background:var(--blue-bg)}
+.topts button:focus-visible,.tq select:focus-visible,.tq input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.topts.two{grid-template-columns:1fr 1fr}
+.tq.done .topts button{cursor:default}
+.topts button.right{border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+.topts button.wrong{border-color:var(--coral);box-shadow:inset 0 0 0 1px var(--coral)}
+.tfill{line-height:2.1}
+.tq select{font:600 14px var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--blue);border-radius:8px;padding:4px 6px;max-width:100%}
+.tq select.right{border-color:var(--teal);background:var(--teal-bg)}
+.tq select.wrong{border-color:var(--coral);background:var(--coral-bg)}
+.tmrow{display:grid;gap:6px;padding:8px 0;border-top:1px dashed var(--line)}
+.tmrow:first-of-type{border-top:0}
+.tmrow code{white-space:normal}
+.tq input{font:600 16px var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--blue);border-radius:8px;padding:8px 10px;width:9em;max-width:100%}
+.tq input.right{border-color:var(--teal)} .tq input.wrong{border-color:var(--coral)}
+.tfb{font-size:13.5px;font-weight:600;margin:0}
+.tq.ok .tfb{color:var(--teal)} .tq.no .tfb{color:var(--coral)}
+.tfb a{color:var(--ink);font-weight:700}
+.tfb .why{display:block;font-weight:400;color:var(--ink);margin-top:3px}
+.tbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0}
+.tmsg{font-size:13.5px;font-weight:600;color:var(--coral)}
+.tresult{border-radius:12px;padding:14px 16px;background:var(--blue-bg);border:0;border-left:4px solid var(--s-blue);display:grid;gap:6px;margin:12px 0}
+.tresult .big,.pgbig .big{font:800 26px/1.1 var(--display);color:var(--blue);font-variant-numeric:tabular-nums}
+.ttimer{position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);z-index:5;font:700 14px var(--display);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px 12px;width:max-content;margin-left:auto}
+/* homework header: the orange frame, once */
+.hwsec .sec{border:1.5px solid var(--amber-line);background:var(--amber-bg);border-radius:12px;padding:10px 14px;align-items:center}
+.hwsec .sec .num,.hwsec .sec h2{color:var(--amber)}
+.hwsec .sec .num{font-size:24px}
+.hwsec .q.hw::before{display:none}
+.hwlock{border:1.5px dashed var(--line);border-radius:10px;padding:12px 14px;color:var(--muted);font-weight:600}
+/* «Η πρόοδός μου» */
+.pg{position:fixed;inset:0;z-index:50;background:var(--ground);overflow-y:auto;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px calc(env(safe-area-inset-bottom,0px) + 84px)}
+.pgin{max-width:560px;margin:0 auto;display:grid;gap:14px}
+.pghead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pghead h2{font:800 24px/1.2 var(--display);margin:0}
+.pgcard{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:10px}
+.pgcard p{margin:0}
+.pgl{font:700 12px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pgt{font:800 18px/1.25 var(--display)}
+.pgbig{display:grid;gap:2px;background:var(--blue-bg);border-radius:10px;padding:10px 12px}
+.pgchart{position:relative}
+.pgchart svg{display:block;width:100%;height:auto;overflow:visible}
+.pgchart .grid line{stroke:var(--line);stroke-width:1}
+.pgchart .ax text{fill:var(--muted);font:600 11px var(--body)}
+.pgchart .ln{fill:none;stroke:var(--s-blue);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.pgchart .pt{fill:var(--s-blue);stroke:var(--paper);stroke-width:2}
+.pgchart .hit{fill:transparent;cursor:pointer;outline:none}
+.pgchart .hit:focus-visible{stroke:var(--blue);stroke-width:2}
+.pgchart .lbl{fill:var(--ink);font:700 12px var(--body)}
+.pgchart .goal{stroke:var(--teal);stroke-width:1.5;stroke-dasharray:4 4}
+.pgchart .goalt{fill:var(--teal);font:700 11px var(--body)}
+.pgtip{min-height:1.4em;margin:4px 0 0;font-size:13px;color:var(--muted)}
+.pgscroll{max-height:196px;overflow-y:auto;overscroll-behavior:contain;border:1px solid var(--line);border-radius:10px;padding:0 10px}
+.pgtab th{position:sticky;top:0;background:var(--paper);z-index:1}
+.pgtab{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+.pgtab th{text-align:left;font:700 12px var(--body);color:var(--muted);padding:8px 8px 6px 0;border-bottom:1px solid var(--line)}
+.pgtab td{padding:6px 8px 6px 0;border-bottom:1px dashed var(--line)}
+.pgtab tr:last-child td{border-bottom:0}
+.pgtab td.na{color:var(--muted)}
+#pg-h a{color:inherit;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+#pg-h a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+body.pg-open #kitfloat{z-index:60}
+.pginfo{background:var(--soft);border-radius:12px;padding:12px 14px;display:grid;gap:8px;font-size:14.5px}
+.pginfo p{margin:0}
+.pgquote{margin:6px 0 0;padding:22px 20px 18px;text-align:center;position:relative;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.pgquote::before{content:"“";position:absolute;left:50%;top:-22px;transform:translateX(-50%);font:400 54px/1 "GFS Didot",Georgia,serif;color:var(--s-blue);background:var(--ground);padding:0 10px}
+.pgquote blockquote{margin:0;font:400 21px/1.45 "GFS Didot",Georgia,"Times New Roman",serif;color:var(--ink);text-wrap:balance}
+.pgquote figcaption{margin-top:10px;font:600 12px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.pgquote figcaption::before{content:"";display:inline-block;width:22px;height:1px;background:var(--muted);vertical-align:middle;margin-right:8px}
+body.pg-open{overflow:hidden}
+@media (max-width:520px){.topts.two{grid-template-columns:1fr}}
+.sos-av{float:right;width:72px;height:84px;border-radius:14px;background:center top/cover no-repeat;margin:0 0 8px 14px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);shape-outside:margin-box}@media(max-width:560px){.sos-av{width:56px;height:65px;border-radius:11px;margin-left:10px}}@media print{.sos-av{display:none}}.sos-av.sa{background-image:url(av3.jpg)}.sos-av.sb{background-image:url(av6.jpg)}
+/* ΣΥΝΑΨΗ: χρώματα του site */
+:root{--ground:#F7F6F0;--ink:#2B3722;--muted:#5E6253;--line:#E1E1D7;--soft:#F3F2EA;--blue:#4F6230;--blue-bg:#EEF0E2;--s-blue:#4F6230;--s-ink:#2B3722;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D;--on-solid-2:#E6E0CC}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}}
+:root[data-theme="dark"]{--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}
+</style>
+<style id="synapsi-site">
+.syn-bar{max-width:860px;margin:0 auto;padding-top:12px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
+.syn-bar a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--hero);color:#fff;text-decoration:none}
+.syn-bar span{color:var(--muted)}
+.syn-foot{max-width:860px;margin:18px auto 0;display:flex;flex-direction:column;gap:12px}
+.syn-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.syn-nav a,.syn-nav span{min-height:52px;padding:8px 14px;border-radius:12px;display:flex;flex-direction:column;justify-content:center;gap:2px;text-decoration:none;font:700 14px/1.3 var(--display);background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.syn-nav small{font:600 11.5px var(--body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.syn-nav .next{text-align:right;background:var(--hero);color:#fff;border-color:var(--hero)}
+.syn-nav .next small{color:var(--hero-kick)}
+.syn-note{font-size:13px;color:var(--muted);padding:12px 14px;border-radius:10px;background:var(--soft)}
+.syn-copy{font-size:12px;color:var(--muted)}
+</style>
+<script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<div class="syn-bar"><a href="index.html">&#8592; Διαδρομή</a><span>Μάθημα 21 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-test" class="navtest">Σύντομο Τεστ</a><a href="#s-3-6">3.6</a><a href="#s-1">Η σημαία done</a><a href="#s-4-3-2">4.3.2</a><a href="#s-3">Τα όρια του πίνακα</a><a href="#s-4">Πότε σειριακή;</a><a href="#s-tools">Εργαλειοθήκη</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a><a href="#s-hw">Για το σπίτι</a></div></nav>
+<main id="doc" lang="el">
+<section class="hero">
+<svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
+<rect height="30" width="30" x="15" y="60"></rect><rect height="30" width="30" x="45" y="60"></rect><rect height="30" width="30" x="75" y="60"></rect><rect height="30" width="30" x="105" y="60"></rect><rect height="30" width="30" x="135" y="60"></rect>
+<circle cx="150" cy="40" r="14"></circle><path d="M160 50 L175 65"></path>
+<path d="M30 105 L120 105" stroke-dasharray="4 4"></path><path d="M112 99 L120 105 L112 111"></path>
+</svg>
+<div class="kicker">Μέρος Δ · Δομές δεδομένων και πίνακες</div>
+<h1>Σειριακή αναζήτηση</h1>
+<p class="sub">Υπάρχει ο αριθμός 56 στον πίνακα; Αν ναι, σε ποια θέση; Η πιο απλή απάντηση: κοιτάμε τα στοιχεία ένα-ένα, από την αρχή, και <b>σταματάμε</b> μόλις το βρούμε. Το «σταματάμε» είναι όλη η τέχνη: θέλει μια λογική μεταβλητή-σημαία και προσοχή στα όρια του πίνακα.</p>
+<div class="chips"><span class="chip">Βιβλίο §3.6 · σελ. 63–64</span><span class="chip">Οδηγίες Μελέτης §4.3.2</span><span class="chip">3 διδακτικές ώρες</span></div>
+</section>
+<div class="goals">
+<h3>Στο τέλος του μαθήματος θα μπορείς να…</h3>
+<div>περιγράφεις και εκτελείς τον αλγόριθμο <b>σειριακής αναζήτησης</b> του βιβλίου</div>
+<div>εξηγείς τον ρόλο της σημαίας <b>done</b> και γιατί χρειάζεται ΟΣΟ και όχι ΓΙΑ</div>
+<div>προσαρμόζεις την αναζήτηση όταν το στοιχείο υπάρχει <b>πολλές φορές</b> ή ο πίνακας είναι <b>ταξινομημένος</b></div>
+<div>αποφεύγεις την <b>παραβίαση των ορίων</b> του πίνακα στη συνθήκη της επανάληψης</div>
+<div>μετράς <b>προσπελάσεις</b> και ξέρεις πότε δικαιολογείται η σειριακή μέθοδος</div>
+<div>χρησιμοποιείς την αναζήτηση σε <b>παράλληλους πίνακες</b> και σε επαναλαμβανόμενα ερωτήματα</div>
+</div>
+<div class="glance">
+<h3>Όλο το μάθημα με μια ματιά: κοιτάμε ένα-ένα, και σταματάμε νωρίς</h3>
+<div class="figure">
+<svg aria-label="Σειριακή αναζήτηση σε αταξινόμητο και σε ταξινομημένο πίνακα" role="img" style="min-width:0" viewbox="0 0 590 330">
+<text class="f-text" font-size="19" font-weight="700" x="50" y="28">Αταξινόμητος · key = 56</text>
+<rect class="f-blue st-ink" height="46" stroke-width="1.6" width="58" x="50" y="40"></rect>
+<text class="f-on" font-size="22" text-anchor="middle" x="79.0" y="71">52</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="79.0" y="104">1</text>
+<rect class="f-blue st-ink" height="46" stroke-width="1.6" width="58" x="108" y="40"></rect>
+<text class="f-on" font-size="22" text-anchor="middle" x="137.0" y="71">12</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="137.0" y="104">2</text>
+<rect class="f-blue st-ink" height="46" stroke-width="1.6" width="58" x="166" y="40"></rect>
+<text class="f-on" font-size="22" text-anchor="middle" x="195.0" y="71">71</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="195.0" y="104">3</text>
+<rect class="f-teal st-ink" height="46" stroke-width="1.6" width="58" x="224" y="40"></rect>
+<text class="f-on" font-size="22" text-anchor="middle" x="253.0" y="71">56</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="253.0" y="104">4</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="58" x="282" y="40"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="311.0" y="71">5</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="311.0" y="104">5</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="58" x="340" y="40"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="369.0" y="71">10</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="369.0" y="104">6</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="58" x="398" y="40"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="427.0" y="71">19</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="427.0" y="104">7</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="58" x="456" y="40"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="485.0" y="71">90</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="485.0" y="104">8</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="58" x="514" y="40"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="543.0" y="71">45</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="543.0" y="104">9</text>
+<text class="f-muted" font-size="17" x="50" y="130">4 προσπελάσεις: βρέθηκε στη θέση 4</text>
+<text class="f-text" font-size="19" font-weight="700" x="50" y="193">Ταξινομημένος · key = 11</text>
+<rect class="f-blue st-ink" height="46" stroke-width="1.6" width="58" x="50" y="205"></rect>
+<text class="f-on" font-size="22" text-anchor="middle" x="79.0" y="236">5</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="79.0" y="269">1</text>
+<rect class="f-blue st-ink" height="46" stroke-width="1.6" width="58" x="108" y="205"></rect>
+<text class="f-on" font-size="22" text-anchor="middle" x="137.0" y="236">10</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="137.0" y="269">2</text>
+<rect class="f-violet st-ink" height="46" stroke-width="1.6" width="58" x="166" y="205"></rect>
+<text class="f-on" font-size="22" text-anchor="middle" x="195.0" y="236">12</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="195.0" y="269">3</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="58" x="224" y="205"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="253.0" y="236">19</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="253.0" y="269">4</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="58" x="282" y="205"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="311.0" y="236">45</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="311.0" y="269">5</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="58" x="340" y="205"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="369.0" y="236">52</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="369.0" y="269">6</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="58" x="398" y="205"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="427.0" y="236">56</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="427.0" y="269">7</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="58" x="456" y="205"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="485.0" y="236">71</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="485.0" y="269">8</text>
+<rect class="f-paper st-ink" height="46" stroke-width="1.6" width="58" x="514" y="205"></rect>
+<text class="f-text" font-size="22" text-anchor="middle" x="543.0" y="236">90</text>
+<text class="f-muted" font-size="15" text-anchor="middle" x="543.0" y="269">9</text>
+<text class="f-muted" font-size="17" x="50" y="295">3 προσπελάσεις: το 12 &gt; 11, άρα το 11 δεν υπάρχει</text>
+</svg>
+</div>
+<p class="small">Στον αταξινόμητο πίνακα το 56 βρίσκεται στην 4η προσπέλαση. Για ένα στοιχείο που <b>δεν υπάρχει</b> (π.χ. 11) πρέπει να κοιτάξουμε και τα 9. Στον ταξινομημένο πίνακα όμως, μόλις δούμε το 12 ξέρουμε ότι το 11 δεν υπάρχει πιο δεξιά: σταματάμε στην 3η προσπέλαση.</p>
+</div>
+<div class="sec" id="s-3-6"><span class="num">3.6</span><h2>Ο αλγόριθμος του βιβλίου</h2><span class="ref">Βιβλίο σελ. 63–64</span></div>
+<div class="box def"><span aria-hidden="true" class="sos-av sa"></span>
+<div class="tag">Από το βιβλίο</div>
+<p>Το πρόβλημα της αναζήτησης (searching) ενός στοιχείου σε πίνακα είναι ιδιαίτερα ενδιαφέρον λόγω της χρησιμότητάς του σε πλήθος εφαρμογών. Υπάρχουν αρκετές μέθοδοι αναζήτησης σε πίνακα που εξαρτώνται κυρίως από το αν ο πίνακας είναι ταξινομημένος ή όχι. […] Η πιο απλή μορφή αναζήτησης στοιχείου σε πίνακα είναι η <b>σειριακή</b> (sequential) ή <b>γραμμική</b> (linear) μέθοδος.</p>
+<p class="src">Σχολικό βιβλίο, §3.6</p>
+</div>
+<p>Ο αλγόριθμος αναζητά την τιμή key στον <b>μη ταξινομημένο</b> πίνακα table των n στοιχείων. Στο τέλος η position έχει την τιμή 0 αν η αναζήτηση είναι ανεπιτυχής, αλλιώς τη θέση του στοιχείου (από 1 ως n).</p>
+<div class="grid g2" style="align-items:start">
+<div><pre class="code">Αλγόριθμος Sequential_Search
+Δεδομένα // n, table, key //
+done ← ψευδής
+position ← 0
+i ← 1
+Όσο (done = ψευδής) και (i &lt;= n) επανάλαβε
+  Αν table[i] = key τότε
+    done ← αληθής
+    position ← i
+  αλλιώς
+    i ← i + 1
+  Τέλος_αν
+Τέλος_επανάληψης
+Αποτελέσματα // done, position //
+Τέλος Sequential_Search</pre></div>
+<div class="box plain" style="margin:0"><div class="tag">Τι κάνει κάθε μεταβλητή</div>
+<p><b>done</b>: η σημαία. Ξεκινά ψευδής («δεν το βρήκα ακόμα») και γίνεται αληθής τη στιγμή που το βρίσκουμε. Τότε η συνθήκη του Όσο γίνεται ψευδής και η επανάληψη σταματά.</p>
+<p><b>i</b>: η θέση που εξετάζουμε. Αυξάνεται <b>μόνο</b> αν δεν βρήκαμε το στοιχείο (στο αλλιώς), οπότε στο τέλος δείχνει τη θέση του.</p>
+<p><b>position</b>: το αποτέλεσμα. 0 σημαίνει «δεν υπάρχει».</p>
+<p class="small"><span class="ln">Το τρέξαμε για τον πίνακα του σχήματος:</span><span class="ln li"><span class="nw">key = 56</span>: <b>αληθής, 4</b></span><span class="ln li"><span class="nw">key = 11</span>: <b>ψευδής, 0</b></span></p></div>
+</div>
+<p>Το βιβλίο σημειώνει δύο παραλλαγές: αν ένα στοιχείο εμφανίζεται <b>περισσότερες από μία φορές</b>, «η μεταβλητή done είναι περιττή» και η αναζήτηση συνεχίζεται μέχρι το τέλος του πίνακα. Αν τα στοιχεία είναι <b>ταξινομημένα</b>, «ο αλγόριθμος πρέπει να σταματήσει, μόλις συναντήσει κάποιο στοιχείο που είναι μεγαλύτερο από το αναζητούμενο».</p>
+<div class="sec" id="s-1"><span class="num">⚑</span><h2>Η σημαία done</h2><span class="ref">Οδηγίες διδασκαλίας, ενότητα 24</span></div>
+<p>Οι οδηγίες διδασκαλίας ζητούν να τονιστεί «η σπουδαιότητα της χρήσης μιας λογικής μεταβλητής done ως σημαίας, προκειμένου να αποφευχθούν περιττές επαναλήψεις». Σύγκρινε δύο λύσεις για έναν πίνακα 1000 στοιχείων, όπου το ζητούμενο είναι στη θέση 3:</p>
+<div class="grid g2" style="align-items:start">
+<div class="box trap" style="margin:0"><span aria-hidden="true" class="sos-av sb"></span><div class="tag">Με ΓΙΑ: πάντα μέχρι το τέλος</div>
+<pre class="code">position ← 0
+ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 1000
+  ΑΝ Α[i] = key ΤΟΤΕ
+    position ← i
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</pre>
+<p><b>1000</b> συγκρίσεις, ενώ η απάντηση ήταν γνωστή από την 3η. Σωστό αποτέλεσμα (για μοναδικό στοιχείο), αλλά 997 περιττές επαναλήψεις. Η ΓΙΑ δεν μπορεί να σταματήσει νωρίτερα.</p></div>
+<div class="box ex" style="margin:0"><div class="tag">Με ΟΣΟ και σημαία: σταματά νωρίς</div>
+<pre class="code">done ← ΨΕΥΔΗΣ
+i ← 1
+ΟΣΟ done = ΨΕΥΔΗΣ ΚΑΙ i &lt;= 1000 ΕΠΑΝΑΛΑΒΕ
+  ΑΝ Α[i] = key ΤΟΤΕ
+    done ← ΑΛΗΘΗΣ
+  ΑΛΛΙΩΣ
+    i ← i + 1
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</pre>
+<p><b>3</b> συγκρίσεις. Η συνθήκη έχει <b>δύο</b> λόγους για να σταματήσει: «το βρήκα» (done) ή «τελείωσε ο πίνακας» <span class="nw">(i &lt;= 1000).</span></p></div>
+</div>
+<div class="tablewrap"><table class="t"><tbody>
+<tr><th>Πίνακας n στοιχείων</th><th>Επιτυχής αναζήτηση (στοιχείο στη θέση k)</th><th>Ανεπιτυχής αναζήτηση</th></tr>
+<tr><td>ΓΙΑ μέχρι το τέλος</td><td>n</td><td>n</td></tr>
+<tr><td>ΟΣΟ με done</td><td>k (κατά μέσο όρο περίπου <span class="nw">n / 2)</span></td><td>n</td></tr>
+<tr><td>ΟΣΟ με done, ταξινομημένος πίνακας</td><td>k</td><td>μέχρι το πρώτο μεγαλύτερο στοιχείο</td></tr>
+</tbody></table></div>
+<p class="small">Στη σημαία μπορείς να δώσεις όποιο όνομα θέλεις (done, βρέθηκε, flag). Σημασία έχει να παίρνει αρχική τιμή ΨΕΥΔΗΣ <b>πριν από κάθε αναζήτηση</b>, όχι μία φορά στην αρχή του προγράμματος (Άσκηση 10).</p>
+<div class="sec" id="s-4-3-2"><span class="num">4.3.2</span><h2>Οι παραλλαγές</h2><span class="ref">Οδηγίες Μελέτης §4.3.2</span></div>
+<p>Οι Οδηγίες Μελέτης δίνουν δύο προγράμματα σε ΓΛΩΣΣΑ για πίνακα Α[100]. Το πρώτο είναι για στοιχείο <b>μοναδικό</b> και δεν χρησιμοποιεί σημαία: προχωρά όσο δεν το βρήκε και δεν έφτασε στην τελευταία θέση, και <b>μετά</b> τον βρόχο ελέγχει πού σταμάτησε.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Αναζήτηση1
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Α[100], i, KEY
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 100
+    ΔΙΑΒΑΣΕ Α[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ 'Δώσε αριθμό για αναζήτηση: '
+  ΔΙΑΒΑΣΕ KEY
+  i &lt;- 1
+  ΟΣΟ Α[i] &lt;&gt; KEY ΚΑΙ i &lt; 100 ΕΠΑΝΑΛΑΒΕ
+    i &lt;- i + 1
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΑΝ Α[i] = KEY ΤΟΤΕ
+    ΓΡΑΨΕ 'Βρέθηκε στη θέση:', i
+  ΑΛΛΙΩΣ
+    ΓΡΑΨΕ 'Δε βρέθηκε'
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Αναζήτηση1</pre>
+<p>Πρόσεξε το <code>i &lt; 100</code> και όχι <code>i &lt;= 100</code>. Το i φτάνει το πολύ στο 100, άρα το Α[i] είναι πάντα μέσα στα όρια. Επειδή όμως ο βρόχος μπορεί να σταματήσει στο 100 και για τους δύο λόγους (βρέθηκε στο τέλος ή δεν υπάρχει), η απάντηση δίνεται με τον έλεγχο <code>Α[i] = KEY</code> μετά τον βρόχο. Το δεύτερο πρόγραμμα είναι για στοιχείο που μπορεί να υπάρχει <b>πολλές φορές</b>: ΓΙΑ ως το τέλος και μια σημαία που λέει αν βρέθηκε έστω μία φορά.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Αναζήτηση2
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Α[100], i, KEY
+  ΛΟΓΙΚΕΣ: flag
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 100
+    ΔΙΑΒΑΣΕ Α[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ 'Δώσε αριθμό για αναζήτηση στον πίνακα Α:'
+  ΔΙΑΒΑΣΕ KEY
+  flag &lt;- ΨΕΥΔΗΣ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 100
+    ΑΝ KEY = Α[i] ΤΟΤΕ
+      flag &lt;- ΑΛΗΘΗΣ
+      ΓΡΑΨΕ 'Βρέθηκε στη θέση ', i
+    ΤΕΛΟΣ_ΑΝ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΑΝ flag = ΨΕΥΔΗΣ ΤΟΤΕ
+    ΓΡΑΨΕ 'Δε βρέθηκε'
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Αναζήτηση2</pre>
+<p class="small"><span class="ln">Στις Οδηγίες η flag δεν δηλώνεται. Εδώ προσθέσαμε <code>ΛΟΓΙΚΕΣ: flag</code>, που χρειάζεται για να τρέξει το πρόγραμμα. Δοκιμή: πίνακας 0, 1, …, 9 δέκα φορές.</span><span class="ln li"><span class="nw">KEY = 7</span>: θέσεις 8, 18, …, 98</span><span class="ln li"><span class="nw">KEY = 11</span>: «Δε βρέθηκε»</span></p>
+<div class="tablewrap"><table class="t"><tbody>
+<tr><th>Περίπτωση</th><th>Επανάληψη</th><th>Πότε σταματά</th></tr>
+<tr><td>Μοναδικό στοιχείο</td><td>ΟΣΟ με σημαία done</td><td>όταν βρεθεί ή τελειώσει ο πίνακας</td></tr>
+<tr><td>Πολλές εμφανίσεις (όλες οι θέσεις, πόσες φορές)</td><td>ΓΙΑ ως το τέλος, με σημαία ή μετρητή</td><td>πάντα στο τέλος</td></tr>
+<tr><td>Ταξινομημένος (αύξουσα)</td><td>ΟΣΟ με σημαία</td><td>στο πρώτο <span class="nw">στοιχείο &gt;= key.</span> Μετά ελέγχουμε αν είναι ίσο</td></tr>
+<tr><td>Το πρώτο στοιχείο με μια ιδιότητα (π.χ. αρνητικό)</td><td>ΟΣΟ με σημαία</td><td>όπως το μοναδικό, με άλλη συνθήκη στο ΑΝ</td></tr>
+</tbody></table></div>
+<div class="sec" id="s-3"><span class="num">⚠</span><h2>Τα όρια του πίνακα</h2><span class="ref">Οδηγίες διδασκαλίας, ενότητα 24</span></div>
+<p>Οι οδηγίες ζητούν επίσης να «αναδειχθεί ενδεχόμενο λάθος στην παραβίαση των ορίων του πίνακα». Το πιο συνηθισμένο μοιάζει απολύτως λογικό:</p>
+<pre class="code">i ← 1
+ΟΣΟ i &lt;= Ν ΚΑΙ Α[i] &lt;&gt; κλ ΕΠΑΝΑΛΑΒΕ
+  i ← i + 1
+ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ</pre>
+<div class="box trap"><span aria-hidden="true" class="sos-av sa"></span>
+<div class="tag">Γιατί είναι λάθος στη ΓΛΩΣΣΑ</div>
+<p>Αν το κλ <b>δεν υπάρχει</b>, το i φτάνει στο <span class="nw">Ν + 1.</span> Εκεί το <code>i &lt;= Ν</code> είναι ψευδές, άρα όλη η συνθήκη είναι ψευδής. Στη ΓΛΩΣΣΑ όμως θεωρούμε ότι υπολογίζονται <b>και τα δύο</b> μέλη μιας σύνθετης συνθήκης πριν συνδυαστούν με το ΚΑΙ (έτσι δουλεύουν και οι διερμηνευτές της). Υπολογίζει λοιπόν και το <code>Α[Ν + 1] &lt;&gt; κλ</code>, ένα στοιχείο που δεν υπάρχει, και το πρόγραμμα τερματίζεται: «Δείκτης εκτός ορίων».</p>
+<p>Η ΓΛΩΣΣΑ, δηλαδή, δεν «κόβει δρόμο» στις λογικές πράξεις. Κάποιες άλλες γλώσσες, όπως η Python, σταματούν τον υπολογισμό στο πρώτο ψευδές μέλος του ΚΑΙ. Στις εξετάσεις όμως γράφουμε ΓΛΩΣΣΑ και δεν στηριζόμαστε σε αυτό.</p>
+</div>
+<p>Δύο σωστοί τρόποι: (α) η <b>σημαία done</b>, όπου το Α[i] εξετάζεται μέσα στον βρόχο, μόνο όταν το i είναι μέσα στα όρια. (Β) ο τρόπος των Οδηγιών Μελέτης, με <code>i &lt; Ν</code> στη συνθήκη και έλεγχο μετά τον βρόχο. Τα συγκρίνουμε στο Λυμένο 4.</p>
+<div class="sec" id="s-4"><span class="num">⏱</span><h2>Πότε σειριακή;</h2><span class="ref">Βιβλίο σελ. 64</span></div>
+<div class="box def"><span aria-hidden="true" class="sos-av sb"></span>
+<div class="tag">Από το βιβλίο · απομνημόνευση</div>
+<p>Η σειριακή μέθοδος αναζήτησης είναι η πιο απλή, αλλά και η λιγότερη αποτελεσματική μέθοδος αναζήτησης. Έτσι, δικαιολογείται η χρήση της μόνο σε περιπτώσεις όπου:</p>
+<ul class="tight">
+<li>ο πίνακας είναι μη ταξινομημένος,</li>
+<li>ο πίνακας είναι μικρού μεγέθους (για παράδειγμα, <span class="nw">n &lt;= 20),</span></li>
+<li>η αναζήτηση σε ένα συγκεκριμένο πίνακα γίνεται σπάνια.</li>
+</ul>
+<p class="src">Σχολικό βιβλίο, §3.6</p>
+</div>
+<p>Για ταξινομημένους πίνακες υπάρχει πολύ πιο γρήγορη μέθοδος, η <b>δυαδική αναζήτηση</b> (Μάθημα 22), που τη γνωρίσαμε ήδη ως «Διαίρει και βασίλευε» στο Μάθημα 18.</p>
+<div class="grid g2" style="align-items:start">
+<div class="box trivia" style="margin:0">
+<div class="tag">Ήξερες ότι;</div>
+<p>Ο πρώτος γνωστός κατάλογος βιβλιοθήκης λεγόταν… <b>Πίνακες</b>. Τον συνέταξε ο ποιητής Καλλίμαχος ο Κυρηναίος (περίπου 310–240 π.Χ.) για τη Βιβλιοθήκη της Αλεξάνδρειας. Κατέγραφε τους συγγραφείς, τα έργα τους και βιογραφικά στοιχεία, χωρισμένα σε κατηγορίες, και έπιανε 120 βιβλία (ρολά παπύρου): πέντε φορές την έκταση της Ιλιάδας.</p>
+<p class="small"><b>1΄ συζήτηση:</b> Σε μια βιβλιοθήκη με εκατοντάδες χιλιάδες ρολά, πόσο θα κρατούσε μια σειριακή αναζήτηση; Τι θα έκανες για να βρίσκεις ένα έργο γρήγορα;</p>
+</div>
+<div class="box trivia" style="margin:0">
+<div class="tag">Ήξερες ότι;</div>
+<p>Σε έναν αταξινόμητο κατάλογο Ν στοιχείων, κάθε κλασικός αλγόριθμος χρειάζεται κατά μέσο όρο <span class="nw">Ν / 2</span> ελέγχους για να βρει ένα συγκεκριμένο στοιχείο, και Ν στη χειρότερη περίπτωση. Το 1996 ο Lov Grover δημοσίευσε έναν αλγόριθμο για <b>κβαντικούς υπολογιστές</b> που το καταφέρνει με περίπου √Ν «ερωτήσεις»: για ένα εκατομμύριο στοιχεία, περίπου χίλιες αντί για μισό εκατομμύριο.</p>
+<p class="small"><b>1΄ συζήτηση:</b> Αν ψάχνεις 1 στα 100, πόσους ελέγχους κάνεις κατά μέσο όρο κλασικά, και πόσους «κβαντικά»;</p>
+</div>
+</div>
+<div class="sec" id="s-tools"><span class="num">⚙</span><h2>Η εργαλειοθήκη της αναζήτησης</h2><span class="ref">Συνέχεια της Α1–Α16</span></div>
+<div class="tablewrap"><table class="t"><tbody>
+<tr><th>Μοτίβο</th><th>Σκελετός</th><th>Πρόσεξε</th></tr>
+<tr><td><b>Σ1.</b> Μοναδικό, με σημαία</td><td><span class="ln cd"><code>done ← ΨΕΥΔΗΣ</code></span><span class="ln cd"><code>i ← 1</code></span><span class="ln cd"><code>ΟΣΟ done = ΨΕΥΔΗΣ ΚΑΙ i &lt;= Ν</code></span><span class="ln cd">ΑΝ βρέθηκε <span class="nw">done ← ΑΛΗΘΗΣ</span> ΑΛΛΙΩΣ <span class="nw">i ← i + 1</span></span></td><td>το i αυξάνει μόνο στο ΑΛΛΙΩΣ</td></tr>
+<tr><td><b>Σ2.</b> Όλες οι εμφανίσεις</td><td><span class="ln cd">ΓΙΑ ως το τέλος</span><span class="ln cd">ΑΝ ίσο: ΓΡΑΨΕ i και μετρητής ή σημαία</span></td><td>«δεν βρέθηκε» μετά τον βρόχο, όχι μέσα</td></tr>
+<tr><td><b>Σ3.</b> Ταξινομημένος</td><td><span class="ln li">σταματώ στο πρώτο <code>Α[i] &gt;= κλ</code></span><span class="ln li">μετά ελέγχω <code>Α[i] = κλ</code></span></td><td>αν δεν σταμάτησε, το κλ είναι μεγαλύτερο από όλα</td></tr>
+<tr><td><b>Σ4.</b> Το πρώτο με μια ιδιότητα</td><td>όπως Σ1, με άλλη συνθήκη στο ΑΝ (π.χ. <code>Θ[i] &lt; 0</code>)</td><td>«το τελευταίο»: από το Ν προς το 1, με <span class="nw">i ← i − 1</span></td></tr>
+<tr><td><b>Σ5.</b> Παράλληλοι πίνακες</td><td>ψάχνω στον ΟΝ, εμφανίζω το ΒΑΘ[i]</td><td>το i μετά τον βρόχο είναι η θέση και στους δύο πίνακες</td></tr>
+<tr><td><b>Σ6.</b> Επαναλαμβανόμενες αναζητήσεις</td><td><span class="ln cd">εξωτερικό ΟΣΟ με τιμή-φρουρό (π.χ. 0)</span><span class="ln cd">μέσα, Σ1</span></td><td><code>done ← ΨΕΥΔΗΣ</code> και <code>i ← 1</code> <b>μέσα</b> στον εξωτερικό βρόχο</td></tr>
+<tr><td><b>Σ7.</b> Έλεγχος μοναδικότητας κατά την εισαγωγή</td><td><span class="ln cd">για το νέο στοιχείο i, Σ1 στις θέσεις 1 έως <span class="nw">i − 1</span></span><span class="ln cd">ΜΕΧΡΙΣ_ΟΤΟΥ δεν υπάρχει</span></td><td>ψάχνουμε μόνο όσες θέσεις έχουν ήδη γεμίσει</td></tr>
+</tbody></table></div>
+<div class="box trap"><span aria-hidden="true" class="sos-av sa"></span>
+<div class="tag">Παγίδες που κοστίζουν μονάδες</div>
+<ul class="tight">
+<li><code>ΟΣΟ i &lt;= Ν ΚΑΙ Α[i] &lt;&gt; κλ</code>: όταν το κλ δεν υπάρχει, υπολογίζεται το <span class="nw">Α[Ν + 1],</span> που είναι εκτός ορίων.</li>
+<li>Αύξηση του i <b>και</b> όταν βρέθηκε (έξω από το ΑΝ): στο τέλος το i δείχνει μία θέση μετά.</li>
+<li>Μήνυμα «Δεν βρέθηκε» <b>μέσα</b> στον βρόχο: εμφανίζεται για κάθε στοιχείο που δεν είναι ίσο.</li>
+<li>Σημαία που παίρνει αρχική τιμή μία φορά, έξω από τον βρόχο των πολλών αναζητήσεων.</li>
+<li>Αναζήτηση με ΓΙΑ για μοναδικό στοιχείο: σωστή, αλλά κάνει περιττές επαναλήψεις και δεν δείχνει τη χρήση της σημαίας που ζητείται.</li>
+<li>Πρόωρος τερματισμός (Σ3) σε πίνακα που <b>δεν</b> είναι ταξινομημένος: «χάνει» στοιχεία που υπάρχουν.</li>
+</ul>
+</div>
+<div class="box def"><span aria-hidden="true" class="sos-av sb"></span>
+<div class="tag">Σύνοψη</div>
+<p><b>Σειριακή αναζήτηση:</b> εξετάζουμε τα στοιχεία ένα-ένα από την αρχή μέχρι να βρούμε το ζητούμενο ή να τελειώσει ο πίνακας.</p>
+<p><b>Σημαία done:</b> λογική μεταβλητή που σταματά την επανάληψη μόλις βρεθεί το στοιχείο. Γι' αυτό ΟΣΟ και όχι ΓΙΑ.</p>
+<p><span class="ln"><b>Παραλλαγές:</b></span><span class="ln li">πολλές εμφανίσεις (ως το τέλος)</span><span class="ln li">ταξινομημένος (σταματώ στο πρώτο μεγαλύτερο)</span><span class="ln li">πρώτο στοιχείο με ιδιότητα.</span></p>
+<p><b>Όρια:</b> στη συνθήκη της επανάληψης δεν γράφουμε Α[i] αν το i μπορεί να είναι <span class="nw">Ν + 1.</span></p>
+<p><b>Πότε:</b> μη ταξινομημένος, μικρός πίνακας, σπάνιες αναζητήσεις.</p>
+</div>
+
+<section class="solved-wrap">
+<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένα παραδείγματα βήμα-βήμα</h2></div>
+<div class="box solved" id="sol-1">
+<div class="tag">Λυμένο 1 · Πίνακας τιμών για τον αλγόριθμο Sequential_Search</div>
+<p>Να εκτελεστεί ο αλγόριθμος Sequential_Search για τον πίνακα 52, 12, 71, 56, 5, 10, 19, 90, 45 <span class="nw">(n = 9),</span> πρώτα με <span class="nw">key = 56</span> και μετά με <span class="nw">key = 11.</span> Πόσες φορές ελέγχεται η συνθήκη του Όσο σε κάθε περίπτωση;</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Μας ενδιαφέρουν οι μεταβλητές done, i, position και η σύγκριση <span class="nw">table[i] = key</span> σε κάθε επανάληψη.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Μια γραμμή για κάθε έλεγχο της συνθήκης. Όταν η σύγκριση είναι ψευδής, αλλάζει μόνο το i. Όταν είναι αληθής, αλλάζουν done και position και το i μένει.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b> <span class="nw">key = 56</span>:
+<div class="tablewrap"><table class="t"><tbody><tr><th>Συνθήκη Όσο</th><th>i</th><th>table[i]</th><th><span class="nw">table[i] = key</span></th><th>done</th><th>position</th></tr>
+<tr><td>–</td><td>1</td><td>–</td><td>–</td><td>Ψ</td><td>0</td></tr>
+<tr><td>Α</td><td>1</td><td>52</td><td>Ψ</td><td>Ψ</td><td>0, άρα <span class="nw">i = 2</span></td></tr>
+<tr><td>Α</td><td>2</td><td>12</td><td>Ψ</td><td>Ψ</td><td>0, άρα <span class="nw">i = 3</span></td></tr>
+<tr><td>Α</td><td>3</td><td>71</td><td>Ψ</td><td>Ψ</td><td>0, άρα <span class="nw">i = 4</span></td></tr>
+<tr><td>Α</td><td>4</td><td>56</td><td>Α</td><td>Α</td><td>4</td></tr>
+<tr><td>Ψ <span class="nw">(done = αληθής)</span></td><td>4</td><td colspan="4"><span class="ln li">τέλος</span><span class="ln li">Αποτελέσματα: αληθής, 4</span></td></tr>
+</tbody></table></div>
+<p><span class="nw">key = 11</span>: η σύγκριση είναι ψευδής και στις 9 θέσεις, το i γίνεται 10 και η συνθήκη <code>i &lt;= n</code> είναι ψευδής. Αποτελέσματα: <b>ψευδής, 0</b>.</p></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Με <span class="nw">key = 56</span> η συνθήκη ελέγχεται <b>5</b> φορές (4 αληθής, 1 ψευδής) και γίνονται 4 προσπελάσεις, όσες λέει το βιβλίο. Με <span class="nw">key = 11</span> ελέγχεται <b>10</b> φορές, με 9 προσπελάσεις. Ο διερμηνευτής δίνει τα ίδια αποτελέσματα.</div></div>
+</div>
+</div>
+<div class="box solved" id="sol-2">
+<div class="tag">Λυμένο 2 · Ο βαθμός ενός μαθητή: παράλληλοι πίνακες</div>
+<p>Να γραφτεί πρόγραμμα που διαβάζει τα ονόματα (όλα διαφορετικά) και τους βαθμούς 6 μαθητών, μετά ένα όνομα, και εμφανίζει τον βαθμό του μαθητή ή μήνυμα ότι δεν υπάρχει.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Ψάχνουμε στον πίνακα των ονομάτων και εμφανίζουμε από τον πίνακα των βαθμών (Σ5). Τα ονόματα είναι μοναδικά, άρα σταματάμε μόλις βρεθεί (Σ1).</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Η αναζήτηση του βιβλίου, μεταφρασμένη σε ΓΛΩΣΣΑ: done, θέση, i. Μετά τον βρόχο, αν done είναι ΑΛΗΘΗΣ, ο βαθμός είναι ο ΒΑΘ[θέση].</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Βαθμός_μαθητή
+ΣΤΑΘΕΡΕΣ
+  Ν = 6
+ΜΕΤΑΒΛΗΤΕΣ
+  ΧΑΡΑΚΤΗΡΕΣ: ΟΝ[Ν], όνομα
+  ΠΡΑΓΜΑΤΙΚΕΣ: ΒΑΘ[Ν]
+  ΑΚΕΡΑΙΕΣ: i, θέση
+  ΛΟΓΙΚΕΣ: done
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΔΙΑΒΑΣΕ ΟΝ[i], ΒΑΘ[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ 'Ποιον μαθητή ψάχνεις;'
+  ΔΙΑΒΑΣΕ όνομα
+  done &lt;- ΨΕΥΔΗΣ
+  θέση &lt;- 0
+  i &lt;- 1
+  ΟΣΟ done = ΨΕΥΔΗΣ ΚΑΙ i &lt;= Ν ΕΠΑΝΑΛΑΒΕ
+    ΑΝ ΟΝ[i] = όνομα ΤΟΤΕ
+      done &lt;- ΑΛΗΘΗΣ
+      θέση &lt;- i
+    ΑΛΛΙΩΣ
+      i &lt;- i + 1
+    ΤΕΛΟΣ_ΑΝ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΑΝ done = ΑΛΗΘΗΣ ΤΟΤΕ
+    ΓΡΑΨΕ όνομα, ': βαθμός', ΒΑΘ[θέση]
+  ΑΛΛΙΩΣ
+    ΓΡΑΨΕ 'Δεν υπάρχει μαθητής', όνομα
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> Άννα 15, Βασίλης 12, Γιώργος 18, Δανάη 9.5, Ελένη 17, Φώτης 14.</span><span class="ln li">«Γιώργος»: <b>βαθμός 18</b> (3 προσπελάσεις)</span><span class="ln li">«Ζωή»: <b>δεν υπάρχει</b> (6 προσπελάσεις)</span><span class="ln">Η σύγκριση αλφαριθμητικών είναι ακριβής: «γιώργος» με μικρό γράμμα δεν θα βρεθεί.</span></div></div>
+</div>
+</div>
+<div class="box solved" id="sol-3">
+<div class="tag">Λυμένο 3 · Ποιες μέρες είχαν 33 βαθμούς;</div>
+<p>Ένας πίνακας περιέχει τις μέγιστες θερμοκρασίες (ακέραιες) 14 ημερών ενός καύσωνα. Να γραφτεί πρόγραμμα που διαβάζει μια θερμοκρασία και εμφανίζει όλες τις μέρες με αυτή τη θερμοκρασία και πόσες ήταν, ή μήνυμα αν δεν υπήρξε καμία.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Η ίδια θερμοκρασία μπορεί να εμφανιστεί πολλές φορές: «η μεταβλητή done είναι περιττή» και ψάχνουμε ως το τέλος (Σ2).</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> ΓΙΑ από 1 έως Ν. Όταν βρίσκουμε, εμφανίζουμε τη μέρα και αυξάνουμε έναν μετρητή. Ο μετρητής κάνει και τη δουλειά της σημαίας των Οδηγιών <span class="nw">(0 = δεν</span> βρέθηκε). Το μήνυμα «καμία» μπαίνει <b>μετά</b> τον βρόχο.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ποιες_μέρες
+ΣΤΑΘΕΡΕΣ
+  Ν = 14
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Θ[Ν], i, χ, φορές
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΔΙΑΒΑΣΕ Θ[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ 'Ποια θερμοκρασία ψάχνεις;'
+  ΔΙΑΒΑΣΕ χ
+  φορές &lt;- 0
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΑΝ Θ[i] = χ ΤΟΤΕ
+      ΓΡΑΨΕ 'Μέρα', i
+      φορές &lt;- φορές + 1
+    ΤΕΛΟΣ_ΑΝ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΑΝ φορές = 0 ΤΟΤΕ
+    ΓΡΑΨΕ 'Καμία μέρα με', χ, 'βαθμούς'
+  ΑΛΛΙΩΣ
+    ΓΡΑΨΕ 'Σύνολο:', φορές, 'μέρες'
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> Θερμοκρασίες 31, 33, 35, 33, 30, 29, 33, 34, 36, 35, 33, 32, 31, 30.</span><span class="ln li"><span class="nw">χ = 33</span>: μέρες <b>2, 4, 7, 11</b>, σύνολο 4</span><span class="ln li"><span class="nw">χ = 28</span>: «Καμία μέρα»</span><span class="ln">Αν το μήνυμα ήταν σε ΑΛΛΙΩΣ μέσα στον βρόχο, θα εμφανιζόταν 10 φορές.</span></div></div>
+</div>
+</div>
+<div class="box solved" id="sol-4">
+<div class="tag">Λυμένο 4 · Παραβίαση ορίων: εντοπισμός και διόρθωση</div>
+<p>Το παρακάτω πρόγραμμα ψάχνει την τιμή κλ στον πίνακα Α[9]. Να ελεγχθεί με τον πίνακα 52, 12, 71, 56, 5, 10, 19, 90, 45 (του Λυμένου 1) και <span class="nw">κλ = 56,</span> <span class="nw">κλ = 11.</span> Να διορθωθεί με δύο τρόπους.</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Όρια
+ΣΤΑΘΕΡΕΣ
+  Ν = 9
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Α[Ν], i, κλ
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΔΙΑΒΑΣΕ Α[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΔΙΑΒΑΣΕ κλ
+  i &lt;- 1
+  ΟΣΟ i &lt;= Ν ΚΑΙ Α[i] &lt;&gt; κλ ΕΠΑΝΑΛΑΒΕ
+    i &lt;- i + 1
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΑΝ i &lt;= Ν ΤΟΤΕ
+    ΓΡΑΨΕ 'Βρέθηκε στη θέση', i
+  ΑΛΛΙΩΣ
+    ΓΡΑΨΕ 'Δεν βρέθηκε'
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Η συνθήκη «όσο είμαι μέσα στον πίνακα και δεν το βρήκα» μοιάζει σωστή. Ελέγχουμε τις δύο περιπτώσεις: <span class="nw">υπάρχει / δεν</span> υπάρχει.</div></div>
+<div class="step"><span class="stepn">2</span><div><span class="ln"><b>Αναλύω.</b></span><span class="ln li"><span class="nw">κλ = 56</span>: σταματά στο <span class="nw">i = 4,</span> γιατί το <code>Α[4] &lt;&gt; 56</code> είναι ψευδές. Εμφανίζει «Βρέθηκε στη θέση 4» ✓.</span><span class="ln li"><span class="nw">κλ = 11</span>: στο <span class="nw">i = 10</span> το <code>i &lt;= 9</code> είναι ψευδές, αλλά υπολογίζεται και το <code>Α[10] &lt;&gt; 11</code>. Βγαίνει <b>«Δείκτης εκτός ορίων: Α[10]»</b>.</span><span class="ln">Η σωστή περίπτωση «κρύβει» το λάθος. Πρέπει να δοκιμάζουμε <b>πάντα</b> και ανεπιτυχή αναζήτηση.</span></div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b> 1ος τρόπος: σημαία done, ώστε το Α[i] να εξετάζεται μόνο μέσα στον βρόχο:
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Όρια
+ΣΤΑΘΕΡΕΣ
+  Ν = 9
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Α[Ν], i, κλ
+  ΛΟΓΙΚΕΣ: done
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΔΙΑΒΑΣΕ Α[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΔΙΑΒΑΣΕ κλ
+  done &lt;- ΨΕΥΔΗΣ
+  i &lt;- 1
+  ΟΣΟ i &lt;= Ν ΚΑΙ done = ΨΕΥΔΗΣ ΕΠΑΝΑΛΑΒΕ
+    ΑΝ Α[i] = κλ ΤΟΤΕ
+      done &lt;- ΑΛΗΘΗΣ
+    ΑΛΛΙΩΣ
+      i &lt;- i + 1
+    ΤΕΛΟΣ_ΑΝ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΑΝ done = ΑΛΗΘΗΣ ΤΟΤΕ
+    ΓΡΑΨΕ 'Βρέθηκε στη θέση', i
+  ΑΛΛΙΩΣ
+    ΓΡΑΨΕ 'Δεν βρέθηκε'
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre>
+2ος τρόπος (Οδηγίες Μελέτης): <code>ΟΣΟ Α[i] &lt;&gt; κλ ΚΑΙ i &lt; Ν ΕΠΑΝΑΛΑΒΕ</code> και μετά τον βρόχο <code>ΑΝ Α[i] = κλ ΤΟΤΕ …</code>. Εδώ το i δεν ξεπερνά ποτέ το Ν.</div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Και οι δύο διορθώσεις δίνουν «Βρέθηκε στη θέση 4» και «Δεν βρέθηκε». Στον 2ο τρόπο προσοχή: ο έλεγχος μετά τον βρόχο πρέπει να είναι <code>Α[i] = κλ</code> και <b>όχι</b> <code>i &lt; Ν</code>, γιατί το στοιχείο μπορεί να είναι ακριβώς στην τελευταία θέση (Άσκηση 4, γ).</div></div>
+</div>
+</div>
+<div class="box solved" id="sol-5">
+<div class="tag">Λυμένο 5 · Ταξινομημένος πίνακας: σταματάμε νωρίτερα</div>
+<p>Ο πίνακας Α[9] έχει τα στοιχεία 5, 10, 12, 19, 45, 52, 56, 71, 90 (αύξουσα σειρά). Να γραφτεί πρόγραμμα σειριακής αναζήτησης που σταματά μόλις συναντήσει στοιχείο μεγαλύτερο ή ίσο από το ζητούμενο, και εμφανίζει και πόσες προσπελάσεις έγιναν.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Αφού ο πίνακας είναι σε αύξουσα σειρά, μόλις δούμε <span class="nw">στοιχείο &gt;= κλ,</span> όλα τα επόμενα είναι ακόμα μεγαλύτερα: το κλ ή είναι εδώ ή δεν υπάρχει (Σ3).</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Σημαία στοπ που γίνεται ΑΛΗΘΗΣ στο πρώτο <code>Α[i] &gt;= κλ</code>. Μετά τον βρόχο τρεις περιπτώσεις: σταμάτησε και <code>Α[i] = κλ</code> (βρέθηκε). Σταμάτησε σε μεγαλύτερο (δεν υπάρχει). Δεν σταμάτησε καθόλου (το κλ είναι μεγαλύτερο από όλα). Μετρητής προσπ σε κάθε επανάληψη.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ταξινομημένος
+ΣΤΑΘΕΡΕΣ
+  Ν = 9
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Α[Ν], i, κλ, προσπ
+  ΛΟΓΙΚΕΣ: στοπ
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΔΙΑΒΑΣΕ Α[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΔΙΑΒΑΣΕ κλ
+  στοπ &lt;- ΨΕΥΔΗΣ
+  προσπ &lt;- 0
+  i &lt;- 1
+  ΟΣΟ i &lt;= Ν ΚΑΙ στοπ = ΨΕΥΔΗΣ ΕΠΑΝΑΛΑΒΕ
+    προσπ &lt;- προσπ + 1
+    ΑΝ Α[i] &gt;= κλ ΤΟΤΕ
+      στοπ &lt;- ΑΛΗΘΗΣ
+    ΑΛΛΙΩΣ
+      i &lt;- i + 1
+    ΤΕΛΟΣ_ΑΝ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ! Σταματήσαμε στο πρώτο στοιχείο που δεν είναι μικρότερο από το κλ
+  ΑΝ στοπ = ΑΛΗΘΗΣ ΤΟΤΕ
+    ΑΝ Α[i] = κλ ΤΟΤΕ
+      ΓΡΑΨΕ 'Βρέθηκε στη θέση', i
+    ΑΛΛΙΩΣ
+      ΓΡΑΨΕ 'Δεν βρέθηκε'
+    ΤΕΛΟΣ_ΑΝ
+  ΑΛΛΙΩΣ
+    ΓΡΑΨΕ 'Δεν βρέθηκε'
+  ΤΕΛΟΣ_ΑΝ
+  ΓΡΑΨΕ 'Προσπελάσεις:', προσπ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b></span><span class="ln li"><span class="nw">κλ = 11</span>: δεν βρέθηκε, <b>3</b> προσπελάσεις (στον αταξινόμητο: 9)</span><span class="ln li"><span class="nw">κλ = 56</span>: θέση 7, 7 προσπελάσεις</span><span class="ln li"><span class="nw">κλ = 95</span>: δεν βρέθηκε, 9</span><span class="ln li"><span class="nw">κλ = 5</span>: θέση 1, 1</span><span class="ln">Το κέρδος υπάρχει μόνο στις ανεπιτυχείς αναζητήσεις. Μην ελέγχεις <code>Α[i] = κλ</code> αν η σημαία είναι ψευδής: εκεί το i είναι 10.</span></div></div>
+</div>
+</div>
+<div class="box solved" id="sol-6">
+<div class="tag">Λυμένο 6 · Το ταμείο: πολλές αναζητήσεις</div>
+<p>Ένα κυλικείο έχει 5 προϊόντα με κωδικό και τιμή. Ο ταμίας πληκτρολογεί κωδικούς μέχρι να δώσει 0. Για κάθε γνωστό κωδικό εμφανίζεται η τιμή και προστίθεται στον λογαριασμό. Για άγνωστο, μήνυμα. Στο τέλος εμφανίζεται το σύνολο.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Δύο επαναλήψεις, η μία μέσα στην άλλη: η εξωτερική για τα ερωτήματα (με τιμή-φρουρό 0, Μάθημα 12), η εσωτερική για την αναζήτηση (Σ6).</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Ο κωδικός μπορεί να είναι 0 από την αρχή: ΟΣΟ με ΔΙΑΒΑΣΕ πριν και στο τέλος του σώματος. Μέσα, για <b>κάθε</b> κωδικό: <code>done ← ΨΕΥΔΗΣ</code> και <code>i ← 1</code> από την αρχή.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ταμείο
+ΣΤΑΘΕΡΕΣ
+  Ν = 5
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: ΚΩΔ[Ν], i, κ
+  ΠΡΑΓΜΑΤΙΚΕΣ: ΤΙΜ[Ν], σύνολο
+  ΛΟΓΙΚΕΣ: done
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΔΙΑΒΑΣΕ ΚΩΔ[i], ΤΙΜ[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  σύνολο &lt;- 0
+  ΓΡΑΨΕ 'Κωδικός (0 για τέλος):'
+  ΔΙΑΒΑΣΕ κ
+  ΟΣΟ κ &lt;&gt; 0 ΕΠΑΝΑΛΑΒΕ
+    done &lt;- ΨΕΥΔΗΣ
+    i &lt;- 1
+    ΟΣΟ done = ΨΕΥΔΗΣ ΚΑΙ i &lt;= Ν ΕΠΑΝΑΛΑΒΕ
+      ΑΝ ΚΩΔ[i] = κ ΤΟΤΕ
+        done &lt;- ΑΛΗΘΗΣ
+      ΑΛΛΙΩΣ
+        i &lt;- i + 1
+      ΤΕΛΟΣ_ΑΝ
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+    ΑΝ done = ΑΛΗΘΗΣ ΤΟΤΕ
+      σύνολο &lt;- σύνολο + ΤΙΜ[i]
+      ΓΡΑΨΕ ' ', ΤΙΜ[i], '€'
+    ΑΛΛΙΩΣ
+      ΓΡΑΨΕ ' Άγνωστος κωδικός', κ
+    ΤΕΛΟΣ_ΑΝ
+    ΓΡΑΨΕ 'Κωδικός (0 για τέλος):'
+    ΔΙΑΒΑΣΕ κ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ 'Σύνολο λογαριασμού:', σύνολο, '€'
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> Προϊόντα 101 (1.2), 205 (0.8), 333 (2.5), 412 (3.1), 520 (0.45). Κωδικοί 333, 101, 999, 333, 520, 0. Εμφανίζει:</span><span class="ln li">2.5, 1.2</span><span class="ln li">«Άγνωστος κωδικός 999»</span><span class="ln li">2.5, 0.45</span><span class="ln li">σύνολο <b>6.65 €</b></span><span class="ln">Αν το <code>done ← ΨΕΥΔΗΣ</code> ήταν έξω από τον εξωτερικό βρόχο, μετά τον πρώτο κωδικό κανένας άλλος δεν θα αναζητούνταν (Άσκηση 10).</span></div></div>
+</div>
+</div>
+</section>
+
+<section class="cards" id="s-cards">
+<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2></div>
+<p class="small">Διάβασε τον όρο, πες τον ορισμό από μέσα σου και πάτα την κάρτα για να τον δεις.</p>
+<div class="deck">
+<button aria-live="polite" class="card" id="card" type="button">
+<span class="face front"><span class="ck">Όρος</span><span class="term" id="c-term"></span><span class="tap">Πάτα για τον ορισμό</span></span>
+<span class="face back"><span class="ck">Ορισμός</span><span class="cdef" id="c-def"></span><span class="tap" id="c-ref"></span></span>
+</button>
+<div class="deckbar">
+<button aria-label="Προηγούμενη κάρτα" class="btn" id="c-prev" type="button">←</button>
+<span class="count" id="c-count"></span>
+<button aria-label="Επόμενη κάρτα" class="btn" id="c-next" type="button">→</button>
+<button class="btn" id="c-shuf" type="button">Ανακάτεμα</button>
+</div>
+</div>
+</section><section class="exercises">
+<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div>
+<div class="q" id="q-1"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Πάτα την απάντησή σου.
+<div class="quiz" data-q="1"><div class="qi" data-ans="Σ" data-why="Η σειριακή αναζήτηση εξετάζει τα στοιχεία ένα-ένα, άρα δεν χρειάζεται ταξινόμηση."><p class="qs">α. Η σειριακή αναζήτηση μπορεί να εφαρμοστεί σε πίνακα που δεν είναι ταξινομημένος.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Είναι η πιο απλή αλλά και η λιγότερο αποτελεσματική μέθοδος."><p class="qs">β. Η σειριακή αναζήτηση είναι η πιο αποτελεσματική μέθοδος αναζήτησης.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Η position ξεκινά από 0 και αλλάζει μόνο όταν βρεθεί το στοιχείο."><p class="qs">γ. Στον αλγόριθμο Sequential_Search της θεωρίας, αν η αναζήτηση είναι ανεπιτυχής, η position έχει την τιμή 0.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Για να βεβαιωθούμε ότι το στοιχείο λείπει, ελέγχουμε όλα τα n."><p class="qs">δ. Σε ανεπιτυχή αναζήτηση σε αταξινόμητο πίνακα n στοιχείων γίνονται n προσπελάσεις.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Αφού θέλουμε όλες τις θέσεις, ο έλεγχος πρέπει να φτάσει ως το τέλος."><p class="qs">ε. Αν ένα στοιχείο υπάρχει πολλές φορές και θέλουμε όλες τις θέσεις του, η σημαία done είναι περιττή.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Η σημαία σταματά τον βρόχο μόλις βρεθεί το στοιχείο."><p class="qs">στ. Η σημαία done χρησιμοποιείται για να αποφευχθούν περιττές επαναλήψεις.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Η ΓΙΑ εκτελείται πάντα όσες φορές ορίζει, δεν σταματά μόλις βρεθεί."><p class="qs">ζ. Η εντολή ΓΙΑ είναι κατάλληλη για σειριακή αναζήτηση μοναδικού στοιχείου, γιατί σταματά μόλις βρεθεί.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Από εκεί και πέρα όλα είναι μεγαλύτερα, άρα το ζητούμενο δεν θα βρεθεί."><p class="qs">η. Σε ταξινομημένο πίνακα (αύξουσα), η αναζήτηση μπορεί να σταματήσει στο πρώτο στοιχείο που είναι μεγαλύτερο από το ζητούμενο.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Τότε η απλότητά της αξίζει περισσότερο από την ταχύτητα."><p class="qs">θ. Η σειριακή αναζήτηση δικαιολογείται όταν ο πίνακας είναι μικρός και οι αναζητήσεις σπάνιες.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Εφαρμόζεται και σε αλφαριθμητικά, π.χ. ονόματα."><p class="qs">ι. Η σειριακή αναζήτηση εφαρμόζεται μόνο σε αριθμητικά δεδομένα.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="score" hidden=""></div></div></div>
+
+<div class="q" id="q-3"><span class="qn">3</span><b>Πόσες προσπελάσεις;</b> Για τον αταξινόμητο πίνακα 52, 12, 71, 56, 5, 10, 19, 90, 45 και τον ταξινομημένο 5, 10, 12, 19, 45, 52, 56, 71, 90, συμπλήρωσε πόσες προσπελάσεις κάνει κάθε μέθοδος.
+<div class="tablewrap"><table class="t"><tbody><tr><th>key</th><th>Αταξινόμητος, ΓΙΑ ως το τέλος</th><th>Αταξινόμητος, με done</th><th>Ταξινομημένος, σταματώ στο <span class="nw">πρώτο &gt;= key</span></th></tr>
+<tr><td>52</td><td></td><td></td><td></td></tr>
+<tr><td>45</td><td></td><td></td><td></td></tr>
+<tr><td>90</td><td></td><td></td><td></td></tr>
+<tr><td>11</td><td></td><td></td><td></td></tr>
+<tr><td>100</td><td></td><td></td><td></td></tr>
+</tbody></table></div><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><div class="tablewrap"><table class="t"><tbody><tr><th>key</th><th>ΓΙΑ</th><th>με done</th><th>ταξινομημένος</th></tr>
+<tr><td>52</td><td>9</td><td>1</td><td>6</td></tr>
+<tr><td>45</td><td>9</td><td>9</td><td>5</td></tr>
+<tr><td>90</td><td>9</td><td>8</td><td>9</td></tr>
+<tr><td>11</td><td>9</td><td>9</td><td>3</td></tr>
+<tr><td>100</td><td>9</td><td>9</td><td>9</td></tr>
+</tbody></table></div>
+<p class="small">Ο ταξινομημένος δεν είναι πάντα καλύτερος για επιτυχή αναζήτηση (52: 6 έναντι 1). Κερδίζει στις ανεπιτυχείς με τιμές «στη μέση».</p></div></details></div>
+<div class="q" id="q-4"><span class="qn">4</span><b>Σωστό ή λάθος τμήμα;</b> Πίνακας Α[Ν] γεμάτος, κλ η τιμή που ψάχνουμε (μοναδική, αν υπάρχει), <span class="nw">i ← 1</span> πριν από κάθε τμήμα. Γράψε Σ αν το τμήμα βρίσκει σωστά τη θέση σε <b>όλες</b> τις περιπτώσεις, Λ αν όχι, και για τα λάθος γράψε μια περίπτωση όπου αποτυγχάνει.
+<div class="quiz" data-q="4"><div class="qi" data-ans="Λ" data-why="Όταν το κλ δεν υπάρχει, υπολογίζεται το Α[Ν + 1], έξω από τα όρια."><p class="qs">α. ΟΣΟ i &lt;= Ν ΚΑΙ Α[i] &lt;&gt; κλ ΕΠΑΝΑΛΑΒΕ i ← i + 1</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Σταματά στο Ν χωρίς να το ξεπεράσει και μετά ελέγχει το Α[i]."><p class="qs">β. ΟΣΟ Α[i] &lt;&gt; κλ ΚΑΙ i &lt; Ν ΕΠΑΝΑΛΑΒΕ i ← i + 1 και μετά ΑΝ Α[i] = κλ ΤΟΤΕ ΓΡΑΨΕ i</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Αν το κλ είναι στη θέση Ν, το i = Ν και δεν εμφανίζεται τίποτα."><p class="qs">γ. Το ίδιο με το β, αλλά μετά: ΑΝ i &lt; Ν ΤΟΤΕ ΓΡΑΨΕ i</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Εμφανίζει «Δεν βρέθηκε» για κάθε άλλο στοιχείο του πίνακα."><p class="qs">δ. ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν ΑΝ Α[i] = κλ ΤΟΤΕ ΓΡΑΨΕ i ΑΛΛΙΩΣ ΓΡΑΨΕ 'Δεν βρέθηκε'</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Αυξάνει το i και μετά την εύρεση, άρα εμφανίζει τη θέση + 1."><p class="qs">ε. Σημαία done. Στο σώμα ΑΝ Α[i] = κλ ΤΟΤΕ done ← ΑΛΗΘΗΣ και μετά το ΑΝ i ← i + 1 . Στο τέλος ΓΡΑΨΕ i</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Το Α[i] εξετάζεται μόνο όταν i &lt;= Ν, άρα σωστό για Ν &gt;= 1."><p class="qs">στ. done ← ΨΕΥΔΗΣ ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ ΑΝ Α[i] = κλ ΤΟΤΕ done ← ΑΛΗΘΗΣ ΑΛΛΙΩΣ i ← i + 1 ΜΕΧΡΙΣ_ΟΤΟΥ done = ΑΛΗΘΗΣ Η i &gt; Ν</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Σε αταξινόμητο πίνακα, π.χ. 52, 12, … με κλ = 12, σταματά στο 52 και λέει «δεν υπάρχει»."><p class="qs">ζ. Σε αταξινόμητο πίνακα: σταματώ στο πρώτο Α[i] &gt;= κλ και ελέγχω αν είναι ίσο.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Δίνει σωστό αποτέλεσμα, αλλά πάει πάντα ως το τέλος."><p class="qs">η. ΟΣΟ i &lt;= Ν ΕΠΑΝΑΛΑΒΕ ΑΝ Α[i] = κλ ΤΟΤΕ θ ← i i ← i + 1 (με θ ← 0 πριν)</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="score" hidden=""></div></div>
+<div class="lines" style="--h:84px"></div></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div>
+<div class="q" id="q-5"><span class="qn">5</span><b>Ο τρόπος των Οδηγιών.</b> Να συμπληρώσετε τον πίνακα Α και να εκτελέσετε το πρόγραμμα για <span class="nw">KEY = 2,</span> <span class="nw">KEY = 4</span> και <span class="nw">KEY = 7,</span> γράφοντας κάθε φορά τις τιμές του i. Τι θα γινόταν με <span class="nw">KEY = 7</span> αν η συνθήκη ήταν <code>i &lt;= 6</code>;
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ίχνος
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Α[6], i, KEY
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 6
+    Α[i] &lt;- (3 * i) mod 7
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΔΙΑΒΑΣΕ KEY
+  i &lt;- 1
+  ΟΣΟ Α[i] &lt;&gt; KEY ΚΑΙ i &lt; 6 ΕΠΑΝΑΛΑΒΕ
+    i &lt;- i + 1
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΑΝ Α[i] = KEY ΤΟΤΕ
+    ΓΡΑΨΕ 'Βρέθηκε στη θέση:', i
+  ΑΛΛΙΩΣ
+    ΓΡΑΨΕ 'Δε βρέθηκε'
+  ΤΕΛΟΣ_ΑΝ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p><span class="ln"><span class="nw">Α = [3,</span> 6, 2, 5, 1, 4].</span><span class="ln li"><span class="nw">KEY = 2</span>: <span class="nw">i = 1,</span> 2, 3, άρα <b>θέση 3</b>.</span><span class="ln li"><span class="nw">KEY = 4</span>: <span class="nw">i = 1,</span> …, 6. Ο βρόχος σταματά γιατί το <code>i &lt; 6</code> είναι ψευδές. <span class="nw">Α[6] = 4,</span> άρα <b>θέση 6</b>.</span><span class="ln li"><span class="nw">KEY = 7</span>: το i φτάνει στο 6. <span class="nw">Α[6] = 4,</span> άρα <b>Δε βρέθηκε</b>.</span><span class="ln">Με <code>i &lt;= 6</code> και <span class="nw">KEY = 7,</span> για <span class="nw">i = 7</span> θα υπολογιζόταν το Α[7]: δείκτης εκτός ορίων.</span></p></div></details></div>
+
+
+
+
+
+
+
+
+
+
+
+
+</section><section class="test" id="s-test">
+<div class="sec" id="s-test"><span class="num">◎</span><h2>Σύντομο Τεστ Μαθήματος</h2></div>
+<div class="tresult" hidden="" id="t-last">
+<span class="big" id="t-lastscore"></span>
+<span id="t-lastnote"></span>
+<a class="tlink" href="#progress" id="t-grade">Βαθμός κατανόησης</a>
+</div>
+<div class="tstart">
+<button class="btn primary" id="t-start" type="button">Έναρξη τεστ</button>
+</div>
+<p class="small" hidden="" id="t-wait"></p>
+<div hidden="" id="t-body"></div>
+</section><section class="exercises hwsec"><div class="sec" id="s-hw"><span class="num">✍</span><h2>Για το σπίτι</h2></div><div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div><div class="q hw" id="q-2"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
+<p>α) Να περιγράψετε τη σειριακή (γραμμική) μέθοδο αναζήτησης.<br/>β) Ποιος είναι ο ρόλος της λογικής μεταβλητής done στον αλγόριθμο Sequential_Search της θεωρίας; Γιατί η επανάληψη γίνεται με Όσο και όχι με Για;<br/>γ) Πώς τροποποιείται ο αλγόριθμος αν το στοιχείο μπορεί να υπάρχει πολλές φορές; Και αν ο πίνακας είναι ταξινομημένος;<br/>δ) Σε ποιες περιπτώσεις δικαιολογείται η χρήση της σειριακής αναζήτησης;</p>
+</div><div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div><div class="q hw" id="q-6"><span class="qn">6</span><b>Η τελευταία εμφάνιση.</b> Να γραφτεί πρόγραμμα που διαβάζει 10 ακέραιους σε πίνακα και έναν ακέραιο κλ, και εμφανίζει τη θέση της <b>τελευταίας</b> εμφάνισης του κλ, ή μήνυμα αν δεν υπάρχει. Η αναζήτηση να σταματά μόλις βρεθεί. (Υπόδειξη: από ποια θέση ξεκινάς;) Έλεγχος: για 4, 7, 1, 7, 9, 3, 7, 2, 5, 8 με <span class="nw">κλ = 7</span> πρέπει να βγει θέση 7.
+</div><div class="q hw" id="q-7"><span class="qn">7</span><b>Ο πρώτος παγετός.</b><span class="theme">Μετεωρολογία</span>
+<p>Ένας πίνακας περιέχει τις ελάχιστες θερμοκρασίες των 31 ημερών του Ιανουαρίου. Να γραφτεί πρόγραμμα που βρίσκει την πρώτη μέρα με αρνητική θερμοκρασία (παγετό) και εμφανίζει τη μέρα και τη θερμοκρασία, ή μήνυμα αν δεν υπήρξε παγετός. Η επανάληψη να σταματά μόλις βρεθεί.</p>
+</div><div class="q hw" id="q-8"><span class="qn">8</span><b>Μικρό λεξικό.</b> Δύο παράλληλοι πίνακες ΕΛ[8] και ΑΓ[8] έχουν 8 ελληνικές λέξεις και τη μετάφρασή τους στα αγγλικά. Να γραφτεί πρόγραμμα που τους διαβάζει και μετά διαβάζει επαναληπτικά ελληνικές λέξεις, μέχρι να δοθεί η λέξη ΤΕΛΟΣ, και για καθεμιά εμφανίζει τη μετάφραση ή μήνυμα ότι η λέξη δεν υπάρχει στο λεξικό.
+</div><div class="q hw" id="q-9"><span class="qn">9</span><b>Πόσες φορές, πρώτη και τελευταία.</b> Να γραφτεί πρόγραμμα που διαβάζει Ν (1 έως 100) ακέραιους σε πίνακα και έναν ακέραιο κλ, και με <b>ένα</b> πέρασμα του πίνακα εμφανίζει πόσες φορές υπάρχει το κλ, τη θέση της πρώτης και της τελευταίας εμφάνισής του, ή μήνυμα αν δεν υπάρχει. Έλεγχος: για <span class="nw">Ν = 10</span> με 3, 5, 3, 8, 3, 1, 9, 3, 2, 7 και <span class="nw">κλ = 3</span> πρέπει να βγει 4 φορές, πρώτη 1, τελευταία 8.
+</div><div class="q hw" id="q-10"><span class="qn">10</span><b>Βρες τα δύο λάθη.</b> Το πρόγραμμα θέλει να διαβάζει 6 διαφορετικούς ακέραιους σε πίνακα και μετά να απαντά σε επαναλαμβανόμενες αναζητήσεις, μέχρι να δοθεί 0.
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Πολλές_αναζητήσεις
+ΣΤΑΘΕΡΕΣ
+  Ν = 6
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Α[Ν], i, κλ
+  ΛΟΓΙΚΕΣ: done
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΔΙΑΒΑΣΕ Α[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  done &lt;- ΨΕΥΔΗΣ
+  ΔΙΑΒΑΣΕ κλ
+  ΟΣΟ κλ &lt;&gt; 0 ΕΠΑΝΑΛΑΒΕ
+    i &lt;- 1
+    ΟΣΟ done = ΨΕΥΔΗΣ ΚΑΙ i &lt;= Ν ΕΠΑΝΑΛΑΒΕ
+      ΑΝ Α[i] = κλ ΤΟΤΕ
+        done &lt;- ΑΛΗΘΗΣ
+      ΤΕΛΟΣ_ΑΝ
+      i &lt;- i + 1
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+    ΑΝ done = ΑΛΗΘΗΣ ΤΟΤΕ
+      ΓΡΑΨΕ κλ, 'στη θέση', i
+    ΑΛΛΙΩΣ
+      ΓΡΑΨΕ κλ, 'δεν υπάρχει'
+    ΤΕΛΟΣ_ΑΝ
+    ΔΙΑΒΑΣΕ κλ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre>
+<p><span class="ln">α) Να εκτελέσετε το πρόγραμμα με πίνακα 4, 9, 2, 7, 5, 1 και αναζητήσεις 7, 3, 0. Τι εμφανίζει; Τι έπρεπε να εμφανίζει;</span><span class="ln">β) Να εντοπίσετε τα δύο λάθη και να τα διορθώσετε.</span><span class="ln">γ) Γιατί με αναζητήσεις 8, 0 το πρόγραμμα φαίνεται σωστό;</span></p>
+</div><div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Το λύνω μόνος</h3></div><div class="q hw" id="q-11"><span class="qn">11</span><b>Χωρίς διπλούς κωδικούς.</b> Να γραφτεί πρόγραμμα που διαβάζει 5 κωδικούς σε πίνακα, με τον περιορισμό ότι όλοι πρέπει να είναι διαφορετικοί: αν ο χρήστης δώσει κωδικό που υπάρχει ήδη, εμφανίζεται μήνυμα με τη θέση όπου υπάρχει και ο κωδικός ξαναζητείται. Σε ποιες θέσεις ψάχνεις κάθε φορά; Έλεγχος: η είσοδος 12, 15, 12, 8, 15, 30, 8, 41 πρέπει να δώσει 12, 15, 8, 30, 41.
+</div><div class="q hw" id="q-12"><span class="qn">12</span><b>Ο φρουρός.</b><span class="theme">Τεχνική</span>
+<p><span class="ln">Μια παλιά τεχνική επιτάχυνσης: δηλώνουμε τον πίνακα με <b>μία θέση παραπάνω</b> και πριν από την αναζήτηση γράφουμε εκεί το ίδιο το κλ (τον «φρουρό»). Τότε η επανάληψη γράφεται <code>ΟΣΟ Α[i] &lt;&gt; κλ ΕΠΑΝΑΛΑΒΕ i ← i + 1</code>.</span><span class="ln">α) Γιατί δεν χρειάζεται πια ο έλεγχος <code>i &lt;= Ν</code>; Γιατί δεν υπάρχει κίνδυνος να βγούμε από τα όρια;</span><span class="ln">β) Πώς καταλαβαίνουμε μετά τον βρόχο αν το κλ υπήρχε πραγματικά;</span><span class="ln">γ) Να γραφτεί το πρόγραμμα για <span class="nw">Ν = 9.</span></span><span class="ln">δ) Πόσες συγκρίσεις γλιτώνουμε σε κάθε επανάληψη σε σχέση με το Σ1;</span></p>
+</div><div class="q hw" id="q-13"><span class="qn">13</span><b>Η σχολική βιβλιοθήκη.</b><span class="theme">Θέμα Γ</span>
+<p>Μια σχολική βιβλιοθήκη έχει 6 βιβλία με διαφορετικούς κωδικούς. Να γραφτεί πρόγραμμα που:</p>
+<p>Γ1. Διαβάζει τους κωδικούς σε πίνακα και θεωρεί ότι όλα τα βιβλία είναι αρχικά διαθέσιμα (πίνακας ΛΟΓΙΚΕΣ: ΔΙΑΘ[6]).<br/>Γ2. Διαβάζει επαναληπτικά κωδικούς βιβλίων μέχρι να δοθεί 0. Για κάθε κωδικό ψάχνει το βιβλίο. Αν δεν υπάρχει, εμφανίζει μήνυμα.<br/>Γ3. Αν υπάρχει, διαβάζει την ενέργεια (Δ για δανεισμό, Ε για επιστροφή, με έλεγχο εγκυρότητας) και ενημερώνει τη διαθεσιμότητα, με κατάλληλο μήνυμα αν το βιβλίο είναι ήδη δανεισμένο ή αν δεν ήταν δανεισμένο.<br/>Γ4. Στο τέλος εμφανίζει πόσοι δανεισμοί έγιναν, πόσοι κωδικοί ήταν άγνωστοι και τους κωδικούς των βιβλίων που είναι δανεισμένα.</p>
+</div><div class="q hw" id="q-14"><span class="qn">14</span><b>Ο μαραθώνιος.</b><span class="theme">Θέμα Δ</span>
+<p>Σε έναν μικρό αγώνα δρόμου τερματίζουν 8 δρομείς. Να γραφτεί πρόγραμμα που:</p>
+<p>Δ1. Περιέχει τμήμα δηλώσεων.<br/>Δ2. Διαβάζει για κάθε δρομέα τον αριθμό συμμετοχής (θετικός, διαφορετικός από όσους έχουν ήδη δοθεί) και τον χρόνο του σε λεπτά (θετικός), σε δύο πίνακες.<br/>Δ3. Διαβάζει επαναληπτικά αριθμούς συμμετοχής, μέχρι να δοθεί 0, και για καθέναν εμφανίζει τον χρόνο σε ώρες και λεπτά και τη θέση του στην κατάταξη <span class="nw">(1 + το</span> πλήθος όσων έτρεξαν πιο γρήγορα), ή μήνυμα αν δεν υπάρχει τέτοιος δρομέας.<br/>Δ4. Μετρά πόσες αναζητήσεις έγιναν και πόσες ήταν ανεπιτυχείς.<br/>Δ5. Στο τέλος εμφανίζει το ποσοστό των ανεπιτυχών αναζητήσεων, αν έγινε τουλάχιστον μία.</p>
+</div><div class="q hw" id="q-15"><span class="qn">15</span><b>Ο πίνακας που «μαθαίνει».</b> Σε πολλές εφαρμογές κάποια στοιχεία αναζητούνται πολύ πιο συχνά από άλλα. Μια ιδέα: κάθε φορά που ένα στοιχείο βρίσκεται, ανταλλάσσεται με το προηγούμενό του, ώστε τα συχνά στοιχεία να «ανεβαίνουν» προς την αρχή. Να γραφτεί πρόγραμμα που διαβάζει 6 ακέραιους και μετά επαναληπτικά τιμές για αναζήτηση μέχρι το 0. Για καθεμιά εμφανίζει τη θέση και τις προσπελάσεις και κάνει την ανταλλαγή. Έλεγχος: για 3, 8, 5, 9, 2, 7 και αναζητήσεις 9, 9, 9 οι προσπελάσεις πρέπει να είναι 4, 3, 2.
+</div><div class="q hw" id="q-16"><span class="qn">16</span><b>Ψάχνοντας ένα μοτίβο.</b><span class="theme">Πρόκληση</span>
+<p><span class="ln">Ένας πίνακας Α[20] έχει ψηφία και ένας πίνακας Β[3] ένα «μοτίβο» τριών ψηφίων. Να γραφτεί πρόγραμμα που βρίσκει την πρώτη θέση i του Α από την οποία ξεκινούν <b>τρία συνεχόμενα</b> στοιχεία ίσα με τα Β[1], Β[2], Β[3], ή εμφανίζει ότι το μοτίβο δεν υπάρχει.</span><span class="ln">α) Ποια είναι η μεγαλύτερη δυνατή τιμή του i και γιατί;</span><span class="ln">β) Πώς εκφράζεται το στοιχείο του Α που συγκρίνεται με το Β[j];</span><span class="ln">γ) Να χρησιμοποιηθούν δύο σημαίες: μία για την εξωτερική αναζήτηση και μία για το «ταιριάζει».</span></p>
+</div></section>
+
+<div aria-labelledby="pg-h" aria-modal="true" class="pg" hidden="" id="progress" role="dialog">
+<div class="pgin">
+<div class="pghead"><h2 id="pg-h"><a href="progress.html" id="pg-alllink">Η πρόοδός μου</a></h2><button class="btn" id="pg-close" type="button">Κλείσιμο</button></div>
+<div class="pgcard">
+<p class="pgl" id="pg-l"></p>
+<p class="pgt" id="pg-t"></p>
+<div class="pgbig"><span class="small">Βαθμός κατανόησης</span><span class="big" id="pg-score">–</span><span class="small" id="pg-note"></span></div>
+<p class="tstats" id="t-stats"></p>
+<div class="pgchart" hidden="" id="pg-chart"></div>
+<div class="pgscroll"><table class="pgtab" id="pg-tab"><thead><tr><th>Ημερομηνία</th><th>Ώρα</th><th>Βαθμός</th><th>Μονάδες</th></tr></thead><tbody id="pg-list"></tbody></table></div>
+<a class="btn primary" href="#test-start" id="pg-again">Νέα προσπάθεια</a>
+<p class="small" hidden="" id="pg-wait"></p>
+</div>
+<div class="pginfo">
+<p><b>Πώς δουλεύει το τεστ.</b> Πέντε μέρη: Σωστό ή Λάθος, συμπλήρωση κενών, πολλαπλής επιλογής, αντιστοίχιση και πίνακας τιμών από τα λυμένα παραδείγματα. Κάθε προσπάθεια έχει άλλες ερωτήσεις.</p>
+<p>Μετά την υποβολή βλέπεις τον βαθμό και, για κάθε λάθος, το σημείο των σημειώσεων που πρέπει να ξαναδιαβάσεις. Για να κάνεις «Νέα προσπάθεια» πρέπει να περάσουν τουλάχιστον <b id="pg-cd">5 λεπτά</b>. Αξιοποίησέ τα ξαναδιαβάζοντας.</p>
+<p>Στο <b>«Βαθμός κατανόησης»</b> βλέπεις την πιο πρόσφατη προσπάθειά σου και από κάτω, αναλυτικά, την πορεία των υπόλοιπων. Για να καταλάβεις καλύτερα το μάθημα, σου προτείνουμε ένθερμα να κάνεις όσες περισσότερες προσπάθειες μπορείς.</p>
+</div>
+<figure class="pgquote" id="pg-quote"><blockquote id="pg-q"></blockquote><figcaption id="pg-qa"></figcaption></figure>
+<p class="small" hidden="" id="pg-allnote">Η συνολική πρόοδος, με όλα τα μαθήματα, ανοίγει στο sinapsi.gr.</p>
+</div>
+</div></main><div class="syn-foot"><div class="syn-nav"><a href="20.html"><small>&#8592; Μάθημα 20</small>Μονοδιάστατοι πίνακες</a><a class="next" href="22.html"><small>Μάθημα 22 &#8594;</small>Δυαδική αναζήτηση</a></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
+<script>
+(function(){
+  var CARDS = [{"term": "Απομνημόνευση", "def": "Η σειριακή μέθοδος αναζήτησης είναι η πιο απλή, αλλά και η λιγότερη αποτελεσματική μέθοδος αναζήτησης. Έτσι, δικαιολογείται η χρήση της μόνο σε περιπτώσεις όπου: ο πίνακας είναι μη ταξινομημένος, ο πίνακας είναι μικρού μεγέθους (για παράδειγμα, n <= 20), η αναζήτηση σε ένα συγκεκριμένο πίνακα γίνεται σπάνια.", "ref": "Σχολικό βιβλίο, §3.6"}, {"term": "Σειριακή αναζήτηση:", "def": "Σειριακή αναζήτηση: εξετάζουμε τα στοιχεία ένα-ένα από την αρχή μέχρι να βρούμε το ζητούμενο ή να τελειώσει ο πίνακας.", "ref": "Σύνοψη"}, {"term": "Σημαία done:", "def": "Σημαία done: λογική μεταβλητή που σταματά την επανάληψη μόλις βρεθεί το στοιχείο. Γι' αυτό ΟΣΟ και όχι ΓΙΑ.", "ref": "Σύνοψη"}, {"term": "Παραλλαγές:", "def": "Παραλλαγές: πολλές εμφανίσεις (ως το τέλος) ταξινομημένος (σταματώ στο πρώτο μεγαλύτερο) πρώτο στοιχείο με ιδιότητα.", "ref": "Σύνοψη"}, {"term": "Όρια:", "def": "Όρια: στη συνθήκη της επανάληψης δεν γράφουμε Α[i] αν το i μπορεί να είναι Ν + 1.", "ref": "Σύνοψη"}, {"term": "Πότε:", "def": "Πότε: μη ταξινομημένος, μικρός πίνακας, σπάνιες αναζητήσεις.", "ref": "Σύνοψη"}, {"term": "Σειριακή αναζήτηση (Sequential_Search)", "def": "done ← ψευδής position ← 0 i ← 1 Όσο done = ψευδής και i <= n : αν table[i] = key τότε done ← αληθής, position ← i αλλιώς i ← i + 1", "ref": "§3.6"}, {"term": "Γιατί σημαία done;", "def": "Για να σταματήσει η επανάληψη μόλις βρεθεί το στοιχείο και να αποφευχθούν περιττές επαναλήψεις.", "ref": "ενότητα 24"}, {"term": "Πότε δικαιολογείται η σειριακή αναζήτηση", "def": "Μη ταξινομημένος πίνακας μικρός (π.χ. n <= 20) σπάνιες αναζητήσεις.", "ref": "§3.6"}, {"term": "Προσπελάσεις σειριακής αναζήτησης", "def": "Επιτυχής: όσο η θέση του στοιχείου (κατά μέσο όρο περίπου n / 2) ανεπιτυχής: n.", "ref": "§3.6"}, {"term": "ΟΣΟ i <= Ν ΚΑΙ Α[i] <> κλ", "def": "Λάθος στη ΓΛΩΣΣΑ: αν το κλ δεν υπάρχει, υπολογίζεται το Α[Ν + 1].", "ref": "όρια"}, {"term": "Αναζήτηση σε ταξινομημένο πίνακα", "def": "Σταματώ στο πρώτο στοιχείο >= κλ και ελέγχω αν είναι ίσο.", "ref": "Σ3"}];
+  // ---- quiz ----
+  document.querySelectorAll('.quiz').forEach(function(quiz){
+    var items = quiz.querySelectorAll('.qi');
+    var score = quiz.querySelector('.score');
+    function update(){
+      var done = quiz.querySelectorAll('.qi.ok, .qi.no').length;
+      if (done < items.length){ score.hidden = true; return; }
+      var ok = quiz.querySelectorAll('.qi.ok').length;
+      score.hidden = false;
+      score.innerHTML = '';
+      var t = document.createElement('span');
+      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? '. Τέλεια!' : ok >= items.length * 0.7 ? '. Πολύ καλά.' : '. Ξαναδιάβασε τη θεωρία.');
+      var r = document.createElement('button'); r.type = 'button'; r.className = 'btn'; r.textContent = 'Ξανά από την αρχή';
+      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); var w = it.querySelector('.qwhy'); if (w) w.remove(); }); update(); };
+      score.append(t, r);
+    }
+    items.forEach(function(it){
+      var ans = it.getAttribute('data-ans');
+      it.querySelectorAll('.qb button').forEach(function(b){
+        b.addEventListener('click', function(){
+          var v = b.getAttribute('data-v');
+          it.querySelectorAll('.qb button').forEach(function(x){ x.disabled = true; if (x.getAttribute('data-v') === ans) x.classList.add('right'); });
+          b.classList.add('pick');
+          it.classList.add(v === ans ? 'ok' : 'no');
+          var f = document.createElement('span'); f.className = 'fb';
+          f.textContent = v === ans ? '✓ Σωστά' : '✗ Η σωστή απάντηση είναι: ' + (it.querySelector('.qb button[data-v="' + ans + '"]') || {}).textContent;
+          it.appendChild(f);
+          if (v !== ans && it.getAttribute('data-why')){ var w = document.createElement('p'); w.className = 'qwhy'; w.textContent = it.getAttribute('data-why'); it.appendChild(w); }
+          update();
+        });
+      });
+    });
+  });
+  // ---- flashcards ----
+  var order = CARDS.map(function(_, i){ return i; }), pos = 0;
+  var card = document.getElementById('card');
+  if (!card || !CARDS.length) return;
+  function show(){
+    var c = CARDS[order[pos]];
+    card.classList.remove('flipped');
+    document.getElementById('c-term').textContent = c.term;
+    document.getElementById('c-def').textContent = c.def;
+    document.getElementById('c-ref').textContent = c.ref;
+    document.getElementById('c-count').textContent = (pos + 1) + ' / ' + CARDS.length;
+  }
+  card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+  document.getElementById('c-next').onclick = function(){ pos = (pos + 1) % CARDS.length; show(); };
+  document.getElementById('c-prev').onclick = function(){ pos = (pos - 1 + CARDS.length) % CARDS.length; show(); };
+  document.getElementById('c-shuf').onclick = function(){
+    for (var i = order.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+    pos = 0; show();
+  };
+  show();
+})();
+</script>
+<script>
+(function(){
+  var BANK = {"lesson": 21, "draw": {"tf_practiced": 5, "tf_new": 5, "fill": 1, "mc": 3, "mc_algo": 2, "match": 1, "match_items": 5, "num": 3}, "tf_new": [{"s": "Η σειριακή αναζήτηση εξετάζει τα στοιχεία του πίνακα ένα-ένα, από την αρχή.", "a": "Σ", "see": ["#s-3-6", "Ο αλγόριθμος του βιβλίου"]}, {"s": "Η σειριακή αναζήτηση είναι η πιο απλή, αλλά και η λιγότερο αποτελεσματική μέθοδος αναζήτησης.", "a": "Σ", "see": ["#s-4", "Πότε σειριακή;"]}, {"s": "Η σειριακή αναζήτηση δικαιολογείται όταν ο πίνακας είναι μικρός, μη ταξινομημένος ή οι αναζητήσεις σπάνιες.", "a": "Σ", "see": ["#s-4", "Πότε σειριακή;"]}, {"s": "Η σειριακή αναζήτηση εφαρμόζεται μόνο σε ταξινομημένους πίνακες.", "a": "Λ", "see": ["#s-4", "Πότε σειριακή;"]}, {"s": "Η σημαία done είναι λογική μεταβλητή που σταματά την επανάληψη μόλις βρεθεί το στοιχείο.", "a": "Σ", "see": ["#s-1", "Η σημαία done"]}, {"s": "Στον αλγόριθμο του βιβλίου, αν το στοιχείο δεν βρεθεί, η position μένει 0.", "a": "Σ", "see": ["#s-3-6", "Ο αλγόριθμος του βιβλίου"]}, {"s": "Όταν θέλουμε όλες τις θέσεις ενός στοιχείου, χρησιμοποιούμε ΓΙΑ ως το τέλος του πίνακα.", "a": "Σ", "see": ["#s-4-3-2", "Οι παραλλαγές"]}, {"s": "Η συνθήκη ΟΣΟ i <= Ν ΚΑΙ Α[i] <> κλ είναι ασφαλής στη ΓΛΩΣΣΑ, γιατί το Α[i] δεν ελέγχεται όταν i > Ν.", "a": "Λ", "see": ["#s-3", "Τα όρια του πίνακα"]}, {"s": "Σε ταξινομημένο πίνακα, η αναζήτηση μπορεί να σταματήσει στο πρώτο στοιχείο που είναι μεγαλύτερο ή ίσο από το ζητούμενο.", "a": "Σ", "see": ["#sol-5", "Λυμένο 5"]}, {"s": "Σε αταξινόμητο πίνακα n στοιχείων, μια ανεπιτυχής αναζήτηση κάνει n ελέγχους.", "a": "Σ", "see": ["#s-3-6", "Ο αλγόριθμος του βιβλίου"]}, {"s": "Με παράλληλους πίνακες, η θέση που βρίσκουμε στον έναν δείχνει το αντίστοιχο στοιχείο του άλλου.", "a": "Σ", "see": ["#sol-2", "Λυμένο 2"]}], "fill": [{"t": "Η σειριακή μέθοδος αναζήτησης είναι η πιο [απλή|γρήγορη|σύνθετη], αλλά και η [λιγότερη|περισσότερη|πιο] αποτελεσματική μέθοδος αναζήτησης. Δικαιολογείται η χρήση της μόνο σε περιπτώσεις όπου ο πίνακας είναι μη [ταξινομημένος|δηλωμένος|γεμάτος] ή έχει [μικρό|μεγάλο|άπειρο] μέγεθος.", "see": ["#s-4", "Πότε σειριακή;"]}, {"t": "Η σημαία done είναι [λογική|ακέραια|πραγματική] μεταβλητή. Ξεκινά [ψευδής|αληθής|μηδέν] και γίνεται αληθής μόλις [βρεθεί|διαβαστεί|τυπωθεί] το στοιχείο, ώστε να σταματήσει η επανάληψη.", "see": ["#s-1", "Η σημαία done"]}], "mc": [{"q": "Στον πίνακα 52, 12, 71, 56, 5, 10, 19, 90, 45 ψάχνουμε το 56. Πόσα στοιχεία ελέγχονται;", "opts": ["4", "3", "9", "1"], "a": 0, "see": ["#sol-1", "Λυμένο 1"]}, {"q": "Στον ίδιο πίνακα ψάχνουμε το 11. Πόσα στοιχεία ελέγχονται;", "opts": ["9", "0", "4", "10"], "a": 0, "see": ["#sol-1", "Λυμένο 1"]}, {"q": "Ποια εντολή επανάληψης ταιριάζει για να βρούμε μοναδικό στοιχείο και να σταματήσουμε μόλις βρεθεί;", "opts": ["ΟΣΟ με σημαία done", "ΓΙΑ ως το τέλος", "ΕΠΙΛΕΞΕ", "καμία"], "a": 0, "see": ["#s-1", "Η σημαία done"]}, {"q": "Ποια μέθοδος ταιριάζει για να βρούμε όλες τις μέρες με θερμοκρασία 33;", "opts": ["ΓΙΑ σε όλο τον πίνακα με μετρητή", "ΟΣΟ που σταματά στο πρώτο", "δυαδική αναζήτηση", "ΜΕΧΡΙΣ_ΟΤΟΥ που σταματά στο πρώτο"], "a": 0, "see": ["#sol-3", "Λυμένο 3"]}, {"q": "Γιατί το ΟΣΟ i <= Ν ΚΑΙ Α[i] <> κλ είναι λάθος στη ΓΛΩΣΣΑ;", "opts": ["Όταν το κλ λείπει, υπολογίζεται και το Α[Ν + 1], έξω από τα όρια.", "Γιατί το ΚΑΙ πρέπει να είναι Η.", "Γιατί το i ξεκινά από 0.", "Δεν είναι λάθος."], "a": 0, "see": ["#s-3", "Τα όρια του πίνακα"]}, {"q": "Σε ταξινομημένο πίνακα 5, 10, 12, 19, 45, 52, 56, 71, 90 ψάχνουμε το 20 και σταματάμε στο πρώτο στοιχείο >= 20. Πόσες προσπελάσεις γίνονται;", "opts": ["5", "9", "4", "3"], "a": 0, "see": ["#sol-5", "Λυμένο 5"]}], "mc_algo": [{"q": "Λυμένο 2 (ο βαθμός ενός μαθητή). Ποιο πρόγραμμα βρίσκει σωστά τον βαθμό;", "code": true, "opts": ["ΠΡΟΓΡΑΜΜΑ Βαθμός_μαθητή\nΣΤΑΘΕΡΕΣ\n  Ν = 6\nΜΕΤΑΒΛΗΤΕΣ\n  ΧΑΡΑΚΤΗΡΕΣ: ΟΝ[Ν], όνομα\n  ΠΡΑΓΜΑΤΙΚΕΣ: ΒΑΘ[Ν]\n  ΑΚΕΡΑΙΕΣ: i, θέση\n  ΛΟΓΙΚΕΣ: done\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ ΟΝ[i], ΒΑΘ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Ποιον μαθητή ψάχνεις;'\n  ΔΙΑΒΑΣΕ όνομα\n  done <- ΨΕΥΔΗΣ\n  θέση <- 0\n  i <- 1\n  ΟΣΟ done = ΨΕΥΔΗΣ ΚΑΙ i <= Ν ΕΠΑΝΑΛΑΒΕ\n    ΑΝ ΟΝ[i] = όνομα ΤΟΤΕ\n      done <- ΑΛΗΘΗΣ\n      θέση <- i\n    ΑΛΛΙΩΣ\n      i <- i + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΑΝ done = ΑΛΗΘΗΣ ΤΟΤΕ\n    ΓΡΑΨΕ όνομα, ': βαθμός', ΒΑΘ[θέση]\n  ΑΛΛΙΩΣ\n    ΓΡΑΨΕ 'Δεν υπάρχει μαθητής', όνομα\n  ΤΕΛΟΣ_ΑΝ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ Βαθμός_μαθητή\nΣΤΑΘΕΡΕΣ\n  Ν = 6\nΜΕΤΑΒΛΗΤΕΣ\n  ΧΑΡΑΚΤΗΡΕΣ: ΟΝ[Ν], όνομα\n  ΠΡΑΓΜΑΤΙΚΕΣ: ΒΑΘ[Ν]\n  ΑΚΕΡΑΙΕΣ: i, θέση\n  ΛΟΓΙΚΕΣ: done\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ ΟΝ[i], ΒΑΘ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Ποιον μαθητή ψάχνεις;'\n  ΔΙΑΒΑΣΕ όνομα\n  done <- ΨΕΥΔΗΣ\n  θέση <- 0\n  i <- 1\n  ΟΣΟ done = ΨΕΥΔΗΣ ΚΑΙ i <= Ν ΕΠΑΝΑΛΑΒΕ\n    ΑΝ ΟΝ[i] <> όνομα ΤΟΤΕ\n      done <- ΑΛΗΘΗΣ\n      θέση <- i\n    ΑΛΛΙΩΣ\n      i <- i + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΑΝ done = ΑΛΗΘΗΣ ΤΟΤΕ\n    ΓΡΑΨΕ όνομα, ': βαθμός', ΒΑΘ[θέση]\n  ΑΛΛΙΩΣ\n    ΓΡΑΨΕ 'Δεν υπάρχει μαθητής', όνομα\n  ΤΕΛΟΣ_ΑΝ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ Βαθμός_μαθητή\nΣΤΑΘΕΡΕΣ\n  Ν = 6\nΜΕΤΑΒΛΗΤΕΣ\n  ΧΑΡΑΚΤΗΡΕΣ: ΟΝ[Ν], όνομα\n  ΠΡΑΓΜΑΤΙΚΕΣ: ΒΑΘ[Ν]\n  ΑΚΕΡΑΙΕΣ: i, θέση\n  ΛΟΓΙΚΕΣ: done\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ ΟΝ[i], ΒΑΘ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Ποιον μαθητή ψάχνεις;'\n  ΔΙΑΒΑΣΕ όνομα\n  done <- ΨΕΥΔΗΣ\n  θέση <- 0\n  i <- 1\n  ΟΣΟ done = ΨΕΥΔΗΣ ΚΑΙ i < Ν ΕΠΑΝΑΛΑΒΕ\n    ΑΝ ΟΝ[i] = όνομα ΤΟΤΕ\n      done <- ΑΛΗΘΗΣ\n      θέση <- i\n    ΑΛΛΙΩΣ\n      i <- i + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΑΝ done = ΑΛΗΘΗΣ ΤΟΤΕ\n    ΓΡΑΨΕ όνομα, ': βαθμός', ΒΑΘ[θέση]\n  ΑΛΛΙΩΣ\n    ΓΡΑΨΕ 'Δεν υπάρχει μαθητής', όνομα\n  ΤΕΛΟΣ_ΑΝ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ Βαθμός_μαθητή\nΣΤΑΘΕΡΕΣ\n  Ν = 6\nΜΕΤΑΒΛΗΤΕΣ\n  ΧΑΡΑΚΤΗΡΕΣ: ΟΝ[Ν], όνομα\n  ΠΡΑΓΜΑΤΙΚΕΣ: ΒΑΘ[Ν]\n  ΑΚΕΡΑΙΕΣ: i, θέση\n  ΛΟΓΙΚΕΣ: done\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ ΟΝ[i], ΒΑΘ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Ποιον μαθητή ψάχνεις;'\n  ΔΙΑΒΑΣΕ όνομα\n  done <- ΨΕΥΔΗΣ\n  θέση <- 0\n  i <- 1\n  ΟΣΟ done = ΨΕΥΔΗΣ ΚΑΙ i <= Ν ΕΠΑΝΑΛΑΒΕ\n    ΑΝ ΟΝ[i] = όνομα ΤΟΤΕ\n      done <- ΑΛΗΘΗΣ\n      θέση <- i\n    ΑΛΛΙΩΣ\n      i <- i + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΑΝ done = ΑΛΗΘΗΣ ΤΟΤΕ\n    ΓΡΑΨΕ όνομα, ': βαθμός', ΒΑΘ[i - 1]\n  ΑΛΛΙΩΣ\n    ΓΡΑΨΕ 'Δεν υπάρχει μαθητής', όνομα\n  ΤΕΛΟΣ_ΑΝ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ"], "a": 0, "why": "Η σημαία done σταματά τον βρόχο μόλις βρεθεί το όνομα, και η θέση στον πίνακα ονομάτων δείχνει τον βαθμό στον παράλληλο πίνακα. Ο βρόχος ελέγχει ως και το Ν.", "see": ["#sol-2", "Λυμένο 2"]}, {"q": "Λυμένο 4 (τα όρια του πίνακα). Ποιο πρόγραμμα βρίσκει τη θέση χωρίς να βγει ποτέ έξω από τον πίνακα;", "code": true, "opts": ["ΠΡΟΓΡΑΜΜΑ Όρια\nΣΤΑΘΕΡΕΣ\n  Ν = 9\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[Ν], i, κλ\n  ΛΟΓΙΚΕΣ: done\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΔΙΑΒΑΣΕ κλ\n  done <- ΨΕΥΔΗΣ\n  i <- 1\n  ΟΣΟ i <= Ν ΚΑΙ done = ΨΕΥΔΗΣ ΕΠΑΝΑΛΑΒΕ\n    ΑΝ Α[i] = κλ ΤΟΤΕ\n      done <- ΑΛΗΘΗΣ\n    ΑΛΛΙΩΣ\n      i <- i + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΑΝ done = ΑΛΗΘΗΣ ΤΟΤΕ\n    ΓΡΑΨΕ 'Βρέθηκε στη θέση', i\n  ΑΛΛΙΩΣ\n    ΓΡΑΨΕ 'Δεν βρέθηκε'\n  ΤΕΛΟΣ_ΑΝ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ Όρια\nΣΤΑΘΕΡΕΣ\n  Ν = 9\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[Ν], i, κλ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΔΙΑΒΑΣΕ κλ\n  i <- 1\n  ΟΣΟ i <= Ν ΚΑΙ Α[i] <> κλ ΕΠΑΝΑΛΑΒΕ\n    i <- i + 1\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΑΝ i <= Ν ΤΟΤΕ\n    ΓΡΑΨΕ 'Βρέθηκε στη θέση', i\n  ΑΛΛΙΩΣ\n    ΓΡΑΨΕ 'Δεν βρέθηκε'\n  ΤΕΛΟΣ_ΑΝ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ Όρια\nΣΤΑΘΕΡΕΣ\n  Ν = 9\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[Ν], i, κλ\n  ΛΟΓΙΚΕΣ: done\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΔΙΑΒΑΣΕ κλ\n  done <- ΨΕΥΔΗΣ\n  i <- 1\n  ΟΣΟ i < Ν ΚΑΙ done = ΨΕΥΔΗΣ ΕΠΑΝΑΛΑΒΕ\n    ΑΝ Α[i] = κλ ΤΟΤΕ\n      done <- ΑΛΗΘΗΣ\n    ΑΛΛΙΩΣ\n      i <- i + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΑΝ done = ΑΛΗΘΗΣ ΤΟΤΕ\n    ΓΡΑΨΕ 'Βρέθηκε στη θέση', i\n  ΑΛΛΙΩΣ\n    ΓΡΑΨΕ 'Δεν βρέθηκε'\n  ΤΕΛΟΣ_ΑΝ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ Όρια\nΣΤΑΘΕΡΕΣ\n  Ν = 9\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[Ν], i, κλ\n  ΛΟΓΙΚΕΣ: done\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΔΙΑΒΑΣΕ κλ\n  done <- ΨΕΥΔΗΣ\n  i <- 1\n  ΟΣΟ i <= Ν ΚΑΙ done = ΨΕΥΔΗΣ ΕΠΑΝΑΛΑΒΕ\n    ΑΝ Α[i] = κλ ΤΟΤΕ\n      done <- ΑΛΗΘΗΣ\n    ΤΕΛΟΣ_ΑΝ\n    i <- i + 1\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΑΝ done = ΑΛΗΘΗΣ ΤΟΤΕ\n    ΓΡΑΨΕ 'Βρέθηκε στη θέση', i\n  ΑΛΛΙΩΣ\n    ΓΡΑΨΕ 'Δεν βρέθηκε'\n  ΤΕΛΟΣ_ΑΝ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ"], "a": 0, "why": "Με τη σημαία done, το Α[i] εξετάζεται μόνο μέσα στον βρόχο, άρα πάντα με i <= Ν. Το i αυξάνεται μόνο όταν δεν βρέθηκε, ώστε να δείχνει τη σωστή θέση.", "see": ["#sol-4", "Λυμένο 4"]}], "match": [{"q": "Βρίσκει σωστά τη θέση κάθε τμήμα, σε όλες τις περιπτώσεις;", "opts": ["σωστό", "λάθος"], "code": true, "see": ["#s-3", "Τα όρια του πίνακα"], "items": [["ΟΣΟ i <= Ν ΚΑΙ Α[i] <> κλ ΕΠΑΝΑΛΑΒΕ i ← i + 1", "λάθος"], ["ΟΣΟ Α[i] <> κλ ΚΑΙ i < Ν … μετά ΑΝ Α[i] = κλ ΤΟΤΕ ΓΡΑΨΕ i", "σωστό"], ["ΟΣΟ Α[i] <> κλ ΚΑΙ i < Ν … μετά ΑΝ i < Ν ΤΟΤΕ ΓΡΑΨΕ i", "λάθος"], ["ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν: ΑΝ Α[i] = κλ ΤΟΤΕ ΓΡΑΨΕ i ΑΛΛΙΩΣ ΓΡΑΨΕ 'Δεν βρέθηκε'", "λάθος"], ["σημαία done, και ΑΝ Α[i] = κλ ΤΟΤΕ done ← ΑΛΗΘΗΣ ΑΛΛΙΩΣ i ← i + 1", "σωστό"], ["σε αταξινόμητο πίνακα: σταματώ στο πρώτο Α[i] >= κλ", "λάθος"], ["ΟΣΟ i <= Ν: ΑΝ Α[i] = κλ ΤΟΤΕ θ ← i, i ← i + 1 (θ ← 0 πριν)", "σωστό"]]}], "num": [{"variants": [{"v": {"K": 52}, "code": "ΠΡΟΓΡΑΜΜΑ Ταξινομημένος\nΣΤΑΘΕΡΕΣ\n  Ν = 9\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[Ν], i, κλ, προσπ\n  ΛΟΓΙΚΕΣ: στοπ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΔΙΑΒΑΣΕ κλ\n  στοπ <- ΨΕΥΔΗΣ\n  προσπ <- 0\n  i <- 1\n  ΟΣΟ i <= Ν ΚΑΙ στοπ = ΨΕΥΔΗΣ ΕΠΑΝΑΛΑΒΕ\n    προσπ <- προσπ + 1\n    ΑΝ Α[i] >= κλ ΤΟΤΕ\n      στοπ <- ΑΛΗΘΗΣ\n    ΑΛΛΙΩΣ\n      i <- i + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ! Σταματήσαμε στο πρώτο στοιχείο που δεν είναι μικρότερο από το κλ\n  ΑΝ στοπ = ΑΛΗΘΗΣ ΤΟΤΕ\n    ΑΝ Α[i] = κλ ΤΟΤΕ\n      ΓΡΑΨΕ 'Βρέθηκε στη θέση', i\n    ΑΛΛΙΩΣ\n    ΤΕΛΟΣ_ΑΝ\n  ΑΛΛΙΩΣ\n  ΤΕΛΟΣ_ΑΝ\n  ΓΡΑΨΕ 'Προσπελάσεις:', προσπ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "6", "q": "Στον ταξινομημένο πίνακα 5, 10, 12, 19, 45, 52, 56, 71, 90 ψάχνουμε κλ = 52. Πόσες προσπελάσεις εμφανίζει;"}, {"v": {"K": 20}, "code": "ΠΡΟΓΡΑΜΜΑ Ταξινομημένος\nΣΤΑΘΕΡΕΣ\n  Ν = 9\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[Ν], i, κλ, προσπ\n  ΛΟΓΙΚΕΣ: στοπ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΔΙΑΒΑΣΕ κλ\n  στοπ <- ΨΕΥΔΗΣ\n  προσπ <- 0\n  i <- 1\n  ΟΣΟ i <= Ν ΚΑΙ στοπ = ΨΕΥΔΗΣ ΕΠΑΝΑΛΑΒΕ\n    προσπ <- προσπ + 1\n    ΑΝ Α[i] >= κλ ΤΟΤΕ\n      στοπ <- ΑΛΗΘΗΣ\n    ΑΛΛΙΩΣ\n      i <- i + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ! Σταματήσαμε στο πρώτο στοιχείο που δεν είναι μικρότερο από το κλ\n  ΑΝ στοπ = ΑΛΗΘΗΣ ΤΟΤΕ\n    ΑΝ Α[i] = κλ ΤΟΤΕ\n      ΓΡΑΨΕ 'Βρέθηκε στη θέση', i\n    ΑΛΛΙΩΣ\n    ΤΕΛΟΣ_ΑΝ\n  ΑΛΛΙΩΣ\n  ΤΕΛΟΣ_ΑΝ\n  ΓΡΑΨΕ 'Προσπελάσεις:', προσπ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "5", "q": "Στον ταξινομημένο πίνακα 5, 10, 12, 19, 45, 52, 56, 71, 90 ψάχνουμε κλ = 20. Πόσες προσπελάσεις εμφανίζει;"}, {"v": {"K": 5}, "code": "ΠΡΟΓΡΑΜΜΑ Ταξινομημένος\nΣΤΑΘΕΡΕΣ\n  Ν = 9\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[Ν], i, κλ, προσπ\n  ΛΟΓΙΚΕΣ: στοπ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΔΙΑΒΑΣΕ κλ\n  στοπ <- ΨΕΥΔΗΣ\n  προσπ <- 0\n  i <- 1\n  ΟΣΟ i <= Ν ΚΑΙ στοπ = ΨΕΥΔΗΣ ΕΠΑΝΑΛΑΒΕ\n    προσπ <- προσπ + 1\n    ΑΝ Α[i] >= κλ ΤΟΤΕ\n      στοπ <- ΑΛΗΘΗΣ\n    ΑΛΛΙΩΣ\n      i <- i + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ! Σταματήσαμε στο πρώτο στοιχείο που δεν είναι μικρότερο από το κλ\n  ΑΝ στοπ = ΑΛΗΘΗΣ ΤΟΤΕ\n    ΑΝ Α[i] = κλ ΤΟΤΕ\n      ΓΡΑΨΕ 'Βρέθηκε στη θέση', i\n    ΑΛΛΙΩΣ\n    ΤΕΛΟΣ_ΑΝ\n  ΑΛΛΙΩΣ\n  ΤΕΛΟΣ_ΑΝ\n  ΓΡΑΨΕ 'Προσπελάσεις:', προσπ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "1", "q": "Στον ταξινομημένο πίνακα 5, 10, 12, 19, 45, 52, 56, 71, 90 ψάχνουμε κλ = 5. Πόσες προσπελάσεις εμφανίζει;"}, {"v": {"K": 100}, "code": "ΠΡΟΓΡΑΜΜΑ Ταξινομημένος\nΣΤΑΘΕΡΕΣ\n  Ν = 9\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[Ν], i, κλ, προσπ\n  ΛΟΓΙΚΕΣ: στοπ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΔΙΑΒΑΣΕ κλ\n  στοπ <- ΨΕΥΔΗΣ\n  προσπ <- 0\n  i <- 1\n  ΟΣΟ i <= Ν ΚΑΙ στοπ = ΨΕΥΔΗΣ ΕΠΑΝΑΛΑΒΕ\n    προσπ <- προσπ + 1\n    ΑΝ Α[i] >= κλ ΤΟΤΕ\n      στοπ <- ΑΛΗΘΗΣ\n    ΑΛΛΙΩΣ\n      i <- i + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ! Σταματήσαμε στο πρώτο στοιχείο που δεν είναι μικρότερο από το κλ\n  ΑΝ στοπ = ΑΛΗΘΗΣ ΤΟΤΕ\n    ΑΝ Α[i] = κλ ΤΟΤΕ\n      ΓΡΑΨΕ 'Βρέθηκε στη θέση', i\n    ΑΛΛΙΩΣ\n    ΤΕΛΟΣ_ΑΝ\n  ΑΛΛΙΩΣ\n  ΤΕΛΟΣ_ΑΝ\n  ΓΡΑΨΕ 'Προσπελάσεις:', προσπ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "9", "q": "Στον ταξινομημένο πίνακα 5, 10, 12, 19, 45, 52, 56, 71, 90 ψάχνουμε κλ = 100. Πόσες προσπελάσεις εμφανίζει;"}, {"v": {"K": 1}, "code": "ΠΡΟΓΡΑΜΜΑ Ταξινομημένος\nΣΤΑΘΕΡΕΣ\n  Ν = 9\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[Ν], i, κλ, προσπ\n  ΛΟΓΙΚΕΣ: στοπ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΔΙΑΒΑΣΕ κλ\n  στοπ <- ΨΕΥΔΗΣ\n  προσπ <- 0\n  i <- 1\n  ΟΣΟ i <= Ν ΚΑΙ στοπ = ΨΕΥΔΗΣ ΕΠΑΝΑΛΑΒΕ\n    προσπ <- προσπ + 1\n    ΑΝ Α[i] >= κλ ΤΟΤΕ\n      στοπ <- ΑΛΗΘΗΣ\n    ΑΛΛΙΩΣ\n      i <- i + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ! Σταματήσαμε στο πρώτο στοιχείο που δεν είναι μικρότερο από το κλ\n  ΑΝ στοπ = ΑΛΗΘΗΣ ΤΟΤΕ\n    ΑΝ Α[i] = κλ ΤΟΤΕ\n      ΓΡΑΨΕ 'Βρέθηκε στη θέση', i\n    ΑΛΛΙΩΣ\n    ΤΕΛΟΣ_ΑΝ\n  ΑΛΛΙΩΣ\n  ΤΕΛΟΣ_ΑΝ\n  ΓΡΑΨΕ 'Προσπελάσεις:', προσπ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "1", "q": "Στον ταξινομημένο πίνακα 5, 10, 12, 19, 45, 52, 56, 71, 90 ψάχνουμε κλ = 1. Πόσες προσπελάσεις εμφανίζει;"}], "q": "Λυμένο 5 (ταξινομημένος πίνακας).", "see": ["#sol-5", "Λυμένο 5"]}, {"variants": [{"v": {"K": 33}, "code": "ΠΡΟΓΡΑΜΜΑ Ποιες_μέρες\nΣΤΑΘΕΡΕΣ\n  Ν = 14\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Θ[Ν], i, χ, φορές\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Θ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΔΙΑΒΑΣΕ χ\n  φορές <- 0\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΑΝ Θ[i] = χ ΤΟΤΕ\n      ΓΡΑΨΕ 'Μέρα', i\n      φορές <- φορές + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΑΝ φορές = 0 ΤΟΤΕ\n    ΓΡΑΨΕ 'Καμία μέρα με', χ, 'βαθμούς'\n  ΑΛΛΙΩΣ\n    ΓΡΑΨΕ 'Σύνολο:', φορές, 'μέρες'\n  ΤΕΛΟΣ_ΑΝ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "5", "q": "Οι θερμοκρασίες 14 ημερών είναι 31, 33, 35, 33, 30, 29, 33, 36, 34, 33, 32, 31, 30, 33. Πόσες μέρες είχαν 33 βαθμούς;"}, {"v": {"K": 31}, "code": "ΠΡΟΓΡΑΜΜΑ Ποιες_μέρες\nΣΤΑΘΕΡΕΣ\n  Ν = 14\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Θ[Ν], i, χ, φορές\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Θ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΔΙΑΒΑΣΕ χ\n  φορές <- 0\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΑΝ Θ[i] = χ ΤΟΤΕ\n      ΓΡΑΨΕ 'Μέρα', i\n      φορές <- φορές + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΑΝ φορές = 0 ΤΟΤΕ\n    ΓΡΑΨΕ 'Καμία μέρα με', χ, 'βαθμούς'\n  ΑΛΛΙΩΣ\n    ΓΡΑΨΕ 'Σύνολο:', φορές, 'μέρες'\n  ΤΕΛΟΣ_ΑΝ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "2", "q": "Οι θερμοκρασίες 14 ημερών είναι 31, 33, 35, 33, 30, 29, 33, 36, 34, 33, 32, 31, 30, 33. Πόσες μέρες είχαν 31 βαθμούς;"}, {"v": {"K": 30}, "code": "ΠΡΟΓΡΑΜΜΑ Ποιες_μέρες\nΣΤΑΘΕΡΕΣ\n  Ν = 14\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Θ[Ν], i, χ, φορές\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Θ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΔΙΑΒΑΣΕ χ\n  φορές <- 0\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΑΝ Θ[i] = χ ΤΟΤΕ\n      ΓΡΑΨΕ 'Μέρα', i\n      φορές <- φορές + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΑΝ φορές = 0 ΤΟΤΕ\n    ΓΡΑΨΕ 'Καμία μέρα με', χ, 'βαθμούς'\n  ΑΛΛΙΩΣ\n    ΓΡΑΨΕ 'Σύνολο:', φορές, 'μέρες'\n  ΤΕΛΟΣ_ΑΝ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "2", "q": "Οι θερμοκρασίες 14 ημερών είναι 31, 33, 35, 33, 30, 29, 33, 36, 34, 33, 32, 31, 30, 33. Πόσες μέρες είχαν 30 βαθμούς;"}, {"v": {"K": 36}, "code": "ΠΡΟΓΡΑΜΜΑ Ποιες_μέρες\nΣΤΑΘΕΡΕΣ\n  Ν = 14\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Θ[Ν], i, χ, φορές\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Θ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΔΙΑΒΑΣΕ χ\n  φορές <- 0\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΑΝ Θ[i] = χ ΤΟΤΕ\n      ΓΡΑΨΕ 'Μέρα', i\n      φορές <- φορές + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΑΝ φορές = 0 ΤΟΤΕ\n    ΓΡΑΨΕ 'Καμία μέρα με', χ, 'βαθμούς'\n  ΑΛΛΙΩΣ\n    ΓΡΑΨΕ 'Σύνολο:', φορές, 'μέρες'\n  ΤΕΛΟΣ_ΑΝ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "1", "q": "Οι θερμοκρασίες 14 ημερών είναι 31, 33, 35, 33, 30, 29, 33, 36, 34, 33, 32, 31, 30, 33. Πόσες μέρες είχαν 36 βαθμούς;"}], "q": "Λυμένο 3 (μέρες με ίδια θερμοκρασία).", "see": ["#sol-3", "Λυμένο 3"]}, {"variants": [{"v": {"S": "101, 103"}, "code": "ΠΡΟΓΡΑΜΜΑ Ταμείο\nΣΤΑΘΕΡΕΣ\n  Ν = 5\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: ΚΩΔ[Ν], i, κ\n  ΠΡΑΓΜΑΤΙΚΕΣ: ΤΙΜ[Ν], σύνολο\n  ΛΟΓΙΚΕΣ: done\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ ΚΩΔ[i], ΤΙΜ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  σύνολο <- 0\n  ΔΙΑΒΑΣΕ κ\n  ΟΣΟ κ <> 0 ΕΠΑΝΑΛΑΒΕ\n    done <- ΨΕΥΔΗΣ\n    i <- 1\n    ΟΣΟ done = ΨΕΥΔΗΣ ΚΑΙ i <= Ν ΕΠΑΝΑΛΑΒΕ\n      ΑΝ ΚΩΔ[i] = κ ΤΟΤΕ\n        done <- ΑΛΗΘΗΣ\n      ΑΛΛΙΩΣ\n        i <- i + 1\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n    ΑΝ done = ΑΛΗΘΗΣ ΤΟΤΕ\n      σύνολο <- σύνολο + ΤΙΜ[i]\n      ΓΡΑΨΕ ' ', ΤΙΜ[i], '€'\n    ΑΛΛΙΩΣ\n      ΓΡΑΨΕ ' Άγνωστος κωδικός', κ\n    ΤΕΛΟΣ_ΑΝ\n    ΔΙΑΒΑΣΕ κ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Σύνολο λογαριασμού:', σύνολο, '€'\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "3.7", "q": "Κωδικοί και τιμές: 101 1.2 €, 102 0.8 €, 103 2.5 €, 104 1.5 €, 105 3 €. Ο ταμίας δίνει 101, 103 και μετά 0. Ποιο σύνολο εμφανίζεται;"}, {"v": {"S": "105, 999, 102"}, "code": "ΠΡΟΓΡΑΜΜΑ Ταμείο\nΣΤΑΘΕΡΕΣ\n  Ν = 5\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: ΚΩΔ[Ν], i, κ\n  ΠΡΑΓΜΑΤΙΚΕΣ: ΤΙΜ[Ν], σύνολο\n  ΛΟΓΙΚΕΣ: done\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ ΚΩΔ[i], ΤΙΜ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  σύνολο <- 0\n  ΔΙΑΒΑΣΕ κ\n  ΟΣΟ κ <> 0 ΕΠΑΝΑΛΑΒΕ\n    done <- ΨΕΥΔΗΣ\n    i <- 1\n    ΟΣΟ done = ΨΕΥΔΗΣ ΚΑΙ i <= Ν ΕΠΑΝΑΛΑΒΕ\n      ΑΝ ΚΩΔ[i] = κ ΤΟΤΕ\n        done <- ΑΛΗΘΗΣ\n      ΑΛΛΙΩΣ\n        i <- i + 1\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n    ΑΝ done = ΑΛΗΘΗΣ ΤΟΤΕ\n      σύνολο <- σύνολο + ΤΙΜ[i]\n      ΓΡΑΨΕ ' ', ΤΙΜ[i], '€'\n    ΑΛΛΙΩΣ\n      ΓΡΑΨΕ ' Άγνωστος κωδικός', κ\n    ΤΕΛΟΣ_ΑΝ\n    ΔΙΑΒΑΣΕ κ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Σύνολο λογαριασμού:', σύνολο, '€'\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "3.8", "q": "Κωδικοί και τιμές: 101 1.2 €, 102 0.8 €, 103 2.5 €, 104 1.5 €, 105 3 €. Ο ταμίας δίνει 105, 999, 102 και μετά 0. Ποιο σύνολο εμφανίζεται;"}, {"v": {"S": "104, 104, 101"}, "code": "ΠΡΟΓΡΑΜΜΑ Ταμείο\nΣΤΑΘΕΡΕΣ\n  Ν = 5\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: ΚΩΔ[Ν], i, κ\n  ΠΡΑΓΜΑΤΙΚΕΣ: ΤΙΜ[Ν], σύνολο\n  ΛΟΓΙΚΕΣ: done\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ ΚΩΔ[i], ΤΙΜ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  σύνολο <- 0\n  ΔΙΑΒΑΣΕ κ\n  ΟΣΟ κ <> 0 ΕΠΑΝΑΛΑΒΕ\n    done <- ΨΕΥΔΗΣ\n    i <- 1\n    ΟΣΟ done = ΨΕΥΔΗΣ ΚΑΙ i <= Ν ΕΠΑΝΑΛΑΒΕ\n      ΑΝ ΚΩΔ[i] = κ ΤΟΤΕ\n        done <- ΑΛΗΘΗΣ\n      ΑΛΛΙΩΣ\n        i <- i + 1\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n    ΑΝ done = ΑΛΗΘΗΣ ΤΟΤΕ\n      σύνολο <- σύνολο + ΤΙΜ[i]\n      ΓΡΑΨΕ ' ', ΤΙΜ[i], '€'\n    ΑΛΛΙΩΣ\n      ΓΡΑΨΕ ' Άγνωστος κωδικός', κ\n    ΤΕΛΟΣ_ΑΝ\n    ΔΙΑΒΑΣΕ κ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Σύνολο λογαριασμού:', σύνολο, '€'\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "4.2", "q": "Κωδικοί και τιμές: 101 1.2 €, 102 0.8 €, 103 2.5 €, 104 1.5 €, 105 3 €. Ο ταμίας δίνει 104, 104, 101 και μετά 0. Ποιο σύνολο εμφανίζεται;"}, {"v": {"S": "200"}, "code": "ΠΡΟΓΡΑΜΜΑ Ταμείο\nΣΤΑΘΕΡΕΣ\n  Ν = 5\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: ΚΩΔ[Ν], i, κ\n  ΠΡΑΓΜΑΤΙΚΕΣ: ΤΙΜ[Ν], σύνολο\n  ΛΟΓΙΚΕΣ: done\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ ΚΩΔ[i], ΤΙΜ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  σύνολο <- 0\n  ΔΙΑΒΑΣΕ κ\n  ΟΣΟ κ <> 0 ΕΠΑΝΑΛΑΒΕ\n    done <- ΨΕΥΔΗΣ\n    i <- 1\n    ΟΣΟ done = ΨΕΥΔΗΣ ΚΑΙ i <= Ν ΕΠΑΝΑΛΑΒΕ\n      ΑΝ ΚΩΔ[i] = κ ΤΟΤΕ\n        done <- ΑΛΗΘΗΣ\n      ΑΛΛΙΩΣ\n        i <- i + 1\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n    ΑΝ done = ΑΛΗΘΗΣ ΤΟΤΕ\n      σύνολο <- σύνολο + ΤΙΜ[i]\n      ΓΡΑΨΕ ' ', ΤΙΜ[i], '€'\n    ΑΛΛΙΩΣ\n      ΓΡΑΨΕ ' Άγνωστος κωδικός', κ\n    ΤΕΛΟΣ_ΑΝ\n    ΔΙΑΒΑΣΕ κ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Σύνολο λογαριασμού:', σύνολο, '€'\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "0", "q": "Κωδικοί και τιμές: 101 1.2 €, 102 0.8 €, 103 2.5 €, 104 1.5 €, 105 3 €. Ο ταμίας δίνει 200 και μετά 0. Ποιο σύνολο εμφανίζεται;"}], "q": "Λυμένο 6 (το ταμείο).", "see": ["#sol-6", "Λυμένο 6"]}], "tf_practiced": [{"s": "Η σειριακή αναζήτηση μπορεί να εφαρμοστεί σε πίνακα που δεν είναι ταξινομημένος.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η σειριακή αναζήτηση είναι η πιο αποτελεσματική μέθοδος αναζήτησης.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Στον αλγόριθμο Sequential_Search της θεωρίας, αν η αναζήτηση είναι ανεπιτυχής, η position έχει την τιμή 0.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Σε ανεπιτυχή αναζήτηση σε αταξινόμητο πίνακα n στοιχείων γίνονται n προσπελάσεις.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Αν ένα στοιχείο υπάρχει πολλές φορές και θέλουμε όλες τις θέσεις του, η σημαία done είναι περιττή.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η σημαία done χρησιμοποιείται για να αποφευχθούν περιττές επαναλήψεις.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η εντολή ΓΙΑ είναι κατάλληλη για σειριακή αναζήτηση μοναδικού στοιχείου, γιατί σταματά μόλις βρεθεί.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Σε ταξινομημένο πίνακα (αύξουσα), η αναζήτηση μπορεί να σταματήσει στο πρώτο στοιχείο που είναι μεγαλύτερο από το ζητούμενο.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η σειριακή αναζήτηση δικαιολογείται όταν ο πίνακας είναι μικρός και οι αναζητήσεις σπάνιες.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η σειριακή αναζήτηση εφαρμόζεται μόνο σε αριθμητικά δεδομένα.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "ΟΣΟ i <= Ν ΚΑΙ Α[i] <> κλ ΕΠΑΝΑΛΑΒΕ i ← i + 1", "a": "Λ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "ΟΣΟ Α[i] <> κλ ΚΑΙ i < Ν ΕΠΑΝΑΛΑΒΕ i ← i + 1 και μετά ΑΝ Α[i] = κλ ΤΟΤΕ ΓΡΑΨΕ i", "a": "Σ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "Το ίδιο με το β, αλλά μετά: ΑΝ i < Ν ΤΟΤΕ ΓΡΑΨΕ i", "a": "Λ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν ΑΝ Α[i] = κλ ΤΟΤΕ ΓΡΑΨΕ i ΑΛΛΙΩΣ ΓΡΑΨΕ 'Δεν βρέθηκε'", "a": "Λ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "Σημαία done. Στο σώμα ΑΝ Α[i] = κλ ΤΟΤΕ done ← ΑΛΗΘΗΣ και μετά το ΑΝ i ← i + 1 . Στο τέλος ΓΡΑΨΕ i", "a": "Λ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "done ← ΨΕΥΔΗΣ ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ ΑΝ Α[i] = κλ ΤΟΤΕ done ← ΑΛΗΘΗΣ ΑΛΛΙΩΣ i ← i + 1 ΜΕΧΡΙΣ_ΟΤΟΥ done = ΑΛΗΘΗΣ Η i > Ν", "a": "Σ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "Σε αταξινόμητο πίνακα: σταματώ στο πρώτο Α[i] >= κλ και ελέγχω αν είναι ίσο.", "a": "Λ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "ΟΣΟ i <= Ν ΕΠΑΝΑΛΑΒΕ ΑΝ Α[i] = κλ ΤΟΤΕ θ ← i i ← i + 1 (με θ ← 0 πριν)", "a": "Σ", "see": ["#q-4", "Άσκηση 4"]}], "title": "Σειριακή αναζήτηση"};
+  // Ρυθμίσεις: στην τελική εφαρμογή θα τις ορίζει ο καθηγητής.
+  var CONFIG = { cooldownMin: 5, timeLimitMin: 0, lockHomework: false, revealAnswers: false };
+  var KEY = 'synapsi.test.L' + BANK.lesson;
+  var $ = function(id){ return document.getElementById(id); };
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || { attempts: [] }; } catch(e){ return { attempts: [] }; } }
+  function save(st){ try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e){} }
+  var state = load();
+  function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function pick(a, n){ return shuffle(a || []).slice(0, Math.min(n, (a || []).length)); }
+  function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function code(txt){ var p = el('pre', 'code'); p.textContent = txt; return p; }
+  function fmt(x){ return (Math.round(x * 10) / 10).toFixed(1).replace('.', ','); }
+  function seeLink(see){ var a = el('a', '', see[1]); a.href = see[0]; return a; }
+  var LET = ['α', 'β', 'γ', 'δ', 'ε', 'στ'];
+  var running = false, items = [], timerId = null, tick = null;
+
+  // ---------- homework lock (parameter) ----------
+  function applyLock(){
+    var hw = document.querySelector('.hwsec');
+    if (!hw || !CONFIG.lockHomework) return;
+    var done = state.attempts.some(function(a){ return a.score != null; });
+    hw.querySelectorAll(':scope > .q, :scope > .exhead').forEach(function(q){ q.hidden = !done; });
+    var note = hw.querySelector('.hwlock');
+    if (!done && !note){ note = el('p', 'hwlock', 'Οι ασκήσεις για το σπίτι ανοίγουν μόλις κάνεις το Σύντομο Τεστ Μαθήματος.'); hw.appendChild(note); }
+    if (done && note) note.remove();
+  }
+
+  // ---------- «Η πρόοδός μου» ----------
+  function progress(){
+    $('pg-l').textContent = 'Μάθημα ' + BANK.lesson;
+    $('pg-t').textContent = BANK.title || '';
+    $('pg-cd').textContent = CONFIG.cooldownMin + ' λεπτά';
+    var done = state.attempts.filter(function(a){ return a.score != null; });
+    var box = $('t-stats'); box.innerHTML = '';
+    if (!done.length){
+      $('pg-score').textContent = '–';
+      $('pg-note').textContent = 'Δεν έχεις κάνει ακόμα το τεστ.';
+    } else {
+      var best = Math.max.apply(null, done.map(function(a){ return a.score; }));
+      var last = done[done.length - 1];
+      $('pg-score').textContent = fmt(last.score) + ' / 10';
+      $('pg-note').textContent = '';
+      [['Καλύτερη', fmt(best) + '/10'], ['Τελευταία', fmt(last.score) + '/10'], ['Προσπάθειες', String(state.attempts.length)]].forEach(function(r, i){
+        if (i) box.appendChild(el('span', 'sep', '|'));
+        box.append(r[0] + ': '); box.appendChild(el('b', '', r[1]));
+      });
+    }
+    chart(done);
+    var tb = $('pg-list'); tb.innerHTML = '';
+    $('pg-tab').parentNode.hidden = !state.attempts.length;
+    state.attempts.slice().reverse().forEach(function(a){
+      var d = new Date(a.start), tr = el('tr');
+      tr.appendChild(el('td', '', d.getDate() + '/' + (d.getMonth() + 1)));
+      tr.appendChild(el('td', '', d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes()));
+      if (a.score != null){ tr.appendChild(el('td', '', fmt(a.score) + '/10')); tr.appendChild(el('td', '', a.got + ' από ' + a.tot)); }
+      else { var td = el('td', 'na', 'δεν υποβλήθηκε'); td.colSpan = 2; tr.appendChild(td); }
+      tb.appendChild(tr);
+    });
+    $('pg-again').textContent = state.attempts.length ? 'Νέα προσπάθεια' : 'Έναρξη τεστ';
+  }
+  function chart(done){
+    var box = $('pg-chart'); box.innerHTML = ''; box.hidden = !done.length;
+    if (!done.length) return;
+    var W = 320, H = 160, L = 26, R = 14, T = 14, B = 26, NS = 'http://www.w3.org/2000/svg';
+    function mk(t, a, p){ var e = document.createElementNS(NS, t); for (var k in a) e.setAttribute(k, a[k]); (p || svg).appendChild(e); return e; }
+    var svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', 'Βαθμός ανά προσπάθεια: ' + done.map(function(a){ return fmt(a.score); }).join(', '));
+    var x = function(i){ return done.length === 1 ? L + (W - L - R) / 2 : L + i * (W - L - R) / (done.length - 1); };
+    var y = function(v){ return T + (10 - v) * (H - T - B) / 10; };
+    var g = mk('g', { 'class': 'grid' }), ax = mk('g', { 'class': 'ax' });
+    [0, 5].forEach(function(v){ mk('line', { x1: L, x2: W - R, y1: y(v), y2: y(v) }, g); var t = mk('text', { x: L - 6, y: y(v) + 4, 'text-anchor': 'end' }, ax); t.textContent = v; });
+    mk('line', { 'class': 'goal', x1: L, x2: W - R, y1: y(10), y2: y(10) });
+    var gt = mk('text', { 'class': 'goalt', x: L - 6, y: y(10) + 4, 'text-anchor': 'end' }); gt.textContent = '10';
+    var prevDay = '', lastX = -99;
+    done.forEach(function(a, i){
+      var d = new Date(a.start), day = d.getDate() + '/' + (d.getMonth() + 1);
+      if (day === prevDay || x(i) - lastX < 34) return;
+      prevDay = day; lastX = x(i);
+      var t = mk('text', { x: x(i), y: H - 8, 'text-anchor': 'middle' }, ax); t.textContent = day;
+    });
+    if (done.length > 1) mk('polyline', { 'class': 'ln', points: done.map(function(a, i){ return x(i) + ',' + y(a.score); }).join(' ') });
+    done.forEach(function(a, i){
+      mk('circle', { 'class': 'pt', cx: x(i), cy: y(a.score), r: 4.5 });
+      var h = mk('circle', { 'class': 'hit', cx: x(i), cy: y(a.score), r: 14, tabindex: 0 });
+      var d = new Date(a.start), txt = d.getDate() + '/' + (d.getMonth() + 1) + ', ' + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes() + ': ' + fmt(a.score) + '/10 (' + a.got + ' από ' + a.tot + ')';
+      var tt = document.createElementNS(NS, 'title'); tt.textContent = txt; h.appendChild(tt);
+    });
+    var la = done[done.length - 1], lt = mk('text', { 'class': 'lbl', x: x(done.length - 1), y: y(la.score) - 10, 'text-anchor': done.length === 1 ? 'middle' : 'end' }); lt.textContent = fmt(la.score);
+    box.appendChild(svg);
+  }
+  function lastCard(){
+    var done = state.attempts.filter(function(a){ return a.score != null; });
+    var c = $('t-last'); c.hidden = !done.length; if (!done.length) return;
+    var a = done[done.length - 1];
+    $('t-lastscore').textContent = fmt(a.score) + ' / 10';
+    $('t-lastnote').textContent = a.got + ' από ' + a.tot + ' μονάδες. ' + (a.score >= 10 ? 'Τέλεια!' : a.score >= 8 ? 'Πολύ καλά. Δες τα λάθη σου και ξαναδοκίμασε για το 10.' : 'Ξαναδιάβασε τις σημειώσεις και δοκίμασε πάλι.');
+  }
+  var QUOTES = [{"q": "Επανάληψις μήτηρ πάσης μαθήσεως.", "a": "Αρχαίο ρητό"}, {"q": "Είμαστε αυτό που κάνουμε κατ’ επανάληψη. Η αριστεία, λοιπόν, δεν είναι πράξη, αλλά συνήθεια.", "a": "Will Durant, πάνω σε ιδέα του Αριστοτέλη"}, {"q": "Η σταγόνα τρυπά την πέτρα.", "a": "Οβίδιος"}, {"q": "Η επανάληψη είναι ο πατέρας της μάθησης, η μητέρα της μνήμης και ο οδηγός της ολοκλήρωσης.", "a": "Zig Ziglar"}, {"q": "Η ικανότητα αποκτάται με την επανάληψη.", "a": "Shinichi Suzuki"}, {"q": "Δεν φοβάμαι αυτόν που έχει εξασκηθεί σε 10.000 κλοτσιές μία φορά, αλλά αυτόν που έχει εξασκηθεί σε μία κλοτσιά 10.000 φορές.", "a": "Bruce Lee"}, {"q": "Η εξάσκηση δεν σε κάνει τέλειο. Η τέλεια εξάσκηση σε κάνει τέλειο.", "a": "Vince Lombardi"}, {"q": "Η μεγαλύτερη δόξα μας δεν είναι ότι δεν πέφτουμε ποτέ, αλλά ότι σηκωνόμαστε κάθε φορά που πέφτουμε.", "a": "Αποδίδεται στον Κομφούκιο"}, {"q": "Δεν έχει σημασία πόσο αργά πηγαίνεις, αρκεί να μη σταματήσεις.", "a": "Αποδίδεται στον Κομφούκιο"}, {"q": "Δοκίμασε ξανά. Απότυχε ξανά. Απότυχε καλύτερα.", "a": "Samuel Beckett"}, {"q": "Μην υποχωρείς ποτέ, ποτέ, ποτέ.", "a": "Winston Churchill"}, {"q": "Δεν είναι ότι είμαι τόσο έξυπνος. Απλώς μένω με τα προβλήματα περισσότερο.", "a": "Αποδίδεται στον Albert Einstein"}, {"q": "Η ενέργεια και η επιμονή κατακτούν τα πάντα.", "a": "Benjamin Franklin"}, {"q": "Τα μεγάλα έργα δεν γίνονται με τη δύναμη, αλλά με την επιμονή.", "a": "Samuel Johnson"}, {"q": "Δεν απέτυχα. Απλώς βρήκα 10.000 τρόπους που δεν λειτουργούν.", "a": "Αποδίδεται στον Thomas Edison"}, {"q": "Χάνεις το 100% των βολών που δεν επιχειρείς.", "a": "Wayne Gretzky"}, {"q": "Έχω αποτύχει ξανά και ξανά και ξανά στη ζωή μου. Και γι’ αυτό πετυχαίνω.", "a": "Michael Jordan"}, {"q": "Η αποτυχία είναι απλώς η ευκαιρία να ξεκινήσεις ξανά, αυτή τη φορά πιο έξυπνα.", "a": "Henry Ford"}, {"q": "Ένα ταξίδι χιλίων μιλίων αρχίζει με ένα βήμα.", "a": "Λάο Τσε"}, {"q": "Αν δεν μπορείς να πετάξεις, τρέξε. Αν δεν μπορείς να τρέξεις, περπάτα. Αν δεν μπορείς να περπατήσεις, σύρσου. Ό,τι κι αν κάνεις, συνέχισε να προχωράς μπροστά.", "a": "Martin Luther King Jr."}, {"q": "Η επιτυχία είναι το άθροισμα μικρών προσπαθειών που επαναλαμβάνονται μέρα με τη μέρα.", "a": "Robert Collier"}, {"q": "Το θάρρος δεν βρυχάται πάντα. Μερικές φορές είναι η ήσυχη φωνή στο τέλος της ημέρας που λέει: «Θα προσπαθήσω ξανά αύριο».", "a": "Mary Anne Radmacher"}, {"q": "Η θέληση για νίκη δεν είναι τίποτα χωρίς τη θέληση για προετοιμασία.", "a": "Juma Ikangaa"}, {"q": "Η υπομονή και η επιμονή έχουν μαγική δύναμη: μπροστά τους οι δυσκολίες εξαφανίζονται και τα εμπόδια χάνονται.", "a": "Αποδίδεται στον John Quincy Adams"}];
+  function quote(){
+    if (!QUOTES.length){ $('pg-quote').hidden = true; return; }
+    var k = Math.floor(Math.random() * QUOTES.length);
+    $('pg-q').textContent = '«' + QUOTES[k].q + '»'; $('pg-qa').textContent = QUOTES[k].a;
+  }
+  function showProgress(on){
+    $('progress').hidden = !on; document.body.classList.toggle('pg-open', on);
+    if (on){ progress(); quote(); refreshStart(); $('pg-close').focus(); }
+  }
+  $('pg-close').addEventListener('click', function(){ showProgress(false); if (location.hash === '#progress') location.hash = 's-test'; });
+  function route(){
+    var h = location.hash;
+    if (h === '#progress'){ showProgress(true); return; }
+    if (!$('progress').hidden) showProgress(false);
+    if (h === '#test-start'){
+      var sec = $('s-test'); if (sec) sec.scrollIntoView({ block: 'start' });
+      if (!running && nextAllowed() <= Date.now()) start();
+    }
+  }
+  window.addEventListener('hashchange', route);
+  $('pg-alllink').addEventListener('click', function(e){
+    if (/sinapsi\.gr$|github\.io$/.test(location.hostname)) return;
+    e.preventDefault(); $('pg-allnote').hidden = false;
+  });
+  $('pg-again').addEventListener('click', function(e){
+    e.preventDefault(); if ($('pg-again').classList.contains('off')) return;
+    if (location.hash === '#test-start') route(); else location.hash = 'test-start';
+  });
+
+  // ---------- start button and cooldown ----------
+  function nextAllowed(){
+    var a = state.attempts[state.attempts.length - 1];
+    if (!a) return 0;
+    return (a.end || a.start) + CONFIG.cooldownMin * 60000;
+  }
+  function refreshStart(){
+    var btn = $('t-start'), w = $('t-wait'), again = $('pg-again'), pw = $('pg-wait');
+    var left = nextAllowed() - Date.now();
+    var label = state.attempts.length ? 'Νέα προσπάθεια' : 'Έναρξη τεστ';
+    btn.textContent = label;
+    if (running){ btn.hidden = true; w.hidden = true; again.classList.add('off'); return; }
+    btn.hidden = false;
+    if (left > 0){
+      var m = Math.floor(left / 60000), s = Math.ceil(left % 60000 / 1000); if (s === 60){ m++; s = 0; }
+      var txt = 'Νέα προσπάθεια σε ' + m + ':' + (s < 10 ? '0' : '') + s + '. Στο μεταξύ ξαναδές τις κάρτες και τα λυμένα.';
+      btn.disabled = true; w.hidden = false; w.textContent = txt;
+      again.classList.add('off'); again.setAttribute('aria-disabled', 'true'); pw.hidden = false; pw.textContent = txt;
+      if (!tick) tick = setInterval(refreshStart, 1000);
+    } else {
+      btn.disabled = false; w.hidden = true;
+      again.classList.remove('off'); again.removeAttribute('aria-disabled'); pw.hidden = true;
+      if (tick){ clearInterval(tick); tick = null; }
+    }
+  }
+
+  // ---------- building a test ----------
+  function addPart(body, title, note){ var h = el('h3', 'tpart', title); if (note) h.appendChild(el('small', '', note)); body.appendChild(h); }
+  function choiceBlock(q, options, correct, two){
+    var wrap = el('div', 'topts' + (two ? ' two' : ''));
+    var it = { pts: 1, box: q, val: null, check: function(){
+      var ok = it.val === correct;
+      wrap.querySelectorAll('button').forEach(function(b, i){
+        if (i === it.val) b.classList.add(ok ? 'right' : 'wrong');
+        else if (i === correct && CONFIG.revealAnswers) b.classList.add('right');
+      });
+      return { got: ok ? 1 : 0, right: options[correct].text ? 'Σωστή απάντηση: ' + options[correct].text : 'Σωστή είναι η ' + options[correct].letter + '.' };
+    }, answered: function(){ return it.val != null; } };
+    options.forEach(function(o, i){
+      var b = el('button'); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+      if (o.letter) b.appendChild(el('span', 'ol', o.letter + '.'));
+      if (o.code) b.appendChild(code(o.code)); else b.appendChild(el('span', '', o.text));
+      b.addEventListener('click', function(){ if (!running) return; it.val = i; wrap.querySelectorAll('button').forEach(function(x){ x.classList.toggle('sel', x === b); x.setAttribute('aria-pressed', String(x === b)); }); });
+      wrap.appendChild(b);
+    });
+    q.appendChild(wrap);
+    return it;
+  }
+  function newQ(body, n, text){ var q = el('div', 'tq'); q.appendChild(el('span', 'tn', 'Ερώτηση ' + n)); if (text) q.appendChild(el('p', '', text)); body.appendChild(q); return q; }
+  function build(){
+    var D = BANK.draw, body = $('t-body'); body.innerHTML = ''; items = [];
+    var n = 0;
+    if (CONFIG.timeLimitMin > 0){ var tm = el('div', 'ttimer'); tm.id = 't-timer'; body.appendChild(tm); }
+    // Α. Σωστό ή Λάθος
+    var tf = shuffle(pick(BANK.tf_practiced, D.tf_practiced).concat(pick(BANK.tf_new, D.tf_new)));
+    if (tf.length){
+      addPart(body, 'Α. Σωστό ή Λάθος', tf.length + (tf.length === 1 ? ' μονάδα' : ' μονάδες'));
+      tf.forEach(function(t){
+        var q = newQ(body, ++n, t.s);
+        var it = choiceBlock(q, [{ text: 'Σωστό' }, { text: 'Λάθος' }], t.a === 'Σ' ? 0 : 1, true);
+        it.see = t.see; items.push(it);
+      });
+    }
+    // Β. Συμπλήρωση κενών
+    var fills = pick(BANK.fill, D.fill);
+    if (fills.length){
+      var blanks = fills.reduce(function(s, f){ return s + (f.t.match(/\[/g) || []).length; }, 0);
+      addPart(body, 'Β. Συμπλήρωση κενών', blanks + (blanks === 1 ? ' μονάδα' : ' μονάδες'));
+      fills.forEach(function(f){
+        var q = newQ(body, ++n, null); q.firstChild.textContent += ': διάλεξε τη σωστή λέξη σε κάθε κενό.';
+        var p = el('p', 'tfill'); var sels = [];
+        f.t.split(/(\[[^\]]+\])/).forEach(function(part){
+          if (part.charAt(0) !== '['){ p.append(part); return; }
+          var opts = part.slice(1, -1).split('|');
+          var s = el('select'); s.setAttribute('aria-label', 'Κενό');
+          var o0 = el('option', '', '…'); o0.value = ''; s.appendChild(o0);
+          shuffle(opts).forEach(function(o){ var x = el('option', '', o); x.value = o; s.appendChild(x); });
+          s._right = opts[0]; sels.push(s); p.appendChild(s);
+        });
+        q.appendChild(p);
+        items.push({ pts: sels.length, box: q, see: f.see, check: function(){
+          var g = 0, miss = [];
+          sels.forEach(function(s){ var ok = s.value === s._right; s.classList.add(ok ? 'right' : 'wrong'); s.disabled = true; if (ok) g++; else miss.push(s._right); });
+          return { got: g, right: 'Σωστά: ' + miss.join(', ') };
+        }, answered: function(){ return sels.every(function(s){ return s.value; }); } });
+      });
+    }
+    // Γ. Πολλαπλής επιλογής
+    var mcs = pick(BANK.mc, D.mc).concat(pick(BANK.mc_algo, D.mc_algo));
+    if (mcs.length){
+      addPart(body, 'Γ. Πολλαπλής επιλογής', mcs.length + (mcs.length === 1 ? ' μονάδα' : ' μονάδες'));
+      mcs.forEach(function(m){
+        var q = newQ(body, ++n, m.q);
+        var order = shuffle(m.opts.map(function(_, i){ return i; }));
+        var options = order.map(function(i, k){ return m.code ? { letter: LET[k], code: m.opts[i] } : { letter: LET[k], text: m.opts[i] }; });
+        var it = choiceBlock(q, options, order.indexOf(m.a));
+        it.see = m.see; it.why = m.why; items.push(it);
+      });
+    }
+    // Δ. Αντιστοίχιση
+    pick(BANK.match, D.match).forEach(function(m){
+      var rows = pick(m.items, D.match_items);
+      addPart(body, 'Δ. Αντιστοίχιση', rows.length + (rows.length === 1 ? ' μονάδα' : ' μονάδες'));
+      var q = newQ(body, ++n, m.q);
+      var sels = [];
+      rows.forEach(function(r){
+        var row = el('div', 'tmrow');
+        row.appendChild(m.code ? el('code', '', r[0]) : el('span', '', r[0]));
+        var s = el('select'); s.setAttribute('aria-label', 'Απάντηση');
+        var o0 = el('option', '', 'Διάλεξε…'); o0.value = ''; s.appendChild(o0);
+        m.opts.forEach(function(o){ var x = el('option', '', o); x.value = o; s.appendChild(x); });
+        s._right = r[1]; sels.push(s); row.appendChild(s); q.appendChild(row);
+      });
+      items.push({ pts: sels.length, box: q, see: m.see, check: function(){
+        var g = 0, miss = [];
+        sels.forEach(function(s, i){ var ok = s.value === s._right; s.classList.add(ok ? 'right' : 'wrong'); s.disabled = true; if (ok) g++; else miss.push((i + 1) + 'η: ' + s._right); });
+        return { got: g, right: 'Σωστά: ' + miss.join(', ') };
+      }, answered: function(){ return sels.every(function(s){ return s.value; }); } });
+    });
+    // Ε. Πίνακας τιμών
+    var nums = pick(BANK.num, D.num);
+    if (nums.length){
+      addPart(body, 'Ε. Πίνακας τιμών', nums.length + (nums.length === 1 ? ' μονάδα' : ' μονάδες'));
+      nums.forEach(function(x){
+        var v = x.variants[Math.floor(Math.random() * x.variants.length)];
+        var q = newQ(body, ++n, x.q);
+        q.appendChild(code(v.code)); q.appendChild(el('p', '', v.q));
+        var inp = el('input'); inp.type = 'text'; inp.setAttribute('inputmode', 'decimal'); inp.setAttribute('aria-label', 'Η απάντησή σου'); inp.autocomplete = 'off';
+        q.appendChild(inp);
+        items.push({ pts: 1, box: q, see: x.see, check: function(){
+          var a = inp.value.trim().replace(',', '.'), r = String(v.a);
+          var ok = a !== '' && (isFinite(a) && isFinite(r) ? Math.abs(parseFloat(a) - parseFloat(r)) < 1e-9 : a === r);
+          inp.classList.add(ok ? 'right' : 'wrong'); inp.disabled = true;
+          return { got: ok ? 1 : 0, right: 'Σωστή απάντηση: ' + r.replace('.', ',') };
+        }, answered: function(){ return inp.value.trim() !== ''; } });
+      });
+    }
+    var bar = el('div', 'tbar'); var sb = el('button', 'btn primary', 'Υποβολή'); sb.type = 'button'; sb.id = 't-submit';
+    var msg = el('span', 'tmsg'); bar.append(sb, msg); body.appendChild(bar);
+    var warned = false;
+    sb.addEventListener('click', function(){
+      var empty = items.filter(function(it){ return !it.answered(); }).length;
+      if (empty && !warned){ warned = true; msg.textContent = 'Έχεις ' + empty + (empty === 1 ? ' αναπάντητη ερώτηση' : ' αναπάντητες ερωτήσεις') + '. Πάτα ξανά «Υποβολή» για να τελειώσεις.'; return; }
+      finish();
+    });
+  }
+  function finish(){
+    if (!running) return;
+    running = false; if (timerId){ clearInterval(timerId); timerId = null; }
+    var got = 0, tot = 0;
+    items.forEach(function(it){
+      var r = it.check(); got += r.got; tot += it.pts;
+      var full = r.got === it.pts;
+      it.box.classList.add('done', full ? 'ok' : 'no');
+      var fb = el('p', 'tfb');
+      if (full) fb.textContent = '✓ Σωστά';
+      else {
+        fb.append((it.pts > 1 ? '✗ ' + r.got + ' από ' + it.pts + '. ' : '✗ Λάθος. ') + (CONFIG.revealAnswers ? r.right + ' ' : ''));
+        if (it.see){ fb.append('Ξαναδιάβασε: '); fb.appendChild(seeLink(it.see)); }
+        if (CONFIG.revealAnswers && it.why) fb.appendChild(el('span', 'why', it.why));
+      }
+      it.box.appendChild(fb);
+    });
+    var score = tot ? Math.round(got / tot * 100) / 10 : 0;
+    var a = state.attempts[state.attempts.length - 1]; a.end = Date.now(); a.score = score; a.got = got; a.tot = tot; save(state);
+    $('t-submit').parentNode.remove();
+    lastCard();
+    var tm = $('t-timer'); if (tm) tm.remove();
+    refreshStart(); applyLock();
+    $('t-last').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function start(){
+    if (running || nextAllowed() > Date.now()) return;
+    running = true;
+    state.attempts.push({ start: Date.now() }); save(state);
+    build(); $('t-body').hidden = false; refreshStart();
+    if (CONFIG.timeLimitMin > 0){
+      var endAt = Date.now() + CONFIG.timeLimitMin * 60000, t = $('t-timer');
+      var upd = function(){ var l = Math.max(0, endAt - Date.now()); var m = Math.floor(l / 60000), s = Math.floor(l % 60000 / 1000); t.textContent = '⏱ ' + m + ':' + (s < 10 ? '0' : '') + s; if (!l) finish(); };
+      upd(); timerId = setInterval(upd, 1000);
+    }
+    $('t-body').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  $('t-start').addEventListener('click', start);
+  lastCard(); refreshStart(); applyLock(); route();
+})();
+</script>
+<style id="kitcss">/*KIT>*//* ==== kit: θέμα, προβολή, «Δείξε λύση» ==== */
+body{font-size:16px}
+.kit-btn{font:600 13px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 12px;border-radius:999px;cursor:pointer}
+.kit-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.kit-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#kitfloat{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:30;display:flex;gap:6px;padding:5px;border-radius:999px;background:var(--ground);border:1px solid var(--line);box-shadow:0 4px 16px rgba(10,20,40,.12)}
+.rt-ans{margin:-2px 0 14px}
+.rt-show{font:600 13.5px/1 var(--body);border:1.5px solid var(--s-teal);background:var(--teal-bg);color:var(--teal);padding:9px 14px;border-radius:999px;cursor:pointer}
+.rt-show:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.rt-body{display:none;margin-top:10px;border-left:4px solid var(--s-teal);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 16px}
+.rt-body .q{margin:0;border:0;padding:0;background:none}
+.rt-open > .rt-body, body.rt-all .rt-body{display:block}
+.rt-open > .rt-show{background:var(--paper)}
+body:not(.rt-all):not(.editing) .solved:not(.rt-open) .rt-hide{display:none}
+body.rt-all .rt-showstep{display:none}
+.solved.rt-open .rt-showstep{display:none}
+.rt-showstep{margin:4px 0 6px}
+body.student .rt-ans{display:none}
+body.editing .rt, body.editing .rt-showstep{display:none}
+/* Λειτουργία προβολής */
+body.proj #bar,body.proj #nav{zoom:1.25}
+body.proj{--muted:#3a4254;--line:#b5bfd2}
+:root[data-theme="dark"] body.proj{--muted:#b9c1d4;--line:#3b465e}
+@media print{#kitfloat,.rt,.rt-showstep,.kit-btn{display:none!important}.rt-hide{display:grid!important}}
+/* Καθαρές γραμμές */
+body{font-size:17px;line-height:1.68}
+.ln{display:block;margin:.22em 0}
+.ln.li{position:relative;padding-left:1.25em}
+.ln.li::before{content:"•";position:absolute;left:.35em;color:var(--muted)}
+.kvs{display:inline-flex;flex-wrap:wrap;gap:.2em 1.2em;vertical-align:top}
+.kv,.nw{white-space:nowrap}
+p,li,td{text-wrap:pretty}
+.ln.cd{font-family:var(--mono);font-size:.92em}
+.cdcols{display:inline-flex;flex-wrap:wrap;gap:4px 28px;vertical-align:top}
+.cdcol{display:inline-block;padding-left:10px;border-left:2px solid var(--line)}/*<KIT*/</style>
+<script id="kitjs">/*KITJS>*/(function(){
+  /* kit: θέμα (φωτεινό/σκοτεινό), προβολή, «Δείξε λύση» */
+  var root = document.documentElement, body = document.body, doc = document.getElementById('doc');
+  if (!doc || body.getAttribute('data-kit')) return;
+  body.setAttribute('data-kit', '1');
+  function get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function put(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+  var theme = get('synapsi-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  var proj = get('aepp-proj') === '1';
+  function mk(id, txt){ var b = document.createElement('button'); b.type = 'button'; b.id = id; b.className = 'kit-btn'; b.textContent = txt; return b; }
+  var bTheme = mk('k-theme', ''), bProj = mk('k-proj', 'Προβολή'), bAll = null;
+  function applyTheme(){ root.setAttribute('data-theme', theme); bTheme.textContent = theme === 'dark' ? '☀ Φωτεινό' : '☾ Σκοτεινό'; bTheme.setAttribute('aria-label', theme === 'dark' ? 'Φωτεινό θέμα' : 'Σκοτεινό θέμα'); }
+  function fit(){
+    if (!proj){ doc.style.zoom = ''; doc.style.maxWidth = ''; return; }
+    var W = window.innerWidth, z = W < 700 ? 1.12 : 1.38;
+    doc.style.zoom = z; doc.style.maxWidth = Math.max(300, Math.min(900, (W - 36) / z)) + 'px';
+  }
+  function applyProj(){ body.classList.toggle('proj', proj); bProj.setAttribute('aria-pressed', String(proj)); fit(); }
+  window.addEventListener('resize', fit);
+  bTheme.onclick = function(){ theme = theme === 'dark' ? 'light' : 'dark'; put('synapsi-theme', theme); applyTheme(); };
+  bProj.onclick = function(){ proj = !proj; put('aepp-proj', proj ? '1' : '0'); applyProj(); };
+  applyTheme(); applyProj();
+
+  var bar = document.getElementById('bar');
+  var teacherSec = doc.querySelector('section.teacher');
+  if (bar){
+    var anchor = document.getElementById('status') || null;
+    if (teacherSec){ bAll = mk('k-all', 'Όλες οι λύσεις'); bar.insertBefore(bAll, anchor); }
+    bar.insertBefore(bProj, anchor); bar.insertBefore(bTheme, anchor);
+  } else {
+    var f = document.createElement('div'); f.id = 'kitfloat';
+    f.appendChild(bTheme); body.appendChild(f); proj = false; applyProj();
+  }
+  if (bAll){
+    bAll.onclick = function(){ var on = !body.classList.contains('rt-all'); body.classList.toggle('rt-all', on); bAll.setAttribute('aria-pressed', String(on)); };
+  }
+
+  /* λυμένα: φαίνεται η εκφώνηση και το «Κατανοώ», τα υπόλοιπα με κουμπί */
+  doc.querySelectorAll('.box.solved').forEach(function(box){
+    var steps = box.querySelector('.steps');
+    if (!steps) return;
+    var st = steps.querySelectorAll(':scope > .step');
+    if (st.length < 2) return;
+    box.classList.add('rt-closed');
+    for (var i = 1; i < st.length; i++) st[i].classList.add('rt-hide');
+    var w = document.createElement('div'); w.className = 'rt-showstep'; w.contentEditable = 'false';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε τη λύση';
+    b.onclick = function(){ box.classList.add('rt-open'); };
+    w.appendChild(b); st[0].after(w);
+  });
+
+  /* ασκήσεις: η απάντηση από τη σελίδα καθηγητή, κρυμμένη κάτω από την εκφώνηση */
+  if (teacherSec){
+    var ans = {};
+    teacherSec.querySelectorAll('.ans .q').forEach(function(q){ var n = q.querySelector('.qn'); if (n) ans[n.textContent.trim()] = q; });
+    doc.querySelectorAll('.exercises .q').forEach(function(q){
+      var n = q.querySelector(':scope > .qn'); if (!n) return;
+      var a = ans[n.textContent.trim()]; if (!a) return;
+      var w = document.createElement('div'); w.className = 'rt rt-ans'; w.contentEditable = 'false';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε λύση';
+      var bodyEl = document.createElement('div'); bodyEl.className = 'rt-body ans';
+      var c = a.cloneNode(true); var qn = c.querySelector('.qn'); if (qn) qn.remove();
+      bodyEl.appendChild(c);
+      b.onclick = function(){ var on = !w.classList.contains('rt-open'); w.classList.toggle('rt-open', on); b.textContent = on ? 'Κρύψε λύση' : 'Δείξε λύση'; };
+      w.appendChild(b); w.appendChild(bodyEl);
+      q.after(w);
+    });
+  }
+})();/*<KITJS*/</script>
+
+</body></html>

@@ -1,7 +1,8 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style id="avcss">.sos-av{float:right;width:72px;height:84px;border-radius:14px;object-position:center top;object-fit:cover;margin:0 0 8px 14px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);shape-outside:margin-box}@media(max-width:560px){.sos-av{width:56px;height:65px;border-radius:11px;margin-left:10px}}@media print{.sos-av{display:none}}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Μάθημα 1 · Η έννοια του προβλήματος</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap">
 <style>
 /* Layout: one A4-like sheet centred on a cool ground; coloured callouts by role (ορισμός, ήξερες ότι, παγίδα, παράδειγμα) */
 :root{
@@ -92,6 +93,7 @@ body.student .teacher{display:none}
 .trivia{background:var(--amber-bg);border:1.5px dashed var(--amber-line)} .trivia .tag{color:var(--amber)}
 .talk{margin-top:6px;font-size:14px;color:var(--amber);font-weight:600}
 .talk span{font-weight:400}
+details.trivia>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;margin:0}details.trivia>summary::-webkit-details-marker{display:none}details.trivia>summary::before{content:"▸";font-size:13px;letter-spacing:0}details.trivia[open]>summary::before{content:"▾"}details.trivia[open]>summary{margin-bottom:6px}details.trivia>summary:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}.talkans{margin-top:6px;font-size:14px;border-top:1px dashed var(--amber-line);padding-top:6px}@media print{details.trivia>summary::before{display:none}}
 .trap{background:var(--coral-bg);border-left:4px solid var(--coral)} .trap .tag{color:var(--coral)}
 .ex{background:var(--teal-bg);border-left:4px solid var(--teal)} .ex .tag{color:var(--teal)}
 .plain{background:var(--soft)} .plain .tag{color:var(--ink)}
@@ -166,6 +168,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .navin::-webkit-scrollbar{display:none}
 #nav a{flex:none;font:600 13px/1 var(--body);color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
 #nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#nav a.navtest{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid,#fff)}
 .sec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
 .btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
 .btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
@@ -183,6 +186,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .qi.no .qb button.pick{background:var(--coral);border-color:var(--coral);color:var(--paper)}
 .qi.no .qb button.right{border-color:var(--teal);color:var(--teal)}
 .fb{font-size:13px;font-weight:700}
+.qwhy{margin:0;font-size:14px;line-height:1.5}
 .qi.ok .fb{color:var(--teal)} .qi.no .fb{color:var(--coral)}
 .score{font:700 15px/1.4 var(--display);padding:10px 14px;border-radius:10px;background:var(--violet-bg);color:var(--violet);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .score .btn{font-size:13px;padding:8px 12px}
@@ -210,12 +214,107 @@ details.reveal .rv{padding:0 14px 12px}
 .count{font:700 14px var(--display);min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion:reduce){.card .face{transition:none}}
 @media (max-width:520px){ #doc{border-radius:12px} .card{min-height:260px} }
-</style>
-<style id="synapsi-brand">
+
+/* test */
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid,#fff);font-size:15px;padding:12px 18px;text-decoration:none;display:inline-block}
+.btn.primary:disabled,.btn.primary.off{opacity:.45;cursor:not-allowed;pointer-events:none}
+.tstart{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.tlink{font:700 14px var(--body);color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+.tlink:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.tstats{margin:0;font-size:14px;line-height:1.7}
+.tstats b{font-variant-numeric:tabular-nums;color:var(--ink)}
+.tstats .sep{color:var(--line);margin:0 8px}
+.tstats:empty{display:none}
+.tpart{margin:18px 0 6px;font:800 16px/1.3 var(--display)}
+.tpart small{font:600 12px var(--body);color:var(--muted);margin-left:6px}
+.tq{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;display:grid;gap:8px;min-width:0}
+.tq>p{margin:0}
+.tq pre.code{margin:0;font-size:13px}
+.tq.ok{border-color:var(--teal);background:var(--teal-bg)}
+.tq.no{border-color:var(--coral);background:var(--coral-bg)}
+.tq .tn{font:700 12px var(--body);color:var(--muted)}
+.topts{display:grid;gap:6px}
+.topts button{font:500 14.5px/1.35 var(--body);text-align:left;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;display:flex;gap:8px;align-items:flex-start;min-width:0}
+.topts button .ol{font-weight:800;flex:none}
+.topts button pre.code{flex:1;min-width:0;background:none;border:0;padding:0;overflow-x:auto}
+.topts button.sel{border-color:var(--blue);background:var(--blue-bg)}
+.topts button:focus-visible,.tq select:focus-visible,.tq input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.topts.two{grid-template-columns:1fr 1fr}
+.tq.done .topts button{cursor:default}
+.topts button.right{border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+.topts button.wrong{border-color:var(--coral);box-shadow:inset 0 0 0 1px var(--coral)}
+.tfill{line-height:2.1}
+.tq select{font:600 14px var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--blue);border-radius:8px;padding:4px 6px;max-width:100%}
+.tq select.right{border-color:var(--teal);background:var(--teal-bg)}
+.tq select.wrong{border-color:var(--coral);background:var(--coral-bg)}
+.tmrow{display:grid;gap:6px;padding:8px 0;border-top:1px dashed var(--line)}
+.tmrow:first-of-type{border-top:0}
+.tmrow code{white-space:normal}
+.tq input{font:600 16px var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--blue);border-radius:8px;padding:8px 10px;width:9em;max-width:100%}
+.tq input.right{border-color:var(--teal)} .tq input.wrong{border-color:var(--coral)}
+.tfb{font-size:13.5px;font-weight:600;margin:0}
+.tq.ok .tfb{color:var(--teal)} .tq.no .tfb{color:var(--coral)}
+.tfb a{color:var(--ink);font-weight:700}
+.tfb .why{display:block;font-weight:400;color:var(--ink);margin-top:3px}
+.tbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0}
+.tmsg{font-size:13.5px;font-weight:600;color:var(--coral)}
+.tresult{border-radius:12px;padding:14px 16px;background:var(--blue-bg);border:0;border-left:4px solid var(--s-blue);display:grid;gap:6px;margin:12px 0}
+.tresult .big,.pgbig .big{font:800 26px/1.1 var(--display);color:var(--blue);font-variant-numeric:tabular-nums}
+.ttimer{position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);z-index:5;font:700 14px var(--display);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px 12px;width:max-content;margin-left:auto}
+/* homework header: the orange frame, once */
+.hwsec .sec{border:1.5px solid var(--amber-line);background:var(--amber-bg);border-radius:12px;padding:10px 14px;align-items:center}
+.hwsec .sec .num,.hwsec .sec h2{color:var(--amber)}
+.hwsec .sec .num{font-size:24px}
+.hwsec .q.hw::before{display:none}
+.hwlock{border:1.5px dashed var(--line);border-radius:10px;padding:12px 14px;color:var(--muted);font-weight:600}
+/* «Η πρόοδός μου» */
+.pg{position:fixed;inset:0;z-index:50;background:var(--ground);overflow-y:auto;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px calc(env(safe-area-inset-bottom,0px) + 84px)}
+.pgin{max-width:560px;margin:0 auto;display:grid;gap:14px}
+.pghead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pghead h2{font:800 24px/1.2 var(--display);margin:0}
+.pgcard{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:10px}
+.pgcard p{margin:0}
+.pgl{font:700 12px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pgt{font:800 18px/1.25 var(--display)}
+.pgbig{display:grid;gap:2px;background:var(--blue-bg);border-radius:10px;padding:10px 12px}
+.pgchart{position:relative}
+.pgchart svg{display:block;width:100%;height:auto;overflow:visible}
+.pgchart .grid line{stroke:var(--line);stroke-width:1}
+.pgchart .ax text{fill:var(--muted);font:600 11px var(--body)}
+.pgchart .ln{fill:none;stroke:var(--s-blue);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.pgchart .pt{fill:var(--s-blue);stroke:var(--paper);stroke-width:2}
+.pgchart .hit{fill:transparent;cursor:pointer;outline:none}
+.pgchart .hit:focus-visible{stroke:var(--blue);stroke-width:2}
+.pgchart .lbl{fill:var(--ink);font:700 12px var(--body)}
+.pgchart .goal{stroke:var(--teal);stroke-width:1.5;stroke-dasharray:4 4}
+.pgchart .goalt{fill:var(--teal);font:700 11px var(--body)}
+.pgtip{min-height:1.4em;margin:4px 0 0;font-size:13px;color:var(--muted)}
+.pgscroll{max-height:196px;overflow-y:auto;overscroll-behavior:contain;border:1px solid var(--line);border-radius:10px;padding:0 10px}
+.pgtab th{position:sticky;top:0;background:var(--paper);z-index:1}
+.pgtab{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+.pgtab th{text-align:left;font:700 12px var(--body);color:var(--muted);padding:8px 8px 6px 0;border-bottom:1px solid var(--line)}
+.pgtab td{padding:6px 8px 6px 0;border-bottom:1px dashed var(--line)}
+.pgtab tr:last-child td{border-bottom:0}
+.pgtab td.na{color:var(--muted)}
+#pg-h a{color:inherit;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+#pg-h a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+body.pg-open #kitfloat{z-index:60}
+.pginfo{background:var(--soft);border-radius:12px;padding:12px 14px;display:grid;gap:8px;font-size:14.5px}
+.pginfo p{margin:0}
+.pgquote{margin:6px 0 0;padding:22px 20px 18px;text-align:center;position:relative;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.pgquote::before{content:"“";position:absolute;left:50%;top:-22px;transform:translateX(-50%);font:400 54px/1 "GFS Didot",Georgia,serif;color:var(--s-blue);background:var(--ground);padding:0 10px}
+.pgquote blockquote{margin:0;font:400 21px/1.45 "GFS Didot",Georgia,"Times New Roman",serif;color:var(--ink);text-wrap:balance}
+.pgquote figcaption{margin-top:10px;font:600 12px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.pgquote figcaption::before{content:"";display:inline-block;width:22px;height:1px;background:var(--muted);vertical-align:middle;margin-right:8px}
+body.pg-open{overflow:hidden}
+@media (max-width:520px){.topts.two{grid-template-columns:1fr}}
+.sos-av{float:right;width:72px;height:84px;border-radius:14px;background:center top/cover no-repeat;margin:0 0 8px 14px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);shape-outside:margin-box}@media(max-width:560px){.sos-av{width:56px;height:65px;border-radius:11px;margin-left:10px}}@media print{.sos-av{display:none}}.sos-av.sa{background-image:url(av6.jpg)}.sos-av.sb{background-image:url(av3.jpg)}
+/* ΣΥΝΑΨΗ: χρώματα του site */
 :root{--ground:#F7F6F0;--ink:#2B3722;--muted:#5E6253;--line:#E1E1D7;--soft:#F3F2EA;--blue:#4F6230;--blue-bg:#EEF0E2;--s-blue:#4F6230;--s-ink:#2B3722;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D;--on-solid-2:#E6E0CC}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}}
 :root[data-theme="dark"]{--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}
-body::before{background:var(--ground)}
+</style>
+<style id="synapsi-site">
 .syn-bar{max-width:860px;margin:0 auto;padding-top:12px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
 .syn-bar a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--hero);color:#fff;text-decoration:none}
 .syn-bar span{color:var(--muted)}
@@ -225,12 +324,11 @@ body::before{background:var(--ground)}
 .syn-nav small{font:600 11.5px var(--body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
 .syn-nav .next{text-align:right;background:var(--hero);color:#fff;border-color:var(--hero)}
 .syn-nav .next small{color:var(--hero-kick)}
-.syn-nav .off{opacity:.6}
 .syn-note{font-size:13px;color:var(--muted);padding:12px 14px;border-radius:10px;background:var(--soft)}
 .syn-copy{font-size:12px;color:var(--muted)}
 </style>
 <script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
-<div class="syn-bar"><a href="index.html">&#8592; Διαδρομή</a><span>Μάθημα 1 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-1-1">1.1</a><a href="#s-1-2">1.2</a><a href="#s-1-3">1.3</a><a href="#s-1-4">1.4</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a></div></nav>
+<div class="syn-bar"><a href="index.html">&#8592; Διαδρομή</a><span>Μάθημα 1 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-test" class="navtest">Σύντομο Τεστ</a><a href="#s-1-1">1.1</a><a href="#s-1-2">1.2</a><a href="#s-1-3">1.3</a><a href="#s-1-4">1.4</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a><a href="#s-hw">Για το σπίτι</a></div></nav>
 <main id="doc" lang="el">
 <section class="hero">
 <svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
@@ -289,16 +387,17 @@ body::before{background:var(--ground)}
 <div class="box ex"><div class="tag">②</div><p><b>απαιτεί λύση</b></p></div>
 <div class="box ex"><div class="tag">③</div><p>η λύση <b>δεν είναι γνωστή</b> ούτε <b>προφανής</b></p></div>
 </div>
-<div class="box def"><img class="sos-av" src="av6.jpg" alt="" loading="lazy">
+<div class="box def"><span aria-hidden="true" class="sos-av sa"></span>
 <div class="tag">Ορισμός · απομνημόνευση</div>
 <p>Με τον όρο <b>Πρόβλημα</b> εννοείται μια κατάσταση η οποία χρήζει αντιμετώπισης, απαιτεί λύση, η δε λύση της δεν είναι γνωστή, ούτε προφανής.</p>
 <p class="src">Σχολικό βιβλίο, §1.1</p>
 </div>
-<div class="box trivia">
-<div class="tag">Ήξερες ότι;</div>
+<details class="box trivia">
+<summary class="tag">Ήξερες ότι;</summary>
 <p>Τον Απρίλιο του 1970 εξερράγη μια δεξαμενή οξυγόνου στο <b>Apollo 13</b>. Οι αστροναύτες μεταφέρθηκαν στη σεληνάκατο, αλλά εκεί το διοξείδιο του άνθρακα ανέβαινε επικίνδυνα. Τα ανταλλακτικά φίλτρα του σκάφους ήταν <b>τετράγωνα</b> και η υποδοχή της σεληνακάτου <b>στρογγυλή</b>. Οι μηχανικοί στη Γη έφτιαξαν προσαρμογέα μόνο με υλικά που υπήρχαν στο σκάφος (πλαστικές σακούλες, χαρτόνι, μονωτική ταινία) και υπαγόρευσαν βήμα-βήμα τις οδηγίες. Ήταν πρόβλημα με όλη τη σημασία της λέξης: επείγον, χωρίς γνωστή ούτε προφανή λύση.</p>
 <p class="talk">Σκέψου: Η ατάκα της ταινίας του 1995 είναι «Houston, we have a problem». Τι είπαν στην πραγματικότητα; <span>(«Houston, we've had a problem»)</span></p>
-</div>
+
+</details>
 <div class="sec" id="s-1-2"><span class="num">1.2</span><h2>Κατανόηση προβλήματος</h2><span class="ref">Βιβλίο σελ. 17–19</span></div>
 <p>Κανένα πρόβλημα δεν λύνεται σωστά αν πρώτα δεν γίνει <b>απόλυτα κατανοητό</b>. Η κατανόηση εξαρτάται από <b>δύο παράγοντες</b>:</p>
 <div class="grid">
@@ -310,13 +409,14 @@ body::before{background:var(--ground)}
 <p>Ο Άρης γράφει στο group της τάξης: <i>«Παραγγέλνω <b>δύο πίτσες με μανιτάρια και πιπεριές</b>.»</i> Φτάνουν δύο πίτσες που έχουν <b>και τα δύο</b> υλικά. Η Δανάη όμως περίμενε <b>μία με μανιτάρια και μία με πιπεριές</b>.</p>
 <p>Η φράση έχει <b>δύο σωστές ερμηνείες</b>. Το <b>«και»</b> μπορεί να ενώνει υλικά της ίδιας πίτσας ή δύο διαφορετικές πίτσες. Το πρόβλημα δεν ήταν στην παράδοση. Ήταν στη <span class="hl">διατύπωση</span>.</p>
 </div>
-<div class="box trivia">
-<div class="tag">Ήξερες ότι;</div>
+<details class="box trivia">
+<summary class="tag">Ήξερες ότι;</summary>
 <p>Το 1999 η NASA έχασε το <b>Mars Climate Orbiter</b>, ένα σκάφος γύρω στα 125 εκατ. δολάρια. Η μία ομάδα έστελνε δεδομένα σε <b>αγγλοσαξονικές μονάδες</b> (pound-force) και η άλλη τα διάβαζε σαν <b>μετρικές</b> (newton). Οι αριθμοί ήταν σωστοί. Η <b>ερμηνεία</b> τους ήταν λάθος.</p>
 <p class="talk">Σκέψου: Ποιος από τους δύο παράγοντες της κατανόησης «έσπασε» εδώ;</p>
-</div>
+
+</details>
 <p>Για να καταλάβουμε ένα πρόβλημα, πρέπει να ξέρουμε και <b>σε ποιο χώρο</b> ανήκει. Αυτό μας το λένε τα <b>δεδομένα</b>.</p>
-<div class="box def"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
+<div class="box def"><span aria-hidden="true" class="sos-av sb"></span>
 <div class="tag">Ορισμοί · απομνημόνευση</div>
 <p>Με τον όρο <b>δεδομένο</b> δηλώνεται οποιοδήποτε στοιχείο μπορεί να γίνει αντιληπτό από έναν τουλάχιστον παρατηρητή με μία από τις πέντε αισθήσεις του.</p>
 <p>Με τον όρο <b>πληροφορία</b> αναφέρεται οποιοδήποτε γνωσιακό στοιχείο προέρχεται από επεξεργασία δεδομένων.</p>
@@ -329,14 +429,15 @@ body::before{background:var(--ground)}
 <tr><td>Όλα τα σκορ των αγώνων της σεζόν</td><td>βαθμολογία</td><td>«Πρωταθλήτρια η ομάδα Χ»</td></tr>
 <tr><td>Οι βαθμοί των 25 μαθητών του τμήματος</td><td>καταμέτρηση</td><td>«Το 80% έγραψε πάνω από 15»</td></tr>
 </tbody></table></div>
-<div class="box trivia">
-<div class="tag">Ήξερες ότι;</div>
+<details class="box trivia">
+<summary class="tag">Ήξερες ότι;</summary>
 <p>Το 2002 οι <b>Oakland Athletics</b>, μια ομάδα μπέιζμπολ με από τους μικρότερους προϋπολογισμούς της λίγκας, έφτασαν στα πλέι-οφ επιλέγοντας παίκτες με <b>ανάλυση στατιστικών δεδομένων</b> αντί για το «μάτι» των σκάουτερ. Η ιστορία έγινε η ταινία <b>Moneyball</b> (2011) με τον Brad Pitt.</p>
 <p class="talk">Σκέψου: Ποια δεδομένα θα κρατούσατε για τους παίκτες της ομάδας του σχολείου, και ποια πληροφορία θα βγάζατε από αυτά;</p>
-</div>
+
+</details>
 <div class="sec" id="s-1-3"><span class="num">1.3</span><h2>Δομή προβλήματος</h2><span class="ref">Βιβλίο σελ. 19–21</span></div>
 <p>Ένα μεγάλο πρόβλημα μοιάζει τρομακτικό. Αν το <b>σπάσουμε σε μικρότερα</b>, και αυτά σε ακόμα μικρότερα, κάποια στιγμή φτάνουμε σε κομμάτια που ξέρουμε να λύσουμε. Αυτή η διαδικασία λέγεται <b>ανάλυση</b> και μας δείχνει τη <b>δομή</b> του προβλήματος.</p>
-<div class="box def"><img class="sos-av" src="av6.jpg" alt="" loading="lazy">
+<div class="box def"><span aria-hidden="true" class="sos-av sa"></span>
 <div class="tag">Ορισμός · απομνημόνευση</div>
 <p>Με τον όρο <b>δομή ενός προβλήματος</b> αναφερόμαστε στα συστατικά του μέρη, στα επιμέρους τμήματα που το αποτελούν καθώς επίσης και στον τρόπο που αυτά τα μέρη συνδέονται μεταξύ τους.</p>
 <p class="src">Σχολικό βιβλίο, §1.3</p>
@@ -375,11 +476,12 @@ body::before{background:var(--ground)}
 </svg>
 </div>
 <p class="small">Κανόνες σχεδίασης: κάθε πρόβλημα είναι ένα <b>ορθογώνιο</b>. Τα απλούστερα προβλήματα στα οποία αναλύεται μπαίνουν <b>ένα επίπεδο πιο κάτω</b> και ενώνονται με αυτό. Η ανάλυση σταματά όταν τα κομμάτια είναι αρκετά απλά για να λυθούν.</p>
-<div class="box trivia">
-<div class="tag">Ήξερες ότι;</div>
+<details class="box trivia">
+<summary class="tag">Ήξερες ότι;</summary>
 <p>Στο <b>Jurassic Park</b> (1993) ακόμα και ο <b>βρυχηθμός του T-Rex</b> ήταν ένα «υποπρόβλημα» της ταινίας: ηχογράφηση δεινόσαυρου δεν υπάρχει. Ο ηχολήπτης Gary Rydstrom τον έφτιαξε συνθέτοντας απλούστερα κομμάτια: τη φωνή ενός μικρού ελέφαντα, μιας τίγρης και ενός αλιγάτορα.</p>
 <p class="talk">Σκέψου: Σε ποιο κουτάκι του διαγράμματος θα έμπαινε αυτό το υποπρόβλημα; Πώς θα το αναλύατε ένα επίπεδο πιο κάτω;</p>
-</div>
+
+</details>
 <div class="sec" id="s-1-4"><span class="num">1.4</span><h2>Καθορισμός απαιτήσεων</h2><span class="ref">Βιβλίο σελ. 21–25</span></div>
 <p>Για να λύσουμε σωστά ένα πρόβλημα, πρέπει να ξέρουμε <b>με ακρίβεια</b> δύο πράγματα: τι μας <b>δίνεται</b> (δεδομένα) και τι μας <b>ζητείται</b> (ζητούμενα). Δεν υπάρχει έτοιμη μέθοδος για να τα βρούμε. Χρειάζεται <b>προσοχή</b>, και όταν κάτι δεν είναι σαφές, κάνουμε <b>ερωτήσεις</b> σε αυτόν που έθεσε το πρόβλημα ή στον εαυτό μας. Μερικές φορές τα δεδομένα πρέπει να τα «ανακαλύψουμε».</p>
 <div class="box plain">
@@ -401,7 +503,7 @@ body::before{background:var(--ground)}
 <li><b>Σε ποια μορφή θέλει το αποτέλεσμα;</b> Ένα όνομα, πίνακα κατάταξης ή γράφημα;</li>
 </ul>
 </div>
-<div class="box trap"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
+<div class="box trap"><span aria-hidden="true" class="sos-av sb"></span>
 <div class="tag">Παγίδες που κοστίζουν μονάδες</div>
 <ul class="tight">
 <li>Το πρόβλημα <b>δεν</b> σχετίζεται υποχρεωτικά με μαθηματικά ή υπολογιστές.</li>
@@ -411,7 +513,7 @@ body::before{background:var(--ground)}
 <li>Τα στάδια είναι με τη σειρά: <b>κατανόηση, ανάλυση, επίλυση</b>.</li>
 </ul>
 </div>
-<div class="box def"><img class="sos-av" src="av6.jpg" alt="" loading="lazy">
+<div class="box def"><span aria-hidden="true" class="sos-av sa"></span>
 <div class="tag">Σύνοψη · τα 3 στάδια αντιμετώπισης ενός προβλήματος</div>
 <p><b>Κατανόηση</b>: απαιτείται η σωστή και πλήρης αποσαφήνιση των δεδομένων και των ζητούμενων του προβλήματος.</p>
 <p><b>Ανάλυση</b>: το αρχικό πρόβλημα διασπάται σε άλλα επιμέρους απλούστερα προβλήματα.</p>
@@ -419,7 +521,7 @@ body::before{background:var(--ground)}
 <p class="src">Σχολικό βιβλίο, §1.4 (σχ. 1.3)</p>
 </div>
 <section class="solved-wrap">
-<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένο παράδειγμα βήμα-βήμα</h2><span class="ref">Έτσι σκεφτόμαστε</span></div>
+<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένο παράδειγμα βήμα-βήμα</h2></div>
 <div class="box solved">
 <div class="tag">Πρόβλημα · Η ουρά στην καντίνα</div>
 <p>Ο κυλικειάρχης του σχολείου λέει: <i>«Θέλω να μη γίνεται ουρά στο διάλειμμα.»</i> Πώς αντιμετωπίζουμε αυτό το πρόβλημα με τα στάδια του μαθήματος;</p>
@@ -448,7 +550,7 @@ body::before{background:var(--ground)}
 </section>
 
 <section class="cards" id="s-cards">
-<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2><span class="ref">Ορισμοί για απομνημόνευση</span></div>
+<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2></div>
 <p class="small">Διάβασε τον όρο, πες τον ορισμό από μέσα σου και πάτα την κάρτα για να τον δεις.</p>
 <div class="deck">
 <button aria-live="polite" class="card" id="card" type="button">
@@ -463,36 +565,15 @@ body::before{background:var(--ground)}
 </div>
 </div>
 </section><section class="exercises">
-<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2><span class="ref">Από τα εύκολα στα δύσκολα</span></div>
+<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2></div>
 <div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div>
-<div class="q"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Γράψε Σ ή Λ.
-<table class="tf">
-<tbody><tr><td>α. Ένα πρόβλημα αφορά πάντα μαθηματικούς υπολογισμούς.</td><td class="b">____</td></tr>
-<tr><td>β. Για να είναι κάτι πρόβλημα, η λύση του δεν πρέπει να είναι γνωστή ούτε προφανής.</td><td class="b">____</td></tr>
-<tr><td>γ. Η κατανόηση ενός προβλήματος εξαρτάται μόνο από τη διατύπωσή του.</td><td class="b">____</td></tr>
-<tr><td>δ. Η πληροφορία προέρχεται από επεξεργασία δεδομένων.</td><td class="b">____</td></tr>
-<tr><td>ε. Υπάρχει συγκεκριμένη μεθοδολογία για τον προσδιορισμό των δεδομένων ενός προβλήματος.</td><td class="b">____</td></tr>
-<tr><td>στ. Ο «μηχανισμός» επεξεργασίας δεδομένων μπορεί να είναι και ο ανθρώπινος εγκέφαλος.</td><td class="b">____</td></tr>
-<tr><td>ζ. Η ανάλυση ενός προβλήματος προηγείται της κατανόησής του.</td><td class="b">____</td></tr>
-</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Λ, β Σ, γ Λ, δ Σ, ε Λ, στ Σ, ζ Λ</span>
-<p class="small">γ: εξαρτάται <b>και</b> από τη σωστή ερμηνεία. ε: το βιβλίο λέει ρητά ότι μεθοδολογία δεν υπάρχει. ζ: πρώτα κατανόηση, μετά ανάλυση.</p></div></details></div>
-<div class="q"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
-<p>α) Τι ονομάζουμε πρόβλημα;<br/>β) Από ποιους παράγοντες εξαρτάται η κατανόηση ενός προβλήματος;<br/>γ) Να εξηγήσετε τη διαφορά μεταξύ δεδομένου και πληροφορίας και να δώσετε ένα δικό σας παράδειγμα.<br/>δ) Τι ονομάζουμε δομή ενός προβλήματος;<br/>ε) Να αναφέρετε τα στάδια αντιμετώπισης ενός προβλήματος και να περιγράψετε σύντομα το καθένα.</p>
-<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p>α) Με τον όρο πρόβλημα εννοείται μια κατάσταση η οποία χρήζει αντιμετώπισης, απαιτεί λύση, η δε λύση της δεν είναι γνωστή, ούτε προφανής.</p>
-<p>β) Από τη <b>σωστή διατύπωση</b> εκ μέρους του δημιουργού του και τη <b>σωστή ερμηνεία</b> από αυτόν που καλείται να το αντιμετωπίσει.</p>
-<p>γ) Δεδομένο: οποιοδήποτε στοιχείο μπορεί να γίνει αντιληπτό από έναν τουλάχιστον παρατηρητή με μία από τις πέντε αισθήσεις του. Πληροφορία: οποιοδήποτε γνωσιακό στοιχείο προέρχεται από επεξεργασία δεδομένων. Παράδειγμα: οι βαθμοί του τμήματος είναι δεδομένα. Ο μέσος όρος του τμήματος, που βγαίνει από αυτούς, είναι πληροφορία.</p>
-<p>δ) Τα συστατικά του μέρη, τα επιμέρους τμήματα που το αποτελούν και ο τρόπος που αυτά συνδέονται μεταξύ τους.</p>
-<p>ε) <b>Κατανόηση</b>: σωστή και πλήρης αποσαφήνιση δεδομένων και ζητουμένων. <b>Ανάλυση</b>: το αρχικό πρόβλημα διασπάται σε απλούστερα. <b>Επίλυση</b>: υλοποιείται η λύση μέσω της λύσης των επιμέρους προβλημάτων.</p></div></details></div>
-<div class="q"><span class="qn">3</span><b>Δεδομένο ή πληροφορία;</b> Δίπλα σε κάθε στοιχείο γράψε Δ ή Π.<span class="theme">Αθλητικά, Σινεμά</span>
-<table class="tf">
-<tbody><tr><td>α. Ο χρόνος κάθε δρομέα στον τελικό των 100 μ.</td><td class="b">____</td></tr>
-<tr><td>β. «Ο νικητής έτρεξε 0,12 δευτ. πιο γρήγορα από τον δεύτερο»</td><td class="b">____</td></tr>
-<tr><td>γ. Τα εισιτήρια που έκοψε κάθε κινηματογράφος το Σαββατοκύριακο</td><td class="b">____</td></tr>
-<tr><td>δ. «Η πιο εμπορική ταινία της εβδομάδας ήταν η Χ»</td><td class="b">____</td></tr>
-</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Δ, β Π, γ Δ, δ Π</span>
-<p class="small">Η β προκύπτει συγκρίνοντας χρόνους, η δ προσθέτοντας και συγκρίνοντας εισιτήρια, δηλαδή με επεξεργασία.</p></div></details></div>
+<div class="q" id="q-1"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Πάτα την απάντησή σου.
+<div class="quiz" data-q="1"><div class="qi" data-ans="Λ" data-why="Τα προβλήματα μπορεί να αφορούν οποιονδήποτε τομέα: μαθηματικά, φυσική, λογική, καθημερινή ζωή."><p class="qs">α. Ένα πρόβλημα αφορά πάντα μαθηματικούς υπολογισμούς.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Είναι ένα από τα τρία στοιχεία του ορισμού: η λύση δεν είναι γνωστή ούτε προφανής."><p class="qs">β. Για να είναι κάτι πρόβλημα, η λύση του δεν πρέπει να είναι γνωστή ούτε προφανής.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Εξαρτάται και από τη σωστή ερμηνεία από αυτόν που το λύνει."><p class="qs">γ. Η κατανόηση ενός προβλήματος εξαρτάται μόνο από τη διατύπωσή του.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Είναι ο ορισμός της πληροφορίας: γνωσιακό στοιχείο που προέρχεται από επεξεργασία δεδομένων."><p class="qs">δ. Η πληροφορία προέρχεται από επεξεργασία δεδομένων.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Το βιβλίο λέει ρητά ότι μεθοδολογία προσδιορισμού των δεδομένων δεν υπάρχει."><p class="qs">ε. Υπάρχει συγκεκριμένη μεθοδολογία για τον προσδιορισμό των δεδομένων ενός προβλήματος.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Για χιλιετίες ο «μηχανισμός» ήταν ο ανθρώπινος εγκέφαλος. Σήμερα είναι και ο υπολογιστής."><p class="qs">στ. Ο «μηχανισμός» επεξεργασίας δεδομένων μπορεί να είναι και ο ανθρώπινος εγκέφαλος.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Πρώτα γίνεται η κατανόηση, μετά η ανάλυση και στο τέλος η επίλυση."><p class="qs">ζ. Η ανάλυση ενός προβλήματος προηγείται της κατανόησής του.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="score" hidden=""></div></div></div>
+
+<div class="q" id="q-3"><span class="qn">3</span><b>Δεδομένο ή πληροφορία;</b> Πάτα την απάντησή σου.<span class="theme">Αθλητικά, Σινεμά</span>
+<div class="quiz" data-q="3"><div class="qi" data-ans="Δ" data-why="Οι χρόνοι μετριούνται και καταγράφονται. Δεν προκύπτουν από επεξεργασία."><p class="qs">α. Ο χρόνος κάθε δρομέα στον τελικό των 100 μ.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Δ" type="button">Δεδομένο</button><button data-v="Π" type="button">Πληροφορία</button></div></div><div class="qi" data-ans="Π" data-why="Προκύπτει συγκρίνοντας τους χρόνους, δηλαδή με επεξεργασία δεδομένων."><p class="qs">β. «Ο νικητής έτρεξε 0,12 δευτ. πιο γρήγορα από τον δεύτερο»</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Δ" type="button">Δεδομένο</button><button data-v="Π" type="button">Πληροφορία</button></div></div><div class="qi" data-ans="Δ" data-why="Είναι οι αριθμοί όπως καταγράφηκαν, ένας για κάθε κινηματογράφο."><p class="qs">γ. Τα εισιτήρια που έκοψε κάθε κινηματογράφος το Σαββατοκύριακο</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Δ" type="button">Δεδομένο</button><button data-v="Π" type="button">Πληροφορία</button></div></div><div class="qi" data-ans="Π" data-why="Προκύπτει προσθέτοντας και συγκρίνοντας εισιτήρια, δηλαδή με επεξεργασία."><p class="qs">δ. «Η πιο εμπορική ταινία της εβδομάδας ήταν η Χ»</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Δ" type="button">Δεδομένο</button><button data-v="Π" type="button">Πληροφορία</button></div></div><div class="score" hidden=""></div></div></div>
 <div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div>
-<div class="q"><span class="qn">4</span><b>Κυνήγι ασάφειας.</b> Κάθε φράση μπορεί να ερμηνευθεί με δύο τρόπους. Γράψε τις δύο ερμηνείες και ξαναγράψε τη φράση ώστε να είναι σαφής.
+<div class="q" id="q-4"><span class="qn">4</span><b>Κυνήγι ασάφειας.</b> Κάθε φράση μπορεί να ερμηνευθεί με δύο τρόπους. Γράψε τις δύο ερμηνείες και ξαναγράψε τη φράση ώστε να είναι σαφής.
 <div class="indent">
 <p>α. <i>«Ο διαιτητής είδε τον παίκτη με την κάμερα.»</i></p>
 <p>β. <i>«Πάρε ένα γάλα από το σούπερ μάρκετ. Αν έχει αυγά, πάρε έξι.»</i> <span class="small">(το αγαπημένο ανέκδοτο των προγραμματιστών)</span></p>
@@ -500,29 +581,37 @@ body::before{background:var(--ground)}
 </div><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p>α. Ο διαιτητής χρησιμοποίησε την κάμερα (VAR) για να δει τον παίκτη <b>ή</b> είδε τον παίκτη που κρατούσε μια κάμερα. <span class="sol">Σωστή διατύπωση: «Ο διαιτητής είδε τον παίκτη στην οθόνη του VAR.»</span></p>
 <p>β. Το «έξι» αφορά τα αυγά <b>ή</b> τα γάλατα; Ο προγραμματιστής του ανεκδότου γύρισε με έξι γάλατα! <span class="sol">Σωστή διατύπωση: «Πάρε ένα γάλα. Αν έχει αυγά, πάρε και έξι αυγά.»</span></p>
 <p>γ. Κανένας μαθητής δεν πήγε <b>ή</b> δεν πήγαν όλοι (κάποιοι πήγαν). <span class="sol">Σωστή διατύπωση: «Κανένας μαθητής δεν πήγε» ή «Δεν πήγαν όλοι οι μαθητές».</span></p></div></details></div>
-<div class="q hw"><span class="qn">5</span><b>Δεδομένα, ζητούμενα, ερωτήσεις.</b><span class="theme">Γεωγραφία, Ταξίδια</span>
+
+<div class="q" id="q-6"><span class="qn">6</span><b>Δεδομένο ή ζητούμενο;</b><span class="theme">Σχολική εκδρομή</span>
+<p>Για το πρόβλημα «Πόσα θα πληρώσει κάθε μαθητής για το πούλμαν της εκδρομής;» χαρακτήρισε κάθε στοιχείο.</p>
+
+<div class="quiz" data-q="6"><div class="qi" data-ans="Α" data-why="Μας το δίνει η εταιρεία του πούλμαν."><p class="qs">α. Το κόστος του πούλμαν ανά χιλιόμετρο</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Δεδομένο</button><button data-v="Β" type="button">Β Ζητούμενο</button></div></div><div class="qi" data-ans="Β" data-why="Δεν μας δίνεται. Το υπολογίζουμε από την απόσταση και το κόστος ανά χιλιόμετρο, άρα είναι ενδιάμεσο ζητούμενο."><p class="qs">β. Το συνολικό κόστος της μεταφοράς</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Δεδομένο</button><button data-v="Β" type="button">Β Ζητούμενο</button></div></div><div class="qi" data-ans="Α" data-why="Το ξέρουμε από τις δηλώσεις συμμετοχής των μαθητών."><p class="qs">γ. Ο αριθμός των μαθητών που πηγαίνουν</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Δεδομένο</button><button data-v="Β" type="button">Β Ζητούμενο</button></div></div><div class="qi" data-ans="Β" data-why="Είναι αυτό που ρωτάει το πρόβλημα."><p class="qs">δ. Το ποσό που αντιστοιχεί σε κάθε μαθητή</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Δεδομένο</button><button data-v="Β" type="button">Β Ζητούμενο</button></div></div><div class="qi" data-ans="Α" data-why="Τη βρίσκουμε στον χάρτη. Είναι δεδομένο."><p class="qs">ε. Η απόσταση μέχρι τον προορισμό</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Δεδομένο</button><button data-v="Β" type="button">Β Ζητούμενο</button></div></div><div class="score" hidden=""></div></div></div>
+
+
+
+
+
+</section><section class="test" id="s-test">
+<div class="sec" id="s-test"><span class="num">◎</span><h2>Σύντομο Τεστ Μαθήματος</h2></div>
+<div class="tresult" hidden="" id="t-last">
+<span class="big" id="t-lastscore"></span>
+<span id="t-lastnote"></span>
+<a class="tlink" href="#progress" id="t-grade">Βαθμός κατανόησης</a>
+</div>
+<div class="tstart">
+<button class="btn primary" id="t-start" type="button">Έναρξη τεστ</button>
+</div>
+<p class="small" hidden="" id="t-wait"></p>
+<div hidden="" id="t-body"></div>
+</section><section class="exercises hwsec"><div class="sec" id="s-hw"><span class="num">✍</span><h2>Για το σπίτι</h2></div><div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div><div class="q hw" id="q-2"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
+<p>α) Τι ονομάζουμε πρόβλημα;<br/>β) Από ποιους παράγοντες εξαρτάται η κατανόηση ενός προβλήματος;<br/>γ) Να εξηγήσετε τη διαφορά μεταξύ δεδομένου και πληροφορίας και να δώσετε ένα δικό σας παράδειγμα.<br/>δ) Τι ονομάζουμε δομή ενός προβλήματος;<br/>ε) Να αναφέρετε τα στάδια αντιμετώπισης ενός προβλήματος και να περιγράψετε σύντομα το καθένα.</p>
+</div><div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div><div class="q hw" id="q-5"><span class="qn">5</span><b>Δεδομένα, ζητούμενα, ερωτήσεις.</b><span class="theme">Γεωγραφία, Ταξίδια</span>
 <p>Η τάξη σου θέλει να οργανώσει πενθήμερη εκδρομή και ο διευθυντής λέει: <i>«Βρείτε τον καλύτερο προορισμό.»</i></p>
 <p>α) Ποια δεδομένα θα χρειαστείτε; (τουλάχιστον 4)<br/>β) Γιατί το ζητούμενο δεν είναι σαφές; Διατύπωσε 3 ερωτήσεις που θα κάνατε στον διευθυντή.</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q"><span class="qn">6</span><b>Δεδομένο ή ζητούμενο;</b><span class="theme">Σχολική εκδρομή</span>
-<p>Για το πρόβλημα «Πόσα θα πληρώσει κάθε μαθητής για το πούλμαν της εκδρομής;» χαρακτήρισε κάθε στοιχείο.</p>
-<ul class="legend tight">
-<li data-v="Α"><b>Α</b> Δεδομένο</li>
-<li data-v="Β"><b>Β</b> Ζητούμενο</li>
-</ul>
-<table class="tf">
-<tbody><tr><td>α. Το κόστος του πούλμαν ανά χιλιόμετρο</td><td class="b">____</td></tr>
-<tr><td>β. Το συνολικό κόστος της μεταφοράς</td><td class="b">____</td></tr>
-<tr><td>γ. Ο αριθμός των μαθητών που πηγαίνουν</td><td class="b">____</td></tr>
-<tr><td>δ. Το ποσό που αντιστοιχεί σε κάθε μαθητή</td><td class="b">____</td></tr>
-<tr><td>ε. Η απόσταση μέχρι τον προορισμό</td><td class="b">____</td></tr>
-</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Α, β Β, γ Α, δ Β, ε Α</span>
-<p class="small">Το συνολικό κόστος είναι ενδιάμεσο ζητούμενο: υπολογίζεται από την απόσταση και το κόστος ανά χιλιόμετρο, και μετά διαιρείται με τον αριθμό των μαθητών.</p></div></details></div>
-<div class="q hw"><span class="qn">7</span><b>Κάν' το σαφές.</b><span class="theme">Καθημερινότητα</span>
+</div><div class="q hw" id="q-7"><span class="qn">7</span><b>Κάν' το σαφές.</b><span class="theme">Καθημερινότητα</span>
 <p>Οι παρακάτω «παραγγελίες» είναι τόσο ασαφείς, που κανείς δεν μπορεί να τις λύσει. Για καθεμία γράψε: α) τρεις ερωτήσεις που θα έκανες, β) μια νέα, σαφή διατύπωση του προβλήματος με τα δεδομένα και το ζητούμενο.</p>
 <p>① «Θέλω μια εφαρμογή για το ρεύμα του σπιτιού.»<br/>② «Βρες μου ένα καλό κινητό.»<br/>③ «Κάνε ένα πρόγραμμα για τους βαθμούς της τάξης.»</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">8</span><b>Διάβασε τη δομή.</b><span class="theme">Πανελλαδικές</span>
+</div><div class="q hw" id="q-8"><span class="qn">8</span><b>Διάβασε τη δομή.</b><span class="theme">Πανελλαδικές</span>
 <p>Μια μαθήτρια ανέλυσε το πρόβλημα «Προετοιμασία για τις Πανελλαδικές» ως εξής:</p>
 <pre class="code">Προετοιμασία για τις Πανελλαδικές
 ├─ 1 Διάβασμα
@@ -533,18 +622,35 @@ body::before{background:var(--ground)}
 │  └─ 2.2 Λύσεις παλαιότερων θεμάτων
 └─ 3 Δηλώσεις σχολών</pre>
 <p>α) Σε πόσα επίπεδα έχει γίνει η ανάλυση;<br/>β) Να σχεδιάσετε τη διαγραμματική αναπαράσταση με ορθογώνια.<br/>γ) Το υποπρόβλημα 3 δεν έχει αναλυθεί. Να το αναλύσετε σε τουλάχιστον δύο απλούστερα.<br/>δ) Να προσθέσετε ένα τέταρτο υποπρόβλημα στο πρώτο επίπεδο που θεωρείτε ότι λείπει, και να το αναλύσετε.</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Μεγάλες ασκήσεις</h3></div>
-<div class="q hw"><span class="qn">9</span><b>Ανάλυση με διάγραμμα.</b><span class="theme">Αθλητικά</span>
+</div><div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Μεγάλες ασκήσεις</h3></div><div class="q hw" id="q-9"><span class="qn">9</span><b>Ανάλυση με διάγραμμα.</b><span class="theme">Αθλητικά</span>
 <p>Το σχολείο σου διοργανώνει <b>τουρνουά μπάσκετ 3×3</b> με 12 ομάδες. Ανάλυσε το πρόβλημα «Διοργάνωση τουρνουά» σε <b>τουλάχιστον τρία επίπεδα</b> και σχεδίασε τη διαγραμματική αναπαράστασή του. Αρίθμησε τα υποπροβλήματα όπως στο παράδειγμα της ταινίας (1, 1.1, 1.1.1 …).</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">10</span><b>Από την εκφώνηση στη δομή.</b><span class="theme">Σινεμά, Σχολική ζωή</span>
+</div><div class="q hw" id="q-10"><span class="qn">10</span><b>Από την εκφώνηση στη δομή.</b><span class="theme">Σινεμά, Σχολική ζωή</span>
 <p>Ο σύλλογος διδασκόντων αποφάσισε να διοργανώσει <b>φεστιβάλ ταινιών μικρού μήκους</b> με θέμα «Η πόλη μου». Κάθε τμήμα μπορεί να στείλει μία ταινία. Οι ταινίες θα προβληθούν στην αίθουσα εκδηλώσεων και θα βραβευτούν οι καλύτερες.</p>
 <p>α) Να εντοπίσετε <b>δύο ασάφειες</b> στην εκφώνηση και για καθεμία να διατυπώσετε μια ερώτηση προς τους διοργανωτές.<br/>β) Να γράψετε τα <b>δεδομένα</b> και τα <b>ζητούμενα</b> του προβλήματος.<br/>γ) Να αναλύσετε το πρόβλημα «Διοργάνωση φεστιβάλ» σε <b>τουλάχιστον τρία επίπεδα</b> και να σχεδιάσετε τη διαγραμματική αναπαράστασή του.<br/>δ) Σε ποιο <b>στάδιο αντιμετώπισης</b> ενός προβλήματος ανήκει καθένα από τα ερωτήματα α, β και γ;</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-</section>
+</div></section>
 
-</main><div class="syn-foot"><div class="syn-nav"><a href="index.html"><small>&#8592; Πίσω</small>Διαδρομή</a><a class="next" href="02.html"><small>Μάθημα 2 &#8594;</small>Τι είναι αλγόριθμος</a></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
+<div aria-labelledby="pg-h" aria-modal="true" class="pg" hidden="" id="progress" role="dialog">
+<div class="pgin">
+<div class="pghead"><h2 id="pg-h"><a href="progress.html" id="pg-alllink">Η πρόοδός μου</a></h2><button class="btn" id="pg-close" type="button">Κλείσιμο</button></div>
+<div class="pgcard">
+<p class="pgl" id="pg-l"></p>
+<p class="pgt" id="pg-t"></p>
+<div class="pgbig"><span class="small">Βαθμός κατανόησης</span><span class="big" id="pg-score">–</span><span class="small" id="pg-note"></span></div>
+<p class="tstats" id="t-stats"></p>
+<div class="pgchart" hidden="" id="pg-chart"></div>
+<div class="pgscroll"><table class="pgtab" id="pg-tab"><thead><tr><th>Ημερομηνία</th><th>Ώρα</th><th>Βαθμός</th><th>Μονάδες</th></tr></thead><tbody id="pg-list"></tbody></table></div>
+<a class="btn primary" href="#test-start" id="pg-again">Νέα προσπάθεια</a>
+<p class="small" hidden="" id="pg-wait"></p>
+</div>
+<div class="pginfo">
+<p><b>Πώς δουλεύει το τεστ.</b> Πέντε μέρη: Σωστό ή Λάθος, συμπλήρωση κενών, πολλαπλής επιλογής, αντιστοίχιση και πίνακας τιμών από τα λυμένα παραδείγματα. Κάθε προσπάθεια έχει άλλες ερωτήσεις.</p>
+<p>Μετά την υποβολή βλέπεις τον βαθμό και, για κάθε λάθος, το σημείο των σημειώσεων που πρέπει να ξαναδιαβάσεις. Για να κάνεις «Νέα προσπάθεια» πρέπει να περάσουν τουλάχιστον <b id="pg-cd">5 λεπτά</b>. Αξιοποίησέ τα ξαναδιαβάζοντας.</p>
+<p>Στο <b>«Βαθμός κατανόησης»</b> βλέπεις την πιο πρόσφατη προσπάθειά σου και από κάτω, αναλυτικά, την πορεία των υπόλοιπων. Για να καταλάβεις καλύτερα το μάθημα, σου προτείνουμε ένθερμα να κάνεις όσες περισσότερες προσπάθειες μπορείς.</p>
+</div>
+<figure class="pgquote" id="pg-quote"><blockquote id="pg-q"></blockquote><figcaption id="pg-qa"></figcaption></figure>
+<p class="small" hidden="" id="pg-allnote">Η συνολική πρόοδος, με όλα τα μαθήματα, ανοίγει στο sinapsi.gr.</p>
+</div>
+</div></main><div class="syn-foot"><div class="syn-nav"><a href="index.html"><small>&#8592; Πίσω</small>Διαδρομή</a><a class="next" href="02.html"><small>Μάθημα 2 &#8594;</small>Τι είναι αλγόριθμος</a></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
 <script>
 (function(){
   var CARDS = [{"term": "Πρόβλημα", "def": "Με τον όρο Πρόβλημα εννοείται μια κατάσταση η οποία χρήζει αντιμετώπισης, απαιτεί λύση, η δε λύση της δεν είναι γνωστή, ούτε προφανής.", "ref": "Σχολικό βιβλίο, §1.1"}, {"term": "δεδομένο", "def": "Με τον όρο δεδομένο δηλώνεται οποιοδήποτε στοιχείο μπορεί να γίνει αντιληπτό από έναν τουλάχιστον παρατηρητή με μία από τις πέντε αισθήσεις του.", "ref": "Σχολικό βιβλίο, §1.2"}, {"term": "πληροφορία", "def": "Με τον όρο πληροφορία αναφέρεται οποιοδήποτε γνωσιακό στοιχείο προέρχεται από επεξεργασία δεδομένων.", "ref": "Σχολικό βιβλίο, §1.2"}, {"term": "επεξεργασία δεδομένων", "def": "Ο όρος επεξεργασία δεδομένων δηλώνει εκείνη τη διαδικασία κατά την οποία ένας \"μηχανισμός\" δέχεται δεδομένα, τα επεξεργάζεται σύμφωνα με έναν προκαθορισμένο τρόπο και αποδίδει πληροφορίες.", "ref": "Σχολικό βιβλίο, §1.2"}, {"term": "δομή ενός προβλήματος", "def": "Με τον όρο δομή ενός προβλήματος αναφερόμαστε στα συστατικά του μέρη, στα επιμέρους τμήματα που το αποτελούν καθώς επίσης και στον τρόπο που αυτά τα μέρη συνδέονται μεταξύ τους.", "ref": "Σχολικό βιβλίο, §1.3"}, {"term": "Κατανόηση", "def": "Κατανόηση : απαιτείται η σωστή και πλήρης αποσαφήνιση των δεδομένων και των ζητούμενων του προβλήματος.", "ref": "Σύνοψη"}, {"term": "Ανάλυση", "def": "Ανάλυση : το αρχικό πρόβλημα διασπάται σε άλλα επιμέρους απλούστερα προβλήματα.", "ref": "Σύνοψη"}, {"term": "Επίλυση", "def": "Επίλυση : υλοποιείται η λύση του προβλήματος, μέσω της λύσης των επιμέρους προβλημάτων.", "ref": "Σύνοψη"}];
@@ -559,9 +665,9 @@ body::before{background:var(--ground)}
       score.hidden = false;
       score.innerHTML = '';
       var t = document.createElement('span');
-      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? ' · Τέλεια!' : ok >= items.length * 0.7 ? ' · Πολύ καλά' : ' · Ξαναδιάβασε τη θεωρία');
+      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? '. Τέλεια!' : ok >= items.length * 0.7 ? '. Πολύ καλά.' : '. Ξαναδιάβασε τη θεωρία.');
       var r = document.createElement('button'); r.type = 'button'; r.className = 'btn'; r.textContent = 'Ξανά από την αρχή';
-      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); }); update(); };
+      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); var w = it.querySelector('.qwhy'); if (w) w.remove(); }); update(); };
       score.append(t, r);
     }
     items.forEach(function(it){
@@ -575,6 +681,7 @@ body::before{background:var(--ground)}
           var f = document.createElement('span'); f.className = 'fb';
           f.textContent = v === ans ? '✓ Σωστά' : '✗ Η σωστή απάντηση είναι: ' + (it.querySelector('.qb button[data-v="' + ans + '"]') || {}).textContent;
           it.appendChild(f);
+          if (v !== ans && it.getAttribute('data-why')){ var w = document.createElement('p'); w.className = 'qwhy'; w.textContent = it.getAttribute('data-why'); it.appendChild(w); }
           update();
         });
       });
@@ -600,6 +707,323 @@ body::before{background:var(--ground)}
     pos = 0; show();
   };
   show();
+})();
+</script>
+<script>
+(function(){
+  var BANK = {"lesson": 1, "draw": {"tf_practiced": 5, "tf_new": 5, "fill": 2, "mc": 4, "mc_algo": 0, "match": 1, "match_items": 5, "num": 0}, "tf_new": [{"s": "Ένα πρόβλημα μπορεί να παρουσιαστεί με οποιαδήποτε μορφή, αρκεί να γίνεται αντιληπτό από μία από τις πέντε ανθρώπινες αισθήσεις.", "a": "Σ", "see": ["#s-1-2", "Κατανόηση προβλήματος"]}, {"s": "Η παρερμηνεία ενός προβλήματος είναι αδύνατη όταν τηρούνται όλοι οι λεξικολογικοί και συντακτικοί κανόνες.", "a": "Λ", "see": ["#s-1-2", "Κατανόηση προβλήματος"]}, {"s": "Το συνηθέστερο μέσο για τη διατύπωση ενός προβλήματος είναι ο λόγος, προφορικός ή γραπτός.", "a": "Σ", "see": ["#s-1-2", "Κατανόηση προβλήματος"]}, {"s": "Ο υπολογιστής είναι ο μοναδικός «μηχανισμός» επεξεργασίας δεδομένων.", "a": "Λ", "see": ["#s-1-2", "Κατανόηση προβλήματος"]}, {"s": "Μια κατάσταση της οποίας η λύση είναι προφανής δεν είναι πρόβλημα κατά τον ορισμό του βιβλίου.", "a": "Σ", "see": ["#s-1-1", "Τι είναι πρόβλημα"]}, {"s": "Η ανάλυση ενός προβλήματος σε απλούστερα σταματά πάντα στο δεύτερο επίπεδο.", "a": "Λ", "see": ["#s-1-3", "Δομή προβλήματος"]}, {"s": "Στη διαγραμματική αναπαράσταση, κάθε πρόβλημα αναπαρίσταται με ένα ορθογώνιο παραλληλόγραμμο.", "a": "Σ", "see": ["#s-1-3", "Δομή προβλήματος"]}, {"s": "Τα απλούστερα προβλήματα στα οποία αναλύεται ένα πρόβλημα σχεδιάζονται ένα επίπεδο πιο ψηλά από αυτό.", "a": "Λ", "see": ["#s-1-3", "Δομή προβλήματος"]}, {"s": "Η δυσκολία αντιμετώπισης ενός προβλήματος ελαττώνεται όσο προχωράει η ανάλυσή του σε απλούστερα προβλήματα.", "a": "Σ", "see": ["#s-1-3", "Δομή προβλήματος"]}, {"s": "Η δομή ενός προβλήματος περιλαμβάνει και τον τρόπο που τα μέρη του συνδέονται μεταξύ τους.", "a": "Σ", "see": ["#s-1-3", "Δομή προβλήματος"]}, {"s": "Τα ζητούμενα ενός προβλήματος είναι πάντα φανερά από την εκφώνησή του.", "a": "Λ", "see": ["#s-1-4", "Καθορισμός απαιτήσεων"]}, {"s": "Οι ερωτήσεις για να ξεκαθαρίσουν τα ζητούμενα μπορεί να απευθύνονται και στον εαυτό μας.", "a": "Σ", "see": ["#s-1-4", "Καθορισμός απαιτήσεων"]}, {"s": "Σε πολλά προβλήματα τα δεδομένα πρέπει να «ανακαλυφθούν» μέσα στα λεγόμενα του προβλήματος.", "a": "Σ", "see": ["#s-1-4", "Καθορισμός απαιτήσεων"]}, {"s": "Υπάρχει μεθοδολογία για τον εντοπισμό των ζητούμενων ενός προβλήματος, αλλά όχι για τα δεδομένα.", "a": "Λ", "see": ["#s-1-4", "Καθορισμός απαιτήσεων"]}], "fill": [{"t": "Με τον όρο Πρόβλημα εννοείται μια κατάσταση η οποία χρήζει [αντιμετώπισης|ανάλυσης|προγραμματισμού], απαιτεί [λύση|υπολογιστή|δεδομένα], η δε λύση της δεν είναι [γνωστή|σωστή|μοναδική], ούτε [προφανής|εφικτή|δύσκολη].", "see": ["#s-1-1", "Τι είναι πρόβλημα"]}, {"t": "Με τον όρο δεδομένο δηλώνεται οποιοδήποτε στοιχείο μπορεί να γίνει [αντιληπτό|μετρήσιμο|επεξεργάσιμο] από έναν τουλάχιστον [παρατηρητή|υπολογιστή|προγραμματιστή] με μία από τις πέντε [αισθήσεις|μεθόδους|συσκευές] του.", "see": ["#s-1-2", "Κατανόηση προβλήματος"]}, {"t": "Με τον όρο πληροφορία αναφέρεται οποιοδήποτε [γνωσιακό|αριθμητικό|φυσικό] στοιχείο προέρχεται από [επεξεργασία|συλλογή|παρατήρηση] δεδομένων.", "see": ["#s-1-2", "Κατανόηση προβλήματος"]}, {"t": "Ο όρος επεξεργασία δεδομένων δηλώνει εκείνη τη διαδικασία κατά την οποία ένας \"μηχανισμός\" δέχεται [δεδομένα|πληροφορίες|εντολές], τα επεξεργάζεται σύμφωνα με έναν [προκαθορισμένο|τυχαίο|οποιονδήποτε] τρόπο και αποδίδει [πληροφορίες|δεδομένα|προβλήματα].", "see": ["#s-1-2", "Κατανόηση προβλήματος"]}, {"t": "Με τον όρο δομή ενός προβλήματος αναφερόμαστε στα [συστατικά|αριθμητικά|ζητούμενα] του μέρη, στα επιμέρους τμήματα που το αποτελούν καθώς επίσης και στον [τρόπο|χρόνο|τόπο] που αυτά τα μέρη συνδέονται μεταξύ τους.", "see": ["#s-1-3", "Δομή προβλήματος"]}, {"t": "Η κατανόηση ενός προβλήματος αποτελεί συνάρτηση δύο παραγόντων, της σωστής [διατύπωσης|επίλυσης|ανάλυσης] εκ μέρους του δημιουργού του και της αντίστοιχα σωστής [ερμηνείας|διατύπωσης|επίλυσης] από τη μεριά εκείνου που καλείται να το αντιμετωπίσει.", "see": ["#s-1-2", "Κατανόηση προβλήματος"]}], "mc": [{"q": "Ποιο από τα παρακάτω ΔΕΝ είναι στοιχείο του ορισμού του προβλήματος;", "opts": ["Αφορά υποχρεωτικά υπολογισμούς.", "Χρήζει αντιμετώπισης.", "Απαιτεί λύση.", "Η λύση του δεν είναι γνωστή ούτε προφανής."], "a": 0, "see": ["#s-1-1", "Τι είναι πρόβλημα"]}, {"q": "Από ποιους δύο παράγοντες εξαρτάται η κατανόηση ενός προβλήματος;", "opts": ["Από τη σωστή διατύπωση και τη σωστή ερμηνεία.", "Από τα δεδομένα και τα ζητούμενα.", "Από την ανάλυση και την επίλυση.", "Από τον υπολογιστή και τον προγραμματιστή."], "a": 0, "see": ["#s-1-2", "Κατανόηση προβλήματος"]}, {"q": "«Ο μέσος όρος του τμήματος στη Φυσική είναι 14,2.» Τι είναι αυτό;", "opts": ["Πληροφορία, γιατί προέρχεται από επεξεργασία δεδομένων.", "Δεδομένο, γιατί είναι αριθμός.", "Δεδομένο, γιατί το διαβάζουμε γραμμένο.", "Ούτε δεδομένο ούτε πληροφορία."], "a": 0, "see": ["#s-1-2", "Κατανόηση προβλήματος"]}, {"q": "«Παραγγέλνω δύο πίτσες με μανιτάρια και πιπεριές.» Γιατί η φράση οδήγησε σε λάθος παράδοση;", "opts": ["Το «και» μπορεί να ενώνει υλικά της ίδιας πίτσας ή δύο διαφορετικές πίτσες.", "Λείπει η τιμή της πίτσας.", "Δεν αναφέρεται η διεύθυνση παράδοσης.", "Η φράση έχει ορθογραφικά λάθη."], "a": 0, "see": ["#s-1-2", "Κατανόηση προβλήματος"]}, {"q": "Ποια είναι η σωστή σειρά των σταδίων αντιμετώπισης ενός προβλήματος;", "opts": ["Κατανόηση, ανάλυση, επίλυση", "Ανάλυση, κατανόηση, επίλυση", "Κατανόηση, επίλυση, ανάλυση", "Επίλυση, ανάλυση, κατανόηση"], "a": 0, "see": ["#s-1-4", "Καθορισμός απαιτήσεων"]}, {"q": "Στη διαγραμματική αναπαράσταση της δομής, πού σχεδιάζονται τα απλούστερα προβλήματα στα οποία αναλύεται ένα πρόβλημα;", "opts": ["Ένα επίπεδο πιο κάτω από αυτό.", "Στο ίδιο επίπεδο, δίπλα του.", "Ένα επίπεδο πιο πάνω από αυτό.", "Μέσα στο ίδιο ορθογώνιο."], "a": 0, "see": ["#s-1-3", "Δομή προβλήματος"]}, {"q": "Πότε σταματά η ανάλυση ενός προβλήματος σε απλούστερα;", "opts": ["Όταν τα επιμέρους προβλήματα θεωρηθούν αρκετά απλά για να αντιμετωπιστούν.", "Πάντα στο τρίτο επίπεδο.", "Όταν φτάσουμε τα 10 υποπροβλήματα.", "Ποτέ. Η ανάλυση συνεχίζεται επ’ άπειρον."], "a": 0, "see": ["#s-1-3", "Δομή προβλήματος"]}, {"q": "«Ποιος είναι ο μεγαλύτερος ποταμός του κόσμου;» Τι πρέπει να κάνουμε πριν απαντήσουμε;", "opts": ["Να ρωτήσουμε με ποιο κριτήριο μετράμε το «μεγαλύτερος».", "Να απαντήσουμε αμέσως «ο Νείλος».", "Να γράψουμε πρόγραμμα στον υπολογιστή.", "Να σχεδιάσουμε τη δομή του προβλήματος."], "a": 0, "see": ["#s-1-4", "Καθορισμός απαιτήσεων"]}, {"q": "Τι ισχύει για τον εντοπισμό των δεδομένων ενός προβλήματος;", "opts": ["Δεν υπάρχει μεθοδολογία. Χρειάζεται προσοχή, συγκέντρωση και σκέψη.", "Υπάρχει συγκεκριμένη μεθοδολογία σε βήματα.", "Δεδομένα είναι μόνο οι αριθμοί της εκφώνησης.", "Τα δεδομένα τα βρίσκει πάντα ο υπολογιστής."], "a": 0, "see": ["#s-1-4", "Καθορισμός απαιτήσεων"]}], "mc_algo": [], "match": [{"q": "Δεδομένο ή πληροφορία;", "opts": ["Δεδομένο", "Πληροφορία"], "see": ["#s-1-2", "Κατανόηση προβλήματος"], "items": [["Ο αριθμός των θεατών σε κάθε αγώνα της σεζόν", "Δεδομένο"], ["«Ο αγώνας με τους περισσότερους θεατές ήταν το ντέρμπι»", "Πληροφορία"], ["Η τιμή κάθε προϊόντος στο ράφι του σούπερ μάρκετ", "Δεδομένο"], ["«Το καλάθι μας κόστισε 12% λιγότερο από τον προηγούμενο μήνα»", "Πληροφορία"], ["Οι ώρες που κοιμήθηκες κάθε βράδυ αυτή την εβδομάδα", "Δεδομένο"], ["«Κατά μέσο όρο κοιμήθηκες 6,5 ώρες»", "Πληροφορία"], ["Τα likes κάθε ανάρτησης ενός λογαριασμού", "Δεδομένο"], ["«Η πιο δημοφιλής ανάρτηση ήταν το βίντεο της εκδρομής»", "Πληροφορία"]]}, {"q": "Σε ποιο στάδιο αντιμετώπισης του προβλήματος ανήκει κάθε ενέργεια;", "opts": ["Κατανόηση", "Ανάλυση", "Επίλυση"], "see": ["#s-1-4", "Καθορισμός απαιτήσεων"], "items": [["Ρωτάμε τον προπονητή τι εννοεί «αποτελεσματικός παίκτης».", "Κατανόηση"], ["Χωρίζουμε την «οργάνωση εκδρομής» σε μεταφορά, διαμονή και πρόγραμμα.", "Ανάλυση"], ["Κλείνουμε το πούλμαν και τα δωμάτια.", "Επίλυση"], ["Καταγράφουμε τι μας δίνεται και τι μας ζητείται.", "Κατανόηση"], ["Χωρίζουμε την εξυπηρέτηση στην καντίνα σε παραγγελία, πληρωμή και παραλαβή.", "Ανάλυση"], ["Βάζουμε POS στο ταμείο και ξεχωριστό σημείο παραλαβής.", "Επίλυση"], ["Ξεκαθαρίζουμε ότι «χωρίς ουρά» σημαίνει αναμονή κάτω από 5 λεπτά.", "Κατανόηση"]]}], "num": [], "tf_practiced": [{"s": "Ένα πρόβλημα αφορά πάντα μαθηματικούς υπολογισμούς.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Για να είναι κάτι πρόβλημα, η λύση του δεν πρέπει να είναι γνωστή ούτε προφανής.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η κατανόηση ενός προβλήματος εξαρτάται μόνο από τη διατύπωσή του.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η πληροφορία προέρχεται από επεξεργασία δεδομένων.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Υπάρχει συγκεκριμένη μεθοδολογία για τον προσδιορισμό των δεδομένων ενός προβλήματος.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Ο «μηχανισμός» επεξεργασίας δεδομένων μπορεί να είναι και ο ανθρώπινος εγκέφαλος.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η ανάλυση ενός προβλήματος προηγείται της κατανόησής του.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}], "title": "Η έννοια του προβλήματος"};
+  // Ρυθμίσεις: στην τελική εφαρμογή θα τις ορίζει ο καθηγητής.
+  var CONFIG = { cooldownMin: 5, timeLimitMin: 0, lockHomework: false, revealAnswers: false };
+  var KEY = 'synapsi.test.L' + BANK.lesson;
+  var $ = function(id){ return document.getElementById(id); };
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || { attempts: [] }; } catch(e){ return { attempts: [] }; } }
+  function save(st){ try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e){} }
+  var state = load();
+  function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function pick(a, n){ return shuffle(a || []).slice(0, Math.min(n, (a || []).length)); }
+  function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function code(txt){ var p = el('pre', 'code'); p.textContent = txt; return p; }
+  function fmt(x){ return (Math.round(x * 10) / 10).toFixed(1).replace('.', ','); }
+  function seeLink(see){ var a = el('a', '', see[1]); a.href = see[0]; return a; }
+  var LET = ['α', 'β', 'γ', 'δ', 'ε', 'στ'];
+  var running = false, items = [], timerId = null, tick = null;
+
+  // ---------- homework lock (parameter) ----------
+  function applyLock(){
+    var hw = document.querySelector('.hwsec');
+    if (!hw || !CONFIG.lockHomework) return;
+    var done = state.attempts.some(function(a){ return a.score != null; });
+    hw.querySelectorAll(':scope > .q, :scope > .exhead').forEach(function(q){ q.hidden = !done; });
+    var note = hw.querySelector('.hwlock');
+    if (!done && !note){ note = el('p', 'hwlock', 'Οι ασκήσεις για το σπίτι ανοίγουν μόλις κάνεις το Σύντομο Τεστ Μαθήματος.'); hw.appendChild(note); }
+    if (done && note) note.remove();
+  }
+
+  // ---------- «Η πρόοδός μου» ----------
+  function progress(){
+    $('pg-l').textContent = 'Μάθημα ' + BANK.lesson;
+    $('pg-t').textContent = BANK.title || '';
+    $('pg-cd').textContent = CONFIG.cooldownMin + ' λεπτά';
+    var done = state.attempts.filter(function(a){ return a.score != null; });
+    var box = $('t-stats'); box.innerHTML = '';
+    if (!done.length){
+      $('pg-score').textContent = '–';
+      $('pg-note').textContent = 'Δεν έχεις κάνει ακόμα το τεστ.';
+    } else {
+      var best = Math.max.apply(null, done.map(function(a){ return a.score; }));
+      var last = done[done.length - 1];
+      $('pg-score').textContent = fmt(last.score) + ' / 10';
+      $('pg-note').textContent = '';
+      [['Καλύτερη', fmt(best) + '/10'], ['Τελευταία', fmt(last.score) + '/10'], ['Προσπάθειες', String(state.attempts.length)]].forEach(function(r, i){
+        if (i) box.appendChild(el('span', 'sep', '|'));
+        box.append(r[0] + ': '); box.appendChild(el('b', '', r[1]));
+      });
+    }
+    chart(done);
+    var tb = $('pg-list'); tb.innerHTML = '';
+    $('pg-tab').parentNode.hidden = !state.attempts.length;
+    state.attempts.slice().reverse().forEach(function(a){
+      var d = new Date(a.start), tr = el('tr');
+      tr.appendChild(el('td', '', d.getDate() + '/' + (d.getMonth() + 1)));
+      tr.appendChild(el('td', '', d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes()));
+      if (a.score != null){ tr.appendChild(el('td', '', fmt(a.score) + '/10')); tr.appendChild(el('td', '', a.got + ' από ' + a.tot)); }
+      else { var td = el('td', 'na', 'δεν υποβλήθηκε'); td.colSpan = 2; tr.appendChild(td); }
+      tb.appendChild(tr);
+    });
+    $('pg-again').textContent = state.attempts.length ? 'Νέα προσπάθεια' : 'Έναρξη τεστ';
+  }
+  function chart(done){
+    var box = $('pg-chart'); box.innerHTML = ''; box.hidden = !done.length;
+    if (!done.length) return;
+    var W = 320, H = 160, L = 26, R = 14, T = 14, B = 26, NS = 'http://www.w3.org/2000/svg';
+    function mk(t, a, p){ var e = document.createElementNS(NS, t); for (var k in a) e.setAttribute(k, a[k]); (p || svg).appendChild(e); return e; }
+    var svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', 'Βαθμός ανά προσπάθεια: ' + done.map(function(a){ return fmt(a.score); }).join(', '));
+    var x = function(i){ return done.length === 1 ? L + (W - L - R) / 2 : L + i * (W - L - R) / (done.length - 1); };
+    var y = function(v){ return T + (10 - v) * (H - T - B) / 10; };
+    var g = mk('g', { 'class': 'grid' }), ax = mk('g', { 'class': 'ax' });
+    [0, 5].forEach(function(v){ mk('line', { x1: L, x2: W - R, y1: y(v), y2: y(v) }, g); var t = mk('text', { x: L - 6, y: y(v) + 4, 'text-anchor': 'end' }, ax); t.textContent = v; });
+    mk('line', { 'class': 'goal', x1: L, x2: W - R, y1: y(10), y2: y(10) });
+    var gt = mk('text', { 'class': 'goalt', x: L - 6, y: y(10) + 4, 'text-anchor': 'end' }); gt.textContent = '10';
+    var prevDay = '', lastX = -99;
+    done.forEach(function(a, i){
+      var d = new Date(a.start), day = d.getDate() + '/' + (d.getMonth() + 1);
+      if (day === prevDay || x(i) - lastX < 34) return;
+      prevDay = day; lastX = x(i);
+      var t = mk('text', { x: x(i), y: H - 8, 'text-anchor': 'middle' }, ax); t.textContent = day;
+    });
+    if (done.length > 1) mk('polyline', { 'class': 'ln', points: done.map(function(a, i){ return x(i) + ',' + y(a.score); }).join(' ') });
+    done.forEach(function(a, i){
+      mk('circle', { 'class': 'pt', cx: x(i), cy: y(a.score), r: 4.5 });
+      var h = mk('circle', { 'class': 'hit', cx: x(i), cy: y(a.score), r: 14, tabindex: 0 });
+      var d = new Date(a.start), txt = d.getDate() + '/' + (d.getMonth() + 1) + ', ' + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes() + ': ' + fmt(a.score) + '/10 (' + a.got + ' από ' + a.tot + ')';
+      var tt = document.createElementNS(NS, 'title'); tt.textContent = txt; h.appendChild(tt);
+    });
+    var la = done[done.length - 1], lt = mk('text', { 'class': 'lbl', x: x(done.length - 1), y: y(la.score) - 10, 'text-anchor': done.length === 1 ? 'middle' : 'end' }); lt.textContent = fmt(la.score);
+    box.appendChild(svg);
+  }
+  function lastCard(){
+    var done = state.attempts.filter(function(a){ return a.score != null; });
+    var c = $('t-last'); c.hidden = !done.length; if (!done.length) return;
+    var a = done[done.length - 1];
+    $('t-lastscore').textContent = fmt(a.score) + ' / 10';
+    $('t-lastnote').textContent = a.got + ' από ' + a.tot + ' μονάδες. ' + (a.score >= 10 ? 'Τέλεια!' : a.score >= 8 ? 'Πολύ καλά. Δες τα λάθη σου και ξαναδοκίμασε για το 10.' : 'Ξαναδιάβασε τις σημειώσεις και δοκίμασε πάλι.');
+  }
+  var QUOTES = [{"q": "Επανάληψις μήτηρ πάσης μαθήσεως.", "a": "Αρχαίο ρητό"}, {"q": "Είμαστε αυτό που κάνουμε κατ’ επανάληψη. Η αριστεία, λοιπόν, δεν είναι πράξη, αλλά συνήθεια.", "a": "Will Durant, πάνω σε ιδέα του Αριστοτέλη"}, {"q": "Η σταγόνα τρυπά την πέτρα.", "a": "Οβίδιος"}, {"q": "Η επανάληψη είναι ο πατέρας της μάθησης, η μητέρα της μνήμης και ο οδηγός της ολοκλήρωσης.", "a": "Zig Ziglar"}, {"q": "Η ικανότητα αποκτάται με την επανάληψη.", "a": "Shinichi Suzuki"}, {"q": "Δεν φοβάμαι αυτόν που έχει εξασκηθεί σε 10.000 κλοτσιές μία φορά, αλλά αυτόν που έχει εξασκηθεί σε μία κλοτσιά 10.000 φορές.", "a": "Bruce Lee"}, {"q": "Η εξάσκηση δεν σε κάνει τέλειο. Η τέλεια εξάσκηση σε κάνει τέλειο.", "a": "Vince Lombardi"}, {"q": "Η μεγαλύτερη δόξα μας δεν είναι ότι δεν πέφτουμε ποτέ, αλλά ότι σηκωνόμαστε κάθε φορά που πέφτουμε.", "a": "Αποδίδεται στον Κομφούκιο"}, {"q": "Δεν έχει σημασία πόσο αργά πηγαίνεις, αρκεί να μη σταματήσεις.", "a": "Αποδίδεται στον Κομφούκιο"}, {"q": "Δοκίμασε ξανά. Απότυχε ξανά. Απότυχε καλύτερα.", "a": "Samuel Beckett"}, {"q": "Μην υποχωρείς ποτέ, ποτέ, ποτέ.", "a": "Winston Churchill"}, {"q": "Δεν είναι ότι είμαι τόσο έξυπνος. Απλώς μένω με τα προβλήματα περισσότερο.", "a": "Αποδίδεται στον Albert Einstein"}, {"q": "Η ενέργεια και η επιμονή κατακτούν τα πάντα.", "a": "Benjamin Franklin"}, {"q": "Τα μεγάλα έργα δεν γίνονται με τη δύναμη, αλλά με την επιμονή.", "a": "Samuel Johnson"}, {"q": "Δεν απέτυχα. Απλώς βρήκα 10.000 τρόπους που δεν λειτουργούν.", "a": "Αποδίδεται στον Thomas Edison"}, {"q": "Χάνεις το 100% των βολών που δεν επιχειρείς.", "a": "Wayne Gretzky"}, {"q": "Έχω αποτύχει ξανά και ξανά και ξανά στη ζωή μου. Και γι’ αυτό πετυχαίνω.", "a": "Michael Jordan"}, {"q": "Η αποτυχία είναι απλώς η ευκαιρία να ξεκινήσεις ξανά, αυτή τη φορά πιο έξυπνα.", "a": "Henry Ford"}, {"q": "Ένα ταξίδι χιλίων μιλίων αρχίζει με ένα βήμα.", "a": "Λάο Τσε"}, {"q": "Αν δεν μπορείς να πετάξεις, τρέξε. Αν δεν μπορείς να τρέξεις, περπάτα. Αν δεν μπορείς να περπατήσεις, σύρσου. Ό,τι κι αν κάνεις, συνέχισε να προχωράς μπροστά.", "a": "Martin Luther King Jr."}, {"q": "Η επιτυχία είναι το άθροισμα μικρών προσπαθειών που επαναλαμβάνονται μέρα με τη μέρα.", "a": "Robert Collier"}, {"q": "Το θάρρος δεν βρυχάται πάντα. Μερικές φορές είναι η ήσυχη φωνή στο τέλος της ημέρας που λέει: «Θα προσπαθήσω ξανά αύριο».", "a": "Mary Anne Radmacher"}, {"q": "Η θέληση για νίκη δεν είναι τίποτα χωρίς τη θέληση για προετοιμασία.", "a": "Juma Ikangaa"}, {"q": "Η υπομονή και η επιμονή έχουν μαγική δύναμη: μπροστά τους οι δυσκολίες εξαφανίζονται και τα εμπόδια χάνονται.", "a": "Αποδίδεται στον John Quincy Adams"}];
+  function quote(){
+    if (!QUOTES.length){ $('pg-quote').hidden = true; return; }
+    var k = Math.floor(Math.random() * QUOTES.length);
+    $('pg-q').textContent = '«' + QUOTES[k].q + '»'; $('pg-qa').textContent = QUOTES[k].a;
+  }
+  function showProgress(on){
+    $('progress').hidden = !on; document.body.classList.toggle('pg-open', on);
+    if (on){ progress(); quote(); refreshStart(); $('pg-close').focus(); }
+  }
+  $('pg-close').addEventListener('click', function(){ showProgress(false); if (location.hash === '#progress') location.hash = 's-test'; });
+  function route(){
+    var h = location.hash;
+    if (h === '#progress'){ showProgress(true); return; }
+    if (!$('progress').hidden) showProgress(false);
+    if (h === '#test-start'){
+      var sec = $('s-test'); if (sec) sec.scrollIntoView({ block: 'start' });
+      if (!running && nextAllowed() <= Date.now()) start();
+    }
+  }
+  window.addEventListener('hashchange', route);
+  $('pg-alllink').addEventListener('click', function(e){
+    if (/sinapsi\.gr$|github\.io$/.test(location.hostname)) return;
+    e.preventDefault(); $('pg-allnote').hidden = false;
+  });
+  $('pg-again').addEventListener('click', function(e){
+    e.preventDefault(); if ($('pg-again').classList.contains('off')) return;
+    if (location.hash === '#test-start') route(); else location.hash = 'test-start';
+  });
+
+  // ---------- start button and cooldown ----------
+  function nextAllowed(){
+    var a = state.attempts[state.attempts.length - 1];
+    if (!a) return 0;
+    return (a.end || a.start) + CONFIG.cooldownMin * 60000;
+  }
+  function refreshStart(){
+    var btn = $('t-start'), w = $('t-wait'), again = $('pg-again'), pw = $('pg-wait');
+    var left = nextAllowed() - Date.now();
+    var label = state.attempts.length ? 'Νέα προσπάθεια' : 'Έναρξη τεστ';
+    btn.textContent = label;
+    if (running){ btn.hidden = true; w.hidden = true; again.classList.add('off'); return; }
+    btn.hidden = false;
+    if (left > 0){
+      var m = Math.floor(left / 60000), s = Math.ceil(left % 60000 / 1000); if (s === 60){ m++; s = 0; }
+      var txt = 'Νέα προσπάθεια σε ' + m + ':' + (s < 10 ? '0' : '') + s + '. Στο μεταξύ ξαναδές τις κάρτες και τα λυμένα.';
+      btn.disabled = true; w.hidden = false; w.textContent = txt;
+      again.classList.add('off'); again.setAttribute('aria-disabled', 'true'); pw.hidden = false; pw.textContent = txt;
+      if (!tick) tick = setInterval(refreshStart, 1000);
+    } else {
+      btn.disabled = false; w.hidden = true;
+      again.classList.remove('off'); again.removeAttribute('aria-disabled'); pw.hidden = true;
+      if (tick){ clearInterval(tick); tick = null; }
+    }
+  }
+
+  // ---------- building a test ----------
+  function addPart(body, title, note){ var h = el('h3', 'tpart', title); if (note) h.appendChild(el('small', '', note)); body.appendChild(h); }
+  function choiceBlock(q, options, correct, two){
+    var wrap = el('div', 'topts' + (two ? ' two' : ''));
+    var it = { pts: 1, box: q, val: null, check: function(){
+      var ok = it.val === correct;
+      wrap.querySelectorAll('button').forEach(function(b, i){
+        if (i === it.val) b.classList.add(ok ? 'right' : 'wrong');
+        else if (i === correct && CONFIG.revealAnswers) b.classList.add('right');
+      });
+      return { got: ok ? 1 : 0, right: options[correct].text ? 'Σωστή απάντηση: ' + options[correct].text : 'Σωστή είναι η ' + options[correct].letter + '.' };
+    }, answered: function(){ return it.val != null; } };
+    options.forEach(function(o, i){
+      var b = el('button'); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+      if (o.letter) b.appendChild(el('span', 'ol', o.letter + '.'));
+      if (o.code) b.appendChild(code(o.code)); else b.appendChild(el('span', '', o.text));
+      b.addEventListener('click', function(){ if (!running) return; it.val = i; wrap.querySelectorAll('button').forEach(function(x){ x.classList.toggle('sel', x === b); x.setAttribute('aria-pressed', String(x === b)); }); });
+      wrap.appendChild(b);
+    });
+    q.appendChild(wrap);
+    return it;
+  }
+  function newQ(body, n, text){ var q = el('div', 'tq'); q.appendChild(el('span', 'tn', 'Ερώτηση ' + n)); if (text) q.appendChild(el('p', '', text)); body.appendChild(q); return q; }
+  function build(){
+    var D = BANK.draw, body = $('t-body'); body.innerHTML = ''; items = [];
+    var n = 0;
+    if (CONFIG.timeLimitMin > 0){ var tm = el('div', 'ttimer'); tm.id = 't-timer'; body.appendChild(tm); }
+    // Α. Σωστό ή Λάθος
+    var tf = shuffle(pick(BANK.tf_practiced, D.tf_practiced).concat(pick(BANK.tf_new, D.tf_new)));
+    if (tf.length){
+      addPart(body, 'Α. Σωστό ή Λάθος', tf.length + ' μονάδες');
+      tf.forEach(function(t){
+        var q = newQ(body, ++n, t.s);
+        var it = choiceBlock(q, [{ text: 'Σωστό' }, { text: 'Λάθος' }], t.a === 'Σ' ? 0 : 1, true);
+        it.see = t.see; items.push(it);
+      });
+    }
+    // Β. Συμπλήρωση κενών
+    var fills = pick(BANK.fill, D.fill);
+    if (fills.length){
+      var blanks = fills.reduce(function(s, f){ return s + (f.t.match(/\[/g) || []).length; }, 0);
+      addPart(body, 'Β. Συμπλήρωση κενών', blanks + ' μονάδες');
+      fills.forEach(function(f){
+        var q = newQ(body, ++n, null); q.firstChild.textContent += ': διάλεξε τη σωστή λέξη σε κάθε κενό.';
+        var p = el('p', 'tfill'); var sels = [];
+        f.t.split(/(\[[^\]]+\])/).forEach(function(part){
+          if (part.charAt(0) !== '['){ p.append(part); return; }
+          var opts = part.slice(1, -1).split('|');
+          var s = el('select'); s.setAttribute('aria-label', 'Κενό');
+          var o0 = el('option', '', '…'); o0.value = ''; s.appendChild(o0);
+          shuffle(opts).forEach(function(o){ var x = el('option', '', o); x.value = o; s.appendChild(x); });
+          s._right = opts[0]; sels.push(s); p.appendChild(s);
+        });
+        q.appendChild(p);
+        items.push({ pts: sels.length, box: q, see: f.see, check: function(){
+          var g = 0, miss = [];
+          sels.forEach(function(s){ var ok = s.value === s._right; s.classList.add(ok ? 'right' : 'wrong'); s.disabled = true; if (ok) g++; else miss.push(s._right); });
+          return { got: g, right: 'Σωστά: ' + miss.join(', ') };
+        }, answered: function(){ return sels.every(function(s){ return s.value; }); } });
+      });
+    }
+    // Γ. Πολλαπλής επιλογής
+    var mcs = pick(BANK.mc, D.mc).concat(pick(BANK.mc_algo, D.mc_algo));
+    if (mcs.length){
+      addPart(body, 'Γ. Πολλαπλής επιλογής', mcs.length + ' μονάδες');
+      mcs.forEach(function(m){
+        var q = newQ(body, ++n, m.q);
+        var order = shuffle(m.opts.map(function(_, i){ return i; }));
+        var options = order.map(function(i, k){ return m.code ? { letter: LET[k], code: m.opts[i] } : { letter: LET[k], text: m.opts[i] }; });
+        var it = choiceBlock(q, options, order.indexOf(m.a));
+        it.see = m.see; it.why = m.why; items.push(it);
+      });
+    }
+    // Δ. Αντιστοίχιση
+    pick(BANK.match, D.match).forEach(function(m){
+      var rows = pick(m.items, D.match_items);
+      addPart(body, 'Δ. Αντιστοίχιση', rows.length + ' μονάδες');
+      var q = newQ(body, ++n, m.q);
+      var sels = [];
+      rows.forEach(function(r){
+        var row = el('div', 'tmrow');
+        row.appendChild(m.code ? el('code', '', r[0]) : el('span', '', r[0]));
+        var s = el('select'); s.setAttribute('aria-label', 'Απάντηση');
+        var o0 = el('option', '', 'Διάλεξε…'); o0.value = ''; s.appendChild(o0);
+        m.opts.forEach(function(o){ var x = el('option', '', o); x.value = o; s.appendChild(x); });
+        s._right = r[1]; sels.push(s); row.appendChild(s); q.appendChild(row);
+      });
+      items.push({ pts: sels.length, box: q, see: m.see, check: function(){
+        var g = 0, miss = [];
+        sels.forEach(function(s, i){ var ok = s.value === s._right; s.classList.add(ok ? 'right' : 'wrong'); s.disabled = true; if (ok) g++; else miss.push((i + 1) + 'η: ' + s._right); });
+        return { got: g, right: 'Σωστά: ' + miss.join(', ') };
+      }, answered: function(){ return sels.every(function(s){ return s.value; }); } });
+    });
+    // Ε. Πίνακας τιμών
+    var nums = pick(BANK.num, D.num);
+    if (nums.length){
+      addPart(body, 'Ε. Πίνακας τιμών', nums.length + ' μονάδες');
+      nums.forEach(function(x){
+        var v = x.variants[Math.floor(Math.random() * x.variants.length)];
+        var q = newQ(body, ++n, x.q);
+        q.appendChild(code(v.code)); q.appendChild(el('p', '', v.q));
+        var inp = el('input'); inp.type = 'text'; inp.setAttribute('inputmode', 'decimal'); inp.setAttribute('aria-label', 'Η απάντησή σου'); inp.autocomplete = 'off';
+        q.appendChild(inp);
+        items.push({ pts: 1, box: q, see: x.see, check: function(){
+          var a = inp.value.trim().replace(',', '.'), r = String(v.a);
+          var ok = a !== '' && (isFinite(a) && isFinite(r) ? Math.abs(parseFloat(a) - parseFloat(r)) < 1e-9 : a === r);
+          inp.classList.add(ok ? 'right' : 'wrong'); inp.disabled = true;
+          return { got: ok ? 1 : 0, right: 'Σωστή απάντηση: ' + r.replace('.', ',') };
+        }, answered: function(){ return inp.value.trim() !== ''; } });
+      });
+    }
+    var bar = el('div', 'tbar'); var sb = el('button', 'btn primary', 'Υποβολή'); sb.type = 'button'; sb.id = 't-submit';
+    var msg = el('span', 'tmsg'); bar.append(sb, msg); body.appendChild(bar);
+    var warned = false;
+    sb.addEventListener('click', function(){
+      var empty = items.filter(function(it){ return !it.answered(); }).length;
+      if (empty && !warned){ warned = true; msg.textContent = 'Έχεις ' + empty + (empty === 1 ? ' αναπάντητη ερώτηση' : ' αναπάντητες ερωτήσεις') + '. Πάτα ξανά «Υποβολή» για να τελειώσεις.'; return; }
+      finish();
+    });
+  }
+  function finish(){
+    if (!running) return;
+    running = false; if (timerId){ clearInterval(timerId); timerId = null; }
+    var got = 0, tot = 0;
+    items.forEach(function(it){
+      var r = it.check(); got += r.got; tot += it.pts;
+      var full = r.got === it.pts;
+      it.box.classList.add('done', full ? 'ok' : 'no');
+      var fb = el('p', 'tfb');
+      if (full) fb.textContent = '✓ Σωστά';
+      else {
+        fb.append((it.pts > 1 ? '✗ ' + r.got + ' από ' + it.pts + '. ' : '✗ Λάθος. ') + (CONFIG.revealAnswers ? r.right + ' ' : ''));
+        if (it.see){ fb.append('Ξαναδιάβασε: '); fb.appendChild(seeLink(it.see)); }
+        if (CONFIG.revealAnswers && it.why) fb.appendChild(el('span', 'why', it.why));
+      }
+      it.box.appendChild(fb);
+    });
+    var score = tot ? Math.round(got / tot * 100) / 10 : 0;
+    var a = state.attempts[state.attempts.length - 1]; a.end = Date.now(); a.score = score; a.got = got; a.tot = tot; save(state);
+    $('t-submit').parentNode.remove();
+    lastCard();
+    var tm = $('t-timer'); if (tm) tm.remove();
+    refreshStart(); applyLock();
+    $('t-last').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function start(){
+    if (running || nextAllowed() > Date.now()) return;
+    running = true;
+    state.attempts.push({ start: Date.now() }); save(state);
+    build(); $('t-body').hidden = false; refreshStart();
+    if (CONFIG.timeLimitMin > 0){
+      var endAt = Date.now() + CONFIG.timeLimitMin * 60000, t = $('t-timer');
+      var upd = function(){ var l = Math.max(0, endAt - Date.now()); var m = Math.floor(l / 60000), s = Math.floor(l % 60000 / 1000); t.textContent = '⏱ ' + m + ':' + (s < 10 ? '0' : '') + s; if (!l) finish(); };
+      upd(); timerId = setInterval(upd, 1000);
+    }
+    $('t-body').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  $('t-start').addEventListener('click', start);
+  lastCard(); refreshStart(); applyLock(); route();
 })();
 </script>
 <style id="kitcss">/*KIT>*//* ==== kit: θέμα, προβολή, «Δείξε λύση» ==== */

@@ -1,0 +1,402 @@
+<title>Διαγώνισμα 1 · Βασικό · Πληροφορική</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
+<style>
+/* Layout: one A4-like sheet centred on a cool ground; coloured callouts by role (ορισμός, ήξερες ότι, παγίδα, παράδειγμα) */
+:root{
+  --ground:#e9edf4; --paper:#ffffff; --ink:#172036; --muted:#5a6377; --line:#d9dfea; --soft:#f3f5f9;
+  --blue:#2457d6; --blue-bg:#e9efff; --teal:#0b7f72; --teal-bg:#e2f4f1;
+  --amber:#a65400; --amber-bg:#fff3df; --amber-line:#e2ad62;
+  --coral:#b93b12; --coral-bg:#fcebe4; --violet:#6534c9; --violet-bg:#efe8fd;
+  --s-blue:#2457d6; --s-teal:#0b8174; --s-violet:#6534c9; --s-ink:#172036; --on-solid:#ffffff; --on-solid-2:#d8e1ff;
+  --hero:#172036; --hero-fg:#ffffff; --hero-sub:#c4cef0; --hero-kick:#a9bcff;
+  --mark:#ffe28a;
+  --display:"Commissioner","Noto Sans",system-ui,sans-serif;
+  --body:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0 0 8px}
+
+/* Toolbar */
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:10px 0;background:var(--ground)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:3px}
+.seg button,.btn{font:600 13px/1 var(--body);border:0;background:none;color:var(--muted);padding:8px 13px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid)}
+.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.spacer{flex:1}
+#status{font-size:12.5px;color:var(--muted)}
+.edit-only{display:none}
+body.editing .edit-only{display:inline-block}
+body.editing .view-only{display:none}
+body.editing #doc{outline:2px dashed var(--blue);outline-offset:6px}
+body.editing #doc [contenteditable="false"]{cursor:default}
+
+/* Sheet */
+#doc{max-width:860px;margin:0 auto;background:var(--paper);border-radius:14px;padding:clamp(18px,4vw,44px);box-shadow:0 1px 2px rgba(10,20,40,.06),0 8px 30px rgba(10,20,40,.06)}
+body.student .teacher{display:none}
+
+.hero{background:var(--hero);color:var(--hero-fg);border-radius:14px;padding:22px 24px 24px;position:relative;overflow:hidden}
+.hero .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--hero-kick);font-weight:700}
+.hero h1{font-size:clamp(28px,5vw,40px);font-weight:800;margin:6px 0 8px;letter-spacing:-.01em}
+.hero .sub{color:var(--hero-sub);max-width:34em}
+.hero .sub b{color:var(--hero-fg)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.12);color:var(--hero-fg)}
+.hero .deco{position:absolute;right:-10px;top:-6px;opacity:.16;width:220px;height:auto}
+.hero .deco *{stroke:var(--hero-fg)}
+
+.goals{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 18px;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px}
+.goals h3{grid-column:1/-1;font-size:13px;color:var(--blue);text-transform:uppercase;letter-spacing:.08em}
+.goals div{padding-left:20px;position:relative;font-size:14px}
+.goals div::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:800}
+
+.glance{margin-top:14px;background:var(--soft);border-radius:12px;padding:14px 16px}
+.glance h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.figure{overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:520px;height:auto;font-family:var(--body)}
+
+.sec{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:5px;margin:30px 0 12px;break-after:avoid}
+.sec .num{font-family:var(--display);font-weight:800;font-size:22px;color:var(--blue);font-variant-numeric:tabular-nums}
+.sec h2{font-size:22px;font-weight:800}
+.sec .ref{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;break-inside:avoid}
+.tag{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.def{background:var(--blue-bg);border-left:4px solid var(--blue)} .def .tag{color:var(--blue)}
+.src{font-size:12px;color:var(--muted);margin:2px 0 0}
+.trivia{background:var(--amber-bg);border:1.5px dashed var(--amber-line)} .trivia .tag{color:var(--amber)}
+.talk{margin-top:6px;font-size:14px;color:var(--amber);font-weight:600}
+.talk span{font-weight:400}
+.trap{background:var(--coral-bg);border-left:4px solid var(--coral)} .trap .tag{color:var(--coral)}
+.ex{background:var(--teal-bg);border-left:4px solid var(--teal)} .ex .tag{color:var(--teal)}
+.plain{background:var(--soft)} .plain .tag{color:var(--ink)}
+.hl{background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 1px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:10px 0}
+.grid .box{margin:0}
+ul.tight{margin:4px 0 8px;padding-left:20px} ul.tight li{margin:3px 0}
+.small{font-size:13px;color:var(--muted)}
+.cap{font-size:13.5px;font-weight:700;margin-bottom:6px}
+
+.tablewrap{overflow-x:auto;margin:10px 0}
+table.t{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
+table.t th{background:var(--s-ink);color:var(--paper);text-align:left;padding:7px 10px;font-weight:600}
+table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:top}
+
+.exhead{display:flex;align-items:center;gap:10px;margin:22px 0 8px}
+.lvl{display:inline-flex;gap:4px}
+.lvl i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}
+.lvl i.on{background:var(--violet)}
+.exhead h3{font-size:17px}
+.q{margin:10px 0 14px;break-inside:avoid}
+.qn{display:inline-block;min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:7px;background:var(--violet-bg);color:var(--violet);font-weight:800;font-size:13px;margin-right:8px}
+.theme{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-left:6px}
+table.tf{width:100%;border-collapse:collapse;margin-top:6px;font-size:14.5px}
+table.tf td{padding:6px 8px;border-bottom:1px solid var(--line)}
+table.tf td.b{width:70px;text-align:center;color:var(--muted)}
+.lines{height:var(--h,44px);background:repeating-linear-gradient(transparent 0 27px,var(--line) 27px 28px);margin-top:6px}
+.drawbox{height:180px;border:1.5px dashed var(--line);border-radius:10px;margin-top:8px}
+.indent{margin-left:34px}
+.sol{color:var(--teal);font-weight:700}
+.ans .q{margin:8px 0}
+.teacher .sec{border-color:var(--teal)} .teacher .sec .num{color:var(--teal)}
+
+/* SVG roles */
+.f-blue{fill:var(--s-blue)} .f-teal{fill:var(--s-teal)} .f-violet{fill:var(--s-violet)} .f-ink{fill:var(--s-ink)}
+.f-paper{fill:var(--paper)} .f-on{fill:var(--on-solid)} .f-on2{fill:var(--on-solid-2)} .f-text{fill:var(--ink)} .f-muted{fill:var(--muted)} .f-onink{fill:var(--paper)}
+.st-ink{stroke:var(--ink)} .st-blue{stroke:var(--blue)} .st-teal{stroke:var(--teal)} .st-violet{stroke:var(--violet)}
+.f-arrow{fill:var(--ink)}
+
+
+/* v2 additions: code, narrow flowcharts, legends */
+:root{--mono:ui-monospace,"Cascadia Mono","Consolas","DejaVu Sans Mono",monospace}
+pre.code{font-family:var(--mono);font-size:14px;line-height:1.55;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:6px 0 8px;overflow-x:auto;white-space:pre}
+.figure.narrow svg{min-width:0;max-width:250px;margin:4px auto}
+.grid.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+ul.legend{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0 2px}
+ul.legend li{font-size:14px}
+ul.legend b{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:6px;background:var(--violet-bg);color:var(--violet);margin-right:4px}
+
+
+/* v3 additions: solved examples step by step, blank value tables */
+.solved{border:1.5px solid var(--teal);background:var(--paper)} .solved .tag{color:var(--teal)}
+.steps{display:grid;gap:14px;margin-top:10px}
+.step{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.stepn{width:30px;height:30px;border-radius:50%;background:var(--s-teal);color:var(--on-solid);font:800 14px/30px var(--display);text-align:center}
+table.t.blank td{height:34px;border:1px solid var(--line)}
+
+/* v4: graphs */
+.figure.narrow.graph svg{max-width:380px}
+
+/* v5: toolbox subsections */
+h3.tool{font-size:17px;margin:24px 0 8px;padding-top:4px;border-top:1px solid var(--line)}
+
+/* homework vs self-check */
+.q.hw::before{content:"Για το σπίτι";display:block;width:max-content;font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:99px;padding:4px 9px;margin-bottom:6px}
+body.editing .q.hw::before{display:none}
+.hwtoggle{display:block;margin-bottom:6px;font:600 12px/1 var(--body);padding:6px 10px;border-radius:99px;border:1.5px dashed var(--line);background:var(--paper);color:var(--muted);cursor:pointer}
+.hwtoggle[aria-pressed="true"]{border-style:solid;border-color:var(--amber-line);color:var(--amber);background:var(--amber-bg)}
+.hwnote{font-size:13px;color:var(--amber);font-weight:600}
+
+@media (max-width:520px){ .indent{margin-left:0} .hero .deco{display:none} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* v4: math notation (fractions, roots) */
+.mx{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:1.06em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 2px;line-height:1.25}
+.frac>span{padding:0 4px}
+.frac>span:first-child{border-bottom:1.3px solid currentColor}
+.rt{border-top:1.3px solid currentColor;padding:0 2px 0 1px;margin-left:1px}
+
+/* student additions */
+#doc{margin-top:0}
+#nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ground);max-width:860px;margin:0 auto;padding-block:10px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.navin{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.navin::-webkit-scrollbar{display:none}
+#nav a{flex:none;font:600 13px/1 var(--body);color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
+#nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
+.btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.quiz{display:grid;gap:10px;margin-top:10px}
+.qi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:8px}
+.qi .qs{margin:0}
+.qb{display:flex;gap:8px;flex-wrap:wrap}
+.qb button{font:600 14px/1 var(--body);padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;min-width:96px}
+.qb button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.qi.ok{border-color:var(--teal);background:var(--teal-bg)}
+.qi.no{border-color:var(--coral);background:var(--coral-bg)}
+.qi .qb button.pick{border-color:currentColor}
+.qi.ok .qb button.pick{background:var(--s-teal);border-color:var(--s-teal);color:var(--on-solid)}
+.qi.no .qb button.pick{background:var(--coral);border-color:var(--coral);color:var(--paper)}
+.qi.no .qb button.right{border-color:var(--teal);color:var(--teal)}
+.fb{font-size:13px;font-weight:700}
+.qi.ok .fb{color:var(--teal)} .qi.no .fb{color:var(--coral)}
+.score{font:700 15px/1.4 var(--display);padding:10px 14px;border-radius:10px;background:var(--violet-bg);color:var(--violet);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.score .btn{font-size:13px;padding:8px 12px}
+
+details.reveal{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+details.reveal summary{cursor:pointer;font-weight:700;color:var(--teal);padding:10px 14px;list-style:none}
+details.reveal summary::-webkit-details-marker{display:none}
+details.reveal summary::before{content:"▸ ";}
+details.reveal[open] summary::before{content:"▾ ";}
+details.reveal .rv{padding:0 14px 12px}
+
+.deck{display:grid;gap:12px;margin-top:10px}
+.card{position:relative;display:block;width:100%;min-height:220px;border:0;padding:0;background:none;cursor:pointer;perspective:1200px;font:inherit;color:inherit;text-align:left}
+.card .face{position:absolute;inset:0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;backface-visibility:hidden;transition:transform .45s ease}
+.card .front{background:var(--hero);color:var(--hero-fg);justify-content:center}
+.card .back{background:var(--blue-bg);color:var(--ink);border:1.5px solid var(--blue);transform:rotateY(180deg);overflow:auto}
+.card.flipped .front{transform:rotateY(-180deg)}
+.card.flipped .back{transform:rotateY(0)}
+.card:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:14px}
+.ck{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.term{font:800 clamp(24px,6vw,34px)/1.15 var(--display)}
+.cdef{font-size:15.5px;line-height:1.55}
+.tap{font-size:12.5px;opacity:.7;margin-top:auto}
+.deckbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.count{font:700 14px var(--display);min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.card .face{transition:none}}
+@media (max-width:520px){ #doc{border-radius:12px} .card{min-height:260px} }
+.rt-show:disabled{opacity:.45;cursor:not-allowed}
+</style>
+<style id="kitcss">/*KIT>*//* ==== kit: θέμα, προβολή, «Δείξε λύση» ==== */
+body{font-size:16px}
+.kit-btn{font:600 13px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 12px;border-radius:999px;cursor:pointer}
+.kit-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.kit-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#kitfloat{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:30;display:flex;gap:6px;padding:5px;border-radius:999px;background:var(--ground);border:1px solid var(--line);box-shadow:0 4px 16px rgba(10,20,40,.12)}
+.rt-ans{margin:-2px 0 14px}
+.rt-show{font:600 13.5px/1 var(--body);border:1.5px solid var(--s-teal);background:var(--teal-bg);color:var(--teal);padding:9px 14px;border-radius:999px;cursor:pointer}
+.rt-show:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.rt-body{display:none;margin-top:10px;border-left:4px solid var(--s-teal);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 16px}
+.rt-body .q{margin:0;border:0;padding:0;background:none}
+.rt-open > .rt-body, body.rt-all .rt-body{display:block}
+.rt-open > .rt-show{background:var(--paper)}
+body:not(.rt-all):not(.editing) .solved:not(.rt-open) .rt-hide{display:none}
+body.rt-all .rt-showstep{display:none}
+.solved.rt-open .rt-showstep{display:none}
+.rt-showstep{margin:4px 0 6px}
+body.student .rt-ans{display:none}
+body.editing .rt, body.editing .rt-showstep{display:none}
+/* Λειτουργία προβολής */
+body.proj #bar,body.proj #nav{zoom:1.25}
+body.proj{--muted:#3a4254;--line:#b5bfd2}
+:root[data-theme="dark"] body.proj{--muted:#b9c1d4;--line:#3b465e}
+@media print{#kitfloat,.rt,.rt-showstep,.kit-btn{display:none!important}.rt-hide{display:grid!important}}
+/* Καθαρές γραμμές */
+body{font-size:17px;line-height:1.68}
+.ln{display:block;margin:.22em 0}
+.ln.li{position:relative;padding-left:1.25em}
+.ln.li::before{content:"•";position:absolute;left:.35em;color:var(--muted)}
+.kvs{display:inline-flex;flex-wrap:wrap;gap:.2em 1.2em;vertical-align:top}
+.kv,.nw{white-space:nowrap}
+p,li,td{text-wrap:pretty}
+.ln.cd{font-family:var(--mono);font-size:.92em}
+.cdcols{display:inline-flex;flex-wrap:wrap;gap:4px 28px;vertical-align:top}
+.cdcol{display:inline-block;padding-left:10px;border-left:2px solid var(--line)}/*<KIT*/</style>
+<style id="pancss">
+.stmt{border-left:3px solid var(--line);padding:2px 0 2px 12px;margin:6px 0 8px}
+.stmt p{margin:0 0 6px}
+.where{font-size:13px;font-weight:600;color:var(--violet);margin:2px 0 6px}
+.where a,.t a.lk{color:var(--violet)}
+body:not(.rt-all) .box.solved:not(.rt-open) .steps>.step:first-child{display:none}
+.credit{font-size:13px;color:var(--hero-sub);margin-top:10px}
+.fig-exam{background:#fff;border-radius:10px;padding:10px;display:block;max-width:420px;margin:8px auto}
+.fig-exam img{display:block;width:100%;height:auto}
+.answers{display:flex;flex-wrap:wrap;gap:6px 14px;font-weight:700}
+.answers span{background:var(--soft);border-radius:8px;padding:4px 10px}
+
+.uml{margin:8px 0;display:flex;flex-direction:column;align-items:center}
+.ub{border:1.5px solid var(--ink);border-radius:8px;background:var(--paper);min-width:180px;font-size:14px;overflow:hidden}
+.ub .un{font-weight:800;text-align:center;padding:6px 10px;color:var(--on-solid)}
+.ub.sup .un{background:var(--s-violet)} .ub.sub .un{background:var(--s-teal)}
+.ub .ua,.ub .um{padding:6px 10px;border-top:1px solid var(--line)}
+.ub .um{border-top:1px dashed var(--muted)} .ub .um div{font-weight:700}
+.ub .mute{color:var(--muted)}
+.uarr{font-size:18px;line-height:1;color:var(--ink);display:flex;flex-direction:column;align-items:center}
+.uarr span{display:block;width:2px;height:14px;background:var(--ink)}
+.usubs{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;width:100%;border-top:2px solid var(--ink);padding-top:12px}
+table.mat{border-collapse:collapse;margin:6px auto}
+table.mat td{border:1px solid var(--line);width:28px;height:28px;text-align:center}
+</style>
+<nav id="nav" aria-label="Θέματα"><div class="navin"><a href="#s-a">Θέμα Α</a><a href="#s-b">Θέμα Β</a><a href="#s-c">Θέμα Γ</a><a href="#s-d">Θέμα Δ</a><a href="#s-map">Χάρτης ύλης</a></div></nav>
+<main id="doc" lang="el"><section class="hero">
+<div class="kicker">Μέρος Α · Μάθημα-διαγώνισμα</div>
+<h1>Διαγώνισμα 1: μαθήματα 1–5</h1>
+<p class="sub">Επίπεδο <b>Βασικό</b> (εύκολο). Γράψε το διαγώνισμα στο τετράδιο, σαν να είσαι σε εξέταση, και μετά άνοιξε τη <b>λύση βήμα-βήμα</b> σε κάθε θέμα.</p>
+<div class="chips"><span class="chip">Επίπεδο: Βασικό</span><span class="chip">4 θέματα · 100 μονάδες</span><span class="chip">Διάρκεια: 1 ώρα</span></div>
+<p class="credit"><b>Καθηγητής: Κωνσταντίνος Θεοφίλου</b> · ΣΥΝΑΨΗ Εκπαιδευτική</p>
+</section>
+<div class="glance"><h3>Πώς δουλεύεις αυτό το διαγώνισμα</h3>
+<p><span class="ln li">Κάθε θέμα γράφει τις μονάδες του και το μάθημα όπου το διδαχθήκαμε. Πάτα το μάθημα για να πας κατευθείαν στη θεωρία.</span><span class="ln li">Η λύση βήμα-βήμα ανοίγει με το κουμπί, <b>αφού γράψεις</b> το διαγώνισμα.</span><span class="ln li">Στις ερωτήσεις με δική σου διατύπωση (ασάφειες, ανάλυση, διαγράμματα) οι λύσεις είναι ενδεικτικές: δεκτή κάθε σωστά τεκμηριωμένη απάντηση.</span></p></div>
+<div class="sec" id="s-a"><span class="num">Α</span><h2>Θέμα Α</h2><span class="ref">30 μονάδες · σωστό/λάθος και αντιστοίχιση</span></div>
+<div class="box solved" id="a1"><div class="tag">Α1 · Μονάδες 20</div><div class="stmt"><p>Να γράψετε στο τετράδιό σας τον αριθμό καθεμιάς από τις παρακάτω προτάσεις 1 έως 10 και δίπλα τη λέξη ΣΩΣΤΟ, αν η πρόταση είναι σωστή, ή τη λέξη ΛΑΘΟΣ, αν η πρόταση είναι λανθασμένη.</p>
+<p><span class="ln">1. Για να χαρακτηριστεί μια κατάσταση πρόβλημα, πρέπει η λύση της να μην είναι γνωστή ούτε προφανής.</span><span class="ln">2. Πληροφορία είναι οποιοδήποτε στοιχείο μπορεί να γίνει αντιληπτό από έναν παρατηρητή με μία από τις πέντε αισθήσεις του.</span><span class="ln">3. Τα στάδια αντιμετώπισης ενός προβλήματος είναι, με τη σειρά, η κατανόηση, η ανάλυση και η επίλυση.</span><span class="ln">4. Κάθε αλγόριθμος πρέπει να δίνει τουλάχιστον μία τιμή ως αποτέλεσμα.</span><span class="ln">5. Σε ένα διάγραμμα ροής το ορθογώνιο δηλώνει είσοδο ή έξοδο στοιχείων.</span><span class="ln">6. Η τιμή της έκφρασης <span class="nw">23 div 5</span> είναι 3.</span><span class="ln">7. Στην εντολή εκχώρησης πρώτα γίνονται οι πράξεις της έκφρασης και μετά το αποτέλεσμα αποδίδεται στη μεταβλητή.</span><span class="ln">8. Κάθε πρόβλημα μπορεί να λυθεί με έναν μόνο τρόπο.</span><span class="ln">9. Ο δομημένος προγραμματισμός στηρίζεται στη χρήση τριών μόνο στοιχειωδών λογικών δομών.</span><span class="ln">10. Ο προγραμματισμός ασχολείται με τον ακριβή προσδιορισμό του προβλήματος.</span></p></div><p class="where">Πού το διδαχθήκαμε: <a href="01.html#s-1-1" target="_top">Μάθημα 1 · Τι είναι πρόβλημα</a>, <a href="01.html#s-1-2" target="_top">Μάθημα 1 · Κατανόηση προβλήματος</a>, <a href="02.html#s-2-1" target="_top">Μάθημα 2 · Τι είναι αλγόριθμος</a>, <a href="02.html#s-2-3" target="_top">Μάθημα 2 · Περιγραφή και αναπαράσταση</a>, <a href="03.html#s-tools" target="_top">Μάθημα 3 · Η εργαλειοθήκη των υπολογισμών</a>, <a href="04.html#s-4-1" target="_top">Μάθημα 4 · Γιατί αναλύουμε</a>, <a href="05.html#s-6-1" target="_top">Μάθημα 5 · Η έννοια του προγράμματος</a>, <a href="05.html#s-6-4-3" target="_top">Μάθημα 5 · Δομημένος προγραμματισμός</a></p><div class="steps"><div class="step"></div></div></div>
+<div class="box solved" id="a2"><div class="tag">Α2 · Μονάδες 10</div><div class="stmt"><p>Να γράψετε στο τετράδιό σας τους αριθμούς της Στήλης Α και δίπλα το γράμμα της Στήλης Β που αντιστοιχεί.</p>
+<div class="tablewrap"><table class="t" style="min-width:0"><tr><th>Στήλη Α</th><th>Στήλη Β</th></tr>
+<tr><td>1. Είσοδος</td><td>α. Κάθε εντολή πρέπει να είναι απλή και εκτελέσιμη.</td></tr>
+<tr><td>2. Έξοδος</td><td>β. Δίνονται καμία, μία ή περισσότερες τιμές δεδομένων.</td></tr>
+<tr><td>3. Καθοριστικότητα</td><td>γ. Ο αλγόριθμος τελειώνει μετά από πεπερασμένα βήματα.</td></tr>
+<tr><td>4. Περατότητα</td><td>δ. Κάθε εντολή καθορίζεται χωρίς καμία αμφιβολία για τον τρόπο εκτέλεσής της.</td></tr>
+<tr><td>5. Αποτελεσματικότητα</td><td>ε. Δημιουργείται τουλάχιστον μία τιμή ως αποτέλεσμα.</td></tr></table></div></div><p class="where">Πού το διδαχθήκαμε: <a href="02.html#s-2-1" target="_top">Μάθημα 2 · Τα πέντε κριτήρια</a></p><div class="steps"><div class="step"></div></div></div>
+<div class="sec" id="s-b"><span class="num">Β</span><h2>Θέμα Β</h2><span class="ref">25 μονάδες · ορισμοί και θεωρία</span></div>
+<div class="box solved" id="b1"><div class="tag">Β1 · Μονάδες 4</div><div class="stmt"><p>Τι ονομάζεται πρόβλημα;</p></div><p class="where">Πού το διδαχθήκαμε: <a href="01.html#s-1-1" target="_top">Μάθημα 1 · Τι είναι πρόβλημα</a></p><div class="steps"><div class="step"></div></div></div>
+<div class="box solved" id="b2"><div class="tag">Β2 · Μονάδες 6</div><div class="stmt"><p>Τι ονομάζεται δεδομένο και τι πληροφορία;</p></div><p class="where">Πού το διδαχθήκαμε: <a href="01.html#s-1-2" target="_top">Μάθημα 1 · Δεδομένα και πληροφορία</a></p><div class="steps"><div class="step"></div></div></div>
+<div class="box solved" id="b3"><div class="tag">Β3 · Μονάδες 5</div><div class="stmt"><p>Να δώσετε τον ορισμό του αλγορίθμου.</p></div><p class="where">Πού το διδαχθήκαμε: <a href="02.html#s-2-1" target="_top">Μάθημα 2 · Τι είναι αλγόριθμος</a></p><div class="steps"><div class="step"></div></div></div>
+<div class="box solved" id="b4"><div class="tag">Β4 · Μονάδες 4</div><div class="stmt"><p>Να αναφέρετε τους τρόπους αναπαράστασης ενός αλγορίθμου.</p></div><p class="where">Πού το διδαχθήκαμε: <a href="02.html#s-2-3" target="_top">Μάθημα 2 · Περιγραφή και αναπαράσταση αλγορίθμων</a></p><div class="steps"><div class="step"></div></div></div>
+<div class="box solved" id="b5"><div class="tag">Β5 · Μονάδες 6</div><div class="stmt"><p>Ποια είναι τα στάδια επίλυσης ενός προβλήματος με τον υπολογιστή; Με ποιο από αυτά ασχολείται ο προγραμματισμός;</p></div><p class="where">Πού το διδαχθήκαμε: <a href="05.html#s-6-1" target="_top">Μάθημα 5 · Η έννοια του προγράμματος</a></p><div class="steps"><div class="step"></div></div></div>
+<div class="sec" id="s-c"><span class="num">Γ</span><h2>Θέμα Γ</h2><span class="ref">25 μονάδες · εφαρμογή της θεωρίας</span></div>
+<div class="box solved" id="c1"><div class="tag">Γ1 · Μονάδες 5</div><div class="stmt"><p>Να γράψετε στο τετράδιό σας το γράμμα καθενός από τα παρακάτω στοιχεία και δίπλα <b>Δ</b>, αν είναι δεδομένο, ή <b>Π</b>, αν είναι πληροφορία.</p>
+<p><span class="ln">α. Η θερμοκρασία που κατέγραψε ένας μετεωρολογικός σταθμός κάθε μισή ώρα.</span><span class="ln">β. «Η πιο ζεστή μέρα του Ιουλίου ήταν η 23η.»</span><span class="ln">γ. Οι ακροάσεις κάθε τραγουδιού ενός καλλιτέχνη σε μια εφαρμογή μουσικής.</span><span class="ln">δ. «Το πιο δημοφιλές τραγούδι του καλλιτέχνη έχει διπλάσιες ακροάσεις από το δεύτερο.»</span><span class="ln">ε. Τα γκολ που σημείωσε κάθε παίκτης μιας ομάδας στη σεζόν.</span></p></div><p class="where">Πού το διδαχθήκαμε: <a href="01.html#s-1-2" target="_top">Μάθημα 1 · Δεδομένα και πληροφορία</a></p><div class="steps"><div class="step"></div></div></div>
+<div class="box solved" id="c2"><div class="tag">Γ2 · Μονάδες 8</div><div class="stmt"><p>Δίνονται τα παρακάτω σχήματα ενός διαγράμματος ροής:</p><div style="overflow-x:auto"><svg viewBox="0 0 340 90" style="width:100%;max-width:420px;display:block;margin:6px auto;font-family:var(--body)" role="img" aria-label="Τέσσερα σχήματα: 1 ρόμβος, 2 έλλειψη, 3 πλάγιο παραλληλόγραμμο, 4 ορθογώνιο"><path d="M45 12L80 40L45 68L10 40z" class="f-paper st-ink" stroke-width="1.6"/><ellipse cx="128" cy="40" rx="36" ry="18" class="f-paper st-ink" stroke-width="1.6"/><path d="M190 22L262 22L246 58L174 58z" class="f-paper st-ink" stroke-width="1.6"/><rect x="276" y="22" width="56" height="36" class="f-paper st-ink" stroke-width="1.6"/><text x="45" y="86" font-size="14" font-weight="700" text-anchor="middle" class="f-text">1</text><text x="128" y="86" font-size="14" font-weight="700" text-anchor="middle" class="f-text">2</text><text x="218" y="86" font-size="14" font-weight="700" text-anchor="middle" class="f-text">3</text><text x="304" y="86" font-size="14" font-weight="700" text-anchor="middle" class="f-text">4</text></svg></div><p>Να γράψετε στο τετράδιό σας τον αριθμό κάθε σχήματος, το όνομά του και τι δηλώνει.</p></div><p class="where">Πού το διδαχθήκαμε: <a href="02.html#s-2-3" target="_top">Μάθημα 2 · Σύμβολα διαγράμματος ροής</a></p><div class="steps"><div class="step"></div></div></div>
+<div class="box solved" id="c3"><div class="tag">Γ3 · Μονάδες 12</div><div class="stmt"><p>Να υπολογίσετε την τιμή καθεμιάς από τις παρακάτω εκφράσεις, γράφοντας τα ενδιάμεσα βήματα.</p><p><span class="ln">α) <span class="nw">3 + 4 * 2 ^ 2</span></span><span class="ln">β) <span class="nw">29 div 6 + 29 mod 6</span></span><span class="ln">γ) <span class="nw">(14 + 6) / 4 * 2</span></span><span class="ln">δ) <span class="nw">125 div 10 mod 10</span></span></p></div><p class="where">Πού το διδαχθήκαμε: <a href="03.html#s-tools" target="_top">Μάθημα 3 · Πράξεις και ιεραρχία</a>, <a href="03.html#s-tools" target="_top">Μάθημα 3 · div και mod</a></p><div class="steps"><div class="step"></div></div></div>
+<div class="sec" id="s-d"><span class="num">Δ</span><h2>Θέμα Δ</h2><span class="ref">20 μονάδες · από το πρόβλημα στη δομή του</span></div>
+<div class="box solved" id="d"><div class="tag">Θέμα Δ (Δ1–Δ3) · Μονάδες 20</div><div class="stmt"><p>Ο σύλλογος γονέων θέλει να στήσει ένα χριστουγεννιάτικο παζάρι στην αυλή του σχολείου με χειροτεχνίες των μαθητών, ώστε να μαζέψει χρήματα για τη σχολική βιβλιοθήκη. Ο πρόεδρος λέει: «Θέλουμε να μαζέψουμε όσο το δυνατόν περισσότερα χρήματα.»</p>
+<p><span class="ln"><b>Δ1.</b> Να γράψετε τρεις ερωτήσεις που θα κάνατε στον πρόεδρο, ώστε να γίνει σαφές το πρόβλημα. <i>(Μονάδες 6)</i></span><span class="ln"><b>Δ2.</b> Να γράψετε τέσσερα δεδομένα που θα χρειαστείτε και το ζητούμενο του προβλήματος. <i>(Μονάδες 6)</i></span><span class="ln"><b>Δ3.</b> Να αναλύσετε το πρόβλημα «Οργάνωση παζαριού» σε δύο επίπεδα και να το αποτυπώσετε με διάγραμμα ή με αριθμημένη λίστα (1, 1.1, 1.2 …). <i>(Μονάδες 8)</i></span></p></div><p class="where">Πού το διδαχθήκαμε: <a href="01.html#s-1-4" target="_top">Μάθημα 1 · Καθορισμός απαιτήσεων</a>, <a href="01.html#s-1-3" target="_top">Μάθημα 1 · Δομή προβλήματος</a></p><div class="steps"><div class="step"></div></div></div>
+<div class="sec" id="s-map"><span class="num">⌖</span><h2>Χάρτης ύλης</h2><span class="ref">Τι εξετάζεται και πού το διδαχθήκαμε</span></div>
+<div class="tablewrap"><table class="t"><tr><th>Θέμα</th><th>Τι εξετάζεται</th><th>Μάθημα</th></tr>
+<tr><td>Α1</td><td>Σωστό/Λάθος σε όλη την ύλη</td><td><a href="01.html" target="_top">1</a>, <a href="02.html" target="_top">2</a>, <a href="03.html" target="_top">3</a>, <a href="04.html" target="_top">4</a>, <a href="05.html" target="_top">5</a></td></tr>
+<tr><td>Α2</td><td>Τα πέντε κριτήρια αλγορίθμου</td><td><a href="02.html" target="_top">2</a></td></tr>
+<tr><td>Β1–Β2</td><td>Πρόβλημα, δεδομένο, πληροφορία</td><td><a href="01.html" target="_top">1</a></td></tr>
+<tr><td>Β3–Β4</td><td>Αλγόριθμος και τρόποι αναπαράστασης</td><td><a href="02.html" target="_top">2</a></td></tr>
+<tr><td>Β5</td><td>Στάδια επίλυσης με υπολογιστή</td><td><a href="05.html" target="_top">5</a></td></tr>
+<tr><td>Γ1</td><td>Δεδομένο ή πληροφορία</td><td><a href="01.html" target="_top">1</a></td></tr>
+<tr><td>Γ2</td><td>Σχήματα διαγράμματος ροής</td><td><a href="02.html" target="_top">2</a></td></tr>
+<tr><td>Γ3</td><td>Ιεραρχία πράξεων, div και mod</td><td><a href="03.html" target="_top">3</a></td></tr>
+<tr><td>Δ</td><td>Ασάφειες, δεδομένα και ζητούμενα, δομή προβλήματος</td><td><a href="01.html" target="_top">1</a></td></tr>
+</table></div><p class="small">Τα θέματα και οι λύσεις είναι πρωτότυπα και ανήκουν στη ΣΥΝΑΨΗ Εκπαιδευτική. Οι ορισμοί που ζητούνται για απομνημόνευση δίνονται όπως στο σχολικό βιβλίο. Παρά τον προσεκτικό έλεγχο, ενδέχεται να υπάρχουν τυπογραφικά λάθη. Καθηγητής: Κωνσταντίνος Θεοφίλου.</p></main>
+<script id="kitjs">/*KITJS>*/(function(){
+  /* kit: θέμα (φωτεινό/σκοτεινό), προβολή, «Δείξε λύση» */
+  var root = document.documentElement, body = document.body, doc = document.getElementById('doc');
+  if (!doc || body.getAttribute('data-kit')) return;
+  body.setAttribute('data-kit', '1');
+  function get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function put(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+  var theme = get('aepp-theme') === 'dark' ? 'dark' : 'light';
+  var proj = get('aepp-proj') === '1';
+  function mk(id, txt){ var b = document.createElement('button'); b.type = 'button'; b.id = id; b.className = 'kit-btn'; b.textContent = txt; return b; }
+  var bTheme = mk('k-theme', ''), bProj = mk('k-proj', 'Προβολή'), bAll = null;
+  function applyTheme(){ root.setAttribute('data-theme', theme); bTheme.textContent = theme === 'dark' ? '☀ Φωτεινό' : '☾ Σκοτεινό'; bTheme.setAttribute('aria-label', theme === 'dark' ? 'Φωτεινό θέμα' : 'Σκοτεινό θέμα'); }
+  function fit(){
+    if (!proj){ doc.style.zoom = ''; doc.style.maxWidth = ''; return; }
+    var W = window.innerWidth, z = W < 700 ? 1.12 : 1.38;
+    doc.style.zoom = z; doc.style.maxWidth = Math.max(300, Math.min(900, (W - 36) / z)) + 'px';
+  }
+  function applyProj(){ body.classList.toggle('proj', proj); bProj.setAttribute('aria-pressed', String(proj)); fit(); }
+  window.addEventListener('resize', fit);
+  bTheme.onclick = function(){ theme = theme === 'dark' ? 'light' : 'dark'; put('aepp-theme', theme); applyTheme(); };
+  bProj.onclick = function(){ proj = !proj; put('aepp-proj', proj ? '1' : '0'); applyProj(); };
+  applyTheme(); applyProj();
+
+  var bar = document.getElementById('bar');
+  var teacherSec = doc.querySelector('section.teacher');
+  if (bar){
+    var anchor = document.getElementById('status') || null;
+    if (teacherSec){ bAll = mk('k-all', 'Όλες οι λύσεις'); bar.insertBefore(bAll, anchor); }
+    bar.insertBefore(bProj, anchor); bar.insertBefore(bTheme, anchor);
+  } else {
+    var f = document.createElement('div'); f.id = 'kitfloat';
+    f.appendChild(bTheme); body.appendChild(f); proj = false; applyProj();
+  }
+  if (bAll){
+    bAll.onclick = function(){ var on = !body.classList.contains('rt-all'); body.classList.toggle('rt-all', on); bAll.setAttribute('aria-pressed', String(on)); };
+  }
+
+  /* λυμένα: φαίνεται η εκφώνηση και το «Κατανοώ», τα υπόλοιπα με κουμπί */
+  doc.querySelectorAll('.box.solved').forEach(function(box){
+    var steps = box.querySelector('.steps');
+    if (!steps) return;
+    var st = steps.querySelectorAll(':scope > .step');
+    if (!st.length) return;
+    box.classList.add('rt-closed');
+    for (var i = 1; i < st.length; i++) st[i].classList.add('rt-hide');
+    var w = document.createElement('div'); w.className = 'rt-showstep'; w.contentEditable = 'false';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε τη λύση';
+    b.disabled = true; b.title = 'Η λύση δεν είναι διαθέσιμη στην προεπισκόπηση';
+    w.appendChild(b); st[0].after(w);
+  });
+
+  /* ασκήσεις: η απάντηση από τη σελίδα καθηγητή, κρυμμένη κάτω από την εκφώνηση */
+  if (teacherSec){
+    var ans = {};
+    teacherSec.querySelectorAll('.ans .q').forEach(function(q){ var n = q.querySelector('.qn'); if (n) ans[n.textContent.trim()] = q; });
+    doc.querySelectorAll('.exercises .q').forEach(function(q){
+      var n = q.querySelector(':scope > .qn'); if (!n) return;
+      var a = ans[n.textContent.trim()]; if (!a) return;
+      var w = document.createElement('div'); w.className = 'rt rt-ans'; w.contentEditable = 'false';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε λύση';
+      var bodyEl = document.createElement('div'); bodyEl.className = 'rt-body ans';
+      var c = a.cloneNode(true); var qn = c.querySelector('.qn'); if (qn) qn.remove();
+      bodyEl.appendChild(c);
+      b.onclick = function(){ var on = !w.classList.contains('rt-open'); w.classList.toggle('rt-open', on); b.textContent = on ? 'Κρύψε λύση' : 'Δείξε λύση'; };
+      w.appendChild(b); w.appendChild(bodyEl);
+      q.after(w);
+    });
+  }
+})();/*<KITJS*/</script>

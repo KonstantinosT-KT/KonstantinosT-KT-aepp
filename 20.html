@@ -1,7 +1,8 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style id="avcss">.sos-av{float:right;width:72px;height:84px;border-radius:14px;object-position:center top;object-fit:cover;margin:0 0 8px 14px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);shape-outside:margin-box}@media(max-width:560px){.sos-av{width:56px;height:65px;border-radius:11px;margin-left:10px}}@media print{.sos-av{display:none}}</style></head><body>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Μάθημα 20 · Μονοδιάστατοι πίνακες</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap">
 <style>
 /* Layout: one A4-like sheet centred on a cool ground; coloured callouts by role (ορισμός, ήξερες ότι, παγίδα, παράδειγμα) */
 :root{
@@ -92,6 +93,7 @@ body.student .teacher{display:none}
 .trivia{background:var(--amber-bg);border:1.5px dashed var(--amber-line)} .trivia .tag{color:var(--amber)}
 .talk{margin-top:6px;font-size:14px;color:var(--amber);font-weight:600}
 .talk span{font-weight:400}
+details.trivia>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;margin:0}details.trivia>summary::-webkit-details-marker{display:none}details.trivia>summary::before{content:"▸";font-size:13px;letter-spacing:0}details.trivia[open]>summary::before{content:"▾"}details.trivia[open]>summary{margin-bottom:6px}details.trivia>summary:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}.talkans{margin-top:6px;font-size:14px;border-top:1px dashed var(--amber-line);padding-top:6px}@media print{details.trivia>summary::before{display:none}}
 .trap{background:var(--coral-bg);border-left:4px solid var(--coral)} .trap .tag{color:var(--coral)}
 .ex{background:var(--teal-bg);border-left:4px solid var(--teal)} .ex .tag{color:var(--teal)}
 .plain{background:var(--soft)} .plain .tag{color:var(--ink)}
@@ -180,6 +182,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .navin::-webkit-scrollbar{display:none}
 #nav a{flex:none;font:600 13px/1 var(--body);color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
 #nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#nav a.navtest{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid,#fff)}
 .sec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
 .btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
 .btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
@@ -197,6 +200,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .qi.no .qb button.pick{background:var(--coral);border-color:var(--coral);color:var(--paper)}
 .qi.no .qb button.right{border-color:var(--teal);color:var(--teal)}
 .fb{font-size:13px;font-weight:700}
+.qwhy{margin:0;font-size:14px;line-height:1.5}
 .qi.ok .fb{color:var(--teal)} .qi.no .fb{color:var(--coral)}
 .score{font:700 15px/1.4 var(--display);padding:10px 14px;border-radius:10px;background:var(--violet-bg);color:var(--violet);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .score .btn{font-size:13px;padding:8px 12px}
@@ -224,12 +228,107 @@ details.reveal .rv{padding:0 14px 12px}
 .count{font:700 14px var(--display);min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion:reduce){.card .face{transition:none}}
 @media (max-width:520px){ #doc{border-radius:12px} .card{min-height:260px} }
-</style>
-<style id="synapsi-brand">
+
+/* test */
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid,#fff);font-size:15px;padding:12px 18px;text-decoration:none;display:inline-block}
+.btn.primary:disabled,.btn.primary.off{opacity:.45;cursor:not-allowed;pointer-events:none}
+.tstart{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.tlink{font:700 14px var(--body);color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+.tlink:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.tstats{margin:0;font-size:14px;line-height:1.7}
+.tstats b{font-variant-numeric:tabular-nums;color:var(--ink)}
+.tstats .sep{color:var(--line);margin:0 8px}
+.tstats:empty{display:none}
+.tpart{margin:18px 0 6px;font:800 16px/1.3 var(--display)}
+.tpart small{font:600 12px var(--body);color:var(--muted);margin-left:6px}
+.tq{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;display:grid;gap:8px;min-width:0}
+.tq>p{margin:0}
+.tq pre.code{margin:0;font-size:13px}
+.tq.ok{border-color:var(--teal);background:var(--teal-bg)}
+.tq.no{border-color:var(--coral);background:var(--coral-bg)}
+.tq .tn{font:700 12px var(--body);color:var(--muted)}
+.topts{display:grid;gap:6px}
+.topts button{font:500 14.5px/1.35 var(--body);text-align:left;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;display:flex;gap:8px;align-items:flex-start;min-width:0}
+.topts button .ol{font-weight:800;flex:none}
+.topts button pre.code{flex:1;min-width:0;background:none;border:0;padding:0;overflow-x:auto}
+.topts button.sel{border-color:var(--blue);background:var(--blue-bg)}
+.topts button:focus-visible,.tq select:focus-visible,.tq input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.topts.two{grid-template-columns:1fr 1fr}
+.tq.done .topts button{cursor:default}
+.topts button.right{border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+.topts button.wrong{border-color:var(--coral);box-shadow:inset 0 0 0 1px var(--coral)}
+.tfill{line-height:2.1}
+.tq select{font:600 14px var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--blue);border-radius:8px;padding:4px 6px;max-width:100%}
+.tq select.right{border-color:var(--teal);background:var(--teal-bg)}
+.tq select.wrong{border-color:var(--coral);background:var(--coral-bg)}
+.tmrow{display:grid;gap:6px;padding:8px 0;border-top:1px dashed var(--line)}
+.tmrow:first-of-type{border-top:0}
+.tmrow code{white-space:normal}
+.tq input{font:600 16px var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--blue);border-radius:8px;padding:8px 10px;width:9em;max-width:100%}
+.tq input.right{border-color:var(--teal)} .tq input.wrong{border-color:var(--coral)}
+.tfb{font-size:13.5px;font-weight:600;margin:0}
+.tq.ok .tfb{color:var(--teal)} .tq.no .tfb{color:var(--coral)}
+.tfb a{color:var(--ink);font-weight:700}
+.tfb .why{display:block;font-weight:400;color:var(--ink);margin-top:3px}
+.tbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0}
+.tmsg{font-size:13.5px;font-weight:600;color:var(--coral)}
+.tresult{border-radius:12px;padding:14px 16px;background:var(--blue-bg);border:0;border-left:4px solid var(--s-blue);display:grid;gap:6px;margin:12px 0}
+.tresult .big,.pgbig .big{font:800 26px/1.1 var(--display);color:var(--blue);font-variant-numeric:tabular-nums}
+.ttimer{position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);z-index:5;font:700 14px var(--display);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px 12px;width:max-content;margin-left:auto}
+/* homework header: the orange frame, once */
+.hwsec .sec{border:1.5px solid var(--amber-line);background:var(--amber-bg);border-radius:12px;padding:10px 14px;align-items:center}
+.hwsec .sec .num,.hwsec .sec h2{color:var(--amber)}
+.hwsec .sec .num{font-size:24px}
+.hwsec .q.hw::before{display:none}
+.hwlock{border:1.5px dashed var(--line);border-radius:10px;padding:12px 14px;color:var(--muted);font-weight:600}
+/* «Η πρόοδός μου» */
+.pg{position:fixed;inset:0;z-index:50;background:var(--ground);overflow-y:auto;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px calc(env(safe-area-inset-bottom,0px) + 84px)}
+.pgin{max-width:560px;margin:0 auto;display:grid;gap:14px}
+.pghead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pghead h2{font:800 24px/1.2 var(--display);margin:0}
+.pgcard{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:10px}
+.pgcard p{margin:0}
+.pgl{font:700 12px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pgt{font:800 18px/1.25 var(--display)}
+.pgbig{display:grid;gap:2px;background:var(--blue-bg);border-radius:10px;padding:10px 12px}
+.pgchart{position:relative}
+.pgchart svg{display:block;width:100%;height:auto;overflow:visible}
+.pgchart .grid line{stroke:var(--line);stroke-width:1}
+.pgchart .ax text{fill:var(--muted);font:600 11px var(--body)}
+.pgchart .ln{fill:none;stroke:var(--s-blue);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.pgchart .pt{fill:var(--s-blue);stroke:var(--paper);stroke-width:2}
+.pgchart .hit{fill:transparent;cursor:pointer;outline:none}
+.pgchart .hit:focus-visible{stroke:var(--blue);stroke-width:2}
+.pgchart .lbl{fill:var(--ink);font:700 12px var(--body)}
+.pgchart .goal{stroke:var(--teal);stroke-width:1.5;stroke-dasharray:4 4}
+.pgchart .goalt{fill:var(--teal);font:700 11px var(--body)}
+.pgtip{min-height:1.4em;margin:4px 0 0;font-size:13px;color:var(--muted)}
+.pgscroll{max-height:196px;overflow-y:auto;overscroll-behavior:contain;border:1px solid var(--line);border-radius:10px;padding:0 10px}
+.pgtab th{position:sticky;top:0;background:var(--paper);z-index:1}
+.pgtab{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+.pgtab th{text-align:left;font:700 12px var(--body);color:var(--muted);padding:8px 8px 6px 0;border-bottom:1px solid var(--line)}
+.pgtab td{padding:6px 8px 6px 0;border-bottom:1px dashed var(--line)}
+.pgtab tr:last-child td{border-bottom:0}
+.pgtab td.na{color:var(--muted)}
+#pg-h a{color:inherit;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+#pg-h a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+body.pg-open #kitfloat{z-index:60}
+.pginfo{background:var(--soft);border-radius:12px;padding:12px 14px;display:grid;gap:8px;font-size:14.5px}
+.pginfo p{margin:0}
+.pgquote{margin:6px 0 0;padding:22px 20px 18px;text-align:center;position:relative;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.pgquote::before{content:"“";position:absolute;left:50%;top:-22px;transform:translateX(-50%);font:400 54px/1 "GFS Didot",Georgia,serif;color:var(--s-blue);background:var(--ground);padding:0 10px}
+.pgquote blockquote{margin:0;font:400 21px/1.45 "GFS Didot",Georgia,"Times New Roman",serif;color:var(--ink);text-wrap:balance}
+.pgquote figcaption{margin-top:10px;font:600 12px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.pgquote figcaption::before{content:"";display:inline-block;width:22px;height:1px;background:var(--muted);vertical-align:middle;margin-right:8px}
+body.pg-open{overflow:hidden}
+@media (max-width:520px){.topts.two{grid-template-columns:1fr}}
+.sos-av{float:right;width:72px;height:84px;border-radius:14px;background:center top/cover no-repeat;margin:0 0 8px 14px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);shape-outside:margin-box}@media(max-width:560px){.sos-av{width:56px;height:65px;border-radius:11px;margin-left:10px}}@media print{.sos-av{display:none}}.sos-av.sa{background-image:url(av3.jpg)}.sos-av.sb{background-image:url(av6.jpg)}
+/* ΣΥΝΑΨΗ: χρώματα του site */
 :root{--ground:#F7F6F0;--ink:#2B3722;--muted:#5E6253;--line:#E1E1D7;--soft:#F3F2EA;--blue:#4F6230;--blue-bg:#EEF0E2;--s-blue:#4F6230;--s-ink:#2B3722;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D;--on-solid-2:#E6E0CC}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}}
 :root[data-theme="dark"]{--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}
-body::before{background:var(--ground)}
+</style>
+<style id="synapsi-site">
 .syn-bar{max-width:860px;margin:0 auto;padding-top:12px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
 .syn-bar a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--hero);color:#fff;text-decoration:none}
 .syn-bar span{color:var(--muted)}
@@ -239,12 +338,11 @@ body::before{background:var(--ground)}
 .syn-nav small{font:600 11.5px var(--body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
 .syn-nav .next{text-align:right;background:var(--hero);color:#fff;border-color:var(--hero)}
 .syn-nav .next small{color:var(--hero-kick)}
-.syn-nav .off{opacity:.6}
 .syn-note{font-size:13px;color:var(--muted);padding:12px 14px;border-radius:10px;background:var(--soft)}
 .syn-copy{font-size:12px;color:var(--muted)}
 </style>
 <script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
-<div class="syn-bar"><a href="index.html">&#8592; Διαδρομή</a><span>Μάθημα 20 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-9-1">9.1</a><a href="#s-4-2">4.2</a><a href="#s-3-3">3.3</a><a href="#s-3">Διαχωρισμός</a><a href="#s-4">Συγχώνευση</a><a href="#s-5-2-3">5.2.3</a><a href="#s-tools">Εργαλειοθήκη</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a></div></nav>
+<div class="syn-bar"><a href="index.html">&#8592; Διαδρομή</a><span>Μάθημα 20 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-test" class="navtest">Σύντομο Τεστ</a><a href="#s-9-1">9.1</a><a href="#s-4-2">4.2</a><a href="#s-3-3">3.3</a><a href="#s-3">Διαχωρισμός</a><a href="#s-4">Συγχώνευση</a><a href="#s-5-2-3">5.2.3</a><a href="#s-tools">Εργαλειοθήκη</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a><a href="#s-hw">Για το σπίτι</a></div></nav>
 <main id="doc" lang="el">
 <section class="hero">
 <svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
@@ -278,20 +376,20 @@ body::before{background:var(--ground)}
 </div>
 <div class="sec" id="s-9-1"><span class="num">9.1</span><h2>Γιατί πίνακας;</h2><span class="ref">Βιβλίο σελ. 155–157</span></div>
 <p>Το βιβλίο ξεκινά από ένα πρόβλημα που ήδη ξέρουμε: τη μέση θερμοκρασία 30 ημερών. Με <b>μία</b> μεταβλητή Θερμοκρασία και έναν αθροιστή λύνεται εύκολα. Αν όμως ζητηθεί και πόσες μέρες ήταν κάτω από τη μέση, τότε:</p>
-<div class="box def"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
+<div class="box def"><span aria-hidden="true" class="sos-av sa"></span>
 <div class="tag">Από το βιβλίο · το πρόβλημα</div>
 <p>«[…] η σύγκριση αυτή πρέπει να γίνει μετά τον υπολογισμό της μέσης θερμοκρασίας. Αυτό σημαίνει ότι όλες οι θερμοκρασίες πρέπει να επανεισαχθούν για να συγκριθούν με τη μέση.»</p>
 <p>Η άλλη λύση, 30 μεταβλητές Θερμοκρασία1, …, Θερμοκρασία30, θέλει «τριάντα εντολές ΔΙΑΒΑΣΕ και τριάντα εντολές ΑΝ». «Η καλύτερη λύση στο πρόβλημα αυτό είναι η χρήση μεταβλητής με δείκτες, έννοια που είναι γνωστή από τα μαθηματικά και υλοποιείται στον προγραμματισμό με τη δομή δεδομένων του πίνακα.»</p>
 <p class="src">Σχολικό βιβλίο, §9.1</p>
 </div>
 <div class="grid g2" style="align-items:start">
-<div class="box def" style="margin:0"><img class="sos-av" src="av6.jpg" alt="" loading="lazy">
+<div class="box def" style="margin:0"><span aria-hidden="true" class="sos-av sb"></span>
 <div class="tag">Ορισμός · απομνημόνευση</div>
 <p><b>Πίνακας</b> είναι ένα σύνολο αντικειμένων ίδιου τύπου, τα οποία αναφέρονται με ένα κοινό όνομα. Κάθε ένα από τα αντικείμενα που απαρτίζουν τον πίνακα λέγεται <b>στοιχείο</b> του πίνακα. Η αναφορά σε ατομικά στοιχεία του πίνακα γίνεται με το όνομα του πίνακα ακολουθούμενο από ένα <b>δείκτη</b>.</p>
 <p>Οι πίνακες που χρησιμοποιούν ένα μόνο δείκτη για την αναφορά των στοιχείων τους ονομάζονται <b>μονοδιάστατοι πίνακες</b>.</p>
 <p class="src">Σχολικό βιβλίο, §9.1</p>
 </div>
-<div class="box def" style="margin:0"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
+<div class="box def" style="margin:0"><span aria-hidden="true" class="sos-av sa"></span>
 <div class="tag">Από το βιβλίο · τρεις σημειώσεις στο περιθώριο</div>
 <p>Το όνομα του πίνακα καθορίζει μία ομάδα <b>διαδοχικών θέσεων</b> στη μνήμη. Ο δείκτης είναι μία ακέραια έκφραση, σταθερή ή μεταβλητή, που περικλείεται μέσα στα σύμβολα [ και ].</p>
 <p>«Είναι σύνηθες όμως στον προγραμματισμό ως δείκτες να χρησιμοποιούνται οι μεταβλητές i, j, k.»</p>
@@ -324,7 +422,7 @@ body::before{background:var(--ground)}
 <p class="small">Το δοκιμάσαμε με 30 θερμοκρασίες (20, 22, 19, 25, 18, 21, 23, 24, 17, 26, τρεις φορές): μέση <b>21.5</b>, μέρες κάτω από τη μέση <b>15</b>. Δες τα δύο περάσματα (Α3 του Μαθήματος 19): στο πρώτο διαβάζουμε και αθροίζουμε, στο δεύτερο συγκρίνουμε. Οι τιμές «δεν χάνονται, αφού βρίσκονται στα στοιχεία του πίνακα».</p>
 <div class="sec" id="s-4-2"><span class="num">4.2</span><h2>Γέμισμα πίνακα</h2><span class="ref">Οδηγίες Μελέτης §4.1–4.2</span></div>
 <div class="grid g2" style="align-items:start">
-<div class="box trap" style="margin:0"><img class="sos-av" src="av6.jpg" alt="" loading="lazy">
+<div class="box trap" style="margin:0"><span aria-hidden="true" class="sos-av sb"></span>
 <div class="tag">Έτσι όχι</div>
 <pre class="code">ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 100
   ΔΙΑΒΑΣΕ Α
@@ -476,11 +574,10 @@ Max ← table[1]
 </svg>
 </div>
 <p>Η επανάληψη είναι <code>ΟΣΟ i &lt;= 5 ΚΑΙ j &lt;= 4</code>: σταματά μόλις τελειώσει <b>ένας</b> από τους δύο. Γιατί όχι ΓΙΑ; Γιατί δεν ξέρουμε από πριν πόσες συγκρίσεις θα γίνουν. Ολόκληρο το πρόγραμμα, με πίνακα τιμών, στο Λυμένο 5.</p>
-<div class="box trivia">
-<div class="tag">Ήξερες ότι;</div>
+<details class="box trivia">
+<summary class="tag">Ήξερες ότι;</summary>
 <p>Ένα από τα πρώτα προγράμματα που γράφτηκαν ποτέ για υπολογιστή με αποθηκευμένο πρόγραμμα ήταν… μια συγχώνευση. Το 1945 ο John von Neumann έγραψε με το χέρι, σε 23 σελίδες, ένα πρόγραμμα ταξινόμησης με συγχώνευση για τον EDVAC, έναν υπολογιστή που δεν είχε ακόμα κατασκευαστεί. Το 1970 ο Donald Knuth μελέτησε το χειρόγραφο σε ένα άρθρο με τίτλο «Το πρώτο πρόγραμμα υπολογιστή του von Neumann» και βρήκε μέσα και ένα λάθος.</p>
-<p class="small"><b>1΄ συζήτηση:</b> Ο von Neumann δεν μπορούσε να τρέξει το πρόγραμμά του, αφού ο υπολογιστής δεν υπήρχε. Πώς θα έλεγχες εσύ ένα πρόγραμμα χωρίς υπολογιστή; (Θυμήσου τον πίνακα τιμών.)</p>
-</div>
+<p class="small"><b>1΄ συζήτηση:</b> Ο von Neumann δεν μπορούσε να τρέξει το πρόγραμμά του, αφού ο υπολογιστής δεν υπήρχε. Πώς θα έλεγχες εσύ ένα πρόγραμμα χωρίς υπολογιστή; (Θυμήσου τον πίνακα τιμών.)</p></details>
 <div class="sec" id="s-5-2-3"><span class="num">5.2.3</span><h2>Λάθη σε πίνακες</h2><span class="ref">Συμπληρωματικό υλικό §5.2.3</span></div>
 <p>Το Συμπληρωματικό υλικό προτείνει μια δραστηριότητα (Παράδειγμα 8) με την εξής εκφώνηση: να διαβάζονται τα μηνιαία έσοδα ενός καταστήματος για το πρώτο εξάμηνο και, για τους μήνες Φεβρουάριο έως Ιούνιο, να ελέγχεται αν είχαν <b>περισσότερα</b> έσοδα από τον ακριβώς προηγούμενο μήνα. Το πρόγραμμα που δίνεται:</p>
 <pre class="code">ΠΡΟΓΡΑΜΜΑ ΕΣΟΔΑ_ΚΑΤΑΣΤΗΜΑΤΟΣ
@@ -504,7 +601,7 @@ Max ← table[1]
 <div class="tag">Δραστηριότητα στην τάξη</div>
 <p><span class="ln li">Εκτελέστε το πρόγραμμα με είσοδο <b>2000, 1800, 2100, 2100, 2000, 2000</b> και συμπληρώστε έναν πίνακα με στήλες: Ι</span><span class="ln li">ΕΣΟΔΑ[Ι]</span><span class="ln li">ΕΣΟΔΑ[Ι+1]</span><span class="ln li"><span class="nw">ΕΣΟΔΑ[Ι] &lt;= ΕΣΟΔΑ[Ι</span>+1]</span><span class="ln li">Έξοδος προγράμματος</span><span class="ln li">Αναμενόμενο αποτέλεσμα</span><span class="ln li">Ορθότητα. Ποια λάθη βρίσκετε; Η λύση βήμα-βήμα είναι στο Λυμένο 3.</span></p>
 </div>
-<div class="box def"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
+<div class="box def"><span aria-hidden="true" class="sos-av sa"></span>
 <div class="tag">Συμβουλή του βιβλίου · απομνημόνευση</div>
 <p>Κατά την εκσφαλμάτωση προγραμμάτων που χρησιμοποιούν πίνακες χρειάζεται να δίνετε ιδιαίτερη προσοχή:</p>
 <ul class="tight">
@@ -523,11 +620,10 @@ Max ← table[1]
 <tr><td><b>Αρχικές τιμές:</b> έχουν όλα τιμή πριν χρησιμοποιηθούν;</td><td>Μετρητής ή αθροιστής χωρίς μηδενισμό. Μέγιστο με αρχική τιμή 0.</td></tr>
 <tr><td><b>Μήνυμα:</b> αφορά τη σωστή θέση;</td><td>Συγκρίνω τον μήνα <span class="nw">Ι + 1</span> με τον Ι, αλλά εμφανίζω «μήνας Ι».</td></tr>
 </tbody></table></div>
-<div class="box trivia">
-<div class="tag">Ήξερες ότι;</div>
+<details class="box trivia">
+<summary class="tag">Ήξερες ότι;</summary>
 <p>Τον Απρίλιο του 2014 δημοσιοποιήθηκε το <b>Heartbleed</b>, ένα από τα πιο γνωστά κενά ασφαλείας στην ιστορία του διαδικτύου. Βρισκόταν στο OpenSSL, λογισμικό που προστατεύει τις κρυπτογραφημένες συνδέσεις σε πάρα πολλούς διακομιστές. Ο υπολογιστής που συνδεόταν έστελνε ένα μικρό μήνυμα και δήλωνε πόσο μεγάλο ήταν, και ο διακομιστής του το επέστρεφε. Ο κώδικας δεν <b>έλεγχε</b> αν το δηλωμένο μέγεθος ήταν το πραγματικό: όποιος δήλωνε μεγαλύτερο μέγεθος έπαιρνε πίσω έως 64 KB από τη μνήμη του διακομιστή, όπου μπορεί να βρίσκονταν κωδικοί και κλειδιά. Ένας έλεγχος ορίων που έλειπε.</p>
-<p class="small"><b>1΄ συζήτηση:</b> Η ΓΛΩΣΣΑ σταματά το πρόγραμμα όταν ο δείκτης βγει έξω από τα όρια («αντικανονικός τερματισμός»). Η γλώσσα C του OpenSSL δεν το κάνει. Ποιο είναι καλύτερο για τον προγραμματιστή και ποιο για την ταχύτητα;</p>
-</div>
+<p class="small"><b>1΄ συζήτηση:</b> Η ΓΛΩΣΣΑ σταματά το πρόγραμμα όταν ο δείκτης βγει έξω από τα όρια («αντικανονικός τερματισμός»). Η γλώσσα C του OpenSSL δεν το κάνει. Ποιο είναι καλύτερο για τον προγραμματιστή και ποιο για την ταχύτητα;</p></details>
 <div class="sec" id="s-tools"><span class="num">⚙</span><h2>Η εργαλειοθήκη των πινάκων</h2><span class="ref">Συνέχεια του Μαθήματος 19 (Α1–Α8)</span></div>
 <div class="tablewrap"><table class="t"><tbody>
 <tr><th>Μοτίβο</th><th>Σκελετός</th><th>Πρόσεξε</th></tr>
@@ -540,7 +636,7 @@ Max ← table[1]
 <tr><td><b>Α15.</b> Συγχώνευση (1η)</td><td><span class="ln cd"><code>Γ[i] ← Α[i]</code></span><span class="ln cd">μετά <code>Γ[Ν1 + i] ← Β[i]</code></span></td><td>Γ με <span class="nw">Ν1 + Ν2</span> θέσεις</td></tr>
 <tr><td><b>Α16.</b> Συγχώνευση (2η, ταξινομημένοι)</td><td><span class="ln li"><code>ΟΣΟ i &lt;= Ν1 ΚΑΙ j &lt;= Ν2</code></span><span class="ln li">το μικρότερο στο Γ[κ]</span><span class="ln li">μετά τα υπόλοιπα</span></td><td>προχωράει μόνο ο δείκτης από όπου πήραμε</td></tr>
 </tbody></table></div>
-<div class="box trap"><img class="sos-av" src="av6.jpg" alt="" loading="lazy">
+<div class="box trap"><span aria-hidden="true" class="sos-av sb"></span>
 <div class="tag">Παγίδες που κοστίζουν μονάδες</div>
 <ul class="tight">
 <li><code>ΔΙΑΒΑΣΕ Α</code> ή <code>ΓΡΑΨΕ Α</code> χωρίς δείκτη: ο πίνακας διαβάζεται και εμφανίζεται <b>στοιχείο-στοιχείο</b>, με βρόχο.</li>
@@ -552,7 +648,7 @@ Max ← table[1]
 <li>Στη συγχώνευση ταξινομημένων ξεχνάμε συχνά να αντιγράψουμε τα στοιχεία που <b>περίσσεψαν</b>.</li>
 </ul>
 </div>
-<div class="box def"><img class="sos-av" src="av3.jpg" alt="" loading="lazy">
+<div class="box def"><span aria-hidden="true" class="sos-av sa"></span>
 <div class="tag">Σύνοψη</div>
 <p><b>Πότε πίνακας:</b> όταν τα δεδομένα χρειάζονται <b>ξανά</b> μετά την ανάγνωσή τους (π.χ. σύγκριση με τον μέσο όρο, θέσεις του μέγιστου, ανάποδη εμφάνιση).</p>
 <p><b>Γέμισμα:</b> με ΓΙΑ και <code>ΔΙΑΒΑΣΕ Α[i]</code>. Με μεταβλητό πλήθος, δήλωση με το μέγιστο και Ν με έλεγχο.</p>
@@ -561,8 +657,8 @@ Max ← table[1]
 </div>
 
 <section class="solved-wrap">
-<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένα παραδείγματα βήμα-βήμα</h2><span class="ref">Έτσι σκεφτόμαστε</span></div>
-<div class="box solved">
+<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένα παραδείγματα βήμα-βήμα</h2></div>
+<div class="box solved" id="sol-1">
 <div class="tag">Λυμένο 1 · Ο πιο βροχερός και ο πιο ξερός μήνας</div>
 <p>Να γραφτεί πρόγραμμα που διαβάζει τη βροχόπτωση (σε mm) καθενός από τους 12 μήνες ενός έτους σε πίνακα, με έλεγχο ότι δεν είναι αρνητική, και εμφανίζει τον πιο βροχερό και τον πιο ξερό μήνα (τον αριθμό του) με τη βροχόπτωσή τους. Αν υπάρχει ισοπαλία, εμφανίζεται ο πρώτος.</p>
 <div class="steps">
@@ -600,7 +696,7 @@ Max ← table[1]
 <div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Είσοδος 85, (−3 απορρίπτεται), 62, 48, 30, 12, 4, 2, 15, 70, 95, 110, 95. Αποτέλεσμα: <b>μήνας 11 με 110 mm</b> και <b>μήνας 7 με 2 mm</b>. Ο 12ος μήνας έχει 95, όσο ο 10ος. Δεν αλλάζει τίποτα, γιατί δεν είναι ούτε μέγιστο ούτε ελάχιστο.</div></div>
 </div>
 </div>
-<div class="box solved">
+<div class="box solved" id="sol-2">
 <div class="tag">Λυμένο 2 · Τα 100 μέτρα: παράλληλοι πίνακες</div>
 <p>Σε έναν αγώνα δρόμου 100 μ. συμμετέχουν Ν αθλητές (2 έως 50). Να γραφτεί πρόγραμμα που διαβάζει για κάθε αθλητή το όνομα και τον χρόνο του (θετικό, σε δευτερόλεπτα) και εμφανίζει τον καλύτερο χρόνο και <b>όλους</b> όσους τον πέτυχαν, τον μέσο χρόνο και τα ονόματα όσων έτρεξαν πιο γρήγορα από τον μέσο χρόνο.</p>
 <div class="steps">
@@ -652,7 +748,7 @@ Max ← table[1]
 <div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> Ν: 1 (απορρίπτεται), 4.</span><span class="ln li">Άννα 13.2</span><span class="ln li">Βασίλης 12.8</span><span class="ln li">Γιώργος 0 (απορρίπτεται), 13.9</span><span class="ln li">Δανάη 12.8</span><span class="ln">Καλύτερος χρόνος <b>12.8</b>: <b>Βασίλης</b> και <b>Δανάη</b>. Μέσος χρόνος <span class="nw">52.7 / 4</span> = <b>13.175</b>. Πιο γρήγοροι: Βασίλης, Δανάη. Με μία μόνο σύγκριση θα είχαμε χάσει τη Δανάη.</span></div></div>
 </div>
 </div>
-<div class="box solved">
+<div class="box solved" id="sol-3">
 <div class="tag">Λυμένο 3 · Η δραστηριότητα του Παραδείγματος 8</div>
 <p>Να εκτελεστεί το πρόγραμμα ΕΣΟΔΑ_ΚΑΤΑΣΤΗΜΑΤΟΣ της ενότητας 5.2.3 με είσοδο 2000, 1800, 2100, 2100, 2000, 2000, να συμπληρωθεί ο πίνακας τιμών και να προταθούν διορθώσεις.</p>
 <div class="steps">
@@ -688,7 +784,7 @@ Max ← table[1]
 <div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Με την ίδια είσοδο το διορθωμένο εμφανίζει μόνο «Ο 3ος μήνας ΑΥΞΗΣΗ» και τερματίζει κανονικά. Τα τρία λάθη αντιστοιχούν ακριβώς στη Συμβουλή του βιβλίου: <b>δείκτης</b> στο μήνυμα, <b>όρια</b> στον βρόχο, και ένα λογικό λάθος στη συνθήκη.</div></div>
 </div>
 </div>
-<div class="box solved">
+<div class="box solved" id="sol-4">
 <div class="tag">Λυμένο 4 · Προάγονται και παραπέμπονται</div>
 <p>Να γραφτεί πρόγραμμα που διαβάζει τα ονόματα και τους βαθμούς 10 μαθητών και δημιουργεί δύο νέους πίνακες: ΕΠ με τα ονόματα όσων έχουν βαθμό τουλάχιστον 10 και ΑΠ με τα ονόματα των υπολοίπων. Στο τέλος εμφανίζει το πλήθος και τα ονόματα κάθε ομάδας.</p>
 <div class="steps">
@@ -729,7 +825,7 @@ Max ← table[1]
 <div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Άννα 15, Βασίλης 8, Γιώργος 12.5, Δανάη 9.5, Ελένη 18, Φώτης 10, Ηλίας 7, Θάλεια 20, Ιάσονας 11, Κατερίνα 4. Προάγονται <b>6</b> (ο Φώτης με 10 μέσα, λόγω &gt;=), παραπέμπονται <b>4</b>. Έλεγχος: <span class="nw">κε + κα = 10.</span> Αν γράφαμε <code>ΕΠ[i] ← ΟΝ[i]</code>, ο ΕΠ θα είχε κενές θέσεις (2, 4, 7, 10) και ο βρόχος εμφάνισης θα σταματούσε με «στοιχείο χωρίς τιμή».</div></div>
 </div>
 </div>
-<div class="box solved">
+<div class="box solved" id="sol-5">
 <div class="tag">Λυμένο 5 · Συγχώνευση ταξινομημένων πινάκων</div>
 <p>Οι πίνακες Α[5] και Β[4] περιέχουν ακέραιους σε αύξουσα σειρά. Να γραφτεί πρόγραμμα που τους διαβάζει και δημιουργεί τον πίνακα Γ[9] με όλα τα στοιχεία τους, επίσης σε αύξουσα σειρά. Να γίνει πίνακας τιμών για <span class="nw">Α = 3,</span> 8, 12, 15, 20 και <span class="nw">Β = 5,</span> 8, 9, 25.</p>
 <div class="steps">
@@ -786,7 +882,7 @@ Max ← table[1]
 <div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Γ = <b>3, 5, 8, 8, 9, 12, 15, 20, 25</b>: 9 στοιχεία, σε αύξουσα σειρά ✓. Το σχήμα της ενότητας «Συγχώνευση» δείχνει την κατάσταση μετά τη γραμμή <span class="nw">κ = 5</span> <span class="nw">(i = 3,</span> <span class="nw">j = 4).</span> Το 8 υπάρχει και στους δύο και γράφεται δύο φορές. Στην Άσκηση 11 θα το γράψουμε μία.</div></div>
 </div>
 </div>
-<div class="box solved">
+<div class="box solved" id="sol-6">
 <div class="tag">Λυμένο 6 · Εκσφαλμάτωση: τέσσερα λάθη σε ένα πρόγραμμα</div>
 <p>Το παρακάτω πρόγραμμα θέλει να διαβάζει τις θερμοκρασίες 7 ημερών του χειμώνα και να εμφανίζει τη μέση θερμοκρασία, τη μέγιστη και σε πόσες μέρες η θερμοκρασία ανέβηκε σε σχέση με την προηγούμενη. Να εντοπιστούν και να διορθωθούν τα λάθη, με δεδομένα ελέγχου −4, −2, −5, −1, −1, −3, −6.</p>
 <pre class="code">ΠΡΟΓΡΑΜΜΑ Κρύο
@@ -848,7 +944,7 @@ Max ← table[1]
 </section>
 
 <section class="cards" id="s-cards">
-<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2><span class="ref">Ορισμοί για απομνημόνευση</span></div>
+<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2></div>
 <p class="small">Διάβασε τον όρο, πες τον ορισμό από μέσα σου και πάτα την κάρτα για να τον δεις.</p>
 <div class="deck">
 <button aria-live="polite" class="card" id="card" type="button">
@@ -863,61 +959,19 @@ Max ← table[1]
 </div>
 </div>
 </section><section class="exercises">
-<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2><span class="ref">Από τα εύκολα στα δύσκολα</span></div>
+<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2></div>
 <div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div>
-<div class="q"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Γράψε Σ ή Λ.
-<table class="tf">
-<tbody><tr><td>α. Ο δείκτης ενός πίνακα μπορεί να είναι ακέραια έκφραση, π.χ. <span class="nw">Α[2 * i − 1].</span></td><td class="b">____</td></tr>
-<tr><td>β. Η εντολή <code>ΔΙΑΒΑΣΕ Α</code> μέσα σε βρόχο γεμίζει όλον τον πίνακα Α.</td><td class="b">____</td></tr>
-<tr><td>γ. Το όνομα ενός πίνακα καθορίζει μια ομάδα διαδοχικών θέσεων μνήμης.</td><td class="b">____</td></tr>
-<tr><td>δ. Η ανάγνωση και η εκτύπωση των στοιχείων ενός πίνακα γίνεται καλύτερα με την εντολή ΓΙΑ.</td><td class="b">____</td></tr>
-<tr><td>ε. Για να βρούμε το μέγιστο στοιχείο ενός πίνακα, η αρχική τιμή του μέγιστου μπορεί πάντα να είναι 0.</td><td class="b">____</td></tr>
-<tr><td>στ. Για να αποθηκεύσουμε ονόματα και βαθμούς χρειάζονται δύο πίνακες.</td><td class="b">____</td></tr>
-<tr><td>ζ. Μετά την εκτέλεση της <code>ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 10</code> η μεταβλητή i έχει την τιμή 10.</td><td class="b">____</td></tr>
-<tr><td>η. Στη συγχώνευση δύο ταξινομημένων πινάκων ο πίνακας που δημιουργείται είναι κι αυτός ταξινομημένος.</td><td class="b">____</td></tr>
-<tr><td>θ. Ο διαχωρισμός είναι η αντίστροφη λειτουργία της συγχώνευσης.</td><td class="b">____</td></tr>
-<tr><td>ι. Η προσπέλαση του στοιχείου Α[0] ενός πίνακα Α[10] είναι λάθος που εμφανίζεται κατά την εκτέλεση.</td><td class="b">____</td></tr>
-</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Σ, β Λ, γ Σ, δ Σ, ε Λ, στ Σ, ζ Λ, η Σ, θ Σ, ι Σ</span>
-<p class="small">β: κάθε τιμή γράφεται πάνω στην προηγούμενη (και στη ΓΛΩΣΣΑ λείπει ο δείκτης). ε: όχι αν όλες οι τιμές είναι αρνητικές. ζ: έχει την τιμή 11.</p></div></details></div>
-<div class="q"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
-<p>α) Να δώσετε τον ορισμό του πίνακα. Πότε ένας πίνακας λέγεται μονοδιάστατος;<br/>β) Γιατί, σύμφωνα με το βιβλίο, η λύση με 30 διαφορετικές μεταβλητές για 30 θερμοκρασίες δεν εξυπηρετεί;<br/>γ) Τι δηλώνουμε για έναν πίνακα στο τμήμα δήλωσης μεταβλητών και γιατί;<br/>δ) Γιατί η επεξεργασία των πινάκων γίνεται καλύτερα με την εντολή ΓΙΑ;<br/>ε) Σε ποια τρία σημεία χρειάζεται ιδιαίτερη προσοχή κατά την εκσφαλμάτωση προγραμμάτων με πίνακες;</p>
-<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p>Βλ. τα πλαίσια της §9.1 και τη Συμβουλή της §5.2.3. (β) Χρειάζονται 30 εντολές ΔΙΑΒΑΣΕ και 30 εντολές ΑΝ. Είναι πρακτική λύση μόνο για μικρό αριθμό δεδομένων. (γ) Τύπο και μέγιστο πλήθος στοιχείων, για να δεσμευτούν οι αντίστοιχες συνεχόμενες θέσεις μνήμης. (δ) Οι βρόχοι επαναλαμβάνονται προκαθορισμένο αριθμό φορών, όσα είναι τα στοιχεία.</p></div></details></div>
-<div class="q"><span class="qn">3</span><b>Ποια επεξεργασία;</b> Αντιστοίχισε κάθε τμήμα κώδικα με την επεξεργασία που κάνει.
-<ul class="legend tight">
-<li data-v="Α"><b>Α</b> Μέγιστο</li>
-<li data-v="Β"><b>Β</b> Θέση του ελάχιστου</li>
-<li data-v="Γ"><b>Γ</b> Διαχωρισμός</li>
-<li data-v="Δ"><b>Δ</b> Συγχώνευση (1η περίπτωση)</li>
-<li data-v="Ε"><b>Ε</b> Σύγκριση γειτονικών</li>
-<li data-v="Ζ"><b>Ζ</b> Μέτρηση</li>
-<li data-v="Η"><b>Η</b> Γέμισμα</li>
-<li data-v="Θ"><b>Θ</b> Αντιγραφή</li>
-</ul>
-<table class="tf">
-<tbody><tr><td>α. <code>ΑΝ Α[i] &lt; Α[θ] ΤΟΤΕ θ ← i</code></td><td class="b">____</td></tr>
-<tr><td>β. <code>ΑΝ Α[i] &gt; 0 ΤΟΤΕ κ ← κ + 1 · Β[κ] ← Α[i]</code></td><td class="b">____</td></tr>
-<tr><td>γ. <code>Γ[20 + i] ← Β[i]</code></td><td class="b">____</td></tr>
-<tr><td>δ. <code>ΑΝ Α[i] = Α[i + 1] ΤΟΤΕ …</code></td><td class="b">____</td></tr>
-<tr><td>ε. <code>ΑΝ Α[i] &gt; μ ΤΟΤΕ μ ← Α[i]</code></td><td class="b">____</td></tr>
-<tr><td>στ. <code>ΔΙΑΒΑΣΕ Α[i]</code></td><td class="b">____</td></tr>
-<tr><td>ζ. <code>ΑΝ Α[i] mod 2 = 0 ΤΟΤΕ π ← π + 1</code></td><td class="b">____</td></tr>
-<tr><td>η. <code>Β[i] ← Α[i]</code> για κάθε i</td><td class="b">____</td></tr>
-</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Β, β Γ, γ Δ, δ Ε, ε Α, στ Η, ζ Ζ, η Θ</span></div></details></div>
-<div class="q"><span class="qn">4</span><b>Σωστό ή λάθος τμήμα;</b> Ο πίνακας είναι <code>ΑΚΕΡΑΙΕΣ: Α[50]</code> και έχει γεμίσει σε όλες τις θέσεις. Γράψε Σ αν το τμήμα είναι σωστό, Λ αν όχι, και για τα λάθος γράψε τι φταίει.
-<table class="tf">
-<tbody><tr><td><span class="ln cd">α. <code>ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 50</code></span><span class="ln cd"><code>ΑΝ Α[i] &lt; Α[i + 1] ΤΟΤΕ …</code></span></td><td class="b">____</td></tr>
-<tr><td><span class="ln cd">β. <code>ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 50</code></span><span class="ln cd"><code>ΑΝ Α[i] &lt; Α[i − 1] ΤΟΤΕ …</code></span></td><td class="b">____</td></tr>
-<tr><td><span class="ln cd">γ. <code>ΓΙΑ i ΑΠΟ 50 ΜΕΧΡΙ 1 ΜΕ_ΒΗΜΑ -1</code></span><span class="ln cd"><code>ΓΡΑΨΕ Α[i]</code></span></td><td class="b">____</td></tr>
-<tr><td><span class="ln cd">δ. <code>ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 25</code></span><span class="ln cd"><code>ΓΡΑΨΕ Α[2 * i]</code></span></td><td class="b">____</td></tr>
-<tr><td><span class="ln cd">ε. <code>ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 50</code></span><span class="ln cd"><code>ΓΡΑΨΕ Α[i] + Α[51 − i]</code></span></td><td class="b">____</td></tr>
-<tr><td><span class="ln cd">στ. <code>ΓΙΑ i ΑΠΟ 0 ΜΕΧΡΙ 49</code></span><span class="ln cd"><code>ΓΡΑΨΕ Α[i]</code></span></td><td class="b">____</td></tr>
-<tr><td><span class="ln cd">ζ. <code>θ ← 1</code></span><span class="ln cd"><code>ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 50</code></span><span class="ln cd"><code>ΑΝ Α[i] &gt; Α[θ] ΤΟΤΕ θ ← Α[i]</code></span></td><td class="b">____</td></tr>
-<tr><td><span class="ln cd">η. <code>ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 50 ΜΕ_ΒΗΜΑ 2</code></span><span class="ln cd"><code>ΓΡΑΨΕ Α[i] + Α[i + 1]</code></span></td><td class="b">____</td></tr>
-</tbody></table>
-<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Λ, β Σ, γ Σ, δ Σ, ε Σ, στ Λ, ζ Λ, η Σ</span>
-<p class="small">α: για <span class="nw">i = 50</span> ζητείται το Α[51]. δ: θέσεις 2, 4, …, 50. ε: το <span class="nw">51 − i</span> πηγαίνει από 50 έως 1. στ: Α[0]. ζ: το θ πρέπει να πάρει τη θέση i, όχι την τιμή Α[i]. η: <span class="nw">i = 1,</span> 3, …, 49, άρα <span class="nw">i + 1</span> το πολύ 50.</p></div></details></div>
+<div class="q" id="q-1"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Πάτα την απάντησή σου.
+<div class="quiz" data-q="1"><div class="qi" data-ans="Σ" data-why="Ο δείκτης είναι ακέραια έκφραση, σταθερή ή μεταβλητή."><p class="qs">α. Ο δείκτης ενός πίνακα μπορεί να είναι ακέραια έκφραση, π.χ. Α[2 * i − 1].</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Κάθε στοιχείο διαβάζεται χωριστά: ΔΙΑΒΑΣΕ Α[i]."><p class="qs">β. Η εντολή ΔΙΑΒΑΣΕ Α μέσα σε βρόχο γεμίζει όλον τον πίνακα Α.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Το όνομα του πίνακα καθορίζει μια ομάδα διαδοχικών θέσεων μνήμης."><p class="qs">γ. Το όνομα ενός πίνακα καθορίζει μια ομάδα διαδοχικών θέσεων μνήμης.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Το πλήθος των στοιχείων είναι γνωστό, άρα ταιριάζει η ΓΙΑ."><p class="qs">δ. Η ανάγνωση και η εκτύπωση των στοιχείων ενός πίνακα γίνεται καλύτερα με την εντολή ΓΙΑ.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Αν όλα τα στοιχεία είναι αρνητικά, το 0 θα έβγαινε λάθος μέγιστο. Αρχική τιμή: το πρώτο στοιχείο."><p class="qs">ε. Για να βρούμε το μέγιστο στοιχείο ενός πίνακα, η αρχική τιμή του μέγιστου μπορεί πάντα να είναι 0.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Ένας πίνακας έχει στοιχεία ενός τύπου, άρα ονόματα και βαθμοί θέλουν δύο παράλληλους πίνακες."><p class="qs">στ. Για να αποθηκεύσουμε ονόματα και βαθμούς χρειάζονται δύο πίνακες.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Μετά το τέλος της ΓΙΑ το i έχει την τιμή 11."><p class="qs">ζ. Μετά την εκτέλεση της ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 10 η μεταβλητή i έχει την τιμή 10.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Η συγχώνευση διαλέγει κάθε φορά το μικρότερο από τα δύο, άρα το αποτέλεσμα μένει ταξινομημένο."><p class="qs">η. Στη συγχώνευση δύο ταξινομημένων πινάκων ο πίνακας που δημιουργείται είναι κι αυτός ταξινομημένος.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Ο διαχωρισμός χωρίζει έναν πίνακα σε δύο, η συγχώνευση ενώνει δύο σε έναν."><p class="qs">θ. Ο διαχωρισμός είναι η αντίστροφη λειτουργία της συγχώνευσης.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Ο δείκτης 0 είναι έξω από τα όρια 1 έως 10, και το λάθος φαίνεται όταν τρέχει το πρόγραμμα."><p class="qs">ι. Η προσπέλαση του στοιχείου Α[0] ενός πίνακα Α[10] είναι λάθος που εμφανίζεται κατά την εκτέλεση.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="score" hidden=""></div></div></div>
+
+<div class="q" id="q-3"><span class="qn">3</span><b>Ποια επεξεργασία;</b> Αντιστοίχισε κάθε τμήμα κώδικα με την επεξεργασία που κάνει.
+
+<div class="quiz" data-q="3"><div class="qi" data-ans="Β" data-why="Κρατά τη θέση του μικρότερου στοιχείου."><p class="qs">α. ΑΝ Α[i] &lt; Α[θ] ΤΟΤΕ θ ← i</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Μέγιστο</button><button data-v="Β" type="button">Β Θέση του ελάχιστου</button><button data-v="Γ" type="button">Γ Διαχωρισμός</button><button data-v="Δ" type="button">Δ Συγχώνευση (1η περίπτωση)</button><button data-v="Ε" type="button">Ε Σύγκριση γειτονικών</button><button data-v="Ζ" type="button">Ζ Μέτρηση</button><button data-v="Η" type="button">Η Γέμισμα</button><button data-v="Θ" type="button">Θ Αντιγραφή</button></div></div><div class="qi" data-ans="Γ" data-why="Βάζει τα θετικά σε νέο πίνακα, άρα διαχωρισμός."><p class="qs">β. ΑΝ Α[i] &gt; 0 ΤΟΤΕ κ ← κ + 1 · Β[κ] ← Α[i]</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Μέγιστο</button><button data-v="Β" type="button">Β Θέση του ελάχιστου</button><button data-v="Γ" type="button">Γ Διαχωρισμός</button><button data-v="Δ" type="button">Δ Συγχώνευση (1η περίπτωση)</button><button data-v="Ε" type="button">Ε Σύγκριση γειτονικών</button><button data-v="Ζ" type="button">Ζ Μέτρηση</button><button data-v="Η" type="button">Η Γέμισμα</button><button data-v="Θ" type="button">Θ Αντιγραφή</button></div></div><div class="qi" data-ans="Δ" data-why="Αντιγράφει τα στοιχεία του Β στο τέλος του Γ, όπως στη συγχώνευση."><p class="qs">γ. Γ[20 + i] ← Β[i]</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Μέγιστο</button><button data-v="Β" type="button">Β Θέση του ελάχιστου</button><button data-v="Γ" type="button">Γ Διαχωρισμός</button><button data-v="Δ" type="button">Δ Συγχώνευση (1η περίπτωση)</button><button data-v="Ε" type="button">Ε Σύγκριση γειτονικών</button><button data-v="Ζ" type="button">Ζ Μέτρηση</button><button data-v="Η" type="button">Η Γέμισμα</button><button data-v="Θ" type="button">Θ Αντιγραφή</button></div></div><div class="qi" data-ans="Ε" data-why="Συγκρίνει κάθε στοιχείο με το επόμενο."><p class="qs">δ. ΑΝ Α[i] = Α[i + 1] ΤΟΤΕ …</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Μέγιστο</button><button data-v="Β" type="button">Β Θέση του ελάχιστου</button><button data-v="Γ" type="button">Γ Διαχωρισμός</button><button data-v="Δ" type="button">Δ Συγχώνευση (1η περίπτωση)</button><button data-v="Ε" type="button">Ε Σύγκριση γειτονικών</button><button data-v="Ζ" type="button">Ζ Μέτρηση</button><button data-v="Η" type="button">Η Γέμισμα</button><button data-v="Θ" type="button">Θ Αντιγραφή</button></div></div><div class="qi" data-ans="Α" data-why="Κρατά τη μεγαλύτερη τιμή."><p class="qs">ε. ΑΝ Α[i] &gt; μ ΤΟΤΕ μ ← Α[i]</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Μέγιστο</button><button data-v="Β" type="button">Β Θέση του ελάχιστου</button><button data-v="Γ" type="button">Γ Διαχωρισμός</button><button data-v="Δ" type="button">Δ Συγχώνευση (1η περίπτωση)</button><button data-v="Ε" type="button">Ε Σύγκριση γειτονικών</button><button data-v="Ζ" type="button">Ζ Μέτρηση</button><button data-v="Η" type="button">Η Γέμισμα</button><button data-v="Θ" type="button">Θ Αντιγραφή</button></div></div><div class="qi" data-ans="Η" data-why="Διαβάζει τιμές στον πίνακα, άρα γέμισμα."><p class="qs">στ. ΔΙΑΒΑΣΕ Α[i]</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Μέγιστο</button><button data-v="Β" type="button">Β Θέση του ελάχιστου</button><button data-v="Γ" type="button">Γ Διαχωρισμός</button><button data-v="Δ" type="button">Δ Συγχώνευση (1η περίπτωση)</button><button data-v="Ε" type="button">Ε Σύγκριση γειτονικών</button><button data-v="Ζ" type="button">Ζ Μέτρηση</button><button data-v="Η" type="button">Η Γέμισμα</button><button data-v="Θ" type="button">Θ Αντιγραφή</button></div></div><div class="qi" data-ans="Ζ" data-why="Μετρά πόσα στοιχεία είναι άρτια."><p class="qs">ζ. ΑΝ Α[i] mod 2 = 0 ΤΟΤΕ π ← π + 1</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Μέγιστο</button><button data-v="Β" type="button">Β Θέση του ελάχιστου</button><button data-v="Γ" type="button">Γ Διαχωρισμός</button><button data-v="Δ" type="button">Δ Συγχώνευση (1η περίπτωση)</button><button data-v="Ε" type="button">Ε Σύγκριση γειτονικών</button><button data-v="Ζ" type="button">Ζ Μέτρηση</button><button data-v="Η" type="button">Η Γέμισμα</button><button data-v="Θ" type="button">Θ Αντιγραφή</button></div></div><div class="qi" data-ans="Θ" data-why="Φτιάχνει ένα ίδιο αντίγραφο του πίνακα."><p class="qs">η. Β[i] ← Α[i] για κάθε i</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Μέγιστο</button><button data-v="Β" type="button">Β Θέση του ελάχιστου</button><button data-v="Γ" type="button">Γ Διαχωρισμός</button><button data-v="Δ" type="button">Δ Συγχώνευση (1η περίπτωση)</button><button data-v="Ε" type="button">Ε Σύγκριση γειτονικών</button><button data-v="Ζ" type="button">Ζ Μέτρηση</button><button data-v="Η" type="button">Η Γέμισμα</button><button data-v="Θ" type="button">Θ Αντιγραφή</button></div></div><div class="score" hidden=""></div></div></div>
+<div class="q" id="q-4"><span class="qn">4</span><b>Σωστό ή λάθος τμήμα;</b> Ο πίνακας είναι <code>ΑΚΕΡΑΙΕΣ: Α[50]</code> και έχει γεμίσει σε όλες τις θέσεις. Γράψε Σ αν το τμήμα είναι σωστό, Λ αν όχι, και για τα λάθος γράψε τι φταίει.
+<div class="quiz" data-q="4"><div class="qi" data-ans="Λ" data-why="Για i = 50 το Α[i + 1] είναι το Α[51], έξω από τα όρια."><p class="qs">α. ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 50 ΑΝ Α[i] &lt; Α[i + 1] ΤΟΤΕ …</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Το i ξεκινά από 2, άρα το Α[i − 1] είναι πάντα από Α[1] έως Α[49]."><p class="qs">β. ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 50 ΑΝ Α[i] &lt; Α[i − 1] ΤΟΤΕ …</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Εμφανίζει τα 50 στοιχεία ανάποδα."><p class="qs">γ. ΓΙΑ i ΑΠΟ 50 ΜΕΧΡΙ 1 ΜΕ_ΒΗΜΑ -1 ΓΡΑΨΕ Α[i]</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Εμφανίζει τα Α[2], Α[4], …, Α[50]."><p class="qs">δ. ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 25 ΓΡΑΨΕ Α[2 * i]</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Οι δείκτες 51 − i είναι από 50 έως 1, μέσα στα όρια."><p class="qs">ε. ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 50 ΓΡΑΨΕ Α[i] + Α[51 − i]</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Ο δείκτης 0 είναι έξω από τα όρια."><p class="qs">στ. ΓΙΑ i ΑΠΟ 0 ΜΕΧΡΙ 49 ΓΡΑΨΕ Α[i]</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Στο θ πρέπει να μπει η θέση i, όχι η τιμή Α[i]."><p class="qs">ζ. θ ← 1 ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 50 ΑΝ Α[i] &gt; Α[θ] ΤΟΤΕ θ ← Α[i]</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Το i παίρνει 1, 3, …, 49, άρα το Α[i + 1] φτάνει ως το Α[50]."><p class="qs">η. ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 50 ΜΕ_ΒΗΜΑ 2 ΓΡΑΨΕ Α[i] + Α[i + 1]</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="score" hidden=""></div></div>
+<div class="lines" style="--h:84px"></div></div>
 <div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div>
-<div class="q"><span class="qn">5</span><b>Η ολίσθηση.</b> Να συμπληρώσετε τον πίνακα Α μετά τον πρώτο βρόχο και μετά τον δεύτερο, και να βρείτε τι εμφανίζεται. Τι κάνει ο δεύτερος βρόχος μαζί με τις εντολές για το τ;
+<div class="q" id="q-5"><span class="qn">5</span><b>Η ολίσθηση.</b> Να συμπληρώσετε τον πίνακα Α μετά τον πρώτο βρόχο και μετά τον δεύτερο, και να βρείτε τι εμφανίζεται. Τι κάνει ο δεύτερος βρόχος μαζί με τις εντολές για το τ;
 <pre class="code">ΠΡΟΓΡΑΜΜΑ Ολίσθηση
 ΜΕΤΑΒΛΗΤΕΣ
   ΑΚΕΡΑΙΕΣ: Α[6], i, τ, ίσα
@@ -942,16 +996,38 @@ Max ← table[1]
   ΓΡΑΨΕ 'Ίσα γειτονικά:', ίσα
 ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre>
 <p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p>Μετά τον 1ο βρόχο: <span class="nw">Α = [1,</span> 4, 2, 2, 4, 1] (1, 4, <span class="nw">9 mod 7,</span> <span class="nw">16 mod 7,</span> <span class="nw">25 mod 7,</span> <span class="nw">36 mod 7).</span> Ο 2ος βρόχος με τα τ κάνει <b>κυκλική ολίσθηση δεξιά κατά μία θέση</b>: <span class="nw">Α = [1,</span> 1, 4, 2, 2, 4]. Εμφανίζει <b>1 1 4 2 2 4</b> και <b>Ίσα γειτονικά: 2</b>. Ο βρόχος πάει ανάποδα (από 6 προς 2): αν πήγαινε από 2 προς 6, θα αντέγραφε το Α[1] σε όλες τις θέσεις.</p></div></details></div>
-<div class="q hw"><span class="qn">6</span><b>Πίνακας τιμών συγχώνευσης.</b> Για το πρόγραμμα του Λυμένου 5 με πίνακες <span class="nw">Α[3] = 2,</span> 7, 9 και <span class="nw">Β[4] = 4,</span> 7, 11, 13 (και Γ[7]), να γίνει πίνακας τιμών με στήλες κ, i, j, <span class="nw">Α[i] &lt;= Β[j],</span> Γ[κ]. Πόσες φορές εκτελείται καθένας από τους δύο βρόχους για τα στοιχεία που περίσσεψαν; Το 7 του Γ[3] από ποιον πίνακα προέρχεται;
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">7</span><b>Όλες οι θέσεις του μέγιστου.</b> Να γραφτεί πρόγραμμα που διαβάζει το πλήθος Ν (1 έως 100) και Ν ακέραιους σε πίνακα και εμφανίζει τον μεγαλύτερο, όλες τις θέσεις στις οποίες εμφανίζεται και πόσες φορές εμφανίζεται. Έλεγχος: <span class="nw">Ν = 8</span> με 5, 9, 2, 9, 7, 9, 1, 3.
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">8</span><b>Η μετοχή.</b><span class="theme">Οικονομία</span>
+
+
+
+
+
+
+
+
+
+
+
+
+</section><section class="test" id="s-test">
+<div class="sec" id="s-test"><span class="num">◎</span><h2>Σύντομο Τεστ Μαθήματος</h2></div>
+<div class="tresult" hidden="" id="t-last">
+<span class="big" id="t-lastscore"></span>
+<span id="t-lastnote"></span>
+<a class="tlink" href="#progress" id="t-grade">Βαθμός κατανόησης</a>
+</div>
+<div class="tstart">
+<button class="btn primary" id="t-start" type="button">Έναρξη τεστ</button>
+</div>
+<p class="small" hidden="" id="t-wait"></p>
+<div hidden="" id="t-body"></div>
+</section><section class="exercises hwsec"><div class="sec" id="s-hw"><span class="num">✍</span><h2>Για το σπίτι</h2></div><div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div><div class="q hw" id="q-2"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
+<p>α) Να δώσετε τον ορισμό του πίνακα. Πότε ένας πίνακας λέγεται μονοδιάστατος;<br/>β) Γιατί, σύμφωνα με το βιβλίο, η λύση με 30 διαφορετικές μεταβλητές για 30 θερμοκρασίες δεν εξυπηρετεί;<br/>γ) Τι δηλώνουμε για έναν πίνακα στο τμήμα δήλωσης μεταβλητών και γιατί;<br/>δ) Γιατί η επεξεργασία των πινάκων γίνεται καλύτερα με την εντολή ΓΙΑ;<br/>ε) Σε ποια τρία σημεία χρειάζεται ιδιαίτερη προσοχή κατά την εκσφαλμάτωση προγραμμάτων με πίνακες;</p>
+</div><div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div><div class="q hw" id="q-6"><span class="qn">6</span><b>Πίνακας τιμών συγχώνευσης.</b> Για το πρόγραμμα του Λυμένου 5 με πίνακες <span class="nw">Α[3] = 2,</span> 7, 9 και <span class="nw">Β[4] = 4,</span> 7, 11, 13 (και Γ[7]), να γίνει πίνακας τιμών με στήλες κ, i, j, <span class="nw">Α[i] &lt;= Β[j],</span> Γ[κ]. Πόσες φορές εκτελείται καθένας από τους δύο βρόχους για τα στοιχεία που περίσσεψαν; Το 7 του Γ[3] από ποιον πίνακα προέρχεται;
+</div><div class="q hw" id="q-7"><span class="qn">7</span><b>Όλες οι θέσεις του μέγιστου.</b> Να γραφτεί πρόγραμμα που διαβάζει το πλήθος Ν (1 έως 100) και Ν ακέραιους σε πίνακα και εμφανίζει τον μεγαλύτερο, όλες τις θέσεις στις οποίες εμφανίζεται και πόσες φορές εμφανίζεται. Έλεγχος: <span class="nw">Ν = 8</span> με 5, 9, 2, 9, 7, 9, 1, 3.
+</div><div class="q hw" id="q-8"><span class="qn">8</span><b>Η μετοχή.</b><span class="theme">Οικονομία</span>
 <p>Να γραφτεί πρόγραμμα που διαβάζει τις τιμές κλεισίματος (θετικές) μιας μετοχής για 20 διαδοχικές εργάσιμες μέρες και εμφανίζει: α) τη μεγαλύτερη άνοδο από μια μέρα στην επόμενη και ποια μέρα έγινε (η «μέρα της ανόδου» είναι η δεύτερη από τις δύο). Αν δεν υπήρξε καμία άνοδος, κατάλληλο μήνυμα, β) σε πόσες μέρες η τιμή έπεσε. Πόσες μεταβολές υπάρχουν σε 20 μέρες;</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">9</span><b>Άρτιοι και περιττοί.</b> Να γραφτεί πρόγραμμα που διαβάζει το πλήθος Ν (1 έως 60) και Ν ακέραιους σε πίνακα Χ, και δημιουργεί δύο νέους πίνακες: Α με τους άρτιους και Π με τους περιττούς, με τη σειρά που εμφανίζονται στον Χ. Να εμφανίζει πόσοι είναι οι άρτιοι και πόσοι οι περιττοί, μετά τους άρτιους <b>με αντίστροφη σειρά</b> και τέλος τους περιττούς. Έλεγχος: <span class="nw">Ν = 7</span> με 12, 5, 8, −3, 0, 14, 9. (Ο −3 είναι περιττός; Και το 0;)
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">10</span><b>Βρες τα δύο λάθη.</b> Το πρόγραμμα θέλει να διαβάζει τα ονόματα και τους βαθμούς 5 μαθητών σε ένα διαγώνισμα και να εμφανίζει τον μέσο όρο, τον καλύτερο μαθητή με τον βαθμό του (τον πρώτο, αν είναι πολλοί) και πόσοι έγραψαν πάνω από τον μέσο όρο.
+</div><div class="q hw" id="q-9"><span class="qn">9</span><b>Άρτιοι και περιττοί.</b> Να γραφτεί πρόγραμμα που διαβάζει το πλήθος Ν (1 έως 60) και Ν ακέραιους σε πίνακα Χ, και δημιουργεί δύο νέους πίνακες: Α με τους άρτιους και Π με τους περιττούς, με τη σειρά που εμφανίζονται στον Χ. Να εμφανίζει πόσοι είναι οι άρτιοι και πόσοι οι περιττοί, μετά τους άρτιους <b>με αντίστροφη σειρά</b> και τέλος τους περιττούς. Έλεγχος: <span class="nw">Ν = 7</span> με 12, 5, 8, −3, 0, 14, 9. (Ο −3 είναι περιττός; Και το 0;)
+</div><div class="q hw" id="q-10"><span class="qn">10</span><b>Βρες τα δύο λάθη.</b> Το πρόγραμμα θέλει να διαβάζει τα ονόματα και τους βαθμούς 5 μαθητών σε ένα διαγώνισμα και να εμφανίζει τον μέσο όρο, τον καλύτερο μαθητή με τον βαθμό του (τον πρώτο, αν είναι πολλοί) και πόσοι έγραψαν πάνω από τον μέσο όρο.
 <pre class="code">ΠΡΟΓΡΑΜΜΑ Διαγώνισμα
 ΣΤΑΘΕΡΕΣ
   Ν = 5
@@ -980,32 +1056,45 @@ Max ← table[1]
   ΓΡΑΨΕ 'Πάνω από τον μέσο όρο:', πάνω
 ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre>
 <p><span class="ln">α) Να εκτελέσετε το πρόγραμμα με είσοδο Άννα 12, Βασίλης 18, Γιώργος 9, Δανάη 16, Ελένη 14, γράφοντας σε πίνακα τιμών τα i, Β[i], θ για τον δεύτερο βρόχο. Τι συμβαίνει;</span><span class="ln">β) Να διορθώσετε το λάθος που βρήκατε. Ποια έξοδος βγαίνει τώρα; Είναι σωστή;</span><span class="ln">γ) Υπάρχει και δεύτερο λάθος, που με αυτά τα δεδομένα <b>δεν</b> φαίνεται. Ποιο είναι; Να βρείτε δεδομένα για τα οποία φαίνεται και να το διορθώσετε.</span></p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Το λύνω μόνος</h3></div>
-<div class="q hw"><span class="qn">11</span><b>Δύο κατάλογοι, χωρίς διπλά.</b><span class="theme">Βιβλιοθήκη</span>
+</div><div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Το λύνω μόνος</h3></div><div class="q hw" id="q-11"><span class="qn">11</span><b>Δύο κατάλογοι, χωρίς διπλά.</b><span class="theme">Βιβλιοθήκη</span>
 <p>Δύο σχολικές βιβλιοθήκες έχουν τους κωδικούς των βιβλίων τους σε αύξουσα σειρά, χωρίς επαναλήψεις: η πρώτη 6 κωδικούς (πίνακας Α), η δεύτερη 5 (πίνακας Β). Να γραφτεί πρόγραμμα που δημιουργεί τον κοινό κατάλογο Γ σε αύξουσα σειρά, όπου κάθε κωδικός εμφανίζεται <b>μία</b> φορά, ακόμα κι αν υπάρχει και στις δύο βιβλιοθήκες. Να εμφανίζει πόσοι είναι οι διαφορετικοί κωδικοί και τον κατάλογο. Πόσες θέσεις πρέπει να έχει ο Γ; Έλεγχος: <span class="nw">Α = 3,</span> 8, 12, 15, 20, 31 και <span class="nw">Β = 5,</span> 8, 9, 20, 25.</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">12</span><b>Κυκλική ολίσθηση.</b> Να γραφτεί πρόγραμμα που διαβάζει 10 ακέραιους σε πίνακα και έναν ακέραιο κ (0 έως 9, με έλεγχο) και μετακινεί όλα τα στοιχεία κατά κ θέσεις δεξιά, «κυκλικά»: όποιο βγαίνει από το τέλος μπαίνει στην αρχή. Να εμφανίζει τον πίνακα. Χρησιμοποιήστε την ιδέα της Άσκησης 5. Έλεγχος: για 1, 2, …, 10 με <span class="nw">κ = 3</span> πρέπει να βγει 8, 9, 10, 1, 2, …, 7.
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">13</span><b>Ο φούρνος της γειτονιάς.</b><span class="theme">Θέμα Γ</span>
+</div><div class="q hw" id="q-12"><span class="qn">12</span><b>Κυκλική ολίσθηση.</b> Να γραφτεί πρόγραμμα που διαβάζει 10 ακέραιους σε πίνακα και έναν ακέραιο κ (0 έως 9, με έλεγχο) και μετακινεί όλα τα στοιχεία κατά κ θέσεις δεξιά, «κυκλικά»: όποιο βγαίνει από το τέλος μπαίνει στην αρχή. Να εμφανίζει τον πίνακα. Χρησιμοποιήστε την ιδέα της Άσκησης 5. Έλεγχος: για 1, 2, …, 10 με <span class="nw">κ = 3</span> πρέπει να βγει 8, 9, 10, 1, 2, …, 7.
+</div><div class="q hw" id="q-13"><span class="qn">13</span><b>Ο φούρνος της γειτονιάς.</b><span class="theme">Θέμα Γ</span>
 <p>Ένας φούρνος καταγράφει πόσα ψωμιά πούλησε σε καθεμιά από τις 30 μέρες ενός μήνα. Να γραφτεί πρόγραμμα που:</p>
 <p>Γ1. Διαβάζει τις πωλήσεις των 30 ημερών σε πίνακα, με έλεγχο ότι δεν είναι αρνητικές.<br/>Γ2. Υπολογίζει και εμφανίζει τον μέσο όρο ψωμιών ανά μέρα.<br/>Γ3. Εμφανίζει τη μέρα με τις περισσότερες πωλήσεις (την πρώτη, αν είναι πολλές) και πόσα ψωμιά πουλήθηκαν.<br/>Γ4. Εμφανίζει σε πόσες μέρες οι πωλήσεις ήταν κάτω από το 80% του μέσου όρου.<br/>Γ5. Εμφανίζει το μεγαλύτερο πλήθος συνεχόμενων ημερών στις οποίες κάθε μέρα πουλήθηκαν περισσότερα ψωμιά από την προηγούμενη.</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">14</span><b>Το βηματόμετρο.</b><span class="theme">Θέμα Δ</span>
+</div><div class="q hw" id="q-14"><span class="qn">14</span><b>Το βηματόμετρο.</b><span class="theme">Θέμα Δ</span>
 <p>Ένα έξυπνο ρολόι καταγράφει, για κάθε μέρα του Φεβρουαρίου (28 μέρες), τα βήματα και τα λεπτά άσκησης. Στόχος είναι τα 10000 βήματα τη μέρα. Να γραφτεί πρόγραμμα που:</p>
 <p>Δ1. Περιέχει τμήμα δηλώσεων.<br/>Δ2. Διαβάζει για κάθε μέρα τα βήματα και τα λεπτά άσκησης σε δύο πίνακες, με έλεγχο ότι τα βήματα δεν είναι αρνητικά και τα λεπτά είναι από 0 έως 1440.<br/>Δ3. Υπολογίζει σε πίνακα ΕΒ[4] τα συνολικά βήματα κάθε εβδομάδας (μέρες 1–7, 8–14, 15–21, 22–28), τα εμφανίζει και εμφανίζει την εβδομάδα με τα περισσότερα βήματα. (Υπόδειξη: η μέρα i ανήκει στην εβδομάδα <span class="nw">(i − 1) div 7 + 1.)</span><br/>Δ4. Δημιουργεί πίνακα με τους αριθμούς των ημερών στις οποίες επιτεύχθηκε ο στόχος και τον εμφανίζει, μαζί με το πλήθος τους.<br/>Δ5. Εμφανίζει τα μέσα λεπτά άσκησης στις μέρες που επιτεύχθηκε ο στόχος και στις υπόλοιπες. Προσοχή στις περιπτώσεις που μία από τις δύο ομάδες είναι κενή.</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">15</span><b>Οι δύο μεγαλύτεροι, με ένα πέρασμα.</b> Να γραφτεί πρόγραμμα που διαβάζει Ν ακέραιους (2 έως 100) σε πίνακα και βρίσκει τον μεγαλύτερο και τον δεύτερο μεγαλύτερο με <b>ένα</b> πέρασμα του πίνακα (χωρίς ταξινόμηση). Αν ο μεγαλύτερος υπάρχει δύο φορές, ο δεύτερος είναι ίσος με αυτόν. Πώς πρέπει να πάρουν αρχικές τιμές οι δύο μεταβλητές; Έλεγχος: 5, 4, 9, 9, 2, 7 δίνει 9 και 9. 4, 1, 2, 3, 4 δίνει 4 και 3.
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">16</span><b>Η καλύτερη εβδομάδα.</b><span class="theme">Πρόκληση</span>
+</div><div class="q hw" id="q-15"><span class="qn">15</span><b>Οι δύο μεγαλύτεροι, με ένα πέρασμα.</b> Να γραφτεί πρόγραμμα που διαβάζει Ν ακέραιους (2 έως 100) σε πίνακα και βρίσκει τον μεγαλύτερο και τον δεύτερο μεγαλύτερο με <b>ένα</b> πέρασμα του πίνακα (χωρίς ταξινόμηση). Αν ο μεγαλύτερος υπάρχει δύο φορές, ο δεύτερος είναι ίσος με αυτόν. Πώς πρέπει να πάρουν αρχικές τιμές οι δύο μεταβλητές; Έλεγχος: 5, 4, 9, 9, 2, 7 δίνει 9 και 9. 4, 1, 2, 3, 4 δίνει 4 και 3.
+</div><div class="q hw" id="q-16"><span class="qn">16</span><b>Η καλύτερη εβδομάδα.</b><span class="theme">Πρόκληση</span>
 <p><span class="ln">Ένα κατάστημα έχει τις πωλήσεις 30 ημερών σε πίνακα. Ζητείται το διάστημα <b>7 συνεχόμενων</b> ημερών (οποιοδήποτε, π.χ. 12η έως 18η) με τις περισσότερες πωλήσεις.</span><span class="ln">α) Πόσα τέτοια διαστήματα υπάρχουν; Πόσες προσθέσεις κάνει η «απλή» λύση, που αθροίζει ξανά από την αρχή κάθε διάστημα;</span><span class="ln">β) Αν ξέρεις το άθροισμα των ημερών 1–7, πώς βρίσκεις με <b>μία</b> πρόσθεση και <b>μία</b> αφαίρεση το άθροισμα των ημερών 2–8;</span><span class="ln">γ) Να γραφτεί το πρόγραμμα με αυτή την ιδέα («κυλιόμενο παράθυρο»), ώστε να εμφανίζει την πρώτη και την τελευταία μέρα του καλύτερου διαστήματος και τις πωλήσεις του.</span></p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-</section>
+</div></section>
 
-</main><div class="syn-foot"><div class="syn-nav"><a href="19.html"><small>&#8592; Μάθημα 19</small>Δομές δεδομένων και πίνακες</a><span class="next off"><small>Μάθημα 21 · σύντομα</small>Σειριακή αναζήτηση</span></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
+<div aria-labelledby="pg-h" aria-modal="true" class="pg" hidden="" id="progress" role="dialog">
+<div class="pgin">
+<div class="pghead"><h2 id="pg-h"><a href="progress.html" id="pg-alllink">Η πρόοδός μου</a></h2><button class="btn" id="pg-close" type="button">Κλείσιμο</button></div>
+<div class="pgcard">
+<p class="pgl" id="pg-l"></p>
+<p class="pgt" id="pg-t"></p>
+<div class="pgbig"><span class="small">Βαθμός κατανόησης</span><span class="big" id="pg-score">–</span><span class="small" id="pg-note"></span></div>
+<p class="tstats" id="t-stats"></p>
+<div class="pgchart" hidden="" id="pg-chart"></div>
+<div class="pgscroll"><table class="pgtab" id="pg-tab"><thead><tr><th>Ημερομηνία</th><th>Ώρα</th><th>Βαθμός</th><th>Μονάδες</th></tr></thead><tbody id="pg-list"></tbody></table></div>
+<a class="btn primary" href="#test-start" id="pg-again">Νέα προσπάθεια</a>
+<p class="small" hidden="" id="pg-wait"></p>
+</div>
+<div class="pginfo">
+<p><b>Πώς δουλεύει το τεστ.</b> Πέντε μέρη: Σωστό ή Λάθος, συμπλήρωση κενών, πολλαπλής επιλογής, αντιστοίχιση και πίνακας τιμών από τα λυμένα παραδείγματα. Κάθε προσπάθεια έχει άλλες ερωτήσεις.</p>
+<p>Μετά την υποβολή βλέπεις τον βαθμό και, για κάθε λάθος, το σημείο των σημειώσεων που πρέπει να ξαναδιαβάσεις. Για να κάνεις «Νέα προσπάθεια» πρέπει να περάσουν τουλάχιστον <b id="pg-cd">5 λεπτά</b>. Αξιοποίησέ τα ξαναδιαβάζοντας.</p>
+<p>Στο <b>«Βαθμός κατανόησης»</b> βλέπεις την πιο πρόσφατη προσπάθειά σου και από κάτω, αναλυτικά, την πορεία των υπόλοιπων. Για να καταλάβεις καλύτερα το μάθημα, σου προτείνουμε ένθερμα να κάνεις όσες περισσότερες προσπάθειες μπορείς.</p>
+</div>
+<figure class="pgquote" id="pg-quote"><blockquote id="pg-q"></blockquote><figcaption id="pg-qa"></figcaption></figure>
+<p class="small" hidden="" id="pg-allnote">Η συνολική πρόοδος, με όλα τα μαθήματα, ανοίγει στο sinapsi.gr.</p>
+</div>
+</div></main><div class="syn-foot"><div class="syn-nav"><a href="19.html"><small>&#8592; Μάθημα 19</small>Δομές δεδομένων και πίνακες</a><a class="next" href="21.html"><small>Μάθημα 21 &#8594;</small>Σειριακή αναζήτηση</a></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
 <script>
 (function(){
-  var CARDS = [{"term": "Πίνακας", "def": "Πίνακας είναι ένα σύνολο αντικειμένων ίδιου τύπου, τα οποία αναφέρονται με ένα κοινό όνομα. Κάθε ένα από τα αντικείμενα που απαρτίζουν τον πίνακα λέγεται στοιχείο του πίνακα. Η αναφορά σε ατομικά στοιχεία του πίνακα γίνεται με το όνομα του πίνακα ακολουθούμενο από ένα δείκτη .", "ref": "Σχολικό βιβλίο, §9.1"}, {"term": "μονοδιάστατοι πίνακες", "def": "Οι πίνακες που χρησιμοποιούν ένα μόνο δείκτη για την αναφορά των στοιχείων τους ονομάζονται μονοδιάστατοι πίνακες .", "ref": "Σχολικό βιβλίο, §9.1"}, {"term": "Απομνημόνευση", "def": "Κατά την εκσφαλμάτωση προγραμμάτων που χρησιμοποιούν πίνακες χρειάζεται να δίνετε ιδιαίτερη προσοχή: στο μέγεθος των πινάκων κατά τη δήλωσή τους, στους δείκτες των πινάκων κατά την προσπέλασή τους, στη μη υπέρβαση των ορίων του πίνακα.", "ref": "Συμπληρωματικό εκπαιδευτικό υλικό, §5.2.3"}, {"term": "Πότε πίνακας:", "def": "Πότε πίνακας: όταν τα δεδομένα χρειάζονται ξανά μετά την ανάγνωσή τους (π.χ. σύγκριση με τον μέσο όρο, θέσεις του μέγιστου, ανάποδη εμφάνιση).", "ref": "Σύνοψη"}, {"term": "Γέμισμα:", "def": "Γέμισμα: με ΓΙΑ και ΔΙΑΒΑΣΕ Α[i] · με μεταβλητό πλήθος, δήλωση με το μέγιστο και Ν με έλεγχο.", "ref": "Σύνοψη"}, {"term": "Επεξεργασίες:", "def": "Επεξεργασίες: μέγιστο/ελάχιστο με θέση, άθροισμα και μέσος όρος, μέτρηση, παράλληλοι πίνακες, γειτονικά, διαχωρισμός, συγχώνευση.", "ref": "Σύνοψη"}, {"term": "Εκσφαλμάτωση:", "def": "Εκσφαλμάτωση: μέγεθος στη δήλωση, δείκτες στην προσπέλαση, όρια του πίνακα.", "ref": "Σύνοψη"}, {"term": "Μέγιστο πίνακα (αντίστοιχο του Παρ. 1 §3.3)", "def": "Max ← table[1] · Για i από 2 μέχρι 100 · Αν table[i] > Max τότε Max ← table[i]", "ref": "Α10"}, {"term": "Όλες οι θέσεις του μέγιστου", "def": "1ο πέρασμα: η τιμή μεγ · 2ο πέρασμα: εμφανίζω κάθε i με Α[i] = μεγ.", "ref": "Α11"}, {"term": "Παράλληλοι πίνακες", "def": "Δύο πίνακες με την ίδια αρίθμηση: ΟΝ[i] και Χ[i] αφορούν το ίδιο πρόσωπο.", "ref": "Α12"}, {"term": "Γειτονικά στοιχεία: όρια βρόχου", "def": "ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν - 1 με Α[i] και Α[i + 1].", "ref": "Α13"}, {"term": "Διαχωρισμός", "def": "κ ← κ + 1 · Β[κ] ← Α[i] (ένας μετρητής ανά νέο πίνακα)", "ref": "Α14"}, {"term": "Συγχώνευση ταξινομημένων", "def": "ΟΣΟ i <= Ν1 ΚΑΙ j <= Ν2: το μικρότερο από Α[i], Β[j] στο Γ[κ]· μετά αντιγράφω όσα περίσσεψαν.", "ref": "Α16"}, {"term": "Εκσφαλμάτωση πινάκων: 3 σημεία", "def": "Μέγεθος στη δήλωση · δείκτες στην προσπέλαση · μη υπέρβαση ορίων.", "ref": "§5.2.3"}];
+  var CARDS = [{"term": "Πίνακας", "def": "Πίνακας είναι ένα σύνολο αντικειμένων ίδιου τύπου, τα οποία αναφέρονται με ένα κοινό όνομα. Κάθε ένα από τα αντικείμενα που απαρτίζουν τον πίνακα λέγεται στοιχείο του πίνακα. Η αναφορά σε ατομικά στοιχεία του πίνακα γίνεται με το όνομα του πίνακα ακολουθούμενο από ένα δείκτη .", "ref": "Σχολικό βιβλίο, §9.1"}, {"term": "μονοδιάστατοι πίνακες", "def": "Οι πίνακες που χρησιμοποιούν ένα μόνο δείκτη για την αναφορά των στοιχείων τους ονομάζονται μονοδιάστατοι πίνακες .", "ref": "Σχολικό βιβλίο, §9.1"}, {"term": "Απομνημόνευση", "def": "Κατά την εκσφαλμάτωση προγραμμάτων που χρησιμοποιούν πίνακες χρειάζεται να δίνετε ιδιαίτερη προσοχή: στο μέγεθος των πινάκων κατά τη δήλωσή τους, στους δείκτες των πινάκων κατά την προσπέλασή τους, στη μη υπέρβαση των ορίων του πίνακα.", "ref": "Συμπληρωματικό εκπαιδευτικό υλικό, §5.2.3"}, {"term": "Πότε πίνακας:", "def": "Πότε πίνακας: όταν τα δεδομένα χρειάζονται ξανά μετά την ανάγνωσή τους (π.χ. σύγκριση με τον μέσο όρο, θέσεις του μέγιστου, ανάποδη εμφάνιση).", "ref": "Σύνοψη"}, {"term": "Γέμισμα:", "def": "Γέμισμα: με ΓΙΑ και ΔΙΑΒΑΣΕ Α[i] . Με μεταβλητό πλήθος, δήλωση με το μέγιστο και Ν με έλεγχο.", "ref": "Σύνοψη"}, {"term": "Επεξεργασίες:", "def": "Επεξεργασίες: μέγιστο/ελάχιστο με θέση, άθροισμα και μέσος όρος, μέτρηση, παράλληλοι πίνακες, γειτονικά, διαχωρισμός, συγχώνευση.", "ref": "Σύνοψη"}, {"term": "Εκσφαλμάτωση:", "def": "Εκσφαλμάτωση: μέγεθος στη δήλωση, δείκτες στην προσπέλαση, όρια του πίνακα.", "ref": "Σύνοψη"}, {"term": "Μέγιστο πίνακα (αντίστοιχο του Παρ. 1 §3.3)", "def": "Max ← table[1] Για i από 2 μέχρι 100 Αν table[i] > Max τότε Max ← table[i]", "ref": "Α10"}, {"term": "Όλες οι θέσεις του μέγιστου", "def": "1ο πέρασμα: η τιμή μεγ 2ο πέρασμα: εμφανίζω κάθε i με Α[i] = μεγ.", "ref": "Α11"}, {"term": "Παράλληλοι πίνακες", "def": "Δύο πίνακες με την ίδια αρίθμηση: ΟΝ[i] και Χ[i] αφορούν το ίδιο πρόσωπο.", "ref": "Α12"}, {"term": "Γειτονικά στοιχεία: όρια βρόχου", "def": "ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν - 1 με Α[i] και Α[i + 1].", "ref": "Α13"}, {"term": "Διαχωρισμός", "def": "κ ← κ + 1 Β[κ] ← Α[i] (ένας μετρητής ανά νέο πίνακα)", "ref": "Α14"}, {"term": "Συγχώνευση ταξινομημένων", "def": "ΟΣΟ i <= Ν1 ΚΑΙ j <= Ν2 : το μικρότερο από Α[i], Β[j] στο Γ[κ]. Μετά αντιγράφω όσα περίσσεψαν.", "ref": "Α16"}, {"term": "Εκσφαλμάτωση πινάκων: 3 σημεία", "def": "Μέγεθος στη δήλωση δείκτες στην προσπέλαση μη υπέρβαση ορίων.", "ref": "§5.2.3"}];
   // ---- quiz ----
   document.querySelectorAll('.quiz').forEach(function(quiz){
     var items = quiz.querySelectorAll('.qi');
@@ -1017,9 +1106,9 @@ Max ← table[1]
       score.hidden = false;
       score.innerHTML = '';
       var t = document.createElement('span');
-      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? ' · Τέλεια!' : ok >= items.length * 0.7 ? ' · Πολύ καλά' : ' · Ξαναδιάβασε τη θεωρία');
+      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? '. Τέλεια!' : ok >= items.length * 0.7 ? '. Πολύ καλά.' : '. Ξαναδιάβασε τη θεωρία.');
       var r = document.createElement('button'); r.type = 'button'; r.className = 'btn'; r.textContent = 'Ξανά από την αρχή';
-      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); }); update(); };
+      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); var w = it.querySelector('.qwhy'); if (w) w.remove(); }); update(); };
       score.append(t, r);
     }
     items.forEach(function(it){
@@ -1033,6 +1122,7 @@ Max ← table[1]
           var f = document.createElement('span'); f.className = 'fb';
           f.textContent = v === ans ? '✓ Σωστά' : '✗ Η σωστή απάντηση είναι: ' + (it.querySelector('.qb button[data-v="' + ans + '"]') || {}).textContent;
           it.appendChild(f);
+          if (v !== ans && it.getAttribute('data-why')){ var w = document.createElement('p'); w.className = 'qwhy'; w.textContent = it.getAttribute('data-why'); it.appendChild(w); }
           update();
         });
       });
@@ -1058,6 +1148,323 @@ Max ← table[1]
     pos = 0; show();
   };
   show();
+})();
+</script>
+<script>
+(function(){
+  var BANK = {"lesson": 20, "draw": {"tf_practiced": 5, "tf_new": 5, "fill": 2, "mc": 2, "mc_algo": 2, "match": 1, "match_items": 5, "num": 3}, "tf_new": [{"s": "Πίνακας είναι ένα σύνολο αντικειμένων ίδιου τύπου, που αναφέρονται με ένα κοινό όνομα.", "a": "Σ", "see": ["#s-9-1", "Γιατί πίνακας;"]}, {"s": "Κάθε αντικείμενο που απαρτίζει τον πίνακα λέγεται στοιχείο του πίνακα.", "a": "Σ", "see": ["#s-9-1", "Γιατί πίνακας;"]}, {"s": "Ο πίνακας χρειάζεται όταν τα δεδομένα πρέπει να χρησιμοποιηθούν ξανά μετά την ανάγνωσή τους.", "a": "Σ", "see": ["#s-9-1", "Γιατί πίνακας;"]}, {"s": "Ο δείκτης ενός πίνακα περικλείεται σε παρενθέσεις, π.χ. Α(3).", "a": "Λ", "see": ["#s-9-1", "Γιατί πίνακας;"]}, {"s": "Όταν το πλήθος των στοιχείων δεν είναι γνωστό, δηλώνουμε τον πίνακα με το μέγιστο δυνατό μέγεθος.", "a": "Σ", "see": ["#s-4-2", "Γέμισμα πίνακα"]}, {"s": "Για το μέγιστο ενός πίνακα, η αρχική τιμή είναι συνήθως το πρώτο στοιχείο του.", "a": "Σ", "see": ["#s-3-3", "Μέγιστο και ελάχιστο"]}, {"s": "Για να βρούμε όλους όσους πέτυχαν τον καλύτερο χρόνο, χρειάζονται δύο περάσματα του πίνακα.", "a": "Σ", "see": ["#sol-2", "Λυμένο 2"]}, {"s": "Στον διαχωρισμό, κάθε νέος πίνακας έχει τον δικό του μετρητή θέσης.", "a": "Σ", "see": ["#s-3", "Διαχωρισμός"]}, {"s": "Στη συγχώνευση δύο ταξινομημένων πινάκων, μετά το κύριο βρόχο αντιγράφονται και τα στοιχεία που περίσσεψαν.", "a": "Σ", "see": ["#s-4", "Συγχώνευση"]}, {"s": "Η συγχώνευση πινάκων 5 και 4 στοιχείων δίνει πίνακα 20 στοιχείων.", "a": "Λ", "see": ["#s-4", "Συγχώνευση"]}, {"s": "Κατά την εκσφαλμάτωση με πίνακες προσέχουμε το μέγεθος στη δήλωση, τους δείκτες και την αρχικοποίηση.", "a": "Σ", "see": ["#s-5-2-3", "Λάθη σε πίνακες"]}, {"s": "Η σύγκριση Α[i] με Α[i + 1] μέσα σε ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν είναι σωστή.", "a": "Λ", "see": ["#sol-3", "Λυμένο 3"]}], "fill": [{"t": "Πίνακας είναι ένα σύνολο αντικειμένων [ίδιου|διαφορετικού|οποιουδήποτε] τύπου, τα οποία αναφέρονται με ένα [κοινό όνομα|διαφορετικό όνομα|αριθμό]. Κάθε ένα από τα αντικείμενα που απαρτίζουν τον πίνακα λέγεται [στοιχείο|δείκτης|κόμβος] του πίνακα.", "see": ["#s-9-1", "Γιατί πίνακας;"]}, {"t": "Το όνομα του πίνακα καθορίζει μία ομάδα [διαδοχικών|τυχαίων|διάσπαρτων] θέσεων στη μνήμη. Ο δείκτης είναι μία [ακέραια|πραγματική|λογική] έκφραση, σταθερή ή μεταβλητή.", "see": ["#s-9-1", "Γιατί πίνακας;"]}, {"t": "Κατά την εκσφαλμάτωση προγραμμάτων που χρησιμοποιούν πίνακες χρειάζεται να δίνετε ιδιαίτερη προσοχή: στο [μέγεθος|όνομα|χρώμα] των πινάκων κατά τη δήλωσή τους, στους [δείκτες|τύπους|σχόλια] των πινάκων.", "see": ["#s-5-2-3", "Λάθη σε πίνακες"]}], "mc": [{"q": "Ο πίνακας είναι ΑΚΕΡΑΙΕΣ: Α[50]. Ποιο τμήμα βγαίνει έξω από τα όρια;", "opts": ["ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 50 με Α[i + 1]", "ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 50 με Α[i - 1]", "ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 25 με Α[2 * i]", "ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 50 με Α[51 - i]"], "a": 0, "see": ["#s-5-2-3", "Λάθη σε πίνακες"]}, {"q": "Ποια είναι η σωστή αρχική τιμή για το μέγιστο ενός πίνακα με αρνητικές θερμοκρασίες;", "opts": ["το πρώτο στοιχείο του πίνακα", "0", "-1", "1"], "a": 0, "see": ["#s-3-3", "Μέγιστο και ελάχιστο"]}, {"q": "Πόσα στοιχεία έχει ο πίνακας που προκύπτει από τη συγχώνευση των Α[5] και Β[4];", "opts": ["9", "20", "5", "4"], "a": 0, "see": ["#s-4", "Συγχώνευση"]}, {"q": "Στη θέση του μέγιστου: θ ← 1, ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 50, ΑΝ Α[i] > Α[θ] ΤΟΤΕ … Τι πρέπει να ακολουθεί;", "opts": ["θ ← i", "θ ← Α[i]", "Α[θ] ← i", "i ← θ"], "a": 0, "see": ["#s-3-3", "Μέγιστο και ελάχιστο"]}, {"q": "Στον διαχωρισμό σε προάγονται και παραπέμπονται, τι κάνει η εντολή κε ← κε + 1 πριν από το ΕΠ[κε] ← ΟΝ[i];", "opts": ["Βρίσκει την επόμενη κενή θέση του ΕΠ.", "Μετρά όλους τους μαθητές.", "Αυξάνει τον βαθμό.", "Τίποτα, είναι περιττή."], "a": 0, "see": ["#sol-4", "Λυμένο 4"]}, {"q": "Σε συγχώνευση με Α = 1, 4, 7 και Β = 2, 3, 9, ποιο είναι το τρίτο στοιχείο του αποτελέσματος;", "opts": ["3", "4", "2", "7"], "a": 0, "see": ["#s-4", "Συγχώνευση"]}], "mc_algo": [{"q": "Λυμένο 1 (πιο βροχερός και πιο ξερός μήνας). Ποιο πρόγραμμα βρίσκει σωστά τις θέσεις;", "code": true, "opts": ["ΠΡΟΓΡΑΜΜΑ Βροχή\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: Β[12], μεγ, ελαχ\n  ΑΚΕΡΑΙΕΣ: i, θμεγ, θελαχ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 12\n    ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ\n      ΓΡΑΨΕ 'Βροχόπτωση μήνα', i, '(mm):'\n      ΔΙΑΒΑΣΕ Β[i]\n    ΜΕΧΡΙΣ_ΟΤΟΥ Β[i] >= 0\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  μεγ <- Β[1]\n  θμεγ <- 1\n  ελαχ <- Β[1]\n  θελαχ <- 1\n  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 12\n    ΑΝ Β[i] > μεγ ΤΟΤΕ\n      μεγ <- Β[i]\n      θμεγ <- i\n    ΤΕΛΟΣ_ΑΝ\n    ΑΝ Β[i] < ελαχ ΤΟΤΕ\n      ελαχ <- Β[i]\n      θελαχ <- i\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Πιο βροχερός μήνας:', θμεγ, 'με', μεγ, 'mm'\n  ΓΡΑΨΕ 'Πιο ξερός μήνας:', θελαχ, 'με', ελαχ, 'mm'\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ Βροχή\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: Β[12], μεγ, ελαχ\n  ΑΚΕΡΑΙΕΣ: i, θμεγ, θελαχ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 12\n    ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ\n      ΓΡΑΨΕ 'Βροχόπτωση μήνα', i, '(mm):'\n      ΔΙΑΒΑΣΕ Β[i]\n    ΜΕΧΡΙΣ_ΟΤΟΥ Β[i] >= 0\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  μεγ <- 0\n  θμεγ <- 1\n  ελαχ <- 0\n  θελαχ <- 1\n  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 12\n    ΑΝ Β[i] > μεγ ΤΟΤΕ\n      μεγ <- Β[i]\n      θμεγ <- i\n    ΤΕΛΟΣ_ΑΝ\n    ΑΝ Β[i] < ελαχ ΤΟΤΕ\n      ελαχ <- Β[i]\n      θελαχ <- i\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Πιο βροχερός μήνας:', θμεγ, 'με', μεγ, 'mm'\n  ΓΡΑΨΕ 'Πιο ξερός μήνας:', θελαχ, 'με', ελαχ, 'mm'\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ Βροχή\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: Β[12], μεγ, ελαχ\n  ΑΚΕΡΑΙΕΣ: i, θμεγ, θελαχ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 12\n    ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ\n      ΓΡΑΨΕ 'Βροχόπτωση μήνα', i, '(mm):'\n      ΔΙΑΒΑΣΕ Β[i]\n    ΜΕΧΡΙΣ_ΟΤΟΥ Β[i] >= 0\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  μεγ <- Β[1]\n  θμεγ <- 1\n  ελαχ <- Β[1]\n  θελαχ <- 1\n  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 12\n    ΑΝ Β[i] > μεγ ΤΟΤΕ\n      μεγ <- Β[i]\n      θμεγ <- Β[i]\n    ΤΕΛΟΣ_ΑΝ\n    ΑΝ Β[i] < ελαχ ΤΟΤΕ\n      ελαχ <- Β[i]\n      θελαχ <- i\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Πιο βροχερός μήνας:', θμεγ, 'με', μεγ, 'mm'\n  ΓΡΑΨΕ 'Πιο ξερός μήνας:', θελαχ, 'με', ελαχ, 'mm'\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ Βροχή\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: Β[12], μεγ, ελαχ\n  ΑΚΕΡΑΙΕΣ: i, θμεγ, θελαχ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 12\n    ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ\n      ΓΡΑΨΕ 'Βροχόπτωση μήνα', i, '(mm):'\n      ΔΙΑΒΑΣΕ Β[i]\n    ΜΕΧΡΙΣ_ΟΤΟΥ Β[i] >= 0\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  μεγ <- Β[1]\n  θμεγ <- 1\n  ελαχ <- Β[1]\n  θελαχ <- 1\n  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 11\n    ΑΝ Β[i] > μεγ ΤΟΤΕ\n      μεγ <- Β[i]\n      θμεγ <- i\n    ΤΕΛΟΣ_ΑΝ\n    ΑΝ Β[i] < ελαχ ΤΟΤΕ\n      ελαχ <- Β[i]\n      θελαχ <- i\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Πιο βροχερός μήνας:', θμεγ, 'με', μεγ, 'mm'\n  ΓΡΑΨΕ 'Πιο ξερός μήνας:', θελαχ, 'με', ελαχ, 'mm'\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ"], "a": 0, "why": "Μέγιστο και ελάχιστο ξεκινούν από το Β[1] (με 0 το ελάχιστο θα έμενε λάθος). Όταν αλλάζει το μέγιστο, κρατάμε τη θέση i, όχι την τιμή. Ο βρόχος φτάνει ως το 12.", "see": ["#sol-1", "Λυμένο 1"]}, {"q": "Λυμένο 5 (συγχώνευση ταξινομημένων). Ποιο πρόγραμμα δίνει σωστά τον Γ σε αύξουσα σειρά;", "code": true, "opts": ["ΠΡΟΓΡΑΜΜΑ Συγχώνευση\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[5], Β[4], Γ[9], i, j, κ, μ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 5\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ j ΑΠΟ 1 ΜΕΧΡΙ 4\n    ΔΙΑΒΑΣΕ Β[j]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  i <- 1\n  j <- 1\n  κ <- 0\n  ΟΣΟ i <= 5 ΚΑΙ j <= 4 ΕΠΑΝΑΛΑΒΕ\n    κ <- κ + 1\n    ΑΝ Α[i] <= Β[j] ΤΟΤΕ\n      Γ[κ] <- Α[i]\n      i <- i + 1\n    ΑΛΛΙΩΣ\n      Γ[κ] <- Β[j]\n      j <- j + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ! Ό,τι περίσσεψε (μόνο ένας από τους δύο βρόχους θα εκτελεστεί)\n  ΓΙΑ μ ΑΠΟ i ΜΕΧΡΙ 5\n    κ <- κ + 1\n    Γ[κ] <- Α[μ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ μ ΑΠΟ j ΜΕΧΡΙ 4\n    κ <- κ + 1\n    Γ[κ] <- Β[μ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ κ ΑΠΟ 1 ΜΕΧΡΙ 9\n    ΓΡΑΨΕ Γ[κ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ Συγχώνευση\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[5], Β[4], Γ[9], i, j, κ, μ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 5\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ j ΑΠΟ 1 ΜΕΧΡΙ 4\n    ΔΙΑΒΑΣΕ Β[j]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  i <- 1\n  j <- 1\n  κ <- 0\n  ΟΣΟ i <= 5 Η j <= 4 ΕΠΑΝΑΛΑΒΕ\n    κ <- κ + 1\n    ΑΝ Α[i] <= Β[j] ΤΟΤΕ\n      Γ[κ] <- Α[i]\n      i <- i + 1\n    ΑΛΛΙΩΣ\n      Γ[κ] <- Β[j]\n      j <- j + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ! Ό,τι περίσσεψε (μόνο ένας από τους δύο βρόχους θα εκτελεστεί)\n  ΓΙΑ μ ΑΠΟ i ΜΕΧΡΙ 5\n    κ <- κ + 1\n    Γ[κ] <- Α[μ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ μ ΑΠΟ j ΜΕΧΡΙ 4\n    κ <- κ + 1\n    Γ[κ] <- Β[μ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ κ ΑΠΟ 1 ΜΕΧΡΙ 9\n    ΓΡΑΨΕ Γ[κ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ Συγχώνευση\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[5], Β[4], Γ[9], i, j, κ, μ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 5\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ j ΑΠΟ 1 ΜΕΧΡΙ 4\n    ΔΙΑΒΑΣΕ Β[j]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  i <- 1\n  j <- 1\n  κ <- 0\n  ΟΣΟ i <= 5 ΚΑΙ j <= 4 ΕΠΑΝΑΛΑΒΕ\n    κ <- κ + 1\n    ΑΝ Α[i] <= Β[j] ΤΟΤΕ\n      Γ[κ] <- Α[i]\n      i <- i + 1\n    ΑΛΛΙΩΣ\n      Γ[κ] <- Β[j]\n      j <- j + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ! Ό,τι περίσσεψε (μόνο ένας από τους δύο βρόχους θα εκτελεστεί)\n  ΓΙΑ μ ΑΠΟ i ΜΕΧΡΙ 5\n    κ <- κ + 1\n    Γ[κ] <- Α[μ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ κ ΑΠΟ 1 ΜΕΧΡΙ 9\n    ΓΡΑΨΕ Γ[κ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ Συγχώνευση\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[5], Β[4], Γ[9], i, j, κ, μ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 5\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ j ΑΠΟ 1 ΜΕΧΡΙ 4\n    ΔΙΑΒΑΣΕ Β[j]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  i <- 1\n  j <- 1\n  κ <- 0\n  ΟΣΟ i <= 5 ΚΑΙ j <= 4 ΕΠΑΝΑΛΑΒΕ\n    κ <- κ + 1\n    ΑΝ Α[i] >= Β[j] ΤΟΤΕ\n      Γ[κ] <- Α[i]\n      i <- i + 1\n    ΑΛΛΙΩΣ\n      Γ[κ] <- Β[j]\n      j <- j + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ! Ό,τι περίσσεψε (μόνο ένας από τους δύο βρόχους θα εκτελεστεί)\n  ΓΙΑ μ ΑΠΟ i ΜΕΧΡΙ 5\n    κ <- κ + 1\n    Γ[κ] <- Α[μ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ μ ΑΠΟ j ΜΕΧΡΙ 4\n    κ <- κ + 1\n    Γ[κ] <- Β[μ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ κ ΑΠΟ 1 ΜΕΧΡΙ 9\n    ΓΡΑΨΕ Γ[κ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ"], "a": 0, "why": "Ο κύριος βρόχος τρέχει όσο υπάρχουν στοιχεία και στους δύο πίνακες (ΚΑΙ) και παίρνει κάθε φορά το μικρότερο. Μετά αντιγράφονται τα υπόλοιπα του πίνακα που δεν τελείωσε.", "see": ["#sol-5", "Λυμένο 5"]}, {"q": "Λυμένο 3 (αυξητική τάση εσόδων). Ποιο πρόγραμμα είναι σωστό;", "code": true, "opts": ["ΠΡΟΓΡΑΜΜΑ ΕΣΟΔΑ_ΚΑΤΑΣΤΗΜΑΤΟΣ\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: ΕΣΟΔΑ[6]\n  ΑΚΕΡΑΙΕΣ: Ι\nΑΡΧΗ\n  ! Επανάληψη ανάγνωσης εσόδων\n  ΓΙΑ Ι ΑΠΟ 1 ΜΕΧΡΙ 6\n    ΓΡΑΨΕ 'Δώσε τα έσοδα του ', Ι, 'ου μήνα'\n    ΔΙΑΒΑΣΕ ΕΣΟΔΑ[Ι]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ! Επανάληψη ελέγχου αυξητικής τάσης\n  ΓΙΑ Ι ΑΠΟ 1 ΜΕΧΡΙ 5\n    ΑΝ ΕΣΟΔΑ[Ι] < ΕΣΟΔΑ[Ι + 1] ΤΟΤΕ\n      ΓΡΑΨΕ 'Ο ', Ι + 1, 'ος μήνας ΑΥΞΗΣΗ'\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ ΕΣΟΔΑ_ΚΑΤΑΣΤΗΜΑΤΟΣ\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: ΕΣΟΔΑ[6]\n  ΑΚΕΡΑΙΕΣ: Ι\nΑΡΧΗ\n  ! Επανάληψη ανάγνωσης εσόδων\n  ΓΙΑ Ι ΑΠΟ 1 ΜΕΧΡΙ 6\n    ΓΡΑΨΕ 'Δώσε τα έσοδα του ', Ι, 'ου μήνα'\n    ΔΙΑΒΑΣΕ ΕΣΟΔΑ[Ι]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ! Επανάληψη ελέγχου αυξητικής τάσης\n  ΓΙΑ Ι ΑΠΟ 1 ΜΕΧΡΙ 6\n    ΑΝ ΕΣΟΔΑ[Ι] <= ΕΣΟΔΑ[Ι + 1] ΤΟΤΕ\n      ΓΡΑΨΕ 'Ο ', Ι, 'ος μήνας ΑΥΞΗΣΗ'\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ ΕΣΟΔΑ_ΚΑΤΑΣΤΗΜΑΤΟΣ\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: ΕΣΟΔΑ[6]\n  ΑΚΕΡΑΙΕΣ: Ι\nΑΡΧΗ\n  ! Επανάληψη ανάγνωσης εσόδων\n  ΓΙΑ Ι ΑΠΟ 1 ΜΕΧΡΙ 6\n    ΓΡΑΨΕ 'Δώσε τα έσοδα του ', Ι, 'ου μήνα'\n    ΔΙΑΒΑΣΕ ΕΣΟΔΑ[Ι]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ! Επανάληψη ελέγχου αυξητικής τάσης\n  ΓΙΑ Ι ΑΠΟ 1 ΜΕΧΡΙ 5\n    ΑΝ ΕΣΟΔΑ[Ι] <= ΕΣΟΔΑ[Ι + 1] ΤΟΤΕ\n      ΓΡΑΨΕ 'Ο ', Ι + 1, 'ος μήνας ΑΥΞΗΣΗ'\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ ΕΣΟΔΑ_ΚΑΤΑΣΤΗΜΑΤΟΣ\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: ΕΣΟΔΑ[6]\n  ΑΚΕΡΑΙΕΣ: Ι\nΑΡΧΗ\n  ! Επανάληψη ανάγνωσης εσόδων\n  ΓΙΑ Ι ΑΠΟ 1 ΜΕΧΡΙ 6\n    ΓΡΑΨΕ 'Δώσε τα έσοδα του ', Ι, 'ου μήνα'\n    ΔΙΑΒΑΣΕ ΕΣΟΔΑ[Ι]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ! Επανάληψη ελέγχου αυξητικής τάσης\n  ΓΙΑ Ι ΑΠΟ 1 ΜΕΧΡΙ 5\n    ΑΝ ΕΣΟΔΑ[Ι] < ΕΣΟΔΑ[Ι + 1] ΤΟΤΕ\n      ΓΡΑΨΕ 'Ο ', Ι, 'ος μήνας ΑΥΞΗΣΗ'\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ"], "a": 0, "why": "Συγκρίνουμε γειτονικά ως το 5ο, ώστε το Ι + 1 να μένει μέσα στα όρια. Αύξηση σημαίνει < (όχι <=), και ο μήνας με την αύξηση είναι ο Ι + 1.", "see": ["#sol-3", "Λυμένο 3"]}], "match": [{"q": "Ποια επεξεργασία κάνει κάθε τμήμα κώδικα;", "opts": ["μέγιστο", "θέση του ελάχιστου", "διαχωρισμός", "συγχώνευση", "σύγκριση γειτονικών", "μέτρηση", "γέμισμα", "αντιγραφή"], "code": true, "see": ["#s-tools", "Η εργαλειοθήκη των πινάκων"], "items": [["ΑΝ Α[i] < Α[θ] ΤΟΤΕ θ ← i", "θέση του ελάχιστου"], ["ΑΝ Α[i] > 0 ΤΟΤΕ κ ← κ + 1, Β[κ] ← Α[i]", "διαχωρισμός"], ["Γ[20 + i] ← Β[i]", "συγχώνευση"], ["ΑΝ Α[i] = Α[i + 1] ΤΟΤΕ …", "σύγκριση γειτονικών"], ["ΑΝ Α[i] > μ ΤΟΤΕ μ ← Α[i]", "μέγιστο"], ["ΔΙΑΒΑΣΕ Α[i]", "γέμισμα"], ["ΑΝ Α[i] mod 2 = 0 ΤΟΤΕ π ← π + 1", "μέτρηση"], ["Β[i] ← Α[i] για κάθε i", "αντιγραφή"]]}], "num": [{"variants": [{"v": {"S": "10, 20, 30, 40, 50, 60, 5, 15, 25, 35, 45, 55"}, "code": "ΠΡΟΓΡΑΜΜΑ Βροχή\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: Β[12], μεγ, ελαχ\n  ΑΚΕΡΑΙΕΣ: i, θμεγ, θελαχ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 12\n    ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ\n      ΓΡΑΨΕ 'Βροχόπτωση μήνα', i, '(mm):'\n      ΔΙΑΒΑΣΕ Β[i]\n    ΜΕΧΡΙΣ_ΟΤΟΥ Β[i] >= 0\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  μεγ <- Β[1]\n  θμεγ <- 1\n  ελαχ <- Β[1]\n  θελαχ <- 1\n  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 12\n    ΑΝ Β[i] > μεγ ΤΟΤΕ\n      μεγ <- Β[i]\n      θμεγ <- i\n    ΤΕΛΟΣ_ΑΝ\n    ΑΝ Β[i] < ελαχ ΤΟΤΕ\n      ελαχ <- Β[i]\n      θελαχ <- i\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Πιο βροχερός μήνας:', θμεγ, 'με', μεγ, 'mm'\n  ΓΡΑΨΕ 'Πιο ξερός μήνας:', θελαχ, 'με', ελαχ, 'mm'\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "6", "q": "Η βροχόπτωση των 12 μηνών είναι 10, 20, 30, 40, 50, 60, 5, 15, 25, 35, 45, 55. Ποιος είναι ο πιο βροχερός μήνας (αριθμός μήνα);"}, {"v": {"S": "80, 0, 0, 30, 80, 10, 10, 10, 10, 10, 10, 90"}, "code": "ΠΡΟΓΡΑΜΜΑ Βροχή\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: Β[12], μεγ, ελαχ\n  ΑΚΕΡΑΙΕΣ: i, θμεγ, θελαχ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 12\n    ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ\n      ΓΡΑΨΕ 'Βροχόπτωση μήνα', i, '(mm):'\n      ΔΙΑΒΑΣΕ Β[i]\n    ΜΕΧΡΙΣ_ΟΤΟΥ Β[i] >= 0\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  μεγ <- Β[1]\n  θμεγ <- 1\n  ελαχ <- Β[1]\n  θελαχ <- 1\n  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 12\n    ΑΝ Β[i] > μεγ ΤΟΤΕ\n      μεγ <- Β[i]\n      θμεγ <- i\n    ΤΕΛΟΣ_ΑΝ\n    ΑΝ Β[i] < ελαχ ΤΟΤΕ\n      ελαχ <- Β[i]\n      θελαχ <- i\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Πιο βροχερός μήνας:', θμεγ, 'με', μεγ, 'mm'\n  ΓΡΑΨΕ 'Πιο ξερός μήνας:', θελαχ, 'με', ελαχ, 'mm'\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "12", "q": "Η βροχόπτωση των 12 μηνών είναι 80, 0, 0, 30, 80, 10, 10, 10, 10, 10, 10, 90. Ποιος είναι ο πιο βροχερός μήνας (αριθμός μήνα);"}, {"v": {"S": "60, 50, 40, 30, 20, 10, 9, 8, 7, 6, 5, 4"}, "code": "ΠΡΟΓΡΑΜΜΑ Βροχή\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: Β[12], μεγ, ελαχ\n  ΑΚΕΡΑΙΕΣ: i, θμεγ, θελαχ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 12\n    ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ\n      ΓΡΑΨΕ 'Βροχόπτωση μήνα', i, '(mm):'\n      ΔΙΑΒΑΣΕ Β[i]\n    ΜΕΧΡΙΣ_ΟΤΟΥ Β[i] >= 0\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  μεγ <- Β[1]\n  θμεγ <- 1\n  ελαχ <- Β[1]\n  θελαχ <- 1\n  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 12\n    ΑΝ Β[i] > μεγ ΤΟΤΕ\n      μεγ <- Β[i]\n      θμεγ <- i\n    ΤΕΛΟΣ_ΑΝ\n    ΑΝ Β[i] < ελαχ ΤΟΤΕ\n      ελαχ <- Β[i]\n      θελαχ <- i\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Πιο βροχερός μήνας:', θμεγ, 'με', μεγ, 'mm'\n  ΓΡΑΨΕ 'Πιο ξερός μήνας:', θελαχ, 'με', ελαχ, 'mm'\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "1", "q": "Η βροχόπτωση των 12 μηνών είναι 60, 50, 40, 30, 20, 10, 9, 8, 7, 6, 5, 4. Ποιος είναι ο πιο βροχερός μήνας (αριθμός μήνα);"}], "q": "Λυμένο 1 (βροχόπτωση).", "see": ["#sol-1", "Λυμένο 1"]}, {"variants": [{"v": {"A": "1, 4, 7, 8, 10", "B": "2, 3, 9, 12"}, "code": "ΠΡΟΓΡΑΜΜΑ Συγχώνευση\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[5], Β[4], Γ[9], i, j, κ, μ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 5\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ j ΑΠΟ 1 ΜΕΧΡΙ 4\n    ΔΙΑΒΑΣΕ Β[j]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  i <- 1\n  j <- 1\n  κ <- 0\n  ΟΣΟ i <= 5 ΚΑΙ j <= 4 ΕΠΑΝΑΛΑΒΕ\n    κ <- κ + 1\n    ΑΝ Α[i] <= Β[j] ΤΟΤΕ\n      Γ[κ] <- Α[i]\n      i <- i + 1\n    ΑΛΛΙΩΣ\n      Γ[κ] <- Β[j]\n      j <- j + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ! Ό,τι περίσσεψε (μόνο ένας από τους δύο βρόχους θα εκτελεστεί)\n  ΓΙΑ μ ΑΠΟ i ΜΕΧΡΙ 5\n    κ <- κ + 1\n    Γ[κ] <- Α[μ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ μ ΑΠΟ j ΜΕΧΡΙ 4\n    κ <- κ + 1\n    Γ[κ] <- Β[μ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ κ ΑΠΟ 1 ΜΕΧΡΙ 9\n    ΓΡΑΨΕ Γ[κ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "7", "q": "Α = 1, 4, 7, 8, 10 και Β = 2, 3, 9, 12. Ποιο είναι το 5ο στοιχείο του Γ;"}, {"v": {"A": "5, 6, 7, 8, 9", "B": "1, 2, 3, 4"}, "code": "ΠΡΟΓΡΑΜΜΑ Συγχώνευση\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[5], Β[4], Γ[9], i, j, κ, μ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 5\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ j ΑΠΟ 1 ΜΕΧΡΙ 4\n    ΔΙΑΒΑΣΕ Β[j]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  i <- 1\n  j <- 1\n  κ <- 0\n  ΟΣΟ i <= 5 ΚΑΙ j <= 4 ΕΠΑΝΑΛΑΒΕ\n    κ <- κ + 1\n    ΑΝ Α[i] <= Β[j] ΤΟΤΕ\n      Γ[κ] <- Α[i]\n      i <- i + 1\n    ΑΛΛΙΩΣ\n      Γ[κ] <- Β[j]\n      j <- j + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ! Ό,τι περίσσεψε (μόνο ένας από τους δύο βρόχους θα εκτελεστεί)\n  ΓΙΑ μ ΑΠΟ i ΜΕΧΡΙ 5\n    κ <- κ + 1\n    Γ[κ] <- Α[μ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ μ ΑΠΟ j ΜΕΧΡΙ 4\n    κ <- κ + 1\n    Γ[κ] <- Β[μ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ κ ΑΠΟ 1 ΜΕΧΡΙ 9\n    ΓΡΑΨΕ Γ[κ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "5", "q": "Α = 5, 6, 7, 8, 9 και Β = 1, 2, 3, 4. Ποιο είναι το 5ο στοιχείο του Γ;"}, {"v": {"A": "2, 4, 6, 8, 10", "B": "1, 3, 5, 7"}, "code": "ΠΡΟΓΡΑΜΜΑ Συγχώνευση\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[5], Β[4], Γ[9], i, j, κ, μ\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 5\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ j ΑΠΟ 1 ΜΕΧΡΙ 4\n    ΔΙΑΒΑΣΕ Β[j]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  i <- 1\n  j <- 1\n  κ <- 0\n  ΟΣΟ i <= 5 ΚΑΙ j <= 4 ΕΠΑΝΑΛΑΒΕ\n    κ <- κ + 1\n    ΑΝ Α[i] <= Β[j] ΤΟΤΕ\n      Γ[κ] <- Α[i]\n      i <- i + 1\n    ΑΛΛΙΩΣ\n      Γ[κ] <- Β[j]\n      j <- j + 1\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ! Ό,τι περίσσεψε (μόνο ένας από τους δύο βρόχους θα εκτελεστεί)\n  ΓΙΑ μ ΑΠΟ i ΜΕΧΡΙ 5\n    κ <- κ + 1\n    Γ[κ] <- Α[μ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ μ ΑΠΟ j ΜΕΧΡΙ 4\n    κ <- κ + 1\n    Γ[κ] <- Β[μ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ κ ΑΠΟ 1 ΜΕΧΡΙ 9\n    ΓΡΑΨΕ Γ[κ]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "5", "q": "Α = 2, 4, 6, 8, 10 και Β = 1, 3, 5, 7. Ποιο είναι το 5ο στοιχείο του Γ;"}], "q": "Λυμένο 5 (συγχώνευση).", "see": ["#sol-5", "Λυμένο 5"]}, {"variants": [{"v": {"S": "12, 8, 15, 10, 9.5, 18, 7, 11, 20, 3"}, "code": "ΠΡΟΓΡΑΜΜΑ Διαχωρισμός\nΣΤΑΘΕΡΕΣ\n  Ν = 10\nΜΕΤΑΒΛΗΤΕΣ\n  ΧΑΡΑΚΤΗΡΕΣ: ΟΝ[Ν], ΕΠ[Ν], ΑΠ[Ν]\n  ΠΡΑΓΜΑΤΙΚΕΣ: ΒΑΘ[Ν]\n  ΑΚΕΡΑΙΕΣ: i, κε, κα\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ ΟΝ[i], ΒΑΘ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  κε <- 0\n  κα <- 0\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΑΝ ΒΑΘ[i] >= 10 ΤΟΤΕ\n      κε <- κε + 1\n      ΕΠ[κε] <- ΟΝ[i]\n    ΑΛΛΙΩΣ\n      κα <- κα + 1\n      ΑΠ[κα] <- ΟΝ[i]\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Προάγονται:', κε\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ κε\n    ΓΡΑΨΕ ' ', ΕΠ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Παραπέμπονται:', κα\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ κα\n    ΓΡΑΨΕ ' ', ΑΠ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "6", "q": "Οι βαθμοί των 10 μαθητών είναι 12, 8, 15, 10, 9.5, 18, 7, 11, 20, 3. Πόσοι προάγονται;"}, {"v": {"S": "10, 10, 10, 10, 10, 9, 9, 9, 9, 9"}, "code": "ΠΡΟΓΡΑΜΜΑ Διαχωρισμός\nΣΤΑΘΕΡΕΣ\n  Ν = 10\nΜΕΤΑΒΛΗΤΕΣ\n  ΧΑΡΑΚΤΗΡΕΣ: ΟΝ[Ν], ΕΠ[Ν], ΑΠ[Ν]\n  ΠΡΑΓΜΑΤΙΚΕΣ: ΒΑΘ[Ν]\n  ΑΚΕΡΑΙΕΣ: i, κε, κα\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ ΟΝ[i], ΒΑΘ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  κε <- 0\n  κα <- 0\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΑΝ ΒΑΘ[i] >= 10 ΤΟΤΕ\n      κε <- κε + 1\n      ΕΠ[κε] <- ΟΝ[i]\n    ΑΛΛΙΩΣ\n      κα <- κα + 1\n      ΑΠ[κα] <- ΟΝ[i]\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Προάγονται:', κε\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ κε\n    ΓΡΑΨΕ ' ', ΕΠ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Παραπέμπονται:', κα\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ κα\n    ΓΡΑΨΕ ' ', ΑΠ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "5", "q": "Οι βαθμοί των 10 μαθητών είναι 10, 10, 10, 10, 10, 9, 9, 9, 9, 9. Πόσοι προάγονται;"}, {"v": {"S": "1, 2, 3, 4, 5, 6, 7, 8, 9, 19"}, "code": "ΠΡΟΓΡΑΜΜΑ Διαχωρισμός\nΣΤΑΘΕΡΕΣ\n  Ν = 10\nΜΕΤΑΒΛΗΤΕΣ\n  ΧΑΡΑΚΤΗΡΕΣ: ΟΝ[Ν], ΕΠ[Ν], ΑΠ[Ν]\n  ΠΡΑΓΜΑΤΙΚΕΣ: ΒΑΘ[Ν]\n  ΑΚΕΡΑΙΕΣ: i, κε, κα\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ ΟΝ[i], ΒΑΘ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  κε <- 0\n  κα <- 0\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΑΝ ΒΑΘ[i] >= 10 ΤΟΤΕ\n      κε <- κε + 1\n      ΕΠ[κε] <- ΟΝ[i]\n    ΑΛΛΙΩΣ\n      κα <- κα + 1\n      ΑΠ[κα] <- ΟΝ[i]\n    ΤΕΛΟΣ_ΑΝ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Προάγονται:', κε\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ κε\n    ΓΡΑΨΕ ' ', ΕΠ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Παραπέμπονται:', κα\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ κα\n    ΓΡΑΨΕ ' ', ΑΠ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "1", "q": "Οι βαθμοί των 10 μαθητών είναι 1, 2, 3, 4, 5, 6, 7, 8, 9, 19. Πόσοι προάγονται;"}], "q": "Λυμένο 4 (διαχωρισμός).", "see": ["#sol-4", "Λυμένο 4"]}], "tf_practiced": [{"s": "Ο δείκτης ενός πίνακα μπορεί να είναι ακέραια έκφραση, π.χ. Α[2 * i − 1].", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η εντολή ΔΙΑΒΑΣΕ Α μέσα σε βρόχο γεμίζει όλον τον πίνακα Α.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Το όνομα ενός πίνακα καθορίζει μια ομάδα διαδοχικών θέσεων μνήμης.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η ανάγνωση και η εκτύπωση των στοιχείων ενός πίνακα γίνεται καλύτερα με την εντολή ΓΙΑ.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Για να βρούμε το μέγιστο στοιχείο ενός πίνακα, η αρχική τιμή του μέγιστου μπορεί πάντα να είναι 0.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Για να αποθηκεύσουμε ονόματα και βαθμούς χρειάζονται δύο πίνακες.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Μετά την εκτέλεση της ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 10 η μεταβλητή i έχει την τιμή 10.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Στη συγχώνευση δύο ταξινομημένων πινάκων ο πίνακας που δημιουργείται είναι κι αυτός ταξινομημένος.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Ο διαχωρισμός είναι η αντίστροφη λειτουργία της συγχώνευσης.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η προσπέλαση του στοιχείου Α[0] ενός πίνακα Α[10] είναι λάθος που εμφανίζεται κατά την εκτέλεση.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 50 ΑΝ Α[i] < Α[i + 1] ΤΟΤΕ …", "a": "Λ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 50 ΑΝ Α[i] < Α[i − 1] ΤΟΤΕ …", "a": "Σ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "ΓΙΑ i ΑΠΟ 50 ΜΕΧΡΙ 1 ΜΕ_ΒΗΜΑ -1 ΓΡΑΨΕ Α[i]", "a": "Σ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 25 ΓΡΑΨΕ Α[2 * i]", "a": "Σ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 50 ΓΡΑΨΕ Α[i] + Α[51 − i]", "a": "Σ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "ΓΙΑ i ΑΠΟ 0 ΜΕΧΡΙ 49 ΓΡΑΨΕ Α[i]", "a": "Λ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "θ ← 1 ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 50 ΑΝ Α[i] > Α[θ] ΤΟΤΕ θ ← Α[i]", "a": "Λ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 50 ΜΕ_ΒΗΜΑ 2 ΓΡΑΨΕ Α[i] + Α[i + 1]", "a": "Σ", "see": ["#q-4", "Άσκηση 4"]}], "title": "Μονοδιάστατοι πίνακες"};
+  // Ρυθμίσεις: στην τελική εφαρμογή θα τις ορίζει ο καθηγητής.
+  var CONFIG = { cooldownMin: 5, timeLimitMin: 0, lockHomework: false, revealAnswers: false };
+  var KEY = 'synapsi.test.L' + BANK.lesson;
+  var $ = function(id){ return document.getElementById(id); };
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || { attempts: [] }; } catch(e){ return { attempts: [] }; } }
+  function save(st){ try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e){} }
+  var state = load();
+  function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function pick(a, n){ return shuffle(a || []).slice(0, Math.min(n, (a || []).length)); }
+  function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function code(txt){ var p = el('pre', 'code'); p.textContent = txt; return p; }
+  function fmt(x){ return (Math.round(x * 10) / 10).toFixed(1).replace('.', ','); }
+  function seeLink(see){ var a = el('a', '', see[1]); a.href = see[0]; return a; }
+  var LET = ['α', 'β', 'γ', 'δ', 'ε', 'στ'];
+  var running = false, items = [], timerId = null, tick = null;
+
+  // ---------- homework lock (parameter) ----------
+  function applyLock(){
+    var hw = document.querySelector('.hwsec');
+    if (!hw || !CONFIG.lockHomework) return;
+    var done = state.attempts.some(function(a){ return a.score != null; });
+    hw.querySelectorAll(':scope > .q, :scope > .exhead').forEach(function(q){ q.hidden = !done; });
+    var note = hw.querySelector('.hwlock');
+    if (!done && !note){ note = el('p', 'hwlock', 'Οι ασκήσεις για το σπίτι ανοίγουν μόλις κάνεις το Σύντομο Τεστ Μαθήματος.'); hw.appendChild(note); }
+    if (done && note) note.remove();
+  }
+
+  // ---------- «Η πρόοδός μου» ----------
+  function progress(){
+    $('pg-l').textContent = 'Μάθημα ' + BANK.lesson;
+    $('pg-t').textContent = BANK.title || '';
+    $('pg-cd').textContent = CONFIG.cooldownMin + ' λεπτά';
+    var done = state.attempts.filter(function(a){ return a.score != null; });
+    var box = $('t-stats'); box.innerHTML = '';
+    if (!done.length){
+      $('pg-score').textContent = '–';
+      $('pg-note').textContent = 'Δεν έχεις κάνει ακόμα το τεστ.';
+    } else {
+      var best = Math.max.apply(null, done.map(function(a){ return a.score; }));
+      var last = done[done.length - 1];
+      $('pg-score').textContent = fmt(last.score) + ' / 10';
+      $('pg-note').textContent = '';
+      [['Καλύτερη', fmt(best) + '/10'], ['Τελευταία', fmt(last.score) + '/10'], ['Προσπάθειες', String(state.attempts.length)]].forEach(function(r, i){
+        if (i) box.appendChild(el('span', 'sep', '|'));
+        box.append(r[0] + ': '); box.appendChild(el('b', '', r[1]));
+      });
+    }
+    chart(done);
+    var tb = $('pg-list'); tb.innerHTML = '';
+    $('pg-tab').parentNode.hidden = !state.attempts.length;
+    state.attempts.slice().reverse().forEach(function(a){
+      var d = new Date(a.start), tr = el('tr');
+      tr.appendChild(el('td', '', d.getDate() + '/' + (d.getMonth() + 1)));
+      tr.appendChild(el('td', '', d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes()));
+      if (a.score != null){ tr.appendChild(el('td', '', fmt(a.score) + '/10')); tr.appendChild(el('td', '', a.got + ' από ' + a.tot)); }
+      else { var td = el('td', 'na', 'δεν υποβλήθηκε'); td.colSpan = 2; tr.appendChild(td); }
+      tb.appendChild(tr);
+    });
+    $('pg-again').textContent = state.attempts.length ? 'Νέα προσπάθεια' : 'Έναρξη τεστ';
+  }
+  function chart(done){
+    var box = $('pg-chart'); box.innerHTML = ''; box.hidden = !done.length;
+    if (!done.length) return;
+    var W = 320, H = 160, L = 26, R = 14, T = 14, B = 26, NS = 'http://www.w3.org/2000/svg';
+    function mk(t, a, p){ var e = document.createElementNS(NS, t); for (var k in a) e.setAttribute(k, a[k]); (p || svg).appendChild(e); return e; }
+    var svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', 'Βαθμός ανά προσπάθεια: ' + done.map(function(a){ return fmt(a.score); }).join(', '));
+    var x = function(i){ return done.length === 1 ? L + (W - L - R) / 2 : L + i * (W - L - R) / (done.length - 1); };
+    var y = function(v){ return T + (10 - v) * (H - T - B) / 10; };
+    var g = mk('g', { 'class': 'grid' }), ax = mk('g', { 'class': 'ax' });
+    [0, 5].forEach(function(v){ mk('line', { x1: L, x2: W - R, y1: y(v), y2: y(v) }, g); var t = mk('text', { x: L - 6, y: y(v) + 4, 'text-anchor': 'end' }, ax); t.textContent = v; });
+    mk('line', { 'class': 'goal', x1: L, x2: W - R, y1: y(10), y2: y(10) });
+    var gt = mk('text', { 'class': 'goalt', x: L - 6, y: y(10) + 4, 'text-anchor': 'end' }); gt.textContent = '10';
+    var prevDay = '', lastX = -99;
+    done.forEach(function(a, i){
+      var d = new Date(a.start), day = d.getDate() + '/' + (d.getMonth() + 1);
+      if (day === prevDay || x(i) - lastX < 34) return;
+      prevDay = day; lastX = x(i);
+      var t = mk('text', { x: x(i), y: H - 8, 'text-anchor': 'middle' }, ax); t.textContent = day;
+    });
+    if (done.length > 1) mk('polyline', { 'class': 'ln', points: done.map(function(a, i){ return x(i) + ',' + y(a.score); }).join(' ') });
+    done.forEach(function(a, i){
+      mk('circle', { 'class': 'pt', cx: x(i), cy: y(a.score), r: 4.5 });
+      var h = mk('circle', { 'class': 'hit', cx: x(i), cy: y(a.score), r: 14, tabindex: 0 });
+      var d = new Date(a.start), txt = d.getDate() + '/' + (d.getMonth() + 1) + ', ' + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes() + ': ' + fmt(a.score) + '/10 (' + a.got + ' από ' + a.tot + ')';
+      var tt = document.createElementNS(NS, 'title'); tt.textContent = txt; h.appendChild(tt);
+    });
+    var la = done[done.length - 1], lt = mk('text', { 'class': 'lbl', x: x(done.length - 1), y: y(la.score) - 10, 'text-anchor': done.length === 1 ? 'middle' : 'end' }); lt.textContent = fmt(la.score);
+    box.appendChild(svg);
+  }
+  function lastCard(){
+    var done = state.attempts.filter(function(a){ return a.score != null; });
+    var c = $('t-last'); c.hidden = !done.length; if (!done.length) return;
+    var a = done[done.length - 1];
+    $('t-lastscore').textContent = fmt(a.score) + ' / 10';
+    $('t-lastnote').textContent = a.got + ' από ' + a.tot + ' μονάδες. ' + (a.score >= 10 ? 'Τέλεια!' : a.score >= 8 ? 'Πολύ καλά. Δες τα λάθη σου και ξαναδοκίμασε για το 10.' : 'Ξαναδιάβασε τις σημειώσεις και δοκίμασε πάλι.');
+  }
+  var QUOTES = [{"q": "Επανάληψις μήτηρ πάσης μαθήσεως.", "a": "Αρχαίο ρητό"}, {"q": "Είμαστε αυτό που κάνουμε κατ’ επανάληψη. Η αριστεία, λοιπόν, δεν είναι πράξη, αλλά συνήθεια.", "a": "Will Durant, πάνω σε ιδέα του Αριστοτέλη"}, {"q": "Η σταγόνα τρυπά την πέτρα.", "a": "Οβίδιος"}, {"q": "Η επανάληψη είναι ο πατέρας της μάθησης, η μητέρα της μνήμης και ο οδηγός της ολοκλήρωσης.", "a": "Zig Ziglar"}, {"q": "Η ικανότητα αποκτάται με την επανάληψη.", "a": "Shinichi Suzuki"}, {"q": "Δεν φοβάμαι αυτόν που έχει εξασκηθεί σε 10.000 κλοτσιές μία φορά, αλλά αυτόν που έχει εξασκηθεί σε μία κλοτσιά 10.000 φορές.", "a": "Bruce Lee"}, {"q": "Η εξάσκηση δεν σε κάνει τέλειο. Η τέλεια εξάσκηση σε κάνει τέλειο.", "a": "Vince Lombardi"}, {"q": "Η μεγαλύτερη δόξα μας δεν είναι ότι δεν πέφτουμε ποτέ, αλλά ότι σηκωνόμαστε κάθε φορά που πέφτουμε.", "a": "Αποδίδεται στον Κομφούκιο"}, {"q": "Δεν έχει σημασία πόσο αργά πηγαίνεις, αρκεί να μη σταματήσεις.", "a": "Αποδίδεται στον Κομφούκιο"}, {"q": "Δοκίμασε ξανά. Απότυχε ξανά. Απότυχε καλύτερα.", "a": "Samuel Beckett"}, {"q": "Μην υποχωρείς ποτέ, ποτέ, ποτέ.", "a": "Winston Churchill"}, {"q": "Δεν είναι ότι είμαι τόσο έξυπνος. Απλώς μένω με τα προβλήματα περισσότερο.", "a": "Αποδίδεται στον Albert Einstein"}, {"q": "Η ενέργεια και η επιμονή κατακτούν τα πάντα.", "a": "Benjamin Franklin"}, {"q": "Τα μεγάλα έργα δεν γίνονται με τη δύναμη, αλλά με την επιμονή.", "a": "Samuel Johnson"}, {"q": "Δεν απέτυχα. Απλώς βρήκα 10.000 τρόπους που δεν λειτουργούν.", "a": "Αποδίδεται στον Thomas Edison"}, {"q": "Χάνεις το 100% των βολών που δεν επιχειρείς.", "a": "Wayne Gretzky"}, {"q": "Έχω αποτύχει ξανά και ξανά και ξανά στη ζωή μου. Και γι’ αυτό πετυχαίνω.", "a": "Michael Jordan"}, {"q": "Η αποτυχία είναι απλώς η ευκαιρία να ξεκινήσεις ξανά, αυτή τη φορά πιο έξυπνα.", "a": "Henry Ford"}, {"q": "Ένα ταξίδι χιλίων μιλίων αρχίζει με ένα βήμα.", "a": "Λάο Τσε"}, {"q": "Αν δεν μπορείς να πετάξεις, τρέξε. Αν δεν μπορείς να τρέξεις, περπάτα. Αν δεν μπορείς να περπατήσεις, σύρσου. Ό,τι κι αν κάνεις, συνέχισε να προχωράς μπροστά.", "a": "Martin Luther King Jr."}, {"q": "Η επιτυχία είναι το άθροισμα μικρών προσπαθειών που επαναλαμβάνονται μέρα με τη μέρα.", "a": "Robert Collier"}, {"q": "Το θάρρος δεν βρυχάται πάντα. Μερικές φορές είναι η ήσυχη φωνή στο τέλος της ημέρας που λέει: «Θα προσπαθήσω ξανά αύριο».", "a": "Mary Anne Radmacher"}, {"q": "Η θέληση για νίκη δεν είναι τίποτα χωρίς τη θέληση για προετοιμασία.", "a": "Juma Ikangaa"}, {"q": "Η υπομονή και η επιμονή έχουν μαγική δύναμη: μπροστά τους οι δυσκολίες εξαφανίζονται και τα εμπόδια χάνονται.", "a": "Αποδίδεται στον John Quincy Adams"}];
+  function quote(){
+    if (!QUOTES.length){ $('pg-quote').hidden = true; return; }
+    var k = Math.floor(Math.random() * QUOTES.length);
+    $('pg-q').textContent = '«' + QUOTES[k].q + '»'; $('pg-qa').textContent = QUOTES[k].a;
+  }
+  function showProgress(on){
+    $('progress').hidden = !on; document.body.classList.toggle('pg-open', on);
+    if (on){ progress(); quote(); refreshStart(); $('pg-close').focus(); }
+  }
+  $('pg-close').addEventListener('click', function(){ showProgress(false); if (location.hash === '#progress') location.hash = 's-test'; });
+  function route(){
+    var h = location.hash;
+    if (h === '#progress'){ showProgress(true); return; }
+    if (!$('progress').hidden) showProgress(false);
+    if (h === '#test-start'){
+      var sec = $('s-test'); if (sec) sec.scrollIntoView({ block: 'start' });
+      if (!running && nextAllowed() <= Date.now()) start();
+    }
+  }
+  window.addEventListener('hashchange', route);
+  $('pg-alllink').addEventListener('click', function(e){
+    if (/sinapsi\.gr$|github\.io$/.test(location.hostname)) return;
+    e.preventDefault(); $('pg-allnote').hidden = false;
+  });
+  $('pg-again').addEventListener('click', function(e){
+    e.preventDefault(); if ($('pg-again').classList.contains('off')) return;
+    if (location.hash === '#test-start') route(); else location.hash = 'test-start';
+  });
+
+  // ---------- start button and cooldown ----------
+  function nextAllowed(){
+    var a = state.attempts[state.attempts.length - 1];
+    if (!a) return 0;
+    return (a.end || a.start) + CONFIG.cooldownMin * 60000;
+  }
+  function refreshStart(){
+    var btn = $('t-start'), w = $('t-wait'), again = $('pg-again'), pw = $('pg-wait');
+    var left = nextAllowed() - Date.now();
+    var label = state.attempts.length ? 'Νέα προσπάθεια' : 'Έναρξη τεστ';
+    btn.textContent = label;
+    if (running){ btn.hidden = true; w.hidden = true; again.classList.add('off'); return; }
+    btn.hidden = false;
+    if (left > 0){
+      var m = Math.floor(left / 60000), s = Math.ceil(left % 60000 / 1000); if (s === 60){ m++; s = 0; }
+      var txt = 'Νέα προσπάθεια σε ' + m + ':' + (s < 10 ? '0' : '') + s + '. Στο μεταξύ ξαναδές τις κάρτες και τα λυμένα.';
+      btn.disabled = true; w.hidden = false; w.textContent = txt;
+      again.classList.add('off'); again.setAttribute('aria-disabled', 'true'); pw.hidden = false; pw.textContent = txt;
+      if (!tick) tick = setInterval(refreshStart, 1000);
+    } else {
+      btn.disabled = false; w.hidden = true;
+      again.classList.remove('off'); again.removeAttribute('aria-disabled'); pw.hidden = true;
+      if (tick){ clearInterval(tick); tick = null; }
+    }
+  }
+
+  // ---------- building a test ----------
+  function addPart(body, title, note){ var h = el('h3', 'tpart', title); if (note) h.appendChild(el('small', '', note)); body.appendChild(h); }
+  function choiceBlock(q, options, correct, two){
+    var wrap = el('div', 'topts' + (two ? ' two' : ''));
+    var it = { pts: 1, box: q, val: null, check: function(){
+      var ok = it.val === correct;
+      wrap.querySelectorAll('button').forEach(function(b, i){
+        if (i === it.val) b.classList.add(ok ? 'right' : 'wrong');
+        else if (i === correct && CONFIG.revealAnswers) b.classList.add('right');
+      });
+      return { got: ok ? 1 : 0, right: options[correct].text ? 'Σωστή απάντηση: ' + options[correct].text : 'Σωστή είναι η ' + options[correct].letter + '.' };
+    }, answered: function(){ return it.val != null; } };
+    options.forEach(function(o, i){
+      var b = el('button'); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+      if (o.letter) b.appendChild(el('span', 'ol', o.letter + '.'));
+      if (o.code) b.appendChild(code(o.code)); else b.appendChild(el('span', '', o.text));
+      b.addEventListener('click', function(){ if (!running) return; it.val = i; wrap.querySelectorAll('button').forEach(function(x){ x.classList.toggle('sel', x === b); x.setAttribute('aria-pressed', String(x === b)); }); });
+      wrap.appendChild(b);
+    });
+    q.appendChild(wrap);
+    return it;
+  }
+  function newQ(body, n, text){ var q = el('div', 'tq'); q.appendChild(el('span', 'tn', 'Ερώτηση ' + n)); if (text) q.appendChild(el('p', '', text)); body.appendChild(q); return q; }
+  function build(){
+    var D = BANK.draw, body = $('t-body'); body.innerHTML = ''; items = [];
+    var n = 0;
+    if (CONFIG.timeLimitMin > 0){ var tm = el('div', 'ttimer'); tm.id = 't-timer'; body.appendChild(tm); }
+    // Α. Σωστό ή Λάθος
+    var tf = shuffle(pick(BANK.tf_practiced, D.tf_practiced).concat(pick(BANK.tf_new, D.tf_new)));
+    if (tf.length){
+      addPart(body, 'Α. Σωστό ή Λάθος', tf.length + (tf.length === 1 ? ' μονάδα' : ' μονάδες'));
+      tf.forEach(function(t){
+        var q = newQ(body, ++n, t.s);
+        var it = choiceBlock(q, [{ text: 'Σωστό' }, { text: 'Λάθος' }], t.a === 'Σ' ? 0 : 1, true);
+        it.see = t.see; items.push(it);
+      });
+    }
+    // Β. Συμπλήρωση κενών
+    var fills = pick(BANK.fill, D.fill);
+    if (fills.length){
+      var blanks = fills.reduce(function(s, f){ return s + (f.t.match(/\[/g) || []).length; }, 0);
+      addPart(body, 'Β. Συμπλήρωση κενών', blanks + (blanks === 1 ? ' μονάδα' : ' μονάδες'));
+      fills.forEach(function(f){
+        var q = newQ(body, ++n, null); q.firstChild.textContent += ': διάλεξε τη σωστή λέξη σε κάθε κενό.';
+        var p = el('p', 'tfill'); var sels = [];
+        f.t.split(/(\[[^\]]+\])/).forEach(function(part){
+          if (part.charAt(0) !== '['){ p.append(part); return; }
+          var opts = part.slice(1, -1).split('|');
+          var s = el('select'); s.setAttribute('aria-label', 'Κενό');
+          var o0 = el('option', '', '…'); o0.value = ''; s.appendChild(o0);
+          shuffle(opts).forEach(function(o){ var x = el('option', '', o); x.value = o; s.appendChild(x); });
+          s._right = opts[0]; sels.push(s); p.appendChild(s);
+        });
+        q.appendChild(p);
+        items.push({ pts: sels.length, box: q, see: f.see, check: function(){
+          var g = 0, miss = [];
+          sels.forEach(function(s){ var ok = s.value === s._right; s.classList.add(ok ? 'right' : 'wrong'); s.disabled = true; if (ok) g++; else miss.push(s._right); });
+          return { got: g, right: 'Σωστά: ' + miss.join(', ') };
+        }, answered: function(){ return sels.every(function(s){ return s.value; }); } });
+      });
+    }
+    // Γ. Πολλαπλής επιλογής
+    var mcs = pick(BANK.mc, D.mc).concat(pick(BANK.mc_algo, D.mc_algo));
+    if (mcs.length){
+      addPart(body, 'Γ. Πολλαπλής επιλογής', mcs.length + (mcs.length === 1 ? ' μονάδα' : ' μονάδες'));
+      mcs.forEach(function(m){
+        var q = newQ(body, ++n, m.q);
+        var order = shuffle(m.opts.map(function(_, i){ return i; }));
+        var options = order.map(function(i, k){ return m.code ? { letter: LET[k], code: m.opts[i] } : { letter: LET[k], text: m.opts[i] }; });
+        var it = choiceBlock(q, options, order.indexOf(m.a));
+        it.see = m.see; it.why = m.why; items.push(it);
+      });
+    }
+    // Δ. Αντιστοίχιση
+    pick(BANK.match, D.match).forEach(function(m){
+      var rows = pick(m.items, D.match_items);
+      addPart(body, 'Δ. Αντιστοίχιση', rows.length + (rows.length === 1 ? ' μονάδα' : ' μονάδες'));
+      var q = newQ(body, ++n, m.q);
+      var sels = [];
+      rows.forEach(function(r){
+        var row = el('div', 'tmrow');
+        row.appendChild(m.code ? el('code', '', r[0]) : el('span', '', r[0]));
+        var s = el('select'); s.setAttribute('aria-label', 'Απάντηση');
+        var o0 = el('option', '', 'Διάλεξε…'); o0.value = ''; s.appendChild(o0);
+        m.opts.forEach(function(o){ var x = el('option', '', o); x.value = o; s.appendChild(x); });
+        s._right = r[1]; sels.push(s); row.appendChild(s); q.appendChild(row);
+      });
+      items.push({ pts: sels.length, box: q, see: m.see, check: function(){
+        var g = 0, miss = [];
+        sels.forEach(function(s, i){ var ok = s.value === s._right; s.classList.add(ok ? 'right' : 'wrong'); s.disabled = true; if (ok) g++; else miss.push((i + 1) + 'η: ' + s._right); });
+        return { got: g, right: 'Σωστά: ' + miss.join(', ') };
+      }, answered: function(){ return sels.every(function(s){ return s.value; }); } });
+    });
+    // Ε. Πίνακας τιμών
+    var nums = pick(BANK.num, D.num);
+    if (nums.length){
+      addPart(body, 'Ε. Πίνακας τιμών', nums.length + (nums.length === 1 ? ' μονάδα' : ' μονάδες'));
+      nums.forEach(function(x){
+        var v = x.variants[Math.floor(Math.random() * x.variants.length)];
+        var q = newQ(body, ++n, x.q);
+        q.appendChild(code(v.code)); q.appendChild(el('p', '', v.q));
+        var inp = el('input'); inp.type = 'text'; inp.setAttribute('inputmode', 'decimal'); inp.setAttribute('aria-label', 'Η απάντησή σου'); inp.autocomplete = 'off';
+        q.appendChild(inp);
+        items.push({ pts: 1, box: q, see: x.see, check: function(){
+          var a = inp.value.trim().replace(',', '.'), r = String(v.a);
+          var ok = a !== '' && (isFinite(a) && isFinite(r) ? Math.abs(parseFloat(a) - parseFloat(r)) < 1e-9 : a === r);
+          inp.classList.add(ok ? 'right' : 'wrong'); inp.disabled = true;
+          return { got: ok ? 1 : 0, right: 'Σωστή απάντηση: ' + r.replace('.', ',') };
+        }, answered: function(){ return inp.value.trim() !== ''; } });
+      });
+    }
+    var bar = el('div', 'tbar'); var sb = el('button', 'btn primary', 'Υποβολή'); sb.type = 'button'; sb.id = 't-submit';
+    var msg = el('span', 'tmsg'); bar.append(sb, msg); body.appendChild(bar);
+    var warned = false;
+    sb.addEventListener('click', function(){
+      var empty = items.filter(function(it){ return !it.answered(); }).length;
+      if (empty && !warned){ warned = true; msg.textContent = 'Έχεις ' + empty + (empty === 1 ? ' αναπάντητη ερώτηση' : ' αναπάντητες ερωτήσεις') + '. Πάτα ξανά «Υποβολή» για να τελειώσεις.'; return; }
+      finish();
+    });
+  }
+  function finish(){
+    if (!running) return;
+    running = false; if (timerId){ clearInterval(timerId); timerId = null; }
+    var got = 0, tot = 0;
+    items.forEach(function(it){
+      var r = it.check(); got += r.got; tot += it.pts;
+      var full = r.got === it.pts;
+      it.box.classList.add('done', full ? 'ok' : 'no');
+      var fb = el('p', 'tfb');
+      if (full) fb.textContent = '✓ Σωστά';
+      else {
+        fb.append((it.pts > 1 ? '✗ ' + r.got + ' από ' + it.pts + '. ' : '✗ Λάθος. ') + (CONFIG.revealAnswers ? r.right + ' ' : ''));
+        if (it.see){ fb.append('Ξαναδιάβασε: '); fb.appendChild(seeLink(it.see)); }
+        if (CONFIG.revealAnswers && it.why) fb.appendChild(el('span', 'why', it.why));
+      }
+      it.box.appendChild(fb);
+    });
+    var score = tot ? Math.round(got / tot * 100) / 10 : 0;
+    var a = state.attempts[state.attempts.length - 1]; a.end = Date.now(); a.score = score; a.got = got; a.tot = tot; save(state);
+    $('t-submit').parentNode.remove();
+    lastCard();
+    var tm = $('t-timer'); if (tm) tm.remove();
+    refreshStart(); applyLock();
+    $('t-last').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function start(){
+    if (running || nextAllowed() > Date.now()) return;
+    running = true;
+    state.attempts.push({ start: Date.now() }); save(state);
+    build(); $('t-body').hidden = false; refreshStart();
+    if (CONFIG.timeLimitMin > 0){
+      var endAt = Date.now() + CONFIG.timeLimitMin * 60000, t = $('t-timer');
+      var upd = function(){ var l = Math.max(0, endAt - Date.now()); var m = Math.floor(l / 60000), s = Math.floor(l % 60000 / 1000); t.textContent = '⏱ ' + m + ':' + (s < 10 ? '0' : '') + s; if (!l) finish(); };
+      upd(); timerId = setInterval(upd, 1000);
+    }
+    $('t-body').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  $('t-start').addEventListener('click', start);
+  lastCard(); refreshStart(); applyLock(); route();
 })();
 </script>
 <style id="kitcss">/*KIT>*//* ==== kit: θέμα, προβολή, «Δείξε λύση» ==== */

@@ -1,7 +1,8 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><style id="avcss">.sos-av{float:right;width:72px;height:84px;border-radius:14px;object-position:center top;object-fit:cover;margin:0 0 8px 14px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);shape-outside:margin-box}@media(max-width:560px){.sos-av{width:56px;height:65px;border-radius:11px;margin-left:10px}}@media print{.sos-av{display:none}}</style></head><body>
-<title>Μάθημα 7 · Το αλφάβητο της ΓΛΩΣΣΑΣ, τύποι, σταθερές, μεταβλητές</title>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Μάθημα 7 · Αλφάβητο, τύποι, σταθερές, μεταβλητές</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap">
 <style>
 /* Layout: one A4-like sheet centred on a cool ground; coloured callouts by role (ορισμός, ήξερες ότι, παγίδα, παράδειγμα) */
 :root{
@@ -92,6 +93,7 @@ body.student .teacher{display:none}
 .trivia{background:var(--amber-bg);border:1.5px dashed var(--amber-line)} .trivia .tag{color:var(--amber)}
 .talk{margin-top:6px;font-size:14px;color:var(--amber);font-weight:600}
 .talk span{font-weight:400}
+details.trivia>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;margin:0}details.trivia>summary::-webkit-details-marker{display:none}details.trivia>summary::before{content:"▸";font-size:13px;letter-spacing:0}details.trivia[open]>summary::before{content:"▾"}details.trivia[open]>summary{margin-bottom:6px}details.trivia>summary:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}.talkans{margin-top:6px;font-size:14px;border-top:1px dashed var(--amber-line);padding-top:6px}@media print{details.trivia>summary::before{display:none}}
 .trap{background:var(--coral-bg);border-left:4px solid var(--coral)} .trap .tag{color:var(--coral)}
 .ex{background:var(--teal-bg);border-left:4px solid var(--teal)} .ex .tag{color:var(--teal)}
 .plain{background:var(--soft)} .plain .tag{color:var(--ink)}
@@ -180,6 +182,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .navin::-webkit-scrollbar{display:none}
 #nav a{flex:none;font:600 13px/1 var(--body);color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
 #nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#nav a.navtest{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid,#fff)}
 .sec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
 .btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
 .btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
@@ -197,6 +200,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .qi.no .qb button.pick{background:var(--coral);border-color:var(--coral);color:var(--paper)}
 .qi.no .qb button.right{border-color:var(--teal);color:var(--teal)}
 .fb{font-size:13px;font-weight:700}
+.qwhy{margin:0;font-size:14px;line-height:1.5}
 .qi.ok .fb{color:var(--teal)} .qi.no .fb{color:var(--coral)}
 .score{font:700 15px/1.4 var(--display);padding:10px 14px;border-radius:10px;background:var(--violet-bg);color:var(--violet);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
 .score .btn{font-size:13px;padding:8px 12px}
@@ -224,12 +228,107 @@ details.reveal .rv{padding:0 14px 12px}
 .count{font:700 14px var(--display);min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
 @media (prefers-reduced-motion:reduce){.card .face{transition:none}}
 @media (max-width:520px){ #doc{border-radius:12px} .card{min-height:260px} }
-</style>
-<style id="synapsi-brand">
+
+/* test */
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid,#fff);font-size:15px;padding:12px 18px;text-decoration:none;display:inline-block}
+.btn.primary:disabled,.btn.primary.off{opacity:.45;cursor:not-allowed;pointer-events:none}
+.tstart{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.tlink{font:700 14px var(--body);color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+.tlink:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.tstats{margin:0;font-size:14px;line-height:1.7}
+.tstats b{font-variant-numeric:tabular-nums;color:var(--ink)}
+.tstats .sep{color:var(--line);margin:0 8px}
+.tstats:empty{display:none}
+.tpart{margin:18px 0 6px;font:800 16px/1.3 var(--display)}
+.tpart small{font:600 12px var(--body);color:var(--muted);margin-left:6px}
+.tq{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;display:grid;gap:8px;min-width:0}
+.tq>p{margin:0}
+.tq pre.code{margin:0;font-size:13px}
+.tq.ok{border-color:var(--teal);background:var(--teal-bg)}
+.tq.no{border-color:var(--coral);background:var(--coral-bg)}
+.tq .tn{font:700 12px var(--body);color:var(--muted)}
+.topts{display:grid;gap:6px}
+.topts button{font:500 14.5px/1.35 var(--body);text-align:left;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;display:flex;gap:8px;align-items:flex-start;min-width:0}
+.topts button .ol{font-weight:800;flex:none}
+.topts button pre.code{flex:1;min-width:0;background:none;border:0;padding:0;overflow-x:auto}
+.topts button.sel{border-color:var(--blue);background:var(--blue-bg)}
+.topts button:focus-visible,.tq select:focus-visible,.tq input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.topts.two{grid-template-columns:1fr 1fr}
+.tq.done .topts button{cursor:default}
+.topts button.right{border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+.topts button.wrong{border-color:var(--coral);box-shadow:inset 0 0 0 1px var(--coral)}
+.tfill{line-height:2.1}
+.tq select{font:600 14px var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--blue);border-radius:8px;padding:4px 6px;max-width:100%}
+.tq select.right{border-color:var(--teal);background:var(--teal-bg)}
+.tq select.wrong{border-color:var(--coral);background:var(--coral-bg)}
+.tmrow{display:grid;gap:6px;padding:8px 0;border-top:1px dashed var(--line)}
+.tmrow:first-of-type{border-top:0}
+.tmrow code{white-space:normal}
+.tq input{font:600 16px var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--blue);border-radius:8px;padding:8px 10px;width:9em;max-width:100%}
+.tq input.right{border-color:var(--teal)} .tq input.wrong{border-color:var(--coral)}
+.tfb{font-size:13.5px;font-weight:600;margin:0}
+.tq.ok .tfb{color:var(--teal)} .tq.no .tfb{color:var(--coral)}
+.tfb a{color:var(--ink);font-weight:700}
+.tfb .why{display:block;font-weight:400;color:var(--ink);margin-top:3px}
+.tbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0}
+.tmsg{font-size:13.5px;font-weight:600;color:var(--coral)}
+.tresult{border-radius:12px;padding:14px 16px;background:var(--blue-bg);border:0;border-left:4px solid var(--s-blue);display:grid;gap:6px;margin:12px 0}
+.tresult .big,.pgbig .big{font:800 26px/1.1 var(--display);color:var(--blue);font-variant-numeric:tabular-nums}
+.ttimer{position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);z-index:5;font:700 14px var(--display);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px 12px;width:max-content;margin-left:auto}
+/* homework header: the orange frame, once */
+.hwsec .sec{border:1.5px solid var(--amber-line);background:var(--amber-bg);border-radius:12px;padding:10px 14px;align-items:center}
+.hwsec .sec .num,.hwsec .sec h2{color:var(--amber)}
+.hwsec .sec .num{font-size:24px}
+.hwsec .q.hw::before{display:none}
+.hwlock{border:1.5px dashed var(--line);border-radius:10px;padding:12px 14px;color:var(--muted);font-weight:600}
+/* «Η πρόοδός μου» */
+.pg{position:fixed;inset:0;z-index:50;background:var(--ground);overflow-y:auto;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px calc(env(safe-area-inset-bottom,0px) + 84px)}
+.pgin{max-width:560px;margin:0 auto;display:grid;gap:14px}
+.pghead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pghead h2{font:800 24px/1.2 var(--display);margin:0}
+.pgcard{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:10px}
+.pgcard p{margin:0}
+.pgl{font:700 12px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pgt{font:800 18px/1.25 var(--display)}
+.pgbig{display:grid;gap:2px;background:var(--blue-bg);border-radius:10px;padding:10px 12px}
+.pgchart{position:relative}
+.pgchart svg{display:block;width:100%;height:auto;overflow:visible}
+.pgchart .grid line{stroke:var(--line);stroke-width:1}
+.pgchart .ax text{fill:var(--muted);font:600 11px var(--body)}
+.pgchart .ln{fill:none;stroke:var(--s-blue);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.pgchart .pt{fill:var(--s-blue);stroke:var(--paper);stroke-width:2}
+.pgchart .hit{fill:transparent;cursor:pointer;outline:none}
+.pgchart .hit:focus-visible{stroke:var(--blue);stroke-width:2}
+.pgchart .lbl{fill:var(--ink);font:700 12px var(--body)}
+.pgchart .goal{stroke:var(--teal);stroke-width:1.5;stroke-dasharray:4 4}
+.pgchart .goalt{fill:var(--teal);font:700 11px var(--body)}
+.pgtip{min-height:1.4em;margin:4px 0 0;font-size:13px;color:var(--muted)}
+.pgscroll{max-height:196px;overflow-y:auto;overscroll-behavior:contain;border:1px solid var(--line);border-radius:10px;padding:0 10px}
+.pgtab th{position:sticky;top:0;background:var(--paper);z-index:1}
+.pgtab{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+.pgtab th{text-align:left;font:700 12px var(--body);color:var(--muted);padding:8px 8px 6px 0;border-bottom:1px solid var(--line)}
+.pgtab td{padding:6px 8px 6px 0;border-bottom:1px dashed var(--line)}
+.pgtab tr:last-child td{border-bottom:0}
+.pgtab td.na{color:var(--muted)}
+#pg-h a{color:inherit;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+#pg-h a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+body.pg-open #kitfloat{z-index:60}
+.pginfo{background:var(--soft);border-radius:12px;padding:12px 14px;display:grid;gap:8px;font-size:14.5px}
+.pginfo p{margin:0}
+.pgquote{margin:6px 0 0;padding:22px 20px 18px;text-align:center;position:relative;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.pgquote::before{content:"“";position:absolute;left:50%;top:-22px;transform:translateX(-50%);font:400 54px/1 "GFS Didot",Georgia,serif;color:var(--s-blue);background:var(--ground);padding:0 10px}
+.pgquote blockquote{margin:0;font:400 21px/1.45 "GFS Didot",Georgia,"Times New Roman",serif;color:var(--ink);text-wrap:balance}
+.pgquote figcaption{margin-top:10px;font:600 12px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.pgquote figcaption::before{content:"";display:inline-block;width:22px;height:1px;background:var(--muted);vertical-align:middle;margin-right:8px}
+body.pg-open{overflow:hidden}
+@media (max-width:520px){.topts.two{grid-template-columns:1fr}}
+.sos-av{float:right;width:72px;height:84px;border-radius:14px;background:center top/cover no-repeat;margin:0 0 8px 14px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);shape-outside:margin-box}@media(max-width:560px){.sos-av{width:56px;height:65px;border-radius:11px;margin-left:10px}}@media print{.sos-av{display:none}}.sos-av.sa{background-image:url(av1.jpg)}.sos-av.sb{background-image:url(av4.jpg)}
+/* ΣΥΝΑΨΗ: χρώματα του site */
 :root{--ground:#F7F6F0;--ink:#2B3722;--muted:#5E6253;--line:#E1E1D7;--soft:#F3F2EA;--blue:#4F6230;--blue-bg:#EEF0E2;--s-blue:#4F6230;--s-ink:#2B3722;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D;--on-solid-2:#E6E0CC}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}}
 :root[data-theme="dark"]{--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}
-body::before{background:var(--ground)}
+</style>
+<style id="synapsi-site">
 .syn-bar{max-width:860px;margin:0 auto;padding-top:12px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
 .syn-bar a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--hero);color:#fff;text-decoration:none}
 .syn-bar span{color:var(--muted)}
@@ -239,12 +338,11 @@ body::before{background:var(--ground)}
 .syn-nav small{font:600 11.5px var(--body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
 .syn-nav .next{text-align:right;background:var(--hero);color:#fff;border-color:var(--hero)}
 .syn-nav .next small{color:var(--hero-kick)}
-.syn-nav .off{opacity:.6}
 .syn-note{font-size:13px;color:var(--muted);padding:12px 14px;border-radius:10px;background:var(--soft)}
 .syn-copy{font-size:12px;color:var(--muted)}
 </style>
 <script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
-<div class="syn-bar"><a href="index.html">&#8592; Διαδρομή</a><span>Μάθημα 7 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-7-1">7.1</a><a href="#s-7-2">7.2</a><a href="#s-7-3">7.3</a><a href="#s-7-4">7.4</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a></div></nav>
+<div class="syn-bar"><a href="index.html">&#8592; Διαδρομή</a><span>Μάθημα 7 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-test" class="navtest">Σύντομο Τεστ</a><a href="#s-7-1">7.1</a><a href="#s-7-2">7.2</a><a href="#s-7-3">7.3</a><a href="#s-7-4">7.4</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a><a href="#s-hw">Για το σπίτι</a></div></nav>
 <main id="doc" lang="el">
 <section class="hero">
 <svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
@@ -324,7 +422,7 @@ body::before{background:var(--ground)}
 </div>
 <div class="sec" id="s-7-1"><span class="num">7.1</span><h2>Το αλφάβητο της ΓΛΩΣΣΑΣ</h2><span class="ref">Βιβλίο σελ. 127–128</span></div>
 <p>Στο Μάθημα 6 είδαμε ότι κάθε γλώσσα, φυσική ή τεχνητή, έχει <b>αλφάβητο</b>, <b>λεξιλόγιο</b>, <b>γραμματική</b> και <b>σημασιολογία</b>. Η ΓΛΩΣΣΑ είναι η τεχνητή γλώσσα του βιβλίου, φτιαγμένη για να μαθαίνουμε προγραμματισμό χωρίς τεχνικές λεπτομέρειες. Το πρώτο της στοιχείο είναι το αλφάβητο: τα σύμβολα που επιτρέπεται να γράψουμε.</p>
-<div class="box def"><img class="sos-av" src="av1.jpg" alt="" loading="lazy">
+<div class="box def"><span aria-hidden="true" class="sos-av sa"></span>
 <div class="tag">Ορισμός · απομνημόνευση</div>
 <p><b>Αλφάβητο της ΓΛΩΣΣΑΣ.</b> Το αλφάβητο της ΓΛΩΣΣΑΣ αποτελείται από τα γράμματα του ελληνικού και του λατινικού αλφαβήτου, τα ψηφία, καθώς και από ειδικά σύμβολα, που χρησιμοποιούνται για προκαθορισμένες ενέργειες.</p>
 <p class="src">Σχολικό βιβλίο, §7.1</p>
@@ -350,7 +448,7 @@ body::before{background:var(--ground)}
 </div>
 <div class="sec" id="s-7-2"><span class="num">7.2</span><h2>Τύποι δεδομένων</h2><span class="ref">Βιβλίο σελ. 128</span></div>
 <p>Ο υπολογιστής δεν αποθηκεύει με τον ίδιο τρόπο το 17, το 17.5, το 'Μαρία' και το ΑΛΗΘΗΣ. Γι' αυτό κάθε τιμή ανήκει σε έναν <b>τύπο δεδομένων</b>. Η ΓΛΩΣΣΑ έχει τέσσερις: δύο <b>αριθμητικούς</b> (ακέραιος, πραγματικός), τον <b>χαρακτήρα</b> και τον <b>λογικό</b>.</p>
-<div class="box def"><img class="sos-av" src="av4.jpg" alt="" loading="lazy">
+<div class="box def"><span aria-hidden="true" class="sos-av sb"></span>
 <div class="tag">Ορισμός · απομνημόνευση · οι τύποι δεδομένων</div>
 <p><b>Ακέραιος τύπος.</b> Ο τύπος αυτός περιλαμβάνει τους ακέραιους που είναι γνωστοί από τα μαθηματικά. Οι ακέραιοι μπορούν να είναι θετικοί, αρνητικοί ή μηδέν.</p>
 <p><b>Πραγματικός τύπος.</b> Ο τύπος αυτός περιλαμβάνει τους πραγματικούς αριθμούς που γνωρίζουμε από τα μαθηματικά. Και οι πραγματικοί αριθμοί μπορούν να είναι θετικοί, αρνητικοί ή μηδέν.</p>
@@ -401,13 +499,14 @@ body::before{background:var(--ground)}
 <div class="box ex"><div class="tag">Ποιον τύπο διαλέγω για ένα δεδομένο;</div><p>Θα κάνω <b>πράξεις</b> με αυτό; Αν όχι (τηλέφωνο, ΑΦΜ, ταχυδρομικός κώδικας), είναι <b>χαρακτήρες</b>. Μπορεί να έχει <b>δεκαδικά</b>; Τότε <b>πραγματική</b>. Είναι <b>ναι/όχι</b>; Τότε <b>λογική</b>. Αλλιώς <b>ακέραια</b>.</p></div>
 </div>
 <p class="small">Το βιβλίο γράφει τους χαρακτήρες σε <b>απλά</b> εισαγωγικά ('Κώστας'). Οι επίσημες οδηγίες διδασκαλίας δέχονται και <b>διπλά</b> ("Κώστας"). Σε αυτό το βοήθημα γράφουμε απλά, όπως το βιβλίο.</p>
-<div class="box trivia">
-<div class="tag">Ήξερες ότι;</div>
+<details class="box trivia">
+<summary class="tag">Ήξερες ότι;</summary>
 <p><span class="ln li">Τον Δεκέμβριο του 2014 το βίντεο <b>Gangnam Style</b> «έσπασε» τον μετρητή προβολών του YouTube. Ο μετρητής ήταν ακέραιος των 32 bit και η μεγαλύτερη τιμή που χωρούσε ήταν <b>2.147.483.647</b>. Κανείς δεν περίμενε ότι ένα βίντεο θα ξεπερνούσε τα δύο δισεκατομμύρια προβολές. Το YouTube άλλαξε τον μετρητή σε ακέραιο των 64 bit, που χωράει πάνω από 9 δισεκατομμύρια δισεκατομμύρια (9</span><span class="ln li">10<sup>18</sup>).</span></p>
 <p class="talk">Σκέψου: Ο τύπος «ακέραιος» στα μαθηματικά δεν έχει όριο. Γιατί στον υπολογιστή έχει; Ποια άλλα νούμερα της καθημερινότητας μπορεί κάποτε να «ξεχειλίσουν»;</p>
-</div>
+
+</details>
 <div class="sec" id="s-7-3"><span class="num">7.3</span><h2>Σταθερές και ονόματα</h2><span class="ref">Βιβλίο σελ. 128–129</span></div>
-<div class="box def"><img class="sos-av" src="av1.jpg" alt="" loading="lazy">
+<div class="box def"><span aria-hidden="true" class="sos-av sa"></span>
 <div class="tag">Ορισμός · απομνημόνευση</div>
 <p><b>Σταθερές.</b> Οι σταθερές (constants) είναι προκαθορισμένες τιμές που δεν μεταβάλλονται κατά τη διάρκεια εκτέλεσης του προγράμματος. Οι σταθερές είναι αντίστοιχου τύπου δεδομένων, δηλαδή ακέραιες, πραγματικές, αλφαριθμητικές ή λογικές.</p>
 <p class="src">Σχολικό βιβλίο, §7.3</p>
@@ -425,10 +524,10 @@ body::before{background:var(--ground)}
 </div>
 <div class="grid g2">
 <div class="box ex"><div class="tag">Γιατί να δώσω όνομα;</div><p>Το <b>ΦΠΑ</b> λέει περισσότερα από το <b>0.24</b>, άρα το πρόγραμμα <b>διαβάζεται</b> πιο εύκολα. Κι αν ο ΦΠΑ αλλάξει, διορθώνω <b>μία γραμμή</b> αντί να ψάχνω το 0.24 σε όλο το πρόγραμμα. Το πρόγραμμα γίνεται ευκολότερο να διορθωθεί και να συντηρηθεί.</p></div>
-<div class="box trap" style="margin:0"><img class="sos-av" src="av4.jpg" alt="" loading="lazy"><div class="tag">Τι δεν κάνουμε με μια σταθερά</div><p>Δεν της αλλάζουμε τιμή: <b><span class="nw">ΦΠΑ ← 0.13</span></b> είναι λάθος. Δεν τη διαβάζουμε: <b>ΔΙΑΒΑΣΕ ΦΠΑ</b> είναι λάθος. Δεν της δηλώνουμε τύπο: τον «καταλαβαίνει» η ΓΛΩΣΣΑ από την τιμή. Το σύμβολο στη δήλωση είναι <b>=</b>, <span class="nw">όχι ← ούτε</span> :.</p></div>
+<div class="box trap" style="margin:0"><span aria-hidden="true" class="sos-av sb"></span><div class="tag">Τι δεν κάνουμε με μια σταθερά</div><p>Δεν της αλλάζουμε τιμή: <b><span class="nw">ΦΠΑ ← 0.13</span></b> είναι λάθος. Δεν τη διαβάζουμε: <b>ΔΙΑΒΑΣΕ ΦΠΑ</b> είναι λάθος. Δεν της δηλώνουμε τύπο: τον «καταλαβαίνει» η ΓΛΩΣΣΑ από την τιμή. Το σύμβολο στη δήλωση είναι <b>=</b>, <span class="nw">όχι ← ούτε</span> :.</p></div>
 </div>
 <h3 class="tool">Ονόματα: οι κανόνες</h3>
-<div class="box def"><img class="sos-av" src="av1.jpg" alt="" loading="lazy">
+<div class="box def"><span aria-hidden="true" class="sos-av sa"></span>
 <div class="tag">Ορισμός · απομνημόνευση</div>
 <p><b>Ονόματα.</b> Τα ονόματα μπορούν να αποτελούνται από γράμματα πεζά ή κεφαλαία του ελληνικού ή του λατινικού αλφαβήτου (Α-Ω, Α-Ζ), ψηφία (0-9) καθώς και τον χαρακτήρα κάτω παύλα (underscore) ( _ ), ενώ πρέπει υποχρεωτικά να αρχίζουν με γράμμα.</p>
 <p><b>Δεσμευμένες λέξεις.</b> Μερικές λέξεις χρησιμοποιούνται από την ίδια τη ΓΛΩΣΣΑ για συγκεκριμένους λόγους, όπως οι λέξεις ΠΡΟΓΡΑΜΜΑ, ΑΚΕΡΑΙΕΣ, ΠΡΑΓΜΑΤΙΚΕΣ, ΑΝ κ.λπ. Αυτές οι λέξεις δεν μπορούν να χρησιμοποιηθούν ως ονόματα.</p>
@@ -442,13 +541,14 @@ body::before{background:var(--ground)}
 <tr><td>4. <b>Δεν</b> είναι δεσμευμένη λέξη;</td><td><span class="kvs"><span class="kv">Ψευδής1</span><span class="kv">Αρχή_Αγώνα</span></span></td><td><span class="kvs"><span class="kv">ΑΡΧΗ</span><span class="kv">ΓΡΑΨΕ</span><span class="kv">ΑΛΗΘΗΣ</span></span></td></tr>
 <tr><td>5. <b>Δεν</b> έχει εισαγωγικά;</td><td>Μαρία</td><td>'Μαρία' (αυτό είναι τιμή, όχι όνομα)</td></tr>
 </tbody></table></div>
-<div class="box trivia">
-<div class="tag">Ήξερες ότι;</div>
+<details class="box trivia">
+<summary class="tag">Ήξερες ότι;</summary>
 <p>Το 1999 η NASA έχασε τον δορυφόρο <b>Mars Climate Orbiter</b>, κόστους περίπου 125 εκατομμυρίων δολαρίων, καθώς πλησίαζε τον Άρη. Μια ομάδα έδινε τα δεδομένα ώθησης σε <b>αγγλοσαξονικές μονάδες</b> (λίβρες-δύναμης επί δευτερόλεπτο), ενώ το λογισμικό της άλλης ομάδας τα περίμενε στο <b>μετρικό σύστημα</b> (newton επί δευτερόλεπτο). Οι αριθμοί ήταν σωστοί. Η σημασία τους όχι.</p>
 <p class="talk">Σκέψου: Θα βοηθούσε αν η μεταβλητή λεγόταν «Ώθηση_Newton» αντί για «Ώθηση»; Τι κερδίζουμε με ονόματα που «μιλάνε»;</p>
-</div>
+
+</details>
 <div class="sec" id="s-7-4"><span class="num">7.4</span><h2>Μεταβλητές</h2><span class="ref">Βιβλίο σελ. 129–130</span></div>
-<div class="box def"><img class="sos-av" src="av4.jpg" alt="" loading="lazy">
+<div class="box def"><span aria-hidden="true" class="sos-av sb"></span>
 <div class="tag">Ορισμός · απομνημόνευση</div>
 <p><b>Μεταβλητή.</b> Μια μεταβλητή παριστάνει μία ποσότητα που η τιμή της μπορεί να μεταβάλλεται. Οι μεταβλητές που χρησιμοποιούνται σε ένα πρόγραμμα αντιστοιχούνται από το μεταγλωττιστή σε συγκεκριμένες θέσεις μνήμης του υπολογιστή.</p>
 <p><b>Τύπος μεταβλητής.</b> Ενώ η τιμή της μεταβλητής μπορεί να αλλάζει κατά την εκτέλεση του προγράμματος, αυτό που μένει υποχρεωτικά αναλλοίωτο είναι ο τύπος της μεταβλητής.</p>
@@ -528,12 +628,13 @@ body::before{background:var(--ground)}
 <tr><td>Μπαίνει αριστερά από ← ή σε ΔΙΑΒΑΣΕ;</td><td>Όχι</td><td>Ναι</td></tr>
 <tr><td>Μπαίνει σε εκφράσεις και σε ΓΡΑΨΕ;</td><td>Ναι</td><td>Ναι (αφού πάρει τιμή)</td></tr>
 </tbody></table></div>
-<div class="box trivia">
-<div class="tag">Ήξερες ότι;</div>
+<details class="box trivia">
+<summary class="tag">Ήξερες ότι;</summary>
 <p>Τις δεκαετίες του 1960–1980 η μνήμη των υπολογιστών ήταν πανάκριβη. Για οικονομία, πολλά προγράμματα αποθήκευαν το έτος με <b>δύο ψηφία</b>: «85» αντί για «1985». Πλησιάζοντας το 2000, ο κόσμος ανησύχησε ότι το «00» θα διαβαστεί ως 1900: τόκοι, λογαριασμοί και ηλικίες θα έβγαιναν λάθος. Αυτό ήταν το περίφημο <b>πρόβλημα του 2000 (Y2K)</b>. Κυβερνήσεις και εταιρείες ξόδεψαν τεράστια ποσά για να ελέγξουν και να διορθώσουν τα προγράμματά τους πριν από την 1η Ιανουαρίου 2000.</p>
 <p class="talk">Σκέψου: Η επιλογή «πόσο χώρο θα πιάνει μια μεταβλητή» φαινόταν έξυπνη το 1970. Γιατί έγινε πρόβλημα 30 χρόνια μετά;</p>
-</div>
-<div class="box trap"><img class="sos-av" src="av1.jpg" alt="" loading="lazy">
+
+</details>
+<div class="box trap"><span aria-hidden="true" class="sos-av sa"></span>
 <div class="tag">Παγίδες που κοστίζουν μονάδες</div>
 <ul class="tight">
 <li><b>'25'</b> είναι χαρακτήρας, <b>25</b> ακέραια, <b>25.0</b> πραγματική. <b>'ΨΕΥΔΗΣ'</b> είναι χαρακτήρας, <b>ΨΕΥΔΗΣ</b> λογική.</li>
@@ -544,7 +645,7 @@ body::before{background:var(--ground)}
 <li>Αριθμοί χωρίς πράξεις (τηλέφωνο, ΑΦΜ, κωδικός) δηλώνονται <b>ΧΑΡΑΚΤΗΡΕΣ</b>.</li>
 </ul>
 </div>
-<div class="box def"><img class="sos-av" src="av4.jpg" alt="" loading="lazy">
+<div class="box def"><span aria-hidden="true" class="sos-av sb"></span>
 <div class="tag">Σύνοψη</div>
 <p><b>Αλφάβητο:</b> γράμματα (ελληνικά, λατινικά, πεζά, κεφαλαία), ψηφία, ειδικοί χαρακτήρες.</p>
 <p><b>Τύποι δεδομένων:</b> ακέραιος, πραγματικός, χαρακτήρας ('…'), λογικός (ΑΛΗΘΗΣ / ΨΕΥΔΗΣ).</p>
@@ -554,8 +655,8 @@ body::before{background:var(--ground)}
 </div>
 
 <section class="solved-wrap">
-<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένα παραδείγματα βήμα-βήμα</h2><span class="ref">Έτσι σκεφτόμαστε</span></div>
-<div class="box solved">
+<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένα παραδείγματα βήμα-βήμα</h2></div>
+<div class="box solved" id="sol-1">
 <div class="tag">Λυμένο 1 · Ποιο όνομα περνάει;</div>
 <p>Ποια από τα παρακάτω ονόματα μεταβλητών είναι αποδεκτά στη ΓΛΩΣΣΑ; Για όσα δεν είναι, να εξηγήσετε γιατί.</p>
 <p><code>Τελικό_Σκορ · 2ος_Παίκτης · Μέσος Όρος · Τιμή€ · ΑΚΕΡΑΙΕΣ · Χ2 · _βαθμός · Ψευδής_1 · 'Όνομα'</code></p>
@@ -577,7 +678,7 @@ body::before{background:var(--ground)}
 <div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Τα δύο «ύπουλα»: το <b>_βαθμός</b> (η _ επιτρέπεται, αλλά όχι στην αρχή) και το <b>Ψευδής_1</b> (μοιάζει με δεσμευμένη λέξη, αλλά δεν είναι).</div></div>
 </div>
 </div>
-<div class="box solved">
+<div class="box solved" id="sol-2">
 <div class="tag">Λυμένο 2 · Ποιος τύπος;</div>
 <p>Να γράψετε τον τύπο δεδομένων κάθε τιμής: <code>2026 · '2026' · 20.26 · ΑΛΗΘΗΣ · 'ΨΕΥΔΗΣ' · −7 · 7.0 · 'Κ' · 0</code></p>
 <div class="steps">
@@ -587,7 +688,7 @@ body::before{background:var(--ground)}
 <div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Το <b>7.0</b> έχει την ίδια αξία με το 7, αλλά γράφεται με δεκαδική τελεία, άρα είναι πραγματική. Το <b>0</b> είναι ακέραιος: οι ακέραιοι μπορεί να είναι θετικοί, αρνητικοί <b>ή μηδέν</b>.</div></div>
 </div>
 </div>
-<div class="box solved">
+<div class="box solved" id="sol-3">
 <div class="tag">Λυμένο 3 · Από τον αλγόριθμο στο πρόγραμμα: οι δηλώσεις</div>
 <p>Στο Μάθημα 3 γράψαμε τον αλγόριθμο «Black Friday»: διαβάζει την τιμή ενός προϊόντος χωρίς ΦΠΑ και ένα <b>ακέραιο</b> ποσοστό έκπτωσης π, και εμφανίζει την τιμή με ΦΠΑ 24%, το ποσό της έκπτωσης και την τελική τιμή, στρογγυλεμένα σε λεπτά. Να γραφτεί το αντίστοιχο πρόγραμμα σε ΓΛΩΣΣΑ, με τον ΦΠΑ ως συμβολική σταθερά.</p>
 <pre class="code">Αλγόριθμος Black_Friday
@@ -624,7 +725,7 @@ body::before{background:var(--ground)}
 <div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Κάθε όνομα του κύριου μέρους υπάρχει στις δηλώσεις, και κανένα δεν δηλώνεται δύο φορές. Οι ΣΤΑΘΕΡΕΣ είναι πριν από τις ΜΕΤΑΒΛΗΤΕΣ. Με τιμή 80 και <span class="nw">π = 30</span> το πρόγραμμα εμφανίζει <b>99.2 29.76 69.44</b>, όπως ο αλγόριθμος. Αν ο ΦΠΑ γίνει 23%, αλλάζω <b>μόνο</b> τη γραμμή <span class="nw">ΦΠΑ = 0.23.</span></div></div>
 </div>
 </div>
-<div class="box solved">
+<div class="box solved" id="sol-4">
 <div class="tag">Λυμένο 4 · Η καρτέλα μιας ταινίας</div>
 <p>Μια εφαρμογή κινηματογράφου κρατά για κάθε ταινία: τον τίτλο, το έτος κυκλοφορίας, τη διάρκεια σε λεπτά, τη μέση βαθμολογία του κοινού (π.χ. 7.8), την τιμή του εισιτηρίου, αν προβάλλεται σε 3D και την αίθουσα (π.χ. Α2). Σε κάθε κράτηση μέσω της εφαρμογής υπάρχει χρέωση 0,50 €. Να γραφτεί το τμήμα δηλώσεων του προγράμματος.</p>
 <div class="steps">
@@ -653,7 +754,7 @@ body::before{background:var(--ground)}
 <div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> 8 στοιχεία στην εκφώνηση, 8 ονόματα στις δηλώσεις (7 μεταβλητές και 1 σταθερά). Όλα τα ονόματα περνούν τους 5 ελέγχους. Η σειρά των τύπων μέσα στις ΜΕΤΑΒΛΗΤΕΣ δεν έχει σημασία.</div></div>
 </div>
 </div>
-<div class="box solved">
+<div class="box solved" id="sol-5">
 <div class="tag">Λυμένο 5 · «Δίνεται το παρακάτω πρόγραμμα»: βρες τα λάθη</div>
 <p>Δίνεται το παρακάτω πρόγραμμα, που υπολογίζει την πληρότητα και τα έσοδα ενός γηπέδου. Να βρεθούν τα <b>τρία</b> λάθη του και να γραφτεί σωστά.</p>
 <pre class="code">ΠΡΟΓΡΑΜΜΑ Γήπεδο
@@ -694,7 +795,7 @@ body::before{background:var(--ground)}
 </section>
 
 <section class="cards" id="s-cards">
-<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2><span class="ref">Ορισμοί για απομνημόνευση</span></div>
+<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2></div>
 <p class="small">Διάβασε τον όρο, πες τον ορισμό από μέσα σου και πάτα την κάρτα για να τον δεις.</p>
 <div class="deck">
 <button aria-live="polite" class="card" id="card" type="button">
@@ -709,85 +810,22 @@ body::before{background:var(--ground)}
 </div>
 </div>
 </section><section class="exercises">
-<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2><span class="ref">Από τα εύκολα στα δύσκολα</span></div>
+<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2></div>
 <div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div>
-<div class="q"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Γράψε Σ ή Λ.
-<table class="tf">
-<tbody><tr><td>α. Το αλφάβητο της ΓΛΩΣΣΑΣ περιλαμβάνει μόνο τα γράμματα του ελληνικού αλφαβήτου, τα ψηφία και τους ειδικούς χαρακτήρες.</td><td class="b">____</td></tr>
-<tr><td>β. Η τιμή '2026' είναι ακέραιου τύπου.</td><td class="b">____</td></tr>
-<tr><td>γ. Ο αριθμός 5.0 είναι πραγματικού τύπου.</td><td class="b">____</td></tr>
-<tr><td>δ. Ο λογικός τύπος δέχεται μόνο δύο τιμές: ΑΛΗΘΗΣ και ΨΕΥΔΗΣ.</td><td class="b">____</td></tr>
-<tr><td>ε. Η τιμή μιας συμβολικής σταθεράς μπορεί να αλλάξει με εντολή εκχώρησης.</td><td class="b">____</td></tr>
-<tr><td>στ. Κατά την εκτέλεση του προγράμματος μπορεί να αλλάξει η τιμή μιας μεταβλητής, αλλά όχι ο τύπος της.</td><td class="b">____</td></tr>
-<tr><td>ζ. Το όνομα μιας μεταβλητής μπορεί να αρχίζει με ψηφίο.</td><td class="b">____</td></tr>
-<tr><td>η. Οι δεσμευμένες λέξεις μπορούν να χρησιμοποιηθούν ως ονόματα μεταβλητών.</td><td class="b">____</td></tr>
-<tr><td>θ. Στο τμήμα δηλώσεων, οι σταθερές δηλώνονται πριν από τις μεταβλητές.</td><td class="b">____</td></tr>
-<tr><td>ι. Όταν μια γραμμή ξεκινά με τον χαρακτήρα &amp;, η γραμμή είναι σχόλιο.</td><td class="b">____</td></tr>
-</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Λ, β Λ, γ Σ, δ Σ, ε Λ, στ Σ, ζ Λ, η Λ, θ Σ, ι Λ</span>
-<p class="small">α: περιλαμβάνει και τα γράμματα του λατινικού αλφαβήτου. β: είναι σε εισαγωγικά, άρα χαρακτήρας. ε: η τιμή μιας σταθεράς δεν αλλάζει ποτέ. ζ: πρέπει να αρχίζει με γράμμα. η: οι δεσμευμένες λέξεις δεν επιτρέπονται ως ονόματα. ι: το &amp; σημαίνει συνέχεια της προηγούμενης εντολής. Σχόλιο δηλώνει το !.</p></div></details></div>
-<div class="q"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
-<p>α) Από ποια στοιχεία αποτελείται το αλφάβητο της ΓΛΩΣΣΑΣ;<br/>β) Ποιους τύπους δεδομένων υποστηρίζει η ΓΛΩΣΣΑ; Να περιγράψετε σύντομα τον καθένα.<br/>γ) Τι είναι οι σταθερές; Πώς δηλώνεται μια συμβολική σταθερά και ποιο είναι το πλεονέκτημα της χρήσης της;<br/>δ) Τι είναι μεταβλητή; Τι μπορεί να αλλάζει και τι μένει αναλλοίωτο σε μια μεταβλητή κατά την εκτέλεση του προγράμματος;<br/>ε) Ποιοι είναι οι κανόνες για τα ονόματα στη ΓΛΩΣΣΑ;<br/>στ) Να γράψετε τη γενική δομή ενός προγράμματος σε ΓΛΩΣΣΑ.</p>
-<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p>α) Από τα γράμματα του ελληνικού και του λατινικού αλφαβήτου (κεφαλαία και πεζά), τα ψηφία 0–9 και ειδικούς χαρακτήρες (+ - * / = ^ ( ) . , ' ! &amp; και το κενό), που χρησιμοποιούνται για προκαθορισμένες ενέργειες.</p>
-<p>β) Αριθμητικούς: ακέραιο (οι ακέραιοι των μαθηματικών, θετικοί, αρνητικοί ή μηδέν) και πραγματικό (οι πραγματικοί αριθμοί). Χαρακτήρα: ένας χαρακτήρας ή σειρά χαρακτήρων μέσα σε απλά εισαγωγικά (αλφαριθμητικά). Λογικό: μόνο οι τιμές ΑΛΗΘΗΣ και ΨΕΥΔΗΣ.</p>
-<p>γ) Προκαθορισμένες τιμές που δεν μεταβάλλονται κατά την εκτέλεση του προγράμματος. Είναι ακέραιες, πραγματικές, αλφαριθμητικές ή λογικές. Συμβολική σταθερά: δηλώνεται στο τμήμα ΣΤΑΘΕΡΕΣ με τη μορφή <span class="nw">Όνομα = τιμή.</span> Πλεονέκτημα: το πρόγραμμα γίνεται πιο κατανοητό και ευκολότερο να διορθωθεί και να συντηρηθεί.</p>
-<p>δ) Μεταβλητή είναι μια ποσότητα που η τιμή της μπορεί να μεταβάλλεται. Αντιστοιχεί σε θέση μνήμης. Μπορεί να αλλάζει η τιμή της. Ο τύπος της μένει υποχρεωτικά αναλλοίωτος.</p>
-<p>ε) Γράμματα (ελληνικά ή λατινικά, πεζά ή κεφαλαία), ψηφία και η κάτω παύλα _. Πρέπει να αρχίζουν με γράμμα. Δεν επιτρέπονται κενά και άλλα σύμβολα, ούτε οι δεσμευμένες λέξεις.</p>
-<p><span class="ln">στ) Από πάνω προς τα κάτω:</span><span class="ln li">ΠΡΟΓΡΑΜΜΑ όνομα</span><span class="ln li">ΣΤΑΘΕΡΕΣ (δηλώσεις σταθερών)</span><span class="ln li">ΜΕΤΑΒΛΗΤΕΣ (δηλώσεις μεταβλητών)</span><span class="ln li">ΑΡΧΗ, και μετά οι εντολές</span><span class="ln li">ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ όνομα</span></p></div></details></div>
-<div class="q"><span class="qn">3</span><b>Αποδεκτό όνομα;</b> Για κάθε όνομα γράψε Α (αποδεκτό) ή Β (μη αποδεκτό).
-<ul class="legend tight">
-<li data-v="Α"><b>Α</b> Αποδεκτό</li>
-<li data-v="Β"><b>Β</b> Μη αποδεκτό</li>
-</ul>
-<table class="tf">
-<tbody><tr><td>α. Βαθμός_1</td><td class="b">____</td></tr>
-<tr><td>β. 1ος_Βαθμός</td><td class="b">____</td></tr>
-<tr><td>γ. Μέση Τιμή</td><td class="b">____</td></tr>
-<tr><td>δ. ΓΡΑΨΕ</td><td class="b">____</td></tr>
-<tr><td>ε. Σκορ2026</td><td class="b">____</td></tr>
-<tr><td>στ. Τιμή-Αγοράς</td><td class="b">____</td></tr>
-<tr><td>ζ. τελικό_σκορ</td><td class="b">____</td></tr>
-<tr><td>η. Ποσό€</td><td class="b">____</td></tr>
-<tr><td>θ. Χ_Ψ</td><td class="b">____</td></tr>
-<tr><td>ι. 'Νίκος'</td><td class="b">____</td></tr>
-</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Α, β Β, γ Β, δ Β, ε Α, στ Β, ζ Α, η Β, θ Α, ι Β</span>
-<p class="small">β: ξεκινά με ψηφίο. γ: έχει κενό. δ: δεσμευμένη λέξη. στ: έχει παύλα (-), που είναι τελεστής. η: έχει το σύμβολο €. ι: με εισαγωγικά είναι τιμή χαρακτήρα, όχι όνομα.</p></div></details></div>
-<div class="q"><span class="qn">4</span><b>Ποιος τύπος;</b> Γράψε το γράμμα του τύπου κάθε τιμής.
-<ul class="legend tight">
-<li data-v="Α"><b>Α</b> Ακέραια</li>
-<li data-v="Β"><b>Β</b> Πραγματική</li>
-<li data-v="Γ"><b>Γ</b> Χαρακτήρας</li>
-<li data-v="Δ"><b>Δ</b> Λογική</li>
-</ul>
-<table class="tf">
-<tbody><tr><td>α. −42</td><td class="b">____</td></tr>
-<tr><td>β. 0.5</td><td class="b">____</td></tr>
-<tr><td>γ. '0.5'</td><td class="b">____</td></tr>
-<tr><td>δ. ΨΕΥΔΗΣ</td><td class="b">____</td></tr>
-<tr><td>ε. 'ΨΕΥΔΗΣ'</td><td class="b">____</td></tr>
-<tr><td>στ. 1821</td><td class="b">____</td></tr>
-<tr><td>ζ. 12.0</td><td class="b">____</td></tr>
-<tr><td>η. 'Ω'</td><td class="b">____</td></tr>
-<tr><td>θ. ΑΛΗΘΗΣ</td><td class="b">____</td></tr>
-<tr><td>ι. −0.001</td><td class="b">____</td></tr>
-</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Α, β Β, γ Γ, δ Δ, ε Γ, στ Α, ζ Β, η Γ, θ Δ, ι Β</span>
-<p class="small">γ, ε, η: τα εισαγωγικά κάνουν κάθε τιμή χαρακτήρα. ζ: το 12.0 έχει δεκαδική τελεία, άρα είναι πραγματική.</p></div></details></div>
+<div class="q" id="q-1"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Πάτα την απάντησή σου.
+<div class="quiz" data-q="1"><div class="qi" data-ans="Λ" data-why="Περιλαμβάνει και τα γράμματα του λατινικού αλφαβήτου."><p class="qs">α. Το αλφάβητο της ΓΛΩΣΣΑΣ περιλαμβάνει μόνο τα γράμματα του ελληνικού αλφαβήτου, τα ψηφία και τους ειδικούς χαρακτήρες.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Είναι μέσα σε εισαγωγικά, άρα είναι τύπου χαρακτήρα."><p class="qs">β. Η τιμή '2026' είναι ακέραιου τύπου.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Έχει δεκαδική τελεία, άρα είναι πραγματικός, παρόλο που αξίζει όσο το 5."><p class="qs">γ. Ο αριθμός 5.0 είναι πραγματικού τύπου.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Ο λογικός τύπος δέχεται μόνο τις τιμές ΑΛΗΘΗΣ και ΨΕΥΔΗΣ."><p class="qs">δ. Ο λογικός τύπος δέχεται μόνο δύο τιμές: ΑΛΗΘΗΣ και ΨΕΥΔΗΣ.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Η τιμή μιας σταθεράς δεν μπορεί να αλλάξει όσο τρέχει το πρόγραμμα."><p class="qs">ε. Η τιμή μιας συμβολικής σταθεράς μπορεί να αλλάξει με εντολή εκχώρησης.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Η τιμή αλλάζει, ενώ ο τύπος μένει υποχρεωτικά αναλλοίωτος."><p class="qs">στ. Κατά την εκτέλεση του προγράμματος μπορεί να αλλάξει η τιμή μιας μεταβλητής, αλλά όχι ο τύπος της.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Τα ονόματα πρέπει υποχρεωτικά να αρχίζουν με γράμμα."><p class="qs">ζ. Το όνομα μιας μεταβλητής μπορεί να αρχίζει με ψηφίο.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Οι δεσμευμένες λέξεις δεν μπορούν να χρησιμοποιηθούν ως ονόματα."><p class="qs">η. Οι δεσμευμένες λέξεις μπορούν να χρησιμοποιηθούν ως ονόματα μεταβλητών.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Πρώτα το τμήμα ΣΤΑΘΕΡΕΣ και μετά το τμήμα ΜΕΤΑΒΛΗΤΕΣ."><p class="qs">θ. Στο τμήμα δηλώσεων, οι σταθερές δηλώνονται πριν από τις μεταβλητές.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Το &amp; σημαίνει ότι συνεχίζεται η εντολή της προηγούμενης γραμμής. Σχόλιο δηλώνει το !."><p class="qs">ι. Όταν μια γραμμή ξεκινά με τον χαρακτήρα &amp;, η γραμμή είναι σχόλιο.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="score" hidden=""></div></div></div>
+
+<div class="q" id="q-3"><span class="qn">3</span><b>Αποδεκτό όνομα;</b> Για κάθε όνομα γράψε Α (αποδεκτό) ή Β (μη αποδεκτό).
+
+<div class="quiz" data-q="3"><div class="qi" data-ans="Α" data-why="Γράμματα, _ και ψηφίο, και αρχίζει με γράμμα."><p class="qs">α. Βαθμός_1</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτό</button><button data-v="Β" type="button">Β Μη αποδεκτό</button></div></div><div class="qi" data-ans="Β" data-why="Αρχίζει με ψηφίο."><p class="qs">β. 1ος_Βαθμός</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτό</button><button data-v="Β" type="button">Β Μη αποδεκτό</button></div></div><div class="qi" data-ans="Β" data-why="Έχει κενό, άρα είναι δύο λέξεις."><p class="qs">γ. Μέση Τιμή</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτό</button><button data-v="Β" type="button">Β Μη αποδεκτό</button></div></div><div class="qi" data-ans="Β" data-why="Είναι δεσμευμένη λέξη της ΓΛΩΣΣΑΣ."><p class="qs">δ. ΓΡΑΨΕ</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτό</button><button data-v="Β" type="button">Β Μη αποδεκτό</button></div></div><div class="qi" data-ans="Α" data-why="Γράμματα και ψηφία, και αρχίζει με γράμμα."><p class="qs">ε. Σκορ2026</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτό</button><button data-v="Β" type="button">Β Μη αποδεκτό</button></div></div><div class="qi" data-ans="Β" data-why="Έχει παύλα (-), που δεν επιτρέπεται σε όνομα."><p class="qs">στ. Τιμή-Αγοράς</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτό</button><button data-v="Β" type="button">Β Μη αποδεκτό</button></div></div><div class="qi" data-ans="Α" data-why="Πεζά γράμματα και _, και αρχίζει με γράμμα."><p class="qs">ζ. τελικό_σκορ</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτό</button><button data-v="Β" type="button">Β Μη αποδεκτό</button></div></div><div class="qi" data-ans="Β" data-why="Έχει το σύμβολο €, που δεν επιτρέπεται."><p class="qs">η. Ποσό€</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτό</button><button data-v="Β" type="button">Β Μη αποδεκτό</button></div></div><div class="qi" data-ans="Α" data-why="Γράμματα και _, και αρχίζει με γράμμα."><p class="qs">θ. Χ_Ψ</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτό</button><button data-v="Β" type="button">Β Μη αποδεκτό</button></div></div><div class="qi" data-ans="Β" data-why="Με εισαγωγικά είναι τιμή τύπου χαρακτήρα, όχι όνομα."><p class="qs">ι. 'Νίκος'</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτό</button><button data-v="Β" type="button">Β Μη αποδεκτό</button></div></div><div class="score" hidden=""></div></div></div>
+<div class="q" id="q-4"><span class="qn">4</span><b>Ποιος τύπος;</b> Γράψε το γράμμα του τύπου κάθε τιμής.
+
+<div class="quiz" data-q="4"><div class="qi" data-ans="Α" data-why="Αρνητικός αριθμός χωρίς δεκαδική τελεία, άρα ακέραια."><p class="qs">α. −42</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Ακέραια</button><button data-v="Β" type="button">Β Πραγματική</button><button data-v="Γ" type="button">Γ Χαρακτήρας</button><button data-v="Δ" type="button">Δ Λογική</button></div></div><div class="qi" data-ans="Β" data-why="Έχει δεκαδική τελεία, άρα πραγματική."><p class="qs">β. 0.5</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Ακέραια</button><button data-v="Β" type="button">Β Πραγματική</button><button data-v="Γ" type="button">Γ Χαρακτήρας</button><button data-v="Δ" type="button">Δ Λογική</button></div></div><div class="qi" data-ans="Γ" data-why="Είναι μέσα σε εισαγωγικά, άρα χαρακτήρας."><p class="qs">γ. '0.5'</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Ακέραια</button><button data-v="Β" type="button">Β Πραγματική</button><button data-v="Γ" type="button">Γ Χαρακτήρας</button><button data-v="Δ" type="button">Δ Λογική</button></div></div><div class="qi" data-ans="Δ" data-why="Χωρίς εισαγωγικά, το ΨΕΥΔΗΣ είναι λογική τιμή."><p class="qs">δ. ΨΕΥΔΗΣ</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Ακέραια</button><button data-v="Β" type="button">Β Πραγματική</button><button data-v="Γ" type="button">Γ Χαρακτήρας</button><button data-v="Δ" type="button">Δ Λογική</button></div></div><div class="qi" data-ans="Γ" data-why="Είναι μέσα σε εισαγωγικά, άρα χαρακτήρας και όχι λογική."><p class="qs">ε. 'ΨΕΥΔΗΣ'</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Ακέραια</button><button data-v="Β" type="button">Β Πραγματική</button><button data-v="Γ" type="button">Γ Χαρακτήρας</button><button data-v="Δ" type="button">Δ Λογική</button></div></div><div class="qi" data-ans="Α" data-why="Αριθμός χωρίς δεκαδική τελεία, άρα ακέραια."><p class="qs">στ. 1821</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Ακέραια</button><button data-v="Β" type="button">Β Πραγματική</button><button data-v="Γ" type="button">Γ Χαρακτήρας</button><button data-v="Δ" type="button">Δ Λογική</button></div></div><div class="qi" data-ans="Β" data-why="Το 12.0 έχει δεκαδική τελεία, άρα είναι πραγματική."><p class="qs">ζ. 12.0</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Ακέραια</button><button data-v="Β" type="button">Β Πραγματική</button><button data-v="Γ" type="button">Γ Χαρακτήρας</button><button data-v="Δ" type="button">Δ Λογική</button></div></div><div class="qi" data-ans="Γ" data-why="Ένας χαρακτήρας μέσα σε εισαγωγικά."><p class="qs">η. 'Ω'</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Ακέραια</button><button data-v="Β" type="button">Β Πραγματική</button><button data-v="Γ" type="button">Γ Χαρακτήρας</button><button data-v="Δ" type="button">Δ Λογική</button></div></div><div class="qi" data-ans="Δ" data-why="Χωρίς εισαγωγικά, το ΑΛΗΘΗΣ είναι λογική τιμή."><p class="qs">θ. ΑΛΗΘΗΣ</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Ακέραια</button><button data-v="Β" type="button">Β Πραγματική</button><button data-v="Γ" type="button">Γ Χαρακτήρας</button><button data-v="Δ" type="button">Δ Λογική</button></div></div><div class="qi" data-ans="Β" data-why="Έχει δεκαδική τελεία, άρα πραγματική. Το πρόσημο δεν αλλάζει τον τύπο."><p class="qs">ι. −0.001</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Ακέραια</button><button data-v="Β" type="button">Β Πραγματική</button><button data-v="Γ" type="button">Γ Χαρακτήρας</button><button data-v="Δ" type="button">Δ Λογική</button></div></div><div class="score" hidden=""></div></div></div>
 <div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div>
-<div class="q"><span class="qn">5</span><b>Σταθερά ή μεταβλητή;</b><span class="theme">Μετεωρολογία</span> Ένα πρόγραμμα μετεωρολογικού σταθμού χρησιμοποιεί τα παρακάτω. Γράψε Α αν πρέπει να δηλωθεί ως συμβολική σταθερά ή Β αν πρέπει να δηλωθεί ως μεταβλητή.
-<ul class="legend tight">
-<li data-v="Α"><b>Α</b> Συμβολική σταθερά</li>
-<li data-v="Β"><b>Β</b> Μεταβλητή</li>
-</ul>
-<table class="tf">
-<tbody><tr><td>α. Ο αριθμός <span class="nw">π = 3.14159,</span> για το εμβαδόν του κυκλικού θόλου του σταθμού</td><td class="b">____</td></tr>
-<tr><td>β. Η θερμοκρασία που μετρά ο αισθητήρας κάθε ώρα</td><td class="b">____</td></tr>
-<tr><td>γ. Το όνομα του σταθμού, που δεν αλλάζει ποτέ</td><td class="b">____</td></tr>
-<tr><td>δ. Το πλήθος των μετρήσεων που έχουν γίνει μέχρι τώρα</td><td class="b">____</td></tr>
-<tr><td>ε. Ο συντελεστής μετατροπής από km/h σε m/s (3.6)</td><td class="b">____</td></tr>
-<tr><td>στ. Η μέγιστη θερμοκρασία της ημέρας</td><td class="b">____</td></tr>
-<tr><td>ζ. Η πόλη που πληκτρολογεί ο χρήστης για να δει την πρόγνωση</td><td class="b">____</td></tr>
-</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Α, β Β, γ Α, δ Β, ε Α, στ Β, ζ Β</span>
-<p class="small">Σταθερά είναι ό,τι <b>δεν αλλάζει όσο τρέχει το πρόγραμμα</b>. Το όνομα του σταθμού είναι σταθερά. Η πόλη που πληκτρολογεί ο χρήστης είναι μεταβλητή, γιατί αλλάζει κάθε φορά και διαβάζεται με ΔΙΑΒΑΣΕ.</p></div></details></div>
-<div class="q"><span class="qn">6</span><b>Αποδεκτή εντολή;</b> Έστω ότι ένα πρόγραμμα έχει τις παρακάτω δηλώσεις. Για κάθε εντολή γράψε Α αν είναι αποδεκτή ή Β αν δεν είναι.
+<div class="q" id="q-5"><span class="qn">5</span><b>Σταθερά ή μεταβλητή;</b><span class="theme">Μετεωρολογία</span> Ένα πρόγραμμα μετεωρολογικού σταθμού χρησιμοποιεί τα παρακάτω. Γράψε Α αν πρέπει να δηλωθεί ως συμβολική σταθερά ή Β αν πρέπει να δηλωθεί ως μεταβλητή.
+
+<div class="quiz" data-q="5"><div class="qi" data-ans="Α" data-why="Το π δεν αλλάζει ποτέ, άρα είναι σταθερά."><p class="qs">α. Ο αριθμός π = 3.14159, για το εμβαδόν του κυκλικού θόλου του σταθμού</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Συμβολική σταθερά</button><button data-v="Β" type="button">Β Μεταβλητή</button></div></div><div class="qi" data-ans="Β" data-why="Αλλάζει σε κάθε μέτρηση, άρα είναι μεταβλητή."><p class="qs">β. Η θερμοκρασία που μετρά ο αισθητήρας κάθε ώρα</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Συμβολική σταθερά</button><button data-v="Β" type="button">Β Μεταβλητή</button></div></div><div class="qi" data-ans="Α" data-why="Δεν αλλάζει όσο τρέχει το πρόγραμμα, άρα είναι σταθερά."><p class="qs">γ. Το όνομα του σταθμού, που δεν αλλάζει ποτέ</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Συμβολική σταθερά</button><button data-v="Β" type="button">Β Μεταβλητή</button></div></div><div class="qi" data-ans="Β" data-why="Μεγαλώνει με κάθε νέα μέτρηση, άρα είναι μεταβλητή."><p class="qs">δ. Το πλήθος των μετρήσεων που έχουν γίνει μέχρι τώρα</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Συμβολική σταθερά</button><button data-v="Β" type="button">Β Μεταβλητή</button></div></div><div class="qi" data-ans="Α" data-why="Ο συντελεστής 3.6 είναι πάντα ίδιος, άρα είναι σταθερά."><p class="qs">ε. Ο συντελεστής μετατροπής από km/h σε m/s (3.6)</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Συμβολική σταθερά</button><button data-v="Β" type="button">Β Μεταβλητή</button></div></div><div class="qi" data-ans="Β" data-why="Αλλάζει από μέρα σε μέρα και μέσα στην ημέρα, άρα είναι μεταβλητή."><p class="qs">στ. Η μέγιστη θερμοκρασία της ημέρας</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Συμβολική σταθερά</button><button data-v="Β" type="button">Β Μεταβλητή</button></div></div><div class="qi" data-ans="Β" data-why="Τη δίνει ο χρήστης με ΔΙΑΒΑΣΕ και αλλάζει κάθε φορά, άρα είναι μεταβλητή."><p class="qs">ζ. Η πόλη που πληκτρολογεί ο χρήστης για να δει την πρόγνωση</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Συμβολική σταθερά</button><button data-v="Β" type="button">Β Μεταβλητή</button></div></div><div class="score" hidden=""></div></div></div>
+<div class="q" id="q-6"><span class="qn">6</span><b>Αποδεκτή εντολή;</b> Έστω ότι ένα πρόγραμμα έχει τις παρακάτω δηλώσεις. Για κάθε εντολή γράψε Α αν είναι αποδεκτή ή Β αν δεν είναι.
 <pre class="code">ΣΤΑΘΕΡΕΣ
   ΟΡΙΟ = 50
 ΜΕΤΑΒΛΗΤΕΣ
@@ -795,24 +833,34 @@ body::before{background:var(--ground)}
   ΠΡΑΓΜΑΤΙΚΕΣ: χ
   ΧΑΡΑΚΤΗΡΕΣ: ον
   ΛΟΓΙΚΕΣ: εντάξει</pre>
-<ul class="legend tight">
-<li data-v="Α"><b>Α</b> Αποδεκτή</li>
-<li data-v="Β"><b>Β</b> Μη αποδεκτή</li>
-</ul>
-<table class="tf">
-<tbody><tr><td>α. <span class="nw">κ ← 15</span></td><td class="b">____</td></tr>
-<tr><td>β. <span class="nw">λ ← 2.5</span></td><td class="b">____</td></tr>
-<tr><td>γ. <span class="nw">ον ← 'Μαρία'</span></td><td class="b">____</td></tr>
-<tr><td>δ. <span class="nw">ον ← Μαρία</span></td><td class="b">____</td></tr>
-<tr><td>ε. <span class="nw">εντάξει ← ΑΛΗΘΗΣ</span></td><td class="b">____</td></tr>
-<tr><td>στ. <span class="nw">εντάξει ← 'ΨΕΥΔΗΣ'</span></td><td class="b">____</td></tr>
-<tr><td>ζ. <span class="nw">ΟΡΙΟ ← 60</span></td><td class="b">____</td></tr>
-<tr><td>η. <span class="nw">χ ← 3.75</span></td><td class="b">____</td></tr>
-<tr><td>θ. <span class="nw">κ ← '15'</span></td><td class="b">____</td></tr>
-<tr><td>ι. <span class="nw">μ ← 4</span></td><td class="b">____</td></tr>
-</tbody></table><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><span class="sol">α Α, β Β, γ Α, δ Β, ε Α, στ Β, ζ Β, η Α, θ Β, ι Β</span>
-<p class="small">β: πραγματική τιμή σε ακέραια μεταβλητή. δ: χωρίς εισαγωγικά το Μαρία είναι όνομα μεταβλητής, που δεν έχει δηλωθεί. στ: το 'ΨΕΥΔΗΣ' είναι χαρακτήρας, όχι λογική τιμή. ζ: η τιμή σταθεράς δεν αλλάζει. θ: χαρακτήρας σε ακέραια μεταβλητή. ι: η μ δεν έχει δηλωθεί.</p></div></details></div>
-<div class="q hw"><span class="qn">7</span><b>Γράψε τις δηλώσεις.</b><span class="theme">Ποδόσφαιρο</span>
+
+<div class="quiz" data-q="6"><div class="qi" data-ans="Α" data-why="Ακέραια τιμή σε ακέραια μεταβλητή."><p class="qs">α. κ ← 15</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτή</button><button data-v="Β" type="button">Β Μη αποδεκτή</button></div></div><div class="qi" data-ans="Β" data-why="Πραγματική τιμή σε ακέραια μεταβλητή."><p class="qs">β. λ ← 2.5</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτή</button><button data-v="Β" type="button">Β Μη αποδεκτή</button></div></div><div class="qi" data-ans="Α" data-why="Τιμή χαρακτήρα, μέσα σε εισαγωγικά, σε μεταβλητή χαρακτήρα."><p class="qs">γ. ον ← 'Μαρία'</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτή</button><button data-v="Β" type="button">Β Μη αποδεκτή</button></div></div><div class="qi" data-ans="Β" data-why="Χωρίς εισαγωγικά, το Μαρία είναι όνομα μεταβλητής, που δεν έχει δηλωθεί."><p class="qs">δ. ον ← Μαρία</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτή</button><button data-v="Β" type="button">Β Μη αποδεκτή</button></div></div><div class="qi" data-ans="Α" data-why="Λογική τιμή σε λογική μεταβλητή."><p class="qs">ε. εντάξει ← ΑΛΗΘΗΣ</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτή</button><button data-v="Β" type="button">Β Μη αποδεκτή</button></div></div><div class="qi" data-ans="Β" data-why="Το 'ΨΕΥΔΗΣ' είναι χαρακτήρας, όχι λογική τιμή."><p class="qs">στ. εντάξει ← 'ΨΕΥΔΗΣ'</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτή</button><button data-v="Β" type="button">Β Μη αποδεκτή</button></div></div><div class="qi" data-ans="Β" data-why="Η ΟΡΙΟ είναι σταθερά και η τιμή της δεν αλλάζει."><p class="qs">ζ. ΟΡΙΟ ← 60</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτή</button><button data-v="Β" type="button">Β Μη αποδεκτή</button></div></div><div class="qi" data-ans="Α" data-why="Πραγματική τιμή σε πραγματική μεταβλητή."><p class="qs">η. χ ← 3.75</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτή</button><button data-v="Β" type="button">Β Μη αποδεκτή</button></div></div><div class="qi" data-ans="Β" data-why="Το '15' είναι χαρακτήρας και δεν μπαίνει σε ακέραια μεταβλητή."><p class="qs">θ. κ ← '15'</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτή</button><button data-v="Β" type="button">Β Μη αποδεκτή</button></div></div><div class="qi" data-ans="Β" data-why="Η μ δεν έχει δηλωθεί."><p class="qs">ι. μ ← 4</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Α" type="button">Α Αποδεκτή</button><button data-v="Β" type="button">Β Μη αποδεκτή</button></div></div><div class="score" hidden=""></div></div></div>
+
+
+
+
+
+
+
+
+
+
+
+</section><section class="test" id="s-test">
+<div class="sec" id="s-test"><span class="num">◎</span><h2>Σύντομο Τεστ Μαθήματος</h2></div>
+<div class="tresult" hidden="" id="t-last">
+<span class="big" id="t-lastscore"></span>
+<span id="t-lastnote"></span>
+<a class="tlink" href="#progress" id="t-grade">Βαθμός κατανόησης</a>
+</div>
+<div class="tstart">
+<button class="btn primary" id="t-start" type="button">Έναρξη τεστ</button>
+</div>
+<p class="small" hidden="" id="t-wait"></p>
+<div hidden="" id="t-body"></div>
+</section><section class="exercises hwsec"><div class="sec" id="s-hw"><span class="num">✍</span><h2>Για το σπίτι</h2></div><div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div><div class="q hw" id="q-2"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
+<p>α) Από ποια στοιχεία αποτελείται το αλφάβητο της ΓΛΩΣΣΑΣ;<br/>β) Ποιους τύπους δεδομένων υποστηρίζει η ΓΛΩΣΣΑ; Να περιγράψετε σύντομα τον καθένα.<br/>γ) Τι είναι οι σταθερές; Πώς δηλώνεται μια συμβολική σταθερά και ποιο είναι το πλεονέκτημα της χρήσης της;<br/>δ) Τι είναι μεταβλητή; Τι μπορεί να αλλάζει και τι μένει αναλλοίωτο σε μια μεταβλητή κατά την εκτέλεση του προγράμματος;<br/>ε) Ποιοι είναι οι κανόνες για τα ονόματα στη ΓΛΩΣΣΑ;<br/>στ) Να γράψετε τη γενική δομή ενός προγράμματος σε ΓΛΩΣΣΑ.</p>
+</div><div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div><div class="q hw" id="q-7"><span class="qn">7</span><b>Γράψε τις δηλώσεις.</b><span class="theme">Ποδόσφαιρο</span>
 <p>Σε ένα πρόγραμμα που καταγράφει έναν ποδοσφαιρικό αγώνα, οι μεταβλητές έχουν κάποια στιγμή τις παρακάτω τιμές:</p>
 <div class="tablewrap"><table class="t"><tbody><tr><th>Μεταβλητή</th><th>Τιμή</th><th>Μεταβλητή</th><th>Τιμή</th></tr>
 <tr><td>γκολ_γηπεδούχου</td><td>3</td><td>θεατές</td><td>31250</td></tr>
@@ -822,20 +870,17 @@ body::before{background:var(--ground)}
 <tr><td>μέση_απόσταση</td><td>10.8</td><td>παράταση</td><td>ΨΕΥΔΗΣ</td></tr>
 </tbody></table></div>
 <p>α) Να γράψετε το τμήμα δήλωσης μεταβλητών.<br/>β) Η μεταβλητή κάρτες έχει τιμή 0. Γιατί δεν τη δηλώνουμε ΠΡΑΓΜΑΤΙΚΗ ή ΛΟΓΙΚΗ;<br/>γ) Η σκορ έχει ψηφία. Γιατί είναι τύπου χαρακτήρα; Τι <b>δεν</b> μπορούμε να κάνουμε με αυτή;</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">8</span><b>Από την εκφώνηση στις δηλώσεις.</b><span class="theme">Ηλεκτρονικό κατάστημα</span>
+</div><div class="q hw" id="q-8"><span class="qn">8</span><b>Από την εκφώνηση στις δηλώσεις.</b><span class="theme">Ηλεκτρονικό κατάστημα</span>
 <p>Ένα ηλεκτρονικό κατάστημα κρατά για κάθε παραγγελία: τον κωδικό της (π.χ. ΠΡ-1045), το ονοματεπώνυμο του πελάτη, το κινητό του (10 ψηφία, π.χ. 6912345678), τον ταχυδρομικό κώδικα, την ποσότητα των τεμαχίων, την τιμή μονάδας σε €, το ποσοστό έκπτωσης (π.χ. 12,5%) και αν πληρώθηκε με κάρτα. Το κόστος αποστολής είναι πάντα 3,50 € και ο ΦΠΑ 24%.</p>
 <p>α) Να προτείνετε όνομα και τύπο για κάθε στοιχείο, αιτιολογώντας την επιλογή σας.<br/>β) Ποια στοιχεία πρέπει να γίνουν συμβολικές σταθερές; Να γράψετε το τμήμα δηλώσεων (σταθερές και μεταβλητές).<br/>γ) Να δώσετε δύο λόγους για τους οποίους το κινητό δηλώνεται ΧΑΡΑΚΤΗΡΕΣ και όχι ΑΚΕΡΑΙΕΣ. (Υπόδειξη: θυμήσου το «Ήξερες ότι;» της §7.2.)</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">9</span><b>Ένα λάθος σε κάθε γραμμή.</b> Κάθε γραμμή από τμήματα δηλώσεων έχει <b>ένα</b> λάθος. Να το βρείτε και να γράψετε τη γραμμή σωστά.
+</div><div class="q hw" id="q-9"><span class="qn">9</span><b>Ένα λάθος σε κάθε γραμμή.</b> Κάθε γραμμή από τμήματα δηλώσεων έχει <b>ένα</b> λάθος. Να το βρείτε και να γράψετε τη γραμμή σωστά.
 <pre class="code">α) ΦΠΑ: 0.24                     ! μέσα στις ΣΤΑΘΕΡΕΣ
 β) ΠΡΑΓΜΑΤΙΚΕΣ = ύψος, βάρος
 γ) ΑΚΕΡΑΙΕΣ: μαθητές, τμήματα, μαθητές
 δ) ΧΑΡΑΚΤΗΡΕΣ: Όνομα Πελάτη
 ε) ΛΟΓΙΚΗ: πληρώθηκε
 στ) ΑΚΕΡΑΙΕΣ: ΑΡΧΗ, κόστος</pre>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">10</span><b>Πίνακας τιμών: τι κρατάει κάθε κουτί;</b>
+</div><div class="q hw" id="q-10"><span class="qn">10</span><b>Πίνακας τιμών: τι κρατάει κάθε κουτί;</b>
 <pre class="code">ΠΡΟΓΡΑΜΜΑ Κουτιά
 ΜΕΤΑΒΛΗΤΕΣ
   ΑΚΕΡΑΙΕΣ: α, β
@@ -860,8 +905,7 @@ body::before{background:var(--ground)}
 <tr><td><span class="nw">β ← β + α</span></td><td></td><td></td><td></td><td></td><td></td></tr>
 <tr><td>ΓΡΑΨΕ α, β, γ, δ</td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table></div>
 <p>β) Γιατί η δ δεν παίρνει την τιμή 16;<br/>γ) Αν η τρίτη εντολή γραφόταν <b><span class="nw">β ← β / 2</span></b>, τι θα συνέβαινε; Αλλάζει κάτι το ότι <span class="nw">10 / 2 = 5</span> «βγαίνει» ακέραιο;</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">11</span><b>Βρες τα λάθη.</b><span class="theme">Συναυλία</span>
+</div><div class="q hw" id="q-11"><span class="qn">11</span><b>Βρες τα λάθη.</b><span class="theme">Συναυλία</span>
 <p>Δίνεται το παρακάτω πρόγραμμα, που υπολογίζει τα έσοδα μιας συναυλίας και πόσα εισιτήρια μένουν διαθέσιμα. Το πρόγραμμα έχει <b>πέντε λάθη</b> στη δομή, στις δηλώσεις ή στη χρήση σταθερών και μεταβλητών. Να τα βρείτε, να εξηγήσετε το καθένα και να γράψετε το πρόγραμμα σωστά.</p>
 <pre class="code">ΠΡΟΓΡΑΜΜΑ Συναυλία
 ΜΕΤΑΒΛΗΤΕΣ
@@ -876,8 +920,7 @@ body::before{background:var(--ground)}
   ΧΩΡΗΤΙΚΟΤΗΤΑ ← ΧΩΡΗΤΙΚΟΤΗΤΑ - εισιτήρια
   ΓΡΑΨΕ καλλιτέχνης, έσοδα, ΧΩΡΗΤΙΚΟΤΗΤΑ
 ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Συναυλία</pre>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">12</span><b>Συμπλήρωση κενών.</b><span class="theme">Διάστημα</span>
+</div><div class="q hw" id="q-12"><span class="qn">12</span><b>Συμπλήρωση κενών.</b><span class="theme">Διάστημα</span>
 <p>Το φως ταξιδεύει με περίπου 299792 χιλιόμετρα το δευτερόλεπτο. Το παρακάτω πρόγραμμα διαβάζει το όνομα ενός ουράνιου σώματος και την απόστασή του από τη Γη σε χιλιόμετρα, και εμφανίζει πόσα δευτερόλεπτα κάνει το φως να φτάσει από αυτό σε εμάς. Να συμπληρώσετε τα κενά.</p>
 <pre class="code">ΠΡΟΓΡΑΜΜΑ Ταχύτητα_Φωτός
 ____(1)____
@@ -891,8 +934,7 @@ ____(5)____
   ΓΡΑΨΕ σώμα, χρόνος
 ____(7)____ Ταχύτητα_Φωτός</pre>
 <p>Ποια τιμή θα εμφανιστεί για τη Σελήνη, που απέχει κατά μέσο όρο 384400 km; (Στρογγύλεψε σε 2 δεκαδικά.)</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">13</span><b>Από το κύριο μέρος στις δηλώσεις.</b><span class="theme">Μπάσκετ</span>
+</div><div class="q hw" id="q-13"><span class="qn">13</span><b>Από το κύριο μέρος στις δηλώσεις.</b><span class="theme">Μπάσκετ</span>
 <p>Δίνεται το κύριο μέρος ενός προγράμματος, που ελέγχει αν μια ομάδα μπάσκετ περνά στα πλέι οφ:</p>
 <pre class="code">ΑΡΧΗ
   ΔΙΑΒΑΣΕ ομάδα, πόντοι, αγώνες, ήττες
@@ -903,8 +945,7 @@ ____(7)____ Ταχύτητα_Φωτός</pre>
   ΓΡΑΨΕ ομάδα, μέσος, ποσοστό, πρόκριση
 ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Μπάσκετ</pre>
 <p>α) Να γράψετε τις δύο πρώτες γραμμές και το τμήμα δήλωσης μεταβλητών, αιτιολογώντας τον τύπο κάθε μεταβλητής.<br/>β) Να ξαναγράψετε το πρόγραμμα ώστε το όριο 60 να είναι συμβολική σταθερά με όνομα ΟΡΙΟ.<br/>γ) Τι θα εμφανιστεί για την ομάδα 'Αετοί' με 2550 πόντους σε 30 αγώνες και 9 ήττες;</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">14</span><b>Μετατροπή: από ψευδογλώσσα σε ΓΛΩΣΣΑ.</b><span class="theme">Τρένο</span>
+</div><div class="q hw" id="q-14"><span class="qn">14</span><b>Μετατροπή: από ψευδογλώσσα σε ΓΛΩΣΣΑ.</b><span class="theme">Τρένο</span>
 <p>Ο παρακάτω αλγόριθμος διαβάζει τον προορισμό ενός τρένου, την απόσταση σε km και τη μέση ταχύτητα σε km/h, και εμφανίζει τη διάρκεια του ταξιδιού σε ώρες και λεπτά. Να γράψετε το αντίστοιχο <b>πλήρες πρόγραμμα</b> σε ΓΛΩΣΣΑ. Θυμήσου ότι η Α_Μ δίνει ακέραιο (Μάθημα 3, Εργαλείο 6).</p>
 <pre class="code">Αλγόριθμος Τρένο
 Διάβασε προορισμός, απόσταση, ταχύτητα
@@ -914,9 +955,7 @@ ____(7)____ Ταχύτητα_Φωτός</pre>
 Εμφάνισε προορισμός, ώρες, λεπτά
 Τέλος Τρένο</pre>
 <p>Να ελέγξετε το πρόγραμμα για ταξίδι 510 km με μέση ταχύτητα 120 km/h.</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Μεγάλες ασκήσεις</h3></div>
-<div class="q hw"><span class="qn">15</span><b>Το πρόγραμμα του γυμναστηρίου.</b><span class="theme">Υγεία, Θέμα Γ</span>
+</div><div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Μεγάλες ασκήσεις</h3></div><div class="q hw" id="q-15"><span class="qn">15</span><b>Το πρόγραμμα του γυμναστηρίου.</b><span class="theme">Υγεία, Θέμα Γ</span>
 <p>Ένα γυμναστήριο θέλει πρόγραμμα για τις εγγραφές. Το πρόγραμμα διαβάζει το όνομα του μέλους, την ηλικία του σε έτη, το βάρος του σε κιλά, το ύψος του σε μέτρα και για πόσους μήνες πληρώνει συνδρομή. Η εγγραφή κοστίζει πάντα 20 € και η μηνιαία συνδρομή 35 €. Το πρόγραμμα υπολογίζει και εμφανίζει:</p>
 <ul class="tight">
 <li>τον δείκτη μάζας σώματος (βάρος διά το τετράγωνο του ύψους), στρογγυλεμένο σε <b>ένα</b> δεκαδικό,</li>
@@ -925,8 +964,7 @@ ____(7)____ Ταχύτητα_Φωτός</pre>
 <li>αν το μέλος είναι ενήλικο (ΑΛΗΘΗΣ ή ΨΕΥΔΗΣ).</li>
 </ul>
 <p>α) Να γράψετε σε πίνακα τα δεδομένα και τα ζητούμενα, με όνομα και τύπο για το καθένα.<br/>β) Ποιες τιμές θα κάνετε συμβολικές σταθερές και γιατί;<br/>γ) Να γράψετε το πλήρες πρόγραμμα σε ΓΛΩΣΣΑ.<br/>δ) Τι θα εμφανιστεί για τον Νίκο, 17 ετών, 70 κιλά, ύψος 1,75 μ., με συνδρομή 6 μηνών;</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-<div class="q hw"><span class="qn">16</span><b>Η σχολική εκδρομή.</b><span class="theme">Ταξίδια, Θέμα Δ</span>
+</div><div class="q hw" id="q-16"><span class="qn">16</span><b>Η σχολική εκδρομή.</b><span class="theme">Ταξίδια, Θέμα Δ</span>
 <p>Ένα σχολείο οργανώνει εκδρομή. Το πρόγραμμα διαβάζει το όνομα του σχολείου, τον αριθμό των μαθητών, τον αριθμό των συνοδών καθηγητών, το κόστος ενός λεωφορείου για όλη την εκδρομή, το κόστος του ξενοδοχείου ανά άτομο και ανά νύχτα, και τον αριθμό των νυχτών. Κάθε λεωφορείο έχει <b>50 θέσεις</b> και για κάθε άτομο πληρώνεται ασφάλιστρο <b>4,50 €</b>. Το πρόγραμμα υπολογίζει:</p>
 <ul class="tight">
 <li>πόσα άτομα ταξιδεύουν συνολικά,</li>
@@ -936,13 +974,33 @@ ____(7)____ Ταχύτητα_Φωτός</pre>
 <li>αν αρκεί ένα λεωφορείο (ΑΛΗΘΗΣ ή ΨΕΥΔΗΣ).</li>
 </ul>
 <p>α) Να καταγράψετε δεδομένα, ζητούμενα και σταθερές, με όνομα και τύπο.<br/>β) Με βάση το Εργαλείο 10 του Μαθήματος 3, να γράψετε την έκφραση για τον αριθμό των λεωφορείων και να εξηγήσετε γιατί <b>δεν</b> είναι <span class="nw">άτομα div 50 + 1.</span> Να την ελέγξετε για 150 και 151 άτομα.<br/>γ) Να γράψετε το πλήρες πρόγραμμα σε ΓΛΩΣΣΑ, χρησιμοποιώντας τις σταθερές και όχι τους αριθμούς 50 και 4.5 μέσα στις εκφράσεις.<br/>δ) Τι θα εμφανιστεί για το 2ο ΓΕΛ, με 87 μαθητές, 6 συνοδούς, 780 € ανά λεωφορείο, 42 € ανά άτομο τη νύχτα και 2 νύχτες;</p>
-<p class="hwnote">Εργασία για το σπίτι: γράψε τις απαντήσεις στο τετράδιό σου.</p></div>
-</section>
+</div></section>
 
-</main><div class="syn-foot"><div class="syn-nav"><a href="06.html"><small>&#8592; Μάθημα 6</small>Γλώσσες και προγραμματιστικά περιβάλλοντα</a><a class="next" href="08.html"><small>Μάθημα 8 &#8594;</small>Τελεστές, συναρτήσεις, εκφράσεις</a></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
+<div aria-labelledby="pg-h" aria-modal="true" class="pg" hidden="" id="progress" role="dialog">
+<div class="pgin">
+<div class="pghead"><h2 id="pg-h"><a href="progress.html" id="pg-alllink">Η πρόοδός μου</a></h2><button class="btn" id="pg-close" type="button">Κλείσιμο</button></div>
+<div class="pgcard">
+<p class="pgl" id="pg-l"></p>
+<p class="pgt" id="pg-t"></p>
+<div class="pgbig"><span class="small">Βαθμός κατανόησης</span><span class="big" id="pg-score">–</span><span class="small" id="pg-note"></span></div>
+<p class="tstats" id="t-stats"></p>
+<div class="pgchart" hidden="" id="pg-chart"></div>
+<div class="pgscroll"><table class="pgtab" id="pg-tab"><thead><tr><th>Ημερομηνία</th><th>Ώρα</th><th>Βαθμός</th><th>Μονάδες</th></tr></thead><tbody id="pg-list"></tbody></table></div>
+<a class="btn primary" href="#test-start" id="pg-again">Νέα προσπάθεια</a>
+<p class="small" hidden="" id="pg-wait"></p>
+</div>
+<div class="pginfo">
+<p><b>Πώς δουλεύει το τεστ.</b> Πέντε μέρη: Σωστό ή Λάθος, συμπλήρωση κενών, πολλαπλής επιλογής, αντιστοίχιση και πίνακας τιμών από τα λυμένα παραδείγματα. Κάθε προσπάθεια έχει άλλες ερωτήσεις.</p>
+<p>Μετά την υποβολή βλέπεις τον βαθμό και, για κάθε λάθος, το σημείο των σημειώσεων που πρέπει να ξαναδιαβάσεις. Για να κάνεις «Νέα προσπάθεια» πρέπει να περάσουν τουλάχιστον <b id="pg-cd">5 λεπτά</b>. Αξιοποίησέ τα ξαναδιαβάζοντας.</p>
+<p>Στο <b>«Βαθμός κατανόησης»</b> βλέπεις την πιο πρόσφατη προσπάθειά σου και από κάτω, αναλυτικά, την πορεία των υπόλοιπων. Για να καταλάβεις καλύτερα το μάθημα, σου προτείνουμε ένθερμα να κάνεις όσες περισσότερες προσπάθειες μπορείς.</p>
+</div>
+<figure class="pgquote" id="pg-quote"><blockquote id="pg-q"></blockquote><figcaption id="pg-qa"></figcaption></figure>
+<p class="small" hidden="" id="pg-allnote">Η συνολική πρόοδος, με όλα τα μαθήματα, ανοίγει στο sinapsi.gr.</p>
+</div>
+</div></main><div class="syn-foot"><div class="syn-nav"><a href="06.html"><small>&#8592; Μάθημα 6</small>Γλώσσες και προγραμματιστικά περιβάλλοντα</a><a class="next" href="08.html"><small>Μάθημα 8 &#8594;</small>Τελεστές, συναρτήσεις, εκφράσεις</a></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
 <script>
 (function(){
-  var CARDS = [{"term": "Αλφάβητο της ΓΛΩΣΣΑΣ.", "def": "Αλφάβητο της ΓΛΩΣΣΑΣ. Το αλφάβητο της ΓΛΩΣΣΑΣ αποτελείται από τα γράμματα του ελληνικού και του λατινικού αλφαβήτου, τα ψηφία, καθώς και από ειδικά σύμβολα, που χρησιμοποιούνται για προκαθορισμένες ενέργειες.", "ref": "Σχολικό βιβλίο, §7.1"}, {"term": "Ακέραιος τύπος.", "def": "Ακέραιος τύπος. Ο τύπος αυτός περιλαμβάνει τους ακέραιους που είναι γνωστοί από τα μαθηματικά. Οι ακέραιοι μπορούν να είναι θετικοί, αρνητικοί ή μηδέν.", "ref": "Σχολικό βιβλίο, §7.2"}, {"term": "Πραγματικός τύπος.", "def": "Πραγματικός τύπος. Ο τύπος αυτός περιλαμβάνει τους πραγματικούς αριθμούς που γνωρίζουμε από τα μαθηματικά. Και οι πραγματικοί αριθμοί μπορούν να είναι θετικοί, αρνητικοί ή μηδέν.", "ref": "Σχολικό βιβλίο, §7.2"}, {"term": "Χαρακτήρας.", "def": "Χαρακτήρας. Ο τύπος αυτός αναφέρεται τόσο σε ένα χαρακτήρα όσο και μία σειρά χαρακτήρων. Οι χαρακτήρες πρέπει υποχρεωτικά να βρίσκονται μέσα σε απλά εισαγωγικά. Επειδή περιέχουν τόσο αλφαβητικούς όσο και αριθμητικούς χαρακτήρες, ονομάζονται συχνά αλφαριθμητικά.", "ref": "Σχολικό βιβλίο, §7.2"}, {"term": "Λογικός.", "def": "Λογικός. Αυτός ο τύπος δέχεται μόνο δύο τιμές: ΑΛΗΘΗΣ και ΨΕΥΔΗΣ.", "ref": "Σχολικό βιβλίο, §7.2"}, {"term": "Σταθερές.", "def": "Σταθερές. Οι σταθερές (constants) είναι προκαθορισμένες τιμές που δεν μεταβάλλονται κατά τη διάρκεια εκτέλεσης του προγράμματος. Οι σταθερές είναι αντίστοιχου τύπου δεδομένων, δηλαδή ακέραιες, πραγματικές, αλφαριθμητικές ή λογικές.", "ref": "Σχολικό βιβλίο, §7.3"}, {"term": "Ονόματα.", "def": "Ονόματα. Τα ονόματα μπορούν να αποτελούνται από γράμματα πεζά ή κεφαλαία του ελληνικού ή του λατινικού αλφαβήτου (Α-Ω, Α-Ζ), ψηφία (0-9) καθώς και τον χαρακτήρα κάτω παύλα (underscore) ( _ ), ενώ πρέπει υποχρεωτικά να αρχίζουν με γράμμα.", "ref": "Σχολικό βιβλίο, §7.3 (σελ. 129)"}, {"term": "Δεσμευμένες λέξεις.", "def": "Δεσμευμένες λέξεις. Μερικές λέξεις χρησιμοποιούνται από την ίδια τη ΓΛΩΣΣΑ για συγκεκριμένους λόγους, όπως οι λέξεις ΠΡΟΓΡΑΜΜΑ, ΑΚΕΡΑΙΕΣ, ΠΡΑΓΜΑΤΙΚΕΣ, ΑΝ κ.λπ. Αυτές οι λέξεις δεν μπορούν να χρησιμοποιηθούν ως ονόματα.", "ref": "Σχολικό βιβλίο, §7.3 (σελ. 129)"}, {"term": "Μεταβλητή.", "def": "Μεταβλητή. Μια μεταβλητή παριστάνει μία ποσότητα που η τιμή της μπορεί να μεταβάλλεται. Οι μεταβλητές που χρησιμοποιούνται σε ένα πρόγραμμα αντιστοιχούνται από το μεταγλωττιστή σε συγκεκριμένες θέσεις μνήμης του υπολογιστή.", "ref": "Σχολικό βιβλίο, §7.4"}, {"term": "Τύπος μεταβλητής.", "def": "Τύπος μεταβλητής. Ενώ η τιμή της μεταβλητής μπορεί να αλλάζει κατά την εκτέλεση του προγράμματος, αυτό που μένει υποχρεωτικά αναλλοίωτο είναι ο τύπος της μεταβλητής.", "ref": "Σχολικό βιβλίο, §7.4"}, {"term": "Αλφάβητο:", "def": "Αλφάβητο: γράμματα (ελληνικά, λατινικά, πεζά, κεφαλαία), ψηφία, ειδικοί χαρακτήρες.", "ref": "Σύνοψη"}, {"term": "Τύποι δεδομένων:", "def": "Τύποι δεδομένων: ακέραιος, πραγματικός, χαρακτήρας ('…'), λογικός (ΑΛΗΘΗΣ / ΨΕΥΔΗΣ).", "ref": "Σύνοψη"}, {"term": "Συμβολική σταθερά:", "def": "Συμβολική σταθερά: όνομα για τιμή που δεν αλλάζει· ΣΤΑΘΕΡΕΣ Όνομα = τιμή.", "ref": "Σύνοψη"}, {"term": "Μεταβλητή:", "def": "Μεταβλητή: θέση μνήμης με όνομα· η τιμή αλλάζει, ο τύπος όχι· ΜΕΤΑΒΛΗΤΕΣ ΤΥΠΟΣ: λίστα.", "ref": "Σύνοψη"}, {"term": "Δομή προγράμματος:", "def": "Δομή προγράμματος: ΠΡΟΓΡΑΜΜΑ → ΣΤΑΘΕΡΕΣ → ΜΕΤΑΒΛΗΤΕΣ → ΑΡΧΗ → εντολές → ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ.", "ref": "Σύνοψη"}, {"term": "Τα 5 ελέγχου ενός ονόματος", "def": "Ξεκινά με γράμμα · μόνο γράμματα, ψηφία, _ · χωρίς κενό · όχι δεσμευμένη λέξη · χωρίς εισαγωγικά.", "ref": "§7.3"}, {"term": "'123' ή 123;", "def": "'123' είναι χαρακτήρας και δεν μπαίνει σε πράξεις· 123 είναι ακέραιος.", "ref": "§7.2"}, {"term": "Τι δεν κάνουμε με μια σταθερά", "def": "Δεν της αλλάζουμε τιμή (όχι ←), δεν τη διαβάζουμε (όχι ΔΙΑΒΑΣΕ), δεν της δηλώνουμε τύπο.", "ref": "§7.3"}, {"term": "Ειδικοί χαρακτήρες της ΓΛΩΣΣΑΣ", "def": "+ - * / = ^ ( ) . , ' ! & και ο κενός χαρακτήρας.", "ref": "§7.1"}, {"term": "! και &", "def": "! : σχόλιο, δεν εκτελείται. & στην αρχή της γραμμής: συνέχεια της προηγούμενης εντολής.", "ref": "Οδηγίες Μελέτης §1.1"}];
+  var CARDS = [{"term": "Αλφάβητο της ΓΛΩΣΣΑΣ.", "def": "Αλφάβητο της ΓΛΩΣΣΑΣ. Το αλφάβητο της ΓΛΩΣΣΑΣ αποτελείται από τα γράμματα του ελληνικού και του λατινικού αλφαβήτου, τα ψηφία, καθώς και από ειδικά σύμβολα, που χρησιμοποιούνται για προκαθορισμένες ενέργειες.", "ref": "Σχολικό βιβλίο, §7.1"}, {"term": "Ακέραιος τύπος.", "def": "Ακέραιος τύπος. Ο τύπος αυτός περιλαμβάνει τους ακέραιους που είναι γνωστοί από τα μαθηματικά. Οι ακέραιοι μπορούν να είναι θετικοί, αρνητικοί ή μηδέν.", "ref": "Σχολικό βιβλίο, §7.2"}, {"term": "Πραγματικός τύπος.", "def": "Πραγματικός τύπος. Ο τύπος αυτός περιλαμβάνει τους πραγματικούς αριθμούς που γνωρίζουμε από τα μαθηματικά. Και οι πραγματικοί αριθμοί μπορούν να είναι θετικοί, αρνητικοί ή μηδέν.", "ref": "Σχολικό βιβλίο, §7.2"}, {"term": "Χαρακτήρας.", "def": "Χαρακτήρας. Ο τύπος αυτός αναφέρεται τόσο σε ένα χαρακτήρα όσο και μία σειρά χαρακτήρων. Οι χαρακτήρες πρέπει υποχρεωτικά να βρίσκονται μέσα σε απλά εισαγωγικά. Επειδή περιέχουν τόσο αλφαβητικούς όσο και αριθμητικούς χαρακτήρες, ονομάζονται συχνά αλφαριθμητικά.", "ref": "Σχολικό βιβλίο, §7.2"}, {"term": "Λογικός.", "def": "Λογικός. Αυτός ο τύπος δέχεται μόνο δύο τιμές: ΑΛΗΘΗΣ και ΨΕΥΔΗΣ.", "ref": "Σχολικό βιβλίο, §7.2"}, {"term": "Σταθερές.", "def": "Σταθερές. Οι σταθερές (constants) είναι προκαθορισμένες τιμές που δεν μεταβάλλονται κατά τη διάρκεια εκτέλεσης του προγράμματος. Οι σταθερές είναι αντίστοιχου τύπου δεδομένων, δηλαδή ακέραιες, πραγματικές, αλφαριθμητικές ή λογικές.", "ref": "Σχολικό βιβλίο, §7.3"}, {"term": "Ονόματα.", "def": "Ονόματα. Τα ονόματα μπορούν να αποτελούνται από γράμματα πεζά ή κεφαλαία του ελληνικού ή του λατινικού αλφαβήτου (Α-Ω, Α-Ζ), ψηφία (0-9) καθώς και τον χαρακτήρα κάτω παύλα (underscore) ( _ ), ενώ πρέπει υποχρεωτικά να αρχίζουν με γράμμα.", "ref": "Σχολικό βιβλίο, §7.3 (σελ. 129)"}, {"term": "Δεσμευμένες λέξεις.", "def": "Δεσμευμένες λέξεις. Μερικές λέξεις χρησιμοποιούνται από την ίδια τη ΓΛΩΣΣΑ για συγκεκριμένους λόγους, όπως οι λέξεις ΠΡΟΓΡΑΜΜΑ, ΑΚΕΡΑΙΕΣ, ΠΡΑΓΜΑΤΙΚΕΣ, ΑΝ κ.λπ. Αυτές οι λέξεις δεν μπορούν να χρησιμοποιηθούν ως ονόματα.", "ref": "Σχολικό βιβλίο, §7.3 (σελ. 129)"}, {"term": "Μεταβλητή.", "def": "Μεταβλητή. Μια μεταβλητή παριστάνει μία ποσότητα που η τιμή της μπορεί να μεταβάλλεται. Οι μεταβλητές που χρησιμοποιούνται σε ένα πρόγραμμα αντιστοιχούνται από το μεταγλωττιστή σε συγκεκριμένες θέσεις μνήμης του υπολογιστή.", "ref": "Σχολικό βιβλίο, §7.4"}, {"term": "Τύπος μεταβλητής.", "def": "Τύπος μεταβλητής. Ενώ η τιμή της μεταβλητής μπορεί να αλλάζει κατά την εκτέλεση του προγράμματος, αυτό που μένει υποχρεωτικά αναλλοίωτο είναι ο τύπος της μεταβλητής.", "ref": "Σχολικό βιβλίο, §7.4"}, {"term": "Αλφάβητο:", "def": "Αλφάβητο: γράμματα (ελληνικά, λατινικά, πεζά, κεφαλαία), ψηφία, ειδικοί χαρακτήρες.", "ref": "Σύνοψη"}, {"term": "Τύποι δεδομένων:", "def": "Τύποι δεδομένων: ακέραιος, πραγματικός, χαρακτήρας ('…'), λογικός (ΑΛΗΘΗΣ / ΨΕΥΔΗΣ).", "ref": "Σύνοψη"}, {"term": "Συμβολική σταθερά:", "def": "Συμβολική σταθερά: όνομα για τιμή που δεν αλλάζει. ΣΤΑΘΕΡΕΣ Όνομα = τιμή.", "ref": "Σύνοψη"}, {"term": "Μεταβλητή:", "def": "Μεταβλητή: θέση μνήμης με όνομα. Η τιμή αλλάζει, ο τύπος όχι. ΜΕΤΑΒΛΗΤΕΣ ΤΥΠΟΣ: λίστα.", "ref": "Σύνοψη"}, {"term": "Δομή προγράμματος", "def": "Δομή προγράμματος , από πάνω προς τα κάτω: ΠΡΟΓΡΑΜΜΑ ΣΤΑΘΕΡΕΣ ΜΕΤΑΒΛΗΤΕΣ ΑΡΧΗ, και μετά οι εντολές ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ref": "Σύνοψη"}, {"term": "Τα 5 ελέγχου ενός ονόματος", "def": "Ξεκινά με γράμμα μόνο γράμματα, ψηφία, _ χωρίς κενό όχι δεσμευμένη λέξη χωρίς εισαγωγικά.", "ref": "§7.3"}, {"term": "'123' ή 123;", "def": "'123' είναι χαρακτήρας και δεν μπαίνει σε πράξεις. 123 είναι ακέραιος.", "ref": "§7.2"}, {"term": "Τι δεν κάνουμε με μια σταθερά", "def": "Δεν της αλλάζουμε τιμή (όχι ←), δεν τη διαβάζουμε (όχι ΔΙΑΒΑΣΕ), δεν της δηλώνουμε τύπο.", "ref": "§7.3"}, {"term": "Ειδικοί χαρακτήρες της ΓΛΩΣΣΑΣ", "def": "+ - * / = ^ ( ) . , ' ! & και ο κενός χαρακτήρας.", "ref": "§7.1"}, {"term": "! και &", "def": "! : σχόλιο, δεν εκτελείται. & στην αρχή της γραμμής: συνέχεια της προηγούμενης εντολής.", "ref": "Οδηγίες Μελέτης §1.1"}];
   // ---- quiz ----
   document.querySelectorAll('.quiz').forEach(function(quiz){
     var items = quiz.querySelectorAll('.qi');
@@ -954,9 +1012,9 @@ ____(7)____ Ταχύτητα_Φωτός</pre>
       score.hidden = false;
       score.innerHTML = '';
       var t = document.createElement('span');
-      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? ' · Τέλεια!' : ok >= items.length * 0.7 ? ' · Πολύ καλά' : ' · Ξαναδιάβασε τη θεωρία');
+      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? '. Τέλεια!' : ok >= items.length * 0.7 ? '. Πολύ καλά.' : '. Ξαναδιάβασε τη θεωρία.');
       var r = document.createElement('button'); r.type = 'button'; r.className = 'btn'; r.textContent = 'Ξανά από την αρχή';
-      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); }); update(); };
+      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); var w = it.querySelector('.qwhy'); if (w) w.remove(); }); update(); };
       score.append(t, r);
     }
     items.forEach(function(it){
@@ -970,6 +1028,7 @@ ____(7)____ Ταχύτητα_Φωτός</pre>
           var f = document.createElement('span'); f.className = 'fb';
           f.textContent = v === ans ? '✓ Σωστά' : '✗ Η σωστή απάντηση είναι: ' + (it.querySelector('.qb button[data-v="' + ans + '"]') || {}).textContent;
           it.appendChild(f);
+          if (v !== ans && it.getAttribute('data-why')){ var w = document.createElement('p'); w.className = 'qwhy'; w.textContent = it.getAttribute('data-why'); it.appendChild(w); }
           update();
         });
       });
@@ -995,6 +1054,323 @@ ____(7)____ Ταχύτητα_Φωτός</pre>
     pos = 0; show();
   };
   show();
+})();
+</script>
+<script>
+(function(){
+  var BANK = {"lesson": 7, "draw": {"tf_practiced": 5, "tf_new": 5, "fill": 2, "mc": 2, "mc_algo": 2, "match": 1, "match_items": 5, "num": 2}, "tf_new": [{"s": "Το αλφάβητο της ΓΛΩΣΣΑΣ περιλαμβάνει τα γράμματα του ελληνικού και του λατινικού αλφαβήτου, τα ψηφία και ειδικά σύμβολα.", "a": "Σ", "see": ["#s-7-1", "Το αλφάβητο της ΓΛΩΣΣΑΣ"]}, {"s": "Ο κενός χαρακτήρας ανήκει στους ειδικούς χαρακτήρες της ΓΛΩΣΣΑΣ.", "a": "Σ", "see": ["#s-7-1", "Το αλφάβητο της ΓΛΩΣΣΑΣ"]}, {"s": "Ό,τι ακολουθεί το σύμβολο ! είναι σχόλιο και δεν εκτελείται.", "a": "Σ", "see": ["#s-7-1", "Το αλφάβητο της ΓΛΩΣΣΑΣ"]}, {"s": "Οι τύποι δεδομένων της ΓΛΩΣΣΑΣ είναι οι αριθμητικοί (ακέραιοι και πραγματικοί), οι χαρακτήρες και οι λογικοί.", "a": "Σ", "see": ["#s-7-2", "Τύποι δεδομένων"]}, {"s": "Ο ακέραιος τύπος περιλαμβάνει μόνο θετικούς αριθμούς.", "a": "Λ", "see": ["#s-7-2", "Τύποι δεδομένων"]}, {"s": "Οι χαρακτήρες πρέπει υποχρεωτικά να βρίσκονται μέσα σε απλά εισαγωγικά.", "a": "Σ", "see": ["#s-7-2", "Τύποι δεδομένων"]}, {"s": "Ο τύπος χαρακτήρα αναφέρεται μόνο σε έναν χαρακτήρα και όχι σε σειρά χαρακτήρων.", "a": "Λ", "see": ["#s-7-2", "Τύποι δεδομένων"]}, {"s": "Η τιμή 17.0 είναι ακέραιου τύπου, γιατί αξίζει όσο το 17.", "a": "Λ", "see": ["#s-7-2", "Τύποι δεδομένων"]}, {"s": "Η τιμή ΑΛΗΘΗΣ, χωρίς εισαγωγικά, είναι λογικού τύπου.", "a": "Σ", "see": ["#s-7-2", "Τύποι δεδομένων"]}, {"s": "Οι σταθερές είναι προκαθορισμένες τιμές που δεν μεταβάλλονται κατά τη διάρκεια εκτέλεσης του προγράμματος.", "a": "Σ", "see": ["#s-7-3", "Σταθερές και ονόματα"]}, {"s": "Η χρήση ονομάτων σταθερών κάνει το πρόγραμμα πιο κατανοητό και ευκολότερο να διορθωθεί και να συντηρηθεί.", "a": "Σ", "see": ["#s-7-3", "Σταθερές και ονόματα"]}, {"s": "Μια συμβολική σταθερά μπορεί να πάρει τιμή με την εντολή ΔΙΑΒΑΣΕ.", "a": "Λ", "see": ["#s-7-3", "Σταθερές και ονόματα"]}, {"s": "Το όνομα Μέση Τιμή είναι αποδεκτό στη ΓΛΩΣΣΑ.", "a": "Λ", "see": ["#s-7-3", "Σταθερές και ονόματα"]}, {"s": "Το όνομα Α100 είναι αποδεκτό στη ΓΛΩΣΣΑ.", "a": "Σ", "see": ["#s-7-3", "Σταθερές και ονόματα"]}, {"s": "Οι μεταβλητές ενός προγράμματος αντιστοιχούνται από τον μεταγλωττιστή σε συγκεκριμένες θέσεις μνήμης.", "a": "Σ", "see": ["#s-7-4", "Μεταβλητές"]}, {"s": "Ο τύπος μιας μεταβλητής μπορεί να αλλάξει κατά την εκτέλεση του προγράμματος.", "a": "Λ", "see": ["#s-7-4", "Μεταβλητές"]}, {"s": "Το όνομα κάθε μεταβλητής είναι μοναδικό για κάθε πρόγραμμα.", "a": "Σ", "see": ["#s-7-4", "Μεταβλητές"]}, {"s": "Η δήλωση του τύπου κάθε μεταβλητής γίνεται υποχρεωτικά στο τμήμα δήλωσης μεταβλητών.", "a": "Σ", "see": ["#s-7-4", "Μεταβλητές"]}, {"s": "Στο τμήμα δηλώσεων, οι μεταβλητές δηλώνονται πριν από τις σταθερές.", "a": "Λ", "see": ["#s-7-4", "Μεταβλητές"]}], "fill": [{"t": "Το αλφάβητο της ΓΛΩΣΣΑΣ αποτελείται από τα γράμματα του ελληνικού και του [λατινικού|αγγλικού|αραβικού] αλφαβήτου, τα [ψηφία|σύμβολα|ονόματα], καθώς και από ειδικά σύμβολα, που χρησιμοποιούνται για [προκαθορισμένες|τυχαίες|μαθηματικές] ενέργειες.", "see": ["#s-7-1", "Το αλφάβητο της ΓΛΩΣΣΑΣ"]}, {"t": "Ακέραιος τύπος. Ο τύπος αυτός περιλαμβάνει τους ακέραιους που είναι γνωστοί από τα μαθηματικά. Οι ακέραιοι μπορούν να είναι θετικοί, [αρνητικοί|πραγματικοί|δεκαδικοί] ή [μηδέν|άπειρο|κλάσματα].", "see": ["#s-7-2", "Τύποι δεδομένων"]}, {"t": "Χαρακτήρας. Ο τύπος αυτός αναφέρεται τόσο σε ένα χαρακτήρα όσο και μία [σειρά χαρακτήρων|λέξη μόνο|λογική τιμή]. Οι χαρακτήρες πρέπει υποχρεωτικά να βρίσκονται μέσα σε [απλά εισαγωγικά|παρενθέσεις|αγκύλες]. Επειδή περιέχουν τόσο αλφαβητικούς όσο και αριθμητικούς χαρακτήρες, ονομάζονται συχνά [αλφαριθμητικά|αριθμητικά|λογικά].", "see": ["#s-7-2", "Τύποι δεδομένων"]}, {"t": "Λογικός. Αυτός ο τύπος δέχεται μόνο δύο τιμές: [ΑΛΗΘΗΣ|ΣΩΣΤΟ|ΝΑΙ] και [ΨΕΥΔΗΣ|ΛΑΘΟΣ|ΟΧΙ].", "see": ["#s-7-2", "Τύποι δεδομένων"]}, {"t": "Οι σταθερές (constants) είναι [προκαθορισμένες|τυχαίες|μεταβλητές] τιμές που δεν μεταβάλλονται κατά τη διάρκεια [εκτέλεσης|μεταγλώττισης|σχεδίασης] του προγράμματος. Οι σταθερές είναι αντίστοιχου τύπου δεδομένων, δηλαδή ακέραιες, πραγματικές, [αλφαριθμητικές|συμβολικές|δεκαδικές] ή λογικές.", "see": ["#s-7-3", "Σταθερές και ονόματα"]}, {"t": "Τα ονόματα μπορούν να αποτελούνται από γράμματα πεζά ή κεφαλαία του ελληνικού ή του λατινικού αλφαβήτου, ψηφία, καθώς και τον χαρακτήρα [κάτω παύλα|παύλα|τελεία] ( _ ), ενώ πρέπει υποχρεωτικά να αρχίζουν με [γράμμα|ψηφίο|κεφαλαίο γράμμα].", "see": ["#s-7-3", "Σταθερές και ονόματα"]}, {"t": "Μια μεταβλητή παριστάνει μία ποσότητα που η [τιμή|τύπος|όνομα] της μπορεί να μεταβάλλεται. Οι μεταβλητές που χρησιμοποιούνται σε ένα πρόγραμμα αντιστοιχούνται από το [μεταγλωττιστή|διερμηνευτή|συντάκτη] σε συγκεκριμένες θέσεις [μνήμης|δίσκου|οθόνης] του υπολογιστή.", "see": ["#s-7-4", "Μεταβλητές"]}, {"t": "Ενώ η τιμή της μεταβλητής μπορεί να αλλάζει κατά την εκτέλεση του προγράμματος, αυτό που μένει υποχρεωτικά αναλλοίωτο είναι ο [τύπος|τιμή|θέση] της μεταβλητής.", "see": ["#s-7-4", "Μεταβλητές"]}], "mc": [{"q": "Ποιο από τα παρακάτω ονόματα είναι αποδεκτό στη ΓΛΩΣΣΑ;", "opts": ["Ψευδής_1", "_βαθμός", "2ος_Παίκτης", "Τιμή€"], "a": 0, "see": ["#sol-1", "Λυμένο 1"]}, {"q": "Ποιο από τα παρακάτω ονόματα ΔΕΝ είναι αποδεκτό στη ΓΛΩΣΣΑ;", "opts": ["ΑΚΕΡΑΙΕΣ", "Τελικό_Σκορ", "Χ2", "μέγιστο"], "a": 0, "see": ["#sol-1", "Λυμένο 1"]}, {"q": "Τι τύπου είναι η τιμή '2026';", "opts": ["χαρακτήρας", "ακέραια", "πραγματική", "λογική"], "a": 0, "see": ["#sol-2", "Λυμένο 2"]}, {"q": "Τι τύπου είναι η τιμή 7.0;", "opts": ["πραγματική", "ακέραια", "χαρακτήρας", "λογική"], "a": 0, "see": ["#sol-2", "Λυμένο 2"]}, {"q": "Με ποιον τύπο δηλώνουμε τον αριθμό κινητού ενός πελάτη (π.χ. 6912345678);", "opts": ["ΧΑΡΑΚΤΗΡΕΣ", "ΑΚΕΡΑΙΕΣ", "ΠΡΑΓΜΑΤΙΚΕΣ", "ΛΟΓΙΚΕΣ"], "a": 0, "see": ["#s-7-2", "Τύποι δεδομένων"]}, {"q": "Ποια είναι η σωστή δήλωση μιας συμβολικής σταθεράς;", "opts": ["ΦΠΑ = 0.24", "ΦΠΑ ← 0.24", "ΦΠΑ: 0.24", "ΠΡΑΓΜΑΤΙΚΕΣ: ΦΠΑ = 0.24"], "a": 0, "see": ["#s-7-3", "Σταθερές και ονόματα"]}, {"q": "Ποια είναι η σωστή σειρά των τμημάτων ενός προγράμματος;", "opts": ["ΠΡΟΓΡΑΜΜΑ, ΣΤΑΘΕΡΕΣ, ΜΕΤΑΒΛΗΤΕΣ, ΑΡΧΗ, ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ, ΜΕΤΑΒΛΗΤΕΣ, ΣΤΑΘΕΡΕΣ, ΑΡΧΗ, ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ, ΑΡΧΗ, ΣΤΑΘΕΡΕΣ, ΜΕΤΑΒΛΗΤΕΣ, ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΣΤΑΘΕΡΕΣ, ΜΕΤΑΒΛΗΤΕΣ, ΠΡΟΓΡΑΜΜΑ, ΑΡΧΗ, ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ"], "a": 0, "see": ["#s-7-4", "Μεταβλητές"]}, {"q": "Μια μεταβλητή δηλώνεται ΑΚΕΡΑΙΑ. Ποια εντολή εκχώρησης είναι αποδεκτή;", "opts": ["κ ← 15", "κ ← 2.5", "κ ← '15'", "κ ← ΑΛΗΘΗΣ"], "a": 0, "see": ["#s-7-4", "Μεταβλητές"]}, {"q": "Ποια μεταβλητή πρέπει να δηλωθεί ΠΡΑΓΜΑΤΙΚΗ, ακόμα κι αν στο παράδειγμα βγαίνει στρογγυλή;", "opts": ["πληρότητα ← θεατές / χωρητικότητα * 100", "νίκες ← αγώνες - ήττες", "σύνολο ← μαθητές + συνοδοί", "λεωφορεία ← (άτομα + 49) div 50"], "a": 0, "see": ["#sol-5", "Λυμένο 5"]}, {"q": "Τι σημαίνει ο χαρακτήρας & στην αρχή μιας γραμμής;", "opts": ["Συνεχίζεται εδώ η εντολή της προηγούμενης γραμμής.", "Ό,τι ακολουθεί είναι σχόλιο.", "Αρχίζει νέα εντολή.", "Ενώνει δύο αλφαριθμητικά."], "a": 0, "see": ["#s-7-1", "Το αλφάβητο της ΓΛΩΣΣΑΣ"]}], "mc_algo": [{"q": "Λυμένο 3 (Black Friday). Ποιο πρόγραμμα είναι σωστό;", "code": true, "opts": ["ΠΡΟΓΡΑΜΜΑ Black_Friday\nΣΤΑΘΕΡΕΣ\n  ΦΠΑ = 0.24\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: τιμή, μεΦΠΑ, έκπτωση, τελική\n  ΑΚΕΡΑΙΕΣ: π\nΑΡΧΗ\n  ΔΙΑΒΑΣΕ τιμή, π\n  μεΦΠΑ ← Α_Μ(τιμή * (1 + ΦΠΑ) * 100 + 0.5) / 100\n  έκπτωση ← Α_Μ(μεΦΠΑ * π / 100 * 100 + 0.5) / 100\n  τελική ← μεΦΠΑ - έκπτωση\n  ΓΡΑΨΕ μεΦΠΑ, έκπτωση, τελική\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Black_Friday", "ΠΡΟΓΡΑΜΜΑ Black_Friday\nΣΤΑΘΕΡΕΣ\n  ΦΠΑ = 0.24\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: τιμή, μεΦΠΑ, έκπτωση\n  ΑΚΕΡΑΙΕΣ: π, τελική\nΑΡΧΗ\n  ΔΙΑΒΑΣΕ τιμή, π\n  μεΦΠΑ ← Α_Μ(τιμή * (1 + ΦΠΑ) * 100 + 0.5) / 100\n  έκπτωση ← Α_Μ(μεΦΠΑ * π / 100 * 100 + 0.5) / 100\n  τελική ← μεΦΠΑ - έκπτωση\n  ΓΡΑΨΕ μεΦΠΑ, έκπτωση, τελική\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Black_Friday", "ΠΡΟΓΡΑΜΜΑ Black_Friday\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: τιμή, μεΦΠΑ, έκπτωση, τελική\n  ΑΚΕΡΑΙΕΣ: π\nΣΤΑΘΕΡΕΣ\n  ΦΠΑ = 0.24\nΑΡΧΗ\n  ΔΙΑΒΑΣΕ τιμή, π\n  μεΦΠΑ ← Α_Μ(τιμή * (1 + ΦΠΑ) * 100 + 0.5) / 100\n  έκπτωση ← Α_Μ(μεΦΠΑ * π / 100 * 100 + 0.5) / 100\n  τελική ← μεΦΠΑ - έκπτωση\n  ΓΡΑΨΕ μεΦΠΑ, έκπτωση, τελική\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Black_Friday", "ΠΡΟΓΡΑΜΜΑ Black_Friday\nΣΤΑΘΕΡΕΣ\n  ΦΠΑ = 0.24\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: τιμή, μεΦΠΑ, έκπτωση, τελική\n  ΑΚΕΡΑΙΕΣ: π\nΑΡΧΗ\n  ΔΙΑΒΑΣΕ τιμή, π, ΦΠΑ\n  μεΦΠΑ ← Α_Μ(τιμή * (1 + ΦΠΑ) * 100 + 0.5) / 100\n  έκπτωση ← Α_Μ(μεΦΠΑ * π / 100 * 100 + 0.5) / 100\n  τελική ← μεΦΠΑ - έκπτωση\n  ΓΡΑΨΕ μεΦΠΑ, έκπτωση, τελική\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Black_Friday"], "a": 0, "why": "Οι ΣΤΑΘΕΡΕΣ μπαίνουν πριν από τις ΜΕΤΑΒΛΗΤΕΣ. Η τελική είναι ποσό σε € και βγαίνει από πράξεις με /, άρα ΠΡΑΓΜΑΤΙΚΗ. Μια σταθερά δεν διαβάζεται με ΔΙΑΒΑΣΕ.", "see": ["#sol-3", "Λυμένο 3"]}, {"q": "Λυμένο 5 (γήπεδο). Ποιο πρόγραμμα είναι σωστό;", "code": true, "opts": ["ΠΡΟΓΡΑΜΜΑ Γήπεδο\nΣΤΑΘΕΡΕΣ\n  ΕΙΣΙΤΗΡΙΟ = 12.5\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: θεατές, χωρητικότητα\n  ΠΡΑΓΜΑΤΙΚΕΣ: πληρότητα, έσοδα\n  ΛΟΓΙΚΕΣ: γεμάτο\nΑΡΧΗ\n  ΔΙΑΒΑΣΕ θεατές, χωρητικότητα\n  πληρότητα ← θεατές / χωρητικότητα * 100\n  έσοδα ← θεατές * ΕΙΣΙΤΗΡΙΟ\n  γεμάτο ← θεατές = χωρητικότητα\n  ΓΡΑΨΕ πληρότητα, έσοδα, γεμάτο\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Γήπεδο", "ΠΡΟΓΡΑΜΜΑ Γήπεδο\nΣΤΑΘΕΡΕΣ\n  ΕΙΣΙΤΗΡΙΟ = 12.5\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: θεατές, χωρητικότητα\n  ΠΡΑΓΜΑΤΙΚΕΣ: πληρότητα, έσοδα\nΑΡΧΗ\n  ΔΙΑΒΑΣΕ θεατές, χωρητικότητα\n  πληρότητα ← θεατές / χωρητικότητα * 100\n  έσοδα ← θεατές * ΕΙΣΙΤΗΡΙΟ\n  γεμάτο ← θεατές = χωρητικότητα\n  ΓΡΑΨΕ πληρότητα, έσοδα, γεμάτο\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Γήπεδο", "ΠΡΟΓΡΑΜΜΑ Γήπεδο\nΣΤΑΘΕΡΕΣ\n  ΕΙΣΙΤΗΡΙΟ = 12.5\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: θεατές, χωρητικότητα\n  ΠΡΑΓΜΑΤΙΚΕΣ: πληρότητα, έσοδα\n  ΛΟΓΙΚΕΣ: γεμάτο\nΑΡΧΗ\n  ΔΙΑΒΑΣΕ θεατές, χωρητικότητα\n  πληρότητα ← θεατές / χωρητικότητα * 100\n  έσοδα ← θεατές * ΕΙΣΙΤΗΡΙΟ\n  ΕΙΣΙΤΗΡΙΟ ← ΕΙΣΙΤΗΡΙΟ + 1\n  γεμάτο ← θεατές = χωρητικότητα\n  ΓΡΑΨΕ πληρότητα, έσοδα, γεμάτο\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Γήπεδο", "ΠΡΟΓΡΑΜΜΑ Γήπεδο\nΣΤΑΘΕΡΕΣ\n  ΕΙΣΙΤΗΡΙΟ = 12.5\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: θεατές, χωρητικότητα, πληρότητα\n  ΠΡΑΓΜΑΤΙΚΕΣ: έσοδα\n  ΛΟΓΙΚΕΣ: γεμάτο\nΑΡΧΗ\n  ΔΙΑΒΑΣΕ θεατές, χωρητικότητα\n  πληρότητα ← θεατές / χωρητικότητα * 100\n  έσοδα ← θεατές * ΕΙΣΙΤΗΡΙΟ\n  γεμάτο ← θεατές = χωρητικότητα\n  ΓΡΑΨΕ πληρότητα, έσοδα, γεμάτο\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Γήπεδο"], "a": 0, "why": "Κάθε μεταβλητή δηλώνεται, και η γεμάτο παίρνει την τιμή μιας σύγκρισης, άρα είναι ΛΟΓΙΚΗ. Η τιμή μιας σταθεράς δεν αλλάζει. Η πληρότητα βγαίνει με /, άρα είναι ΠΡΑΓΜΑΤΙΚΗ.", "see": ["#sol-5", "Λυμένο 5"]}, {"q": "Από την ψευδογλώσσα στη ΓΛΩΣΣΑ (ορθογώνιο). Ποιο πρόγραμμα είναι σωστό;", "code": true, "opts": ["ΠΡΟΓΡΑΜΜΑ Ορθογώνιο\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: α, β, εμβ\nΑΡΧΗ\n  ΔΙΑΒΑΣΕ α, β\n  εμβ ← α * β\n  ΓΡΑΨΕ εμβ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ορθογώνιο", "ΠΡΟΓΡΑΜΜΑ Ορθογώνιο\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: α, β, εμβ\nΑΡΧΗ\n  ΔΙΑΒΑΣΕ α, β\n  εμβ ← α * β\n  ΓΡΑΨΕ εμβ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ορθογώνιο", "ΠΡΟΓΡΑΜΜΑ Ορθογώνιο\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: α, β\nΑΡΧΗ\n  ΔΙΑΒΑΣΕ α, β\n  εμβ ← α * β\n  ΓΡΑΨΕ εμβ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ορθογώνιο", "ΠΡΟΓΡΑΜΜΑ Ορθογώνιο\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: α, β, εμβ\nΑΡΧΗ\n  ΔΙΑΒΑΣΕ α, β\n  εμβ ← α * β\n  ΓΡΑΨΕ 'εμβ'\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ορθογώνιο"], "a": 0, "why": "Οι πλευρές μπορεί να έχουν δεκαδικά, άρα όλες οι μεταβλητές είναι ΠΡΑΓΜΑΤΙΚΕΣ και δηλώνονται όλες. Το 'εμβ' με εισαγωγικά εμφανίζει τη λέξη, όχι την τιμή.", "see": ["#s-7-4", "Μεταβλητές"]}], "match": [{"q": "Τι τύπου είναι κάθε τιμή;", "opts": ["ακέραια", "πραγματική", "χαρακτήρας", "λογική"], "code": true, "see": ["#sol-2", "Λυμένο 2"], "items": [["-980", "ακέραια"], ["0", "ακέραια"], ["3.14159", "πραγματική"], ["5.0", "πραγματική"], ["'Κώστας'", "χαρακτήρας"], ["'123'", "χαρακτήρας"], ["'ΨΕΥΔΗΣ'", "χαρακτήρας"], ["ΑΛΗΘΗΣ", "λογική"], ["ΨΕΥΔΗΣ", "λογική"], ["-0.45", "πραγματική"]]}, {"q": "Με ποιον τύπο δηλώνεται κάθε στοιχείο;", "opts": ["ΑΚΕΡΑΙΕΣ", "ΠΡΑΓΜΑΤΙΚΕΣ", "ΧΑΡΑΚΤΗΡΕΣ", "ΛΟΓΙΚΕΣ"], "see": ["#sol-4", "Λυμένο 4"], "items": [["το έτος κυκλοφορίας μιας ταινίας", "ΑΚΕΡΑΙΕΣ"], ["η μέση βαθμολογία του κοινού (π.χ. 7.8)", "ΠΡΑΓΜΑΤΙΚΕΣ"], ["ο τίτλος της ταινίας", "ΧΑΡΑΚΤΗΡΕΣ"], ["αν προβάλλεται σε 3D", "ΛΟΓΙΚΕΣ"], ["η αίθουσα (π.χ. Α2)", "ΧΑΡΑΚΤΗΡΕΣ"], ["η τιμή του εισιτηρίου σε €", "ΠΡΑΓΜΑΤΙΚΕΣ"], ["ο ταχυδρομικός κώδικας", "ΧΑΡΑΚΤΗΡΕΣ"], ["η διάρκεια σε ακέραια λεπτά", "ΑΚΕΡΑΙΕΣ"]]}, {"q": "Γιατί δεν είναι αποδεκτό κάθε όνομα;", "opts": ["αρχίζει με ψηφίο", "έχει κενό", "είναι δεσμευμένη λέξη", "έχει σύμβολο που δεν επιτρέπεται", "είναι τιμή χαρακτήρα"], "see": ["#s-7-3", "Σταθερές και ονόματα"], "items": [["100Α", "αρχίζει με ψηφίο"], ["Μέση Τιμή", "έχει κενό"], ["ΓΡΑΨΕ", "είναι δεσμευμένη λέξη"], ["Κόστος$", "έχει σύμβολο που δεν επιτρέπεται"], ["'Νίκος'", "είναι τιμή χαρακτήρα"], ["Τιμή-Αγοράς", "έχει σύμβολο που δεν επιτρέπεται"], ["ΑΚΕΡΑΙΕΣ", "είναι δεσμευμένη λέξη"], ["2η_ζώνη", "αρχίζει με ψηφίο"]]}], "num": [{"variants": [{"v": {"P": 50, "D": 20}, "code": "  ΔΙΑΒΑΣΕ τιμή, π\n  μεΦΠΑ ← Α_Μ(τιμή * (1 + ΦΠΑ) * 100 + 0.5) / 100\n  έκπτωση ← Α_Μ(μεΦΠΑ * π / 100 * 100 + 0.5) / 100\n  τελική ← μεΦΠΑ - έκπτωση\n  ΓΡΑΨΕ μεΦΠΑ, έκπτωση, τελική", "a": "49.6", "q": "Το πρόγραμμα Black_Friday διαβάζει τιμή = 50 και π = 20. Ποια τιμή εμφανίζεται για την τελική;"}, {"v": {"P": 100, "D": 25}, "code": "  ΔΙΑΒΑΣΕ τιμή, π\n  μεΦΠΑ ← Α_Μ(τιμή * (1 + ΦΠΑ) * 100 + 0.5) / 100\n  έκπτωση ← Α_Μ(μεΦΠΑ * π / 100 * 100 + 0.5) / 100\n  τελική ← μεΦΠΑ - έκπτωση\n  ΓΡΑΨΕ μεΦΠΑ, έκπτωση, τελική", "a": "93", "q": "Το πρόγραμμα Black_Friday διαβάζει τιμή = 100 και π = 25. Ποια τιμή εμφανίζεται για την τελική;"}, {"v": {"P": 19.9, "D": 15}, "code": "  ΔΙΑΒΑΣΕ τιμή, π\n  μεΦΠΑ ← Α_Μ(τιμή * (1 + ΦΠΑ) * 100 + 0.5) / 100\n  έκπτωση ← Α_Μ(μεΦΠΑ * π / 100 * 100 + 0.5) / 100\n  τελική ← μεΦΠΑ - έκπτωση\n  ΓΡΑΨΕ μεΦΠΑ, έκπτωση, τελική", "a": "20.98", "q": "Το πρόγραμμα Black_Friday διαβάζει τιμή = 19.9 και π = 15. Ποια τιμή εμφανίζεται για την τελική;"}, {"v": {"P": 250, "D": 40}, "code": "  ΔΙΑΒΑΣΕ τιμή, π\n  μεΦΠΑ ← Α_Μ(τιμή * (1 + ΦΠΑ) * 100 + 0.5) / 100\n  έκπτωση ← Α_Μ(μεΦΠΑ * π / 100 * 100 + 0.5) / 100\n  τελική ← μεΦΠΑ - έκπτωση\n  ΓΡΑΨΕ μεΦΠΑ, έκπτωση, τελική", "a": "186", "q": "Το πρόγραμμα Black_Friday διαβάζει τιμή = 250 και π = 40. Ποια τιμή εμφανίζεται για την τελική;"}], "q": "Λυμένο 3 (Black Friday).", "see": ["#sol-3", "Λυμένο 3"]}, {"variants": [{"v": {"T": 4500, "C": 18000}, "code": "  ΔΙΑΒΑΣΕ θεατές, χωρητικότητα\n  πληρότητα ← θεατές / χωρητικότητα * 100\n  έσοδα ← θεατές * ΕΙΣΙΤΗΡΙΟ\n  γεμάτο ← θεατές = χωρητικότητα\n  ΓΡΑΨΕ πληρότητα, έσοδα, γεμάτο", "a": "25", "q": "Το πρόγραμμα Γήπεδο διαβάζει θεατές = 4500 και χωρητικότητα = 18000. Ποια τιμή εμφανίζεται για την πληρότητα;"}, {"v": {"T": 6000, "C": 8000}, "code": "  ΔΙΑΒΑΣΕ θεατές, χωρητικότητα\n  πληρότητα ← θεατές / χωρητικότητα * 100\n  έσοδα ← θεατές * ΕΙΣΙΤΗΡΙΟ\n  γεμάτο ← θεατές = χωρητικότητα\n  ΓΡΑΨΕ πληρότητα, έσοδα, γεμάτο", "a": "75", "q": "Το πρόγραμμα Γήπεδο διαβάζει θεατές = 6000 και χωρητικότητα = 8000. Ποια τιμή εμφανίζεται για την πληρότητα;"}, {"v": {"T": 300, "C": 1200}, "code": "  ΔΙΑΒΑΣΕ θεατές, χωρητικότητα\n  πληρότητα ← θεατές / χωρητικότητα * 100\n  έσοδα ← θεατές * ΕΙΣΙΤΗΡΙΟ\n  γεμάτο ← θεατές = χωρητικότητα\n  ΓΡΑΨΕ πληρότητα, έσοδα, γεμάτο", "a": "25", "q": "Το πρόγραμμα Γήπεδο διαβάζει θεατές = 300 και χωρητικότητα = 1200. Ποια τιμή εμφανίζεται για την πληρότητα;"}, {"v": {"T": 7200, "C": 9000}, "code": "  ΔΙΑΒΑΣΕ θεατές, χωρητικότητα\n  πληρότητα ← θεατές / χωρητικότητα * 100\n  έσοδα ← θεατές * ΕΙΣΙΤΗΡΙΟ\n  γεμάτο ← θεατές = χωρητικότητα\n  ΓΡΑΨΕ πληρότητα, έσοδα, γεμάτο", "a": "80", "q": "Το πρόγραμμα Γήπεδο διαβάζει θεατές = 7200 και χωρητικότητα = 9000. Ποια τιμή εμφανίζεται για την πληρότητα;"}], "q": "Λυμένο 5 (γήπεδο).", "see": ["#sol-5", "Λυμένο 5"]}, {"variants": [{"v": {"A": 5, "B": 3}, "code": "  α ← 5\n  β ← α + 3\n  γ ← β / 4\n  α ← β - α\n  β ← β + α\n  ΓΡΑΨΕ β", "a": "11", "q": "Οι α, β είναι ΑΚΕΡΑΙΕΣ και η γ ΠΡΑΓΜΑΤΙΚΗ. Εκτελούνται οι εντολές: α ← 5, β ← α + 3, γ ← β / 4, α ← β - α, β ← β + α, ΓΡΑΨΕ β. Ποια τιμή εμφανίζεται;"}, {"v": {"A": 6, "B": 2}, "code": "  α ← 6\n  β ← α + 2\n  γ ← β / 4\n  α ← β - α\n  β ← β + α\n  ΓΡΑΨΕ β", "a": "10", "q": "Οι α, β είναι ΑΚΕΡΑΙΕΣ και η γ ΠΡΑΓΜΑΤΙΚΗ. Εκτελούνται οι εντολές: α ← 6, β ← α + 2, γ ← β / 4, α ← β - α, β ← β + α, ΓΡΑΨΕ β. Ποια τιμή εμφανίζεται;"}, {"v": {"A": 9, "B": 7}, "code": "  α ← 9\n  β ← α + 7\n  γ ← β / 4\n  α ← β - α\n  β ← β + α\n  ΓΡΑΨΕ β", "a": "23", "q": "Οι α, β είναι ΑΚΕΡΑΙΕΣ και η γ ΠΡΑΓΜΑΤΙΚΗ. Εκτελούνται οι εντολές: α ← 9, β ← α + 7, γ ← β / 4, α ← β - α, β ← β + α, ΓΡΑΨΕ β. Ποια τιμή εμφανίζεται;"}, {"v": {"A": 4, "B": 8}, "code": "  α ← 4\n  β ← α + 8\n  γ ← β / 4\n  α ← β - α\n  β ← β + α\n  ΓΡΑΨΕ β", "a": "20", "q": "Οι α, β είναι ΑΚΕΡΑΙΕΣ και η γ ΠΡΑΓΜΑΤΙΚΗ. Εκτελούνται οι εντολές: α ← 4, β ← α + 8, γ ← β / 4, α ← β - α, β ← β + α, ΓΡΑΨΕ β. Ποια τιμή εμφανίζεται;"}], "q": "Πίνακας τιμών (κουτιά μνήμης).", "see": ["#s-7-4", "Μεταβλητές"]}], "tf_practiced": [{"s": "Το αλφάβητο της ΓΛΩΣΣΑΣ περιλαμβάνει μόνο τα γράμματα του ελληνικού αλφαβήτου, τα ψηφία και τους ειδικούς χαρακτήρες.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η τιμή '2026' είναι ακέραιου τύπου.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Ο αριθμός 5.0 είναι πραγματικού τύπου.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Ο λογικός τύπος δέχεται μόνο δύο τιμές: ΑΛΗΘΗΣ και ΨΕΥΔΗΣ.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η τιμή μιας συμβολικής σταθεράς μπορεί να αλλάξει με εντολή εκχώρησης.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Κατά την εκτέλεση του προγράμματος μπορεί να αλλάξει η τιμή μιας μεταβλητής, αλλά όχι ο τύπος της.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Το όνομα μιας μεταβλητής μπορεί να αρχίζει με ψηφίο.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Οι δεσμευμένες λέξεις μπορούν να χρησιμοποιηθούν ως ονόματα μεταβλητών.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Στο τμήμα δηλώσεων, οι σταθερές δηλώνονται πριν από τις μεταβλητές.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Όταν μια γραμμή ξεκινά με τον χαρακτήρα &, η γραμμή είναι σχόλιο.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}], "title": "Αλφάβητο, τύποι, σταθερές, μεταβλητές"};
+  // Ρυθμίσεις: στην τελική εφαρμογή θα τις ορίζει ο καθηγητής.
+  var CONFIG = { cooldownMin: 5, timeLimitMin: 0, lockHomework: false, revealAnswers: false };
+  var KEY = 'synapsi.test.L' + BANK.lesson;
+  var $ = function(id){ return document.getElementById(id); };
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || { attempts: [] }; } catch(e){ return { attempts: [] }; } }
+  function save(st){ try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e){} }
+  var state = load();
+  function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function pick(a, n){ return shuffle(a || []).slice(0, Math.min(n, (a || []).length)); }
+  function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function code(txt){ var p = el('pre', 'code'); p.textContent = txt; return p; }
+  function fmt(x){ return (Math.round(x * 10) / 10).toFixed(1).replace('.', ','); }
+  function seeLink(see){ var a = el('a', '', see[1]); a.href = see[0]; return a; }
+  var LET = ['α', 'β', 'γ', 'δ', 'ε', 'στ'];
+  var running = false, items = [], timerId = null, tick = null;
+
+  // ---------- homework lock (parameter) ----------
+  function applyLock(){
+    var hw = document.querySelector('.hwsec');
+    if (!hw || !CONFIG.lockHomework) return;
+    var done = state.attempts.some(function(a){ return a.score != null; });
+    hw.querySelectorAll(':scope > .q, :scope > .exhead').forEach(function(q){ q.hidden = !done; });
+    var note = hw.querySelector('.hwlock');
+    if (!done && !note){ note = el('p', 'hwlock', 'Οι ασκήσεις για το σπίτι ανοίγουν μόλις κάνεις το Σύντομο Τεστ Μαθήματος.'); hw.appendChild(note); }
+    if (done && note) note.remove();
+  }
+
+  // ---------- «Η πρόοδός μου» ----------
+  function progress(){
+    $('pg-l').textContent = 'Μάθημα ' + BANK.lesson;
+    $('pg-t').textContent = BANK.title || '';
+    $('pg-cd').textContent = CONFIG.cooldownMin + ' λεπτά';
+    var done = state.attempts.filter(function(a){ return a.score != null; });
+    var box = $('t-stats'); box.innerHTML = '';
+    if (!done.length){
+      $('pg-score').textContent = '–';
+      $('pg-note').textContent = 'Δεν έχεις κάνει ακόμα το τεστ.';
+    } else {
+      var best = Math.max.apply(null, done.map(function(a){ return a.score; }));
+      var last = done[done.length - 1];
+      $('pg-score').textContent = fmt(last.score) + ' / 10';
+      $('pg-note').textContent = '';
+      [['Καλύτερη', fmt(best) + '/10'], ['Τελευταία', fmt(last.score) + '/10'], ['Προσπάθειες', String(state.attempts.length)]].forEach(function(r, i){
+        if (i) box.appendChild(el('span', 'sep', '|'));
+        box.append(r[0] + ': '); box.appendChild(el('b', '', r[1]));
+      });
+    }
+    chart(done);
+    var tb = $('pg-list'); tb.innerHTML = '';
+    $('pg-tab').parentNode.hidden = !state.attempts.length;
+    state.attempts.slice().reverse().forEach(function(a){
+      var d = new Date(a.start), tr = el('tr');
+      tr.appendChild(el('td', '', d.getDate() + '/' + (d.getMonth() + 1)));
+      tr.appendChild(el('td', '', d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes()));
+      if (a.score != null){ tr.appendChild(el('td', '', fmt(a.score) + '/10')); tr.appendChild(el('td', '', a.got + ' από ' + a.tot)); }
+      else { var td = el('td', 'na', 'δεν υποβλήθηκε'); td.colSpan = 2; tr.appendChild(td); }
+      tb.appendChild(tr);
+    });
+    $('pg-again').textContent = state.attempts.length ? 'Νέα προσπάθεια' : 'Έναρξη τεστ';
+  }
+  function chart(done){
+    var box = $('pg-chart'); box.innerHTML = ''; box.hidden = !done.length;
+    if (!done.length) return;
+    var W = 320, H = 160, L = 26, R = 14, T = 14, B = 26, NS = 'http://www.w3.org/2000/svg';
+    function mk(t, a, p){ var e = document.createElementNS(NS, t); for (var k in a) e.setAttribute(k, a[k]); (p || svg).appendChild(e); return e; }
+    var svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', 'Βαθμός ανά προσπάθεια: ' + done.map(function(a){ return fmt(a.score); }).join(', '));
+    var x = function(i){ return done.length === 1 ? L + (W - L - R) / 2 : L + i * (W - L - R) / (done.length - 1); };
+    var y = function(v){ return T + (10 - v) * (H - T - B) / 10; };
+    var g = mk('g', { 'class': 'grid' }), ax = mk('g', { 'class': 'ax' });
+    [0, 5].forEach(function(v){ mk('line', { x1: L, x2: W - R, y1: y(v), y2: y(v) }, g); var t = mk('text', { x: L - 6, y: y(v) + 4, 'text-anchor': 'end' }, ax); t.textContent = v; });
+    mk('line', { 'class': 'goal', x1: L, x2: W - R, y1: y(10), y2: y(10) });
+    var gt = mk('text', { 'class': 'goalt', x: L - 6, y: y(10) + 4, 'text-anchor': 'end' }); gt.textContent = '10';
+    var prevDay = '', lastX = -99;
+    done.forEach(function(a, i){
+      var d = new Date(a.start), day = d.getDate() + '/' + (d.getMonth() + 1);
+      if (day === prevDay || x(i) - lastX < 34) return;
+      prevDay = day; lastX = x(i);
+      var t = mk('text', { x: x(i), y: H - 8, 'text-anchor': 'middle' }, ax); t.textContent = day;
+    });
+    if (done.length > 1) mk('polyline', { 'class': 'ln', points: done.map(function(a, i){ return x(i) + ',' + y(a.score); }).join(' ') });
+    done.forEach(function(a, i){
+      mk('circle', { 'class': 'pt', cx: x(i), cy: y(a.score), r: 4.5 });
+      var h = mk('circle', { 'class': 'hit', cx: x(i), cy: y(a.score), r: 14, tabindex: 0 });
+      var d = new Date(a.start), txt = d.getDate() + '/' + (d.getMonth() + 1) + ', ' + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes() + ': ' + fmt(a.score) + '/10 (' + a.got + ' από ' + a.tot + ')';
+      var tt = document.createElementNS(NS, 'title'); tt.textContent = txt; h.appendChild(tt);
+    });
+    var la = done[done.length - 1], lt = mk('text', { 'class': 'lbl', x: x(done.length - 1), y: y(la.score) - 10, 'text-anchor': done.length === 1 ? 'middle' : 'end' }); lt.textContent = fmt(la.score);
+    box.appendChild(svg);
+  }
+  function lastCard(){
+    var done = state.attempts.filter(function(a){ return a.score != null; });
+    var c = $('t-last'); c.hidden = !done.length; if (!done.length) return;
+    var a = done[done.length - 1];
+    $('t-lastscore').textContent = fmt(a.score) + ' / 10';
+    $('t-lastnote').textContent = a.got + ' από ' + a.tot + ' μονάδες. ' + (a.score >= 10 ? 'Τέλεια!' : a.score >= 8 ? 'Πολύ καλά. Δες τα λάθη σου και ξαναδοκίμασε για το 10.' : 'Ξαναδιάβασε τις σημειώσεις και δοκίμασε πάλι.');
+  }
+  var QUOTES = [{"q": "Επανάληψις μήτηρ πάσης μαθήσεως.", "a": "Αρχαίο ρητό"}, {"q": "Είμαστε αυτό που κάνουμε κατ’ επανάληψη. Η αριστεία, λοιπόν, δεν είναι πράξη, αλλά συνήθεια.", "a": "Will Durant, πάνω σε ιδέα του Αριστοτέλη"}, {"q": "Η σταγόνα τρυπά την πέτρα.", "a": "Οβίδιος"}, {"q": "Η επανάληψη είναι ο πατέρας της μάθησης, η μητέρα της μνήμης και ο οδηγός της ολοκλήρωσης.", "a": "Zig Ziglar"}, {"q": "Η ικανότητα αποκτάται με την επανάληψη.", "a": "Shinichi Suzuki"}, {"q": "Δεν φοβάμαι αυτόν που έχει εξασκηθεί σε 10.000 κλοτσιές μία φορά, αλλά αυτόν που έχει εξασκηθεί σε μία κλοτσιά 10.000 φορές.", "a": "Bruce Lee"}, {"q": "Η εξάσκηση δεν σε κάνει τέλειο. Η τέλεια εξάσκηση σε κάνει τέλειο.", "a": "Vince Lombardi"}, {"q": "Η μεγαλύτερη δόξα μας δεν είναι ότι δεν πέφτουμε ποτέ, αλλά ότι σηκωνόμαστε κάθε φορά που πέφτουμε.", "a": "Αποδίδεται στον Κομφούκιο"}, {"q": "Δεν έχει σημασία πόσο αργά πηγαίνεις, αρκεί να μη σταματήσεις.", "a": "Αποδίδεται στον Κομφούκιο"}, {"q": "Δοκίμασε ξανά. Απότυχε ξανά. Απότυχε καλύτερα.", "a": "Samuel Beckett"}, {"q": "Μην υποχωρείς ποτέ, ποτέ, ποτέ.", "a": "Winston Churchill"}, {"q": "Δεν είναι ότι είμαι τόσο έξυπνος. Απλώς μένω με τα προβλήματα περισσότερο.", "a": "Αποδίδεται στον Albert Einstein"}, {"q": "Η ενέργεια και η επιμονή κατακτούν τα πάντα.", "a": "Benjamin Franklin"}, {"q": "Τα μεγάλα έργα δεν γίνονται με τη δύναμη, αλλά με την επιμονή.", "a": "Samuel Johnson"}, {"q": "Δεν απέτυχα. Απλώς βρήκα 10.000 τρόπους που δεν λειτουργούν.", "a": "Αποδίδεται στον Thomas Edison"}, {"q": "Χάνεις το 100% των βολών που δεν επιχειρείς.", "a": "Wayne Gretzky"}, {"q": "Έχω αποτύχει ξανά και ξανά και ξανά στη ζωή μου. Και γι’ αυτό πετυχαίνω.", "a": "Michael Jordan"}, {"q": "Η αποτυχία είναι απλώς η ευκαιρία να ξεκινήσεις ξανά, αυτή τη φορά πιο έξυπνα.", "a": "Henry Ford"}, {"q": "Ένα ταξίδι χιλίων μιλίων αρχίζει με ένα βήμα.", "a": "Λάο Τσε"}, {"q": "Αν δεν μπορείς να πετάξεις, τρέξε. Αν δεν μπορείς να τρέξεις, περπάτα. Αν δεν μπορείς να περπατήσεις, σύρσου. Ό,τι κι αν κάνεις, συνέχισε να προχωράς μπροστά.", "a": "Martin Luther King Jr."}, {"q": "Η επιτυχία είναι το άθροισμα μικρών προσπαθειών που επαναλαμβάνονται μέρα με τη μέρα.", "a": "Robert Collier"}, {"q": "Το θάρρος δεν βρυχάται πάντα. Μερικές φορές είναι η ήσυχη φωνή στο τέλος της ημέρας που λέει: «Θα προσπαθήσω ξανά αύριο».", "a": "Mary Anne Radmacher"}, {"q": "Η θέληση για νίκη δεν είναι τίποτα χωρίς τη θέληση για προετοιμασία.", "a": "Juma Ikangaa"}, {"q": "Η υπομονή και η επιμονή έχουν μαγική δύναμη: μπροστά τους οι δυσκολίες εξαφανίζονται και τα εμπόδια χάνονται.", "a": "Αποδίδεται στον John Quincy Adams"}];
+  function quote(){
+    if (!QUOTES.length){ $('pg-quote').hidden = true; return; }
+    var k = Math.floor(Math.random() * QUOTES.length);
+    $('pg-q').textContent = '«' + QUOTES[k].q + '»'; $('pg-qa').textContent = QUOTES[k].a;
+  }
+  function showProgress(on){
+    $('progress').hidden = !on; document.body.classList.toggle('pg-open', on);
+    if (on){ progress(); quote(); refreshStart(); $('pg-close').focus(); }
+  }
+  $('pg-close').addEventListener('click', function(){ showProgress(false); if (location.hash === '#progress') location.hash = 's-test'; });
+  function route(){
+    var h = location.hash;
+    if (h === '#progress'){ showProgress(true); return; }
+    if (!$('progress').hidden) showProgress(false);
+    if (h === '#test-start'){
+      var sec = $('s-test'); if (sec) sec.scrollIntoView({ block: 'start' });
+      if (!running && nextAllowed() <= Date.now()) start();
+    }
+  }
+  window.addEventListener('hashchange', route);
+  $('pg-alllink').addEventListener('click', function(e){
+    if (/sinapsi\.gr$|github\.io$/.test(location.hostname)) return;
+    e.preventDefault(); $('pg-allnote').hidden = false;
+  });
+  $('pg-again').addEventListener('click', function(e){
+    e.preventDefault(); if ($('pg-again').classList.contains('off')) return;
+    if (location.hash === '#test-start') route(); else location.hash = 'test-start';
+  });
+
+  // ---------- start button and cooldown ----------
+  function nextAllowed(){
+    var a = state.attempts[state.attempts.length - 1];
+    if (!a) return 0;
+    return (a.end || a.start) + CONFIG.cooldownMin * 60000;
+  }
+  function refreshStart(){
+    var btn = $('t-start'), w = $('t-wait'), again = $('pg-again'), pw = $('pg-wait');
+    var left = nextAllowed() - Date.now();
+    var label = state.attempts.length ? 'Νέα προσπάθεια' : 'Έναρξη τεστ';
+    btn.textContent = label;
+    if (running){ btn.hidden = true; w.hidden = true; again.classList.add('off'); return; }
+    btn.hidden = false;
+    if (left > 0){
+      var m = Math.floor(left / 60000), s = Math.ceil(left % 60000 / 1000); if (s === 60){ m++; s = 0; }
+      var txt = 'Νέα προσπάθεια σε ' + m + ':' + (s < 10 ? '0' : '') + s + '. Στο μεταξύ ξαναδές τις κάρτες και τα λυμένα.';
+      btn.disabled = true; w.hidden = false; w.textContent = txt;
+      again.classList.add('off'); again.setAttribute('aria-disabled', 'true'); pw.hidden = false; pw.textContent = txt;
+      if (!tick) tick = setInterval(refreshStart, 1000);
+    } else {
+      btn.disabled = false; w.hidden = true;
+      again.classList.remove('off'); again.removeAttribute('aria-disabled'); pw.hidden = true;
+      if (tick){ clearInterval(tick); tick = null; }
+    }
+  }
+
+  // ---------- building a test ----------
+  function addPart(body, title, note){ var h = el('h3', 'tpart', title); if (note) h.appendChild(el('small', '', note)); body.appendChild(h); }
+  function choiceBlock(q, options, correct, two){
+    var wrap = el('div', 'topts' + (two ? ' two' : ''));
+    var it = { pts: 1, box: q, val: null, check: function(){
+      var ok = it.val === correct;
+      wrap.querySelectorAll('button').forEach(function(b, i){
+        if (i === it.val) b.classList.add(ok ? 'right' : 'wrong');
+        else if (i === correct && CONFIG.revealAnswers) b.classList.add('right');
+      });
+      return { got: ok ? 1 : 0, right: options[correct].text ? 'Σωστή απάντηση: ' + options[correct].text : 'Σωστή είναι η ' + options[correct].letter + '.' };
+    }, answered: function(){ return it.val != null; } };
+    options.forEach(function(o, i){
+      var b = el('button'); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+      if (o.letter) b.appendChild(el('span', 'ol', o.letter + '.'));
+      if (o.code) b.appendChild(code(o.code)); else b.appendChild(el('span', '', o.text));
+      b.addEventListener('click', function(){ if (!running) return; it.val = i; wrap.querySelectorAll('button').forEach(function(x){ x.classList.toggle('sel', x === b); x.setAttribute('aria-pressed', String(x === b)); }); });
+      wrap.appendChild(b);
+    });
+    q.appendChild(wrap);
+    return it;
+  }
+  function newQ(body, n, text){ var q = el('div', 'tq'); q.appendChild(el('span', 'tn', 'Ερώτηση ' + n)); if (text) q.appendChild(el('p', '', text)); body.appendChild(q); return q; }
+  function build(){
+    var D = BANK.draw, body = $('t-body'); body.innerHTML = ''; items = [];
+    var n = 0;
+    if (CONFIG.timeLimitMin > 0){ var tm = el('div', 'ttimer'); tm.id = 't-timer'; body.appendChild(tm); }
+    // Α. Σωστό ή Λάθος
+    var tf = shuffle(pick(BANK.tf_practiced, D.tf_practiced).concat(pick(BANK.tf_new, D.tf_new)));
+    if (tf.length){
+      addPart(body, 'Α. Σωστό ή Λάθος', tf.length + (tf.length === 1 ? ' μονάδα' : ' μονάδες'));
+      tf.forEach(function(t){
+        var q = newQ(body, ++n, t.s);
+        var it = choiceBlock(q, [{ text: 'Σωστό' }, { text: 'Λάθος' }], t.a === 'Σ' ? 0 : 1, true);
+        it.see = t.see; items.push(it);
+      });
+    }
+    // Β. Συμπλήρωση κενών
+    var fills = pick(BANK.fill, D.fill);
+    if (fills.length){
+      var blanks = fills.reduce(function(s, f){ return s + (f.t.match(/\[/g) || []).length; }, 0);
+      addPart(body, 'Β. Συμπλήρωση κενών', blanks + (blanks === 1 ? ' μονάδα' : ' μονάδες'));
+      fills.forEach(function(f){
+        var q = newQ(body, ++n, null); q.firstChild.textContent += ': διάλεξε τη σωστή λέξη σε κάθε κενό.';
+        var p = el('p', 'tfill'); var sels = [];
+        f.t.split(/(\[[^\]]+\])/).forEach(function(part){
+          if (part.charAt(0) !== '['){ p.append(part); return; }
+          var opts = part.slice(1, -1).split('|');
+          var s = el('select'); s.setAttribute('aria-label', 'Κενό');
+          var o0 = el('option', '', '…'); o0.value = ''; s.appendChild(o0);
+          shuffle(opts).forEach(function(o){ var x = el('option', '', o); x.value = o; s.appendChild(x); });
+          s._right = opts[0]; sels.push(s); p.appendChild(s);
+        });
+        q.appendChild(p);
+        items.push({ pts: sels.length, box: q, see: f.see, check: function(){
+          var g = 0, miss = [];
+          sels.forEach(function(s){ var ok = s.value === s._right; s.classList.add(ok ? 'right' : 'wrong'); s.disabled = true; if (ok) g++; else miss.push(s._right); });
+          return { got: g, right: 'Σωστά: ' + miss.join(', ') };
+        }, answered: function(){ return sels.every(function(s){ return s.value; }); } });
+      });
+    }
+    // Γ. Πολλαπλής επιλογής
+    var mcs = pick(BANK.mc, D.mc).concat(pick(BANK.mc_algo, D.mc_algo));
+    if (mcs.length){
+      addPart(body, 'Γ. Πολλαπλής επιλογής', mcs.length + (mcs.length === 1 ? ' μονάδα' : ' μονάδες'));
+      mcs.forEach(function(m){
+        var q = newQ(body, ++n, m.q);
+        var order = shuffle(m.opts.map(function(_, i){ return i; }));
+        var options = order.map(function(i, k){ return m.code ? { letter: LET[k], code: m.opts[i] } : { letter: LET[k], text: m.opts[i] }; });
+        var it = choiceBlock(q, options, order.indexOf(m.a));
+        it.see = m.see; it.why = m.why; items.push(it);
+      });
+    }
+    // Δ. Αντιστοίχιση
+    pick(BANK.match, D.match).forEach(function(m){
+      var rows = pick(m.items, D.match_items);
+      addPart(body, 'Δ. Αντιστοίχιση', rows.length + (rows.length === 1 ? ' μονάδα' : ' μονάδες'));
+      var q = newQ(body, ++n, m.q);
+      var sels = [];
+      rows.forEach(function(r){
+        var row = el('div', 'tmrow');
+        row.appendChild(m.code ? el('code', '', r[0]) : el('span', '', r[0]));
+        var s = el('select'); s.setAttribute('aria-label', 'Απάντηση');
+        var o0 = el('option', '', 'Διάλεξε…'); o0.value = ''; s.appendChild(o0);
+        m.opts.forEach(function(o){ var x = el('option', '', o); x.value = o; s.appendChild(x); });
+        s._right = r[1]; sels.push(s); row.appendChild(s); q.appendChild(row);
+      });
+      items.push({ pts: sels.length, box: q, see: m.see, check: function(){
+        var g = 0, miss = [];
+        sels.forEach(function(s, i){ var ok = s.value === s._right; s.classList.add(ok ? 'right' : 'wrong'); s.disabled = true; if (ok) g++; else miss.push((i + 1) + 'η: ' + s._right); });
+        return { got: g, right: 'Σωστά: ' + miss.join(', ') };
+      }, answered: function(){ return sels.every(function(s){ return s.value; }); } });
+    });
+    // Ε. Πίνακας τιμών
+    var nums = pick(BANK.num, D.num);
+    if (nums.length){
+      addPart(body, 'Ε. Πίνακας τιμών', nums.length + (nums.length === 1 ? ' μονάδα' : ' μονάδες'));
+      nums.forEach(function(x){
+        var v = x.variants[Math.floor(Math.random() * x.variants.length)];
+        var q = newQ(body, ++n, x.q);
+        q.appendChild(code(v.code)); q.appendChild(el('p', '', v.q));
+        var inp = el('input'); inp.type = 'text'; inp.setAttribute('inputmode', 'decimal'); inp.setAttribute('aria-label', 'Η απάντησή σου'); inp.autocomplete = 'off';
+        q.appendChild(inp);
+        items.push({ pts: 1, box: q, see: x.see, check: function(){
+          var a = inp.value.trim().replace(',', '.'), r = String(v.a);
+          var ok = a !== '' && (isFinite(a) && isFinite(r) ? Math.abs(parseFloat(a) - parseFloat(r)) < 1e-9 : a === r);
+          inp.classList.add(ok ? 'right' : 'wrong'); inp.disabled = true;
+          return { got: ok ? 1 : 0, right: 'Σωστή απάντηση: ' + r.replace('.', ',') };
+        }, answered: function(){ return inp.value.trim() !== ''; } });
+      });
+    }
+    var bar = el('div', 'tbar'); var sb = el('button', 'btn primary', 'Υποβολή'); sb.type = 'button'; sb.id = 't-submit';
+    var msg = el('span', 'tmsg'); bar.append(sb, msg); body.appendChild(bar);
+    var warned = false;
+    sb.addEventListener('click', function(){
+      var empty = items.filter(function(it){ return !it.answered(); }).length;
+      if (empty && !warned){ warned = true; msg.textContent = 'Έχεις ' + empty + (empty === 1 ? ' αναπάντητη ερώτηση' : ' αναπάντητες ερωτήσεις') + '. Πάτα ξανά «Υποβολή» για να τελειώσεις.'; return; }
+      finish();
+    });
+  }
+  function finish(){
+    if (!running) return;
+    running = false; if (timerId){ clearInterval(timerId); timerId = null; }
+    var got = 0, tot = 0;
+    items.forEach(function(it){
+      var r = it.check(); got += r.got; tot += it.pts;
+      var full = r.got === it.pts;
+      it.box.classList.add('done', full ? 'ok' : 'no');
+      var fb = el('p', 'tfb');
+      if (full) fb.textContent = '✓ Σωστά';
+      else {
+        fb.append((it.pts > 1 ? '✗ ' + r.got + ' από ' + it.pts + '. ' : '✗ Λάθος. ') + (CONFIG.revealAnswers ? r.right + ' ' : ''));
+        if (it.see){ fb.append('Ξαναδιάβασε: '); fb.appendChild(seeLink(it.see)); }
+        if (CONFIG.revealAnswers && it.why) fb.appendChild(el('span', 'why', it.why));
+      }
+      it.box.appendChild(fb);
+    });
+    var score = tot ? Math.round(got / tot * 100) / 10 : 0;
+    var a = state.attempts[state.attempts.length - 1]; a.end = Date.now(); a.score = score; a.got = got; a.tot = tot; save(state);
+    $('t-submit').parentNode.remove();
+    lastCard();
+    var tm = $('t-timer'); if (tm) tm.remove();
+    refreshStart(); applyLock();
+    $('t-last').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function start(){
+    if (running || nextAllowed() > Date.now()) return;
+    running = true;
+    state.attempts.push({ start: Date.now() }); save(state);
+    build(); $('t-body').hidden = false; refreshStart();
+    if (CONFIG.timeLimitMin > 0){
+      var endAt = Date.now() + CONFIG.timeLimitMin * 60000, t = $('t-timer');
+      var upd = function(){ var l = Math.max(0, endAt - Date.now()); var m = Math.floor(l / 60000), s = Math.floor(l % 60000 / 1000); t.textContent = '⏱ ' + m + ':' + (s < 10 ? '0' : '') + s; if (!l) finish(); };
+      upd(); timerId = setInterval(upd, 1000);
+    }
+    $('t-body').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  $('t-start').addEventListener('click', start);
+  lastCard(); refreshStart(); applyLock(); route();
 })();
 </script>
 <style id="kitcss">/*KIT>*//* ==== kit: θέμα, προβολή, «Δείξε λύση» ==== */

@@ -1,0 +1,1532 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Μάθημα 23 · Ταξινόμηση</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@500;700;800&amp;family=Noto+Sans:ital,wght@0,400;0,600;0,700;1,400&amp;display=swap" id="fonts" rel="stylesheet"/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=GFS+Didot&display=swap">
+<style>
+/* Layout: one A4-like sheet centred on a cool ground; coloured callouts by role (ορισμός, ήξερες ότι, παγίδα, παράδειγμα) */
+:root{
+  --ground:#e9edf4; --paper:#ffffff; --ink:#172036; --muted:#5a6377; --line:#d9dfea; --soft:#f3f5f9;
+  --blue:#2457d6; --blue-bg:#e9efff; --teal:#0b7f72; --teal-bg:#e2f4f1;
+  --amber:#a65400; --amber-bg:#fff3df; --amber-line:#e2ad62;
+  --coral:#b93b12; --coral-bg:#fcebe4; --violet:#6534c9; --violet-bg:#efe8fd;
+  --s-blue:#2457d6; --s-teal:#0b8174; --s-violet:#6534c9; --s-ink:#172036; --on-solid:#ffffff; --on-solid-2:#d8e1ff;
+  --hero:#172036; --hero-fg:#ffffff; --hero-sub:#c4cef0; --hero-kick:#a9bcff;
+  --mark:#ffe28a;
+  --display:"Commissioner","Noto Sans",system-ui,sans-serif;
+  --body:"Noto Sans",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --ground:#0c111b; --paper:#141a27; --ink:#e6eaf3; --muted:#9aa3b8; --line:#2a3347; --soft:#1a2131;
+  --blue:#8aa8ff; --blue-bg:#1a2547; --teal:#56d3c2; --teal-bg:#11302d;
+  --amber:#f0b25e; --amber-bg:#2c2315; --amber-line:#6d5328;
+  --coral:#ff9470; --coral-bg:#341f19; --violet:#b9a0ff; --violet-bg:#251e3f;
+  --s-blue:#3563e0; --s-teal:#118a7c; --s-violet:#7446d6; --s-ink:#e6eaf3; --on-solid:#ffffff; --on-solid-2:#dbe3ff;
+  --hero:#0a0f19; --hero-fg:#ffffff; --hero-sub:#b6c1e6; --hero-kick:#9fb4ff;
+  --mark:#6b5a12; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 40px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+p{margin:0 0 8px}
+
+/* Toolbar */
+#bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;max-width:860px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;
+  padding:10px 0;background:var(--ground)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:3px}
+.seg button,.btn{font:600 13px/1 var(--body);border:0;background:none;color:var(--muted);padding:8px 13px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.btn{border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid)}
+.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.spacer{flex:1}
+#status{font-size:12.5px;color:var(--muted)}
+.edit-only{display:none}
+body.editing .edit-only{display:inline-block}
+body.editing .view-only{display:none}
+body.editing #doc{outline:2px dashed var(--blue);outline-offset:6px}
+body.editing #doc [contenteditable="false"]{cursor:default}
+
+/* Sheet */
+#doc{max-width:860px;margin:0 auto;background:var(--paper);border-radius:14px;padding:clamp(18px,4vw,44px);box-shadow:0 1px 2px rgba(10,20,40,.06),0 8px 30px rgba(10,20,40,.06)}
+body.student .teacher{display:none}
+
+.hero{background:var(--hero);color:var(--hero-fg);border-radius:14px;padding:22px 24px 24px;position:relative;overflow:hidden}
+.hero .kicker{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--hero-kick);font-weight:700}
+.hero h1{font-size:clamp(28px,5vw,40px);font-weight:800;margin:6px 0 8px;letter-spacing:-.01em}
+.hero .sub{color:var(--hero-sub);max-width:34em}
+.hero .sub b{color:var(--hero-fg)}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.chip{font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px;background:rgba(255,255,255,.12);color:var(--hero-fg)}
+.hero .deco{position:absolute;right:-10px;top:-6px;opacity:.16;width:220px;height:auto}
+.hero .deco *{stroke:var(--hero-fg)}
+
+.goals{margin-top:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:6px 18px;padding:14px 18px;border:1.5px solid var(--line);border-radius:12px}
+.goals h3{grid-column:1/-1;font-size:13px;color:var(--blue);text-transform:uppercase;letter-spacing:.08em}
+.goals div{padding-left:20px;position:relative;font-size:14px}
+.goals div::before{content:"✓";position:absolute;left:0;color:var(--teal);font-weight:800}
+
+.glance{margin-top:14px;background:var(--soft);border-radius:12px;padding:14px 16px}
+.glance h3{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:8px}
+.figure{overflow-x:auto}
+.figure svg{display:block;width:100%;min-width:520px;height:auto;font-family:var(--body)}
+
+.sec{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:2px solid var(--ink);padding-bottom:5px;margin:30px 0 12px;break-after:avoid}
+.sec .num{font-family:var(--display);font-weight:800;font-size:22px;color:var(--blue);font-variant-numeric:tabular-nums}
+.sec h2{font-size:22px;font-weight:800}
+.sec .ref{margin-left:auto;font-size:12px;color:var(--muted);font-weight:600}
+
+.box{border-radius:10px;padding:12px 16px;margin:12px 0;break-inside:avoid}
+.tag{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.def{background:var(--blue-bg);border-left:4px solid var(--blue)} .def .tag{color:var(--blue)}
+.src{font-size:12px;color:var(--muted);margin:2px 0 0}
+.trivia{background:var(--amber-bg);border:1.5px dashed var(--amber-line)} .trivia .tag{color:var(--amber)}
+.talk{margin-top:6px;font-size:14px;color:var(--amber);font-weight:600}
+.talk span{font-weight:400}
+details.trivia>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px;margin:0}details.trivia>summary::-webkit-details-marker{display:none}details.trivia>summary::before{content:"▸";font-size:13px;letter-spacing:0}details.trivia[open]>summary::before{content:"▾"}details.trivia[open]>summary{margin-bottom:6px}details.trivia>summary:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:4px}.talkans{margin-top:6px;font-size:14px;border-top:1px dashed var(--amber-line);padding-top:6px}@media print{details.trivia>summary::before{display:none}}
+.trap{background:var(--coral-bg);border-left:4px solid var(--coral)} .trap .tag{color:var(--coral)}
+.ex{background:var(--teal-bg);border-left:4px solid var(--teal)} .ex .tag{color:var(--teal)}
+.plain{background:var(--soft)} .plain .tag{color:var(--ink)}
+.hl{background:linear-gradient(transparent 58%,var(--mark) 58%);padding:0 1px}
+.grid{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin:10px 0}
+.grid .box{margin:0}
+ul.tight{margin:4px 0 8px;padding-left:20px} ul.tight li{margin:3px 0}
+.small{font-size:13px;color:var(--muted)}
+.cap{font-size:13.5px;font-weight:700;margin-bottom:6px}
+
+.tablewrap{overflow-x:auto;margin:10px 0}
+table.t{width:100%;border-collapse:collapse;font-size:14px;min-width:480px}
+table.t th{background:var(--s-ink);color:var(--paper);text-align:left;padding:7px 10px;font-weight:600}
+table.t td{border-bottom:1px solid var(--line);padding:7px 10px;vertical-align:top}
+
+.exhead{display:flex;align-items:center;gap:10px;margin:22px 0 8px}
+.lvl{display:inline-flex;gap:4px}
+.lvl i{width:10px;height:10px;border-radius:50%;background:var(--line);display:block}
+.lvl i.on{background:var(--violet)}
+.exhead h3{font-size:17px}
+.q{margin:10px 0 14px;break-inside:avoid}
+.qn{display:inline-block;min-width:26px;height:26px;line-height:26px;text-align:center;border-radius:7px;background:var(--violet-bg);color:var(--violet);font-weight:800;font-size:13px;margin-right:8px}
+.theme{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-left:6px}
+table.tf{width:100%;border-collapse:collapse;margin-top:6px;font-size:14.5px}
+table.tf td{padding:6px 8px;border-bottom:1px solid var(--line)}
+table.tf td.b{width:70px;text-align:center;color:var(--muted)}
+.lines{height:var(--h,44px);background:repeating-linear-gradient(transparent 0 27px,var(--line) 27px 28px);margin-top:6px}
+.drawbox{height:180px;border:1.5px dashed var(--line);border-radius:10px;margin-top:8px}
+.indent{margin-left:34px}
+.sol{color:var(--teal);font-weight:700}
+.ans .q{margin:8px 0}
+.teacher .sec{border-color:var(--teal)} .teacher .sec .num{color:var(--teal)}
+
+/* SVG roles */
+.f-blue{fill:var(--s-blue)} .f-teal{fill:var(--s-teal)} .f-violet{fill:var(--s-violet)} .f-ink{fill:var(--s-ink)}
+.f-paper{fill:var(--paper)} .f-on{fill:var(--on-solid)} .f-on2{fill:var(--on-solid-2)} .f-text{fill:var(--ink)} .f-muted{fill:var(--muted)} .f-onink{fill:var(--paper)}
+.st-ink{stroke:var(--ink)} .st-blue{stroke:var(--blue)} .st-teal{stroke:var(--teal)} .st-violet{stroke:var(--violet)}
+.f-arrow{fill:var(--ink)}
+
+
+/* v2 additions: code, narrow flowcharts, legends */
+:root{--mono:ui-monospace,"Cascadia Mono","Consolas","DejaVu Sans Mono",monospace}
+pre.code{font-family:var(--mono);font-size:14px;line-height:1.55;background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:6px 0 8px;overflow-x:auto;white-space:pre}
+.figure.narrow svg{min-width:0;max-width:250px;margin:4px auto}
+.grid.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+ul.legend{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0 2px}
+ul.legend li{font-size:14px}
+ul.legend b{display:inline-block;min-width:22px;height:22px;line-height:22px;text-align:center;border-radius:6px;background:var(--violet-bg);color:var(--violet);margin-right:4px}
+
+
+/* v3 additions: solved examples step by step, blank value tables */
+.solved{border:1.5px solid var(--teal);background:var(--paper)} .solved .tag{color:var(--teal)}
+.steps{display:grid;gap:14px;margin-top:10px}
+.step{display:grid;grid-template-columns:30px minmax(0,1fr);gap:10px;align-items:start}
+.stepn{width:30px;height:30px;border-radius:50%;background:var(--s-teal);color:var(--on-solid);font:800 14px/30px var(--display);text-align:center}
+table.t.blank td{height:34px;border:1px solid var(--line)}
+
+/* v4: graphs */
+.figure.narrow.graph svg{max-width:380px}
+
+/* v5: toolbox subsections */
+h3.tool{font-size:17px;margin:24px 0 8px;padding-top:4px;border-top:1px solid var(--line)}
+
+/* homework vs self-check */
+.q.hw::before{content:"Για το σπίτι";display:block;width:max-content;font:700 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--amber);background:var(--amber-bg);border:1px solid var(--amber-line);border-radius:99px;padding:4px 9px;margin-bottom:6px}
+body.editing .q.hw::before{display:none}
+.hwtoggle{display:block;margin-bottom:6px;font:600 12px/1 var(--body);padding:6px 10px;border-radius:99px;border:1.5px dashed var(--line);background:var(--paper);color:var(--muted);cursor:pointer}
+.hwtoggle[aria-pressed="true"]{border-style:solid;border-color:var(--amber-line);color:var(--amber);background:var(--amber-bg)}
+.hwnote{font-size:13px;color:var(--amber);font-weight:600}
+
+@media (max-width:520px){ .indent{margin-left:0} .hero .deco{display:none} }
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* v4: math notation (fractions, roots) */
+.mx{font-family:"Cambria Math","STIX Two Math","Times New Roman",serif;font-size:1.06em}
+.frac{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 2px;line-height:1.25}
+.frac>span{padding:0 4px}
+.frac>span:first-child{border-bottom:1.3px solid currentColor}
+.rt{border-top:1.3px solid currentColor;padding:0 2px 0 1px;margin-left:1px}
+
+/* student additions */
+#doc{margin-top:0}
+#nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ground);max-width:860px;margin:0 auto;padding-block:10px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--ground)}
+.navin{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.navin::-webkit-scrollbar{display:none}
+#nav a{flex:none;font:600 13px/1 var(--body);color:var(--ink);text-decoration:none;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:9px 14px}
+#nav a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#nav a.navtest{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid,#fff)}
+.sec{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 64px)}
+.btn{font:600 14px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:10px 14px;border-radius:999px;cursor:pointer}
+.btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+.quiz{display:grid;gap:10px;margin-top:10px}
+.qi{border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:grid;gap:8px}
+.qi .qs{margin:0}
+.qb{display:flex;gap:8px;flex-wrap:wrap}
+.qb button{font:600 14px/1 var(--body);padding:10px 16px;border-radius:999px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;min-width:96px}
+.qb button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.qi.ok{border-color:var(--teal);background:var(--teal-bg)}
+.qi.no{border-color:var(--coral);background:var(--coral-bg)}
+.qi .qb button.pick{border-color:currentColor}
+.qi.ok .qb button.pick{background:var(--s-teal);border-color:var(--s-teal);color:var(--on-solid)}
+.qi.no .qb button.pick{background:var(--coral);border-color:var(--coral);color:var(--paper)}
+.qi.no .qb button.right{border-color:var(--teal);color:var(--teal)}
+.fb{font-size:13px;font-weight:700}
+.qwhy{margin:0;font-size:14px;line-height:1.5}
+.qi.ok .fb{color:var(--teal)} .qi.no .fb{color:var(--coral)}
+.score{font:700 15px/1.4 var(--display);padding:10px 14px;border-radius:10px;background:var(--violet-bg);color:var(--violet);display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.score .btn{font-size:13px;padding:8px 12px}
+
+details.reveal{margin-top:10px;border:1px solid var(--line);border-radius:10px;background:var(--soft)}
+details.reveal summary{cursor:pointer;font-weight:700;color:var(--teal);padding:10px 14px;list-style:none}
+details.reveal summary::-webkit-details-marker{display:none}
+details.reveal summary::before{content:"▸ ";}
+details.reveal[open] summary::before{content:"▾ ";}
+details.reveal .rv{padding:0 14px 12px}
+
+.deck{display:grid;gap:12px;margin-top:10px}
+.card{position:relative;display:block;width:100%;min-height:220px;border:0;padding:0;background:none;cursor:pointer;perspective:1200px;font:inherit;color:inherit;text-align:left}
+.card .face{position:absolute;inset:0;border-radius:14px;padding:20px 22px;display:flex;flex-direction:column;gap:10px;backface-visibility:hidden;transition:transform .45s ease}
+.card .front{background:var(--hero);color:var(--hero-fg);justify-content:center}
+.card .back{background:var(--blue-bg);color:var(--ink);border:1.5px solid var(--blue);transform:rotateY(180deg);overflow:auto}
+.card.flipped .front{transform:rotateY(-180deg)}
+.card.flipped .back{transform:rotateY(0)}
+.card:focus-visible{outline:2px solid var(--blue);outline-offset:3px;border-radius:14px}
+.ck{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;opacity:.75}
+.term{font:800 clamp(24px,6vw,34px)/1.15 var(--display)}
+.cdef{font-size:15.5px;line-height:1.55}
+.tap{font-size:12.5px;opacity:.7;margin-top:auto}
+.deckbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.count{font:700 14px var(--display);min-width:60px;text-align:center;font-variant-numeric:tabular-nums}
+@media (prefers-reduced-motion:reduce){.card .face{transition:none}}
+@media (max-width:520px){ #doc{border-radius:12px} .card{min-height:260px} }
+
+/* test */
+.btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid,#fff);font-size:15px;padding:12px 18px;text-decoration:none;display:inline-block}
+.btn.primary:disabled,.btn.primary.off{opacity:.45;cursor:not-allowed;pointer-events:none}
+.tstart{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.tlink{font:700 14px var(--body);color:var(--blue);text-decoration:underline;text-underline-offset:3px}
+.tlink:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.tstats{margin:0;font-size:14px;line-height:1.7}
+.tstats b{font-variant-numeric:tabular-nums;color:var(--ink)}
+.tstats .sep{color:var(--line);margin:0 8px}
+.tstats:empty{display:none}
+.tpart{margin:18px 0 6px;font:800 16px/1.3 var(--display)}
+.tpart small{font:600 12px var(--body);color:var(--muted);margin-left:6px}
+.tq{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:8px 0;display:grid;gap:8px;min-width:0}
+.tq>p{margin:0}
+.tq pre.code{margin:0;font-size:13px}
+.tq.ok{border-color:var(--teal);background:var(--teal-bg)}
+.tq.no{border-color:var(--coral);background:var(--coral-bg)}
+.tq .tn{font:700 12px var(--body);color:var(--muted)}
+.topts{display:grid;gap:6px}
+.topts button{font:500 14.5px/1.35 var(--body);text-align:left;padding:10px 12px;border-radius:10px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;display:flex;gap:8px;align-items:flex-start;min-width:0}
+.topts button .ol{font-weight:800;flex:none}
+.topts button pre.code{flex:1;min-width:0;background:none;border:0;padding:0;overflow-x:auto}
+.topts button.sel{border-color:var(--blue);background:var(--blue-bg)}
+.topts button:focus-visible,.tq select:focus-visible,.tq input:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.topts.two{grid-template-columns:1fr 1fr}
+.tq.done .topts button{cursor:default}
+.topts button.right{border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+.topts button.wrong{border-color:var(--coral);box-shadow:inset 0 0 0 1px var(--coral)}
+.tfill{line-height:2.1}
+.tq select{font:600 14px var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--blue);border-radius:8px;padding:4px 6px;max-width:100%}
+.tq select.right{border-color:var(--teal);background:var(--teal-bg)}
+.tq select.wrong{border-color:var(--coral);background:var(--coral-bg)}
+.tmrow{display:grid;gap:6px;padding:8px 0;border-top:1px dashed var(--line)}
+.tmrow:first-of-type{border-top:0}
+.tmrow code{white-space:normal}
+.tq input{font:600 16px var(--body);color:var(--ink);background:var(--paper);border:1.5px solid var(--blue);border-radius:8px;padding:8px 10px;width:9em;max-width:100%}
+.tq input.right{border-color:var(--teal)} .tq input.wrong{border-color:var(--coral)}
+.tfb{font-size:13.5px;font-weight:600;margin:0}
+.tq.ok .tfb{color:var(--teal)} .tq.no .tfb{color:var(--coral)}
+.tfb a{color:var(--ink);font-weight:700}
+.tfb .why{display:block;font-weight:400;color:var(--ink);margin-top:3px}
+.tbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:16px 0}
+.tmsg{font-size:13.5px;font-weight:600;color:var(--coral)}
+.tresult{border-radius:12px;padding:14px 16px;background:var(--blue-bg);border:0;border-left:4px solid var(--s-blue);display:grid;gap:6px;margin:12px 0}
+.tresult .big,.pgbig .big{font:800 26px/1.1 var(--display);color:var(--blue);font-variant-numeric:tabular-nums}
+.ttimer{position:sticky;top:calc(env(safe-area-inset-top,0px) + 58px);z-index:5;font:700 14px var(--display);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:6px 12px;width:max-content;margin-left:auto}
+/* homework header: the orange frame, once */
+.hwsec .sec{border:1.5px solid var(--amber-line);background:var(--amber-bg);border-radius:12px;padding:10px 14px;align-items:center}
+.hwsec .sec .num,.hwsec .sec h2{color:var(--amber)}
+.hwsec .sec .num{font-size:24px}
+.hwsec .q.hw::before{display:none}
+.hwlock{border:1.5px dashed var(--line);border-radius:10px;padding:12px 14px;color:var(--muted);font-weight:600}
+/* «Η πρόοδός μου» */
+.pg{position:fixed;inset:0;z-index:50;background:var(--ground);overflow-y:auto;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px calc(env(safe-area-inset-bottom,0px) + 84px)}
+.pgin{max-width:560px;margin:0 auto;display:grid;gap:14px}
+.pghead{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pghead h2{font:800 24px/1.2 var(--display);margin:0}
+.pgcard{background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;gap:10px}
+.pgcard p{margin:0}
+.pgl{font:700 12px var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pgt{font:800 18px/1.25 var(--display)}
+.pgbig{display:grid;gap:2px;background:var(--blue-bg);border-radius:10px;padding:10px 12px}
+.pgchart{position:relative}
+.pgchart svg{display:block;width:100%;height:auto;overflow:visible}
+.pgchart .grid line{stroke:var(--line);stroke-width:1}
+.pgchart .ax text{fill:var(--muted);font:600 11px var(--body)}
+.pgchart .ln{fill:none;stroke:var(--s-blue);stroke-width:2;stroke-linejoin:round;stroke-linecap:round}
+.pgchart .pt{fill:var(--s-blue);stroke:var(--paper);stroke-width:2}
+.pgchart .hit{fill:transparent;cursor:pointer;outline:none}
+.pgchart .hit:focus-visible{stroke:var(--blue);stroke-width:2}
+.pgchart .lbl{fill:var(--ink);font:700 12px var(--body)}
+.pgchart .goal{stroke:var(--teal);stroke-width:1.5;stroke-dasharray:4 4}
+.pgchart .goalt{fill:var(--teal);font:700 11px var(--body)}
+.pgtip{min-height:1.4em;margin:4px 0 0;font-size:13px;color:var(--muted)}
+.pgscroll{max-height:196px;overflow-y:auto;overscroll-behavior:contain;border:1px solid var(--line);border-radius:10px;padding:0 10px}
+.pgtab th{position:sticky;top:0;background:var(--paper);z-index:1}
+.pgtab{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+.pgtab th{text-align:left;font:700 12px var(--body);color:var(--muted);padding:8px 8px 6px 0;border-bottom:1px solid var(--line)}
+.pgtab td{padding:6px 8px 6px 0;border-bottom:1px dashed var(--line)}
+.pgtab tr:last-child td{border-bottom:0}
+.pgtab td.na{color:var(--muted)}
+#pg-h a{color:inherit;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:4px}
+#pg-h a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+body.pg-open #kitfloat{z-index:60}
+.pginfo{background:var(--soft);border-radius:12px;padding:12px 14px;display:grid;gap:8px;font-size:14.5px}
+.pginfo p{margin:0}
+.pgquote{margin:6px 0 0;padding:22px 20px 18px;text-align:center;position:relative;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.pgquote::before{content:"“";position:absolute;left:50%;top:-22px;transform:translateX(-50%);font:400 54px/1 "GFS Didot",Georgia,serif;color:var(--s-blue);background:var(--ground);padding:0 10px}
+.pgquote blockquote{margin:0;font:400 21px/1.45 "GFS Didot",Georgia,"Times New Roman",serif;color:var(--ink);text-wrap:balance}
+.pgquote figcaption{margin-top:10px;font:600 12px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.pgquote figcaption::before{content:"";display:inline-block;width:22px;height:1px;background:var(--muted);vertical-align:middle;margin-right:8px}
+body.pg-open{overflow:hidden}
+@media (max-width:520px){.topts.two{grid-template-columns:1fr}}
+.sos-av{float:right;width:72px;height:84px;border-radius:14px;background:center top/cover no-repeat;margin:0 0 8px 14px;border:2px solid #fff;box-shadow:0 1px 5px rgba(0,0,0,.2);shape-outside:margin-box}@media(max-width:560px){.sos-av{width:56px;height:65px;border-radius:11px;margin-left:10px}}@media print{.sos-av{display:none}}.sos-av.sa{background-image:url(av3.jpg)}.sos-av.sb{background-image:url(av6.jpg)}
+/* ΣΥΝΑΨΗ: χρώματα του site */
+:root{--ground:#F7F6F0;--ink:#2B3722;--muted:#5E6253;--line:#E1E1D7;--soft:#F3F2EA;--blue:#4F6230;--blue-bg:#EEF0E2;--s-blue:#4F6230;--s-ink:#2B3722;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D;--on-solid-2:#E6E0CC}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}}
+:root[data-theme="dark"]{--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}
+</style>
+<style id="synapsi-site">
+.syn-bar{max-width:860px;margin:0 auto;padding-top:12px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
+.syn-bar a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--hero);color:#fff;text-decoration:none}
+.syn-bar span{color:var(--muted)}
+.syn-foot{max-width:860px;margin:18px auto 0;display:flex;flex-direction:column;gap:12px}
+.syn-nav{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.syn-nav a,.syn-nav span{min-height:52px;padding:8px 14px;border-radius:12px;display:flex;flex-direction:column;justify-content:center;gap:2px;text-decoration:none;font:700 14px/1.3 var(--display);background:var(--paper);color:var(--ink);border:1px solid var(--line)}
+.syn-nav small{font:600 11.5px var(--body);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
+.syn-nav .next{text-align:right;background:var(--hero);color:#fff;border-color:var(--hero)}
+.syn-nav .next small{color:var(--hero-kick)}
+.syn-note{font-size:13px;color:var(--muted);padding:12px 14px;border-radius:10px;background:var(--soft)}
+.syn-copy{font-size:12px;color:var(--muted)}
+</style>
+<script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<div class="syn-bar"><a href="index.html">&#8592; Διαδρομή</a><span>Μάθημα 23 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-test" class="navtest">Σύντομο Τεστ</a><a href="#s-3-7">3.7</a><a href="#s-1">Η φυσαλίδα</a><a href="#s-2">Φυσαλίδα με σημαία</a><a href="#s-3">Παράλληλοι πίνακες</a><a href="#s-4">Ταξινόμηση με επιλογή</a><a href="#s-tools">Εργαλειοθήκη</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a><a href="#s-hw">Για το σπίτι</a></div></nav>
+<main id="doc" lang="el">
+<section class="hero">
+<svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
+<rect height="30" width="22" x="20" y="110"></rect><rect height="50" width="22" x="50" y="90"></rect><rect height="70" width="22" x="80" y="70"></rect><rect height="90" width="22" x="110" y="50"></rect><rect height="110" width="22" x="140" y="30"></rect>
+<circle cx="185" cy="40" r="8"></circle><circle cx="192" cy="70" r="5"></circle><circle cx="182" cy="95" r="3"></circle>
+</svg>
+<div class="kicker">Μέρος Δ · Δομές δεδομένων και πίνακες</div>
+<h1>Ταξινόμηση</h1>
+<p class="sub">Η δυαδική αναζήτηση του Μαθήματος 22 ήθελε ταξινομημένο πίνακα. Πώς τον ταξινομούμε; Με τη <b>φυσαλίδα</b> (ευθεία ανταλλαγή), που συγκρίνει γειτονικά στοιχεία και τα ανταλλάσσει, και με την <b>επιλογή</b>, που βρίσκει κάθε φορά το μικρότερο και το βάζει στη θέση του. Και, σχεδόν πάντα στις εξετάσεις, με παράλληλους πίνακες που πρέπει να «ακολουθούν».</p>
+<div class="chips"><span class="chip">Βιβλίο §3.7 · σελ. 65–67</span><span class="chip">Οδηγίες διδασκαλίας · ενότητα 25</span><span class="chip">Οδηγίες Μελέτης §4.3.1</span><span class="chip">4 διδακτικές ώρες</span></div>
+</section>
+<div class="goals">
+<h3>Στο τέλος του μαθήματος θα μπορείς να…</h3>
+<div>δίνεις τον ορισμό της <b>ταξινόμησης</b> και εξηγείς γιατί χρειάζεται</div>
+<div>εκτελείς με πίνακα τιμών την <b>ταξινόμηση ευθείας ανταλλαγής</b> (φυσαλίδας)</div>
+<div>γράφεις την ταξινόμηση σε ΓΛΩΣΣΑ, σε <b>αύξουσα</b> ή <b>φθίνουσα</b> σειρά, με ανταλλαγή μέσω βοηθητικής μεταβλητής</div>
+<div>ταξινομείς <b>παράλληλους πίνακες</b> και με <b>δύο κριτήρια</b></div>
+<div>βελτιώνεις τη φυσαλίδα με <b>σημαία</b> που σταματά όταν ο πίνακας ταξινομηθεί</div>
+<div>υλοποιείς την <b>ταξινόμηση με επιλογή</b> από την περιγραφή της</div>
+</div>
+<div class="glance">
+<h3>Όλο το μάθημα με μια ματιά: το παράδειγμα του βιβλίου (σχ. 3.7)</h3>
+<div class="figure">
+<svg aria-label="Ταξινόμηση φυσαλίδας: ο πίνακας μετά από κάθε πέρασμα" role="img" style="min-width:0" viewbox="0 0 564 376">
+<text class="f-muted" font-size="14" text-anchor="end" x="26" y="63">1</text>
+<text class="f-muted" font-size="14" text-anchor="end" x="26" y="97">2</text>
+<text class="f-muted" font-size="14" text-anchor="end" x="26" y="131">3</text>
+<text class="f-muted" font-size="14" text-anchor="end" x="26" y="165">4</text>
+<text class="f-muted" font-size="14" text-anchor="end" x="26" y="199">5</text>
+<text class="f-muted" font-size="14" text-anchor="end" x="26" y="233">6</text>
+<text class="f-muted" font-size="14" text-anchor="end" x="26" y="267">7</text>
+<text class="f-muted" font-size="14" text-anchor="end" x="26" y="301">8</text>
+<text class="f-muted" font-size="14" text-anchor="end" x="26" y="335">9</text>
+<text class="f-text" font-size="15" font-weight="700" text-anchor="middle" x="63.0" y="28">Αρχικά</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="37" y="40"></rect><text class="f-text" font-size="17" text-anchor="middle" x="63.0" y="62">52</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="37" y="74"></rect><text class="f-text" font-size="17" text-anchor="middle" x="63.0" y="96">12</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="37" y="108"></rect><text class="f-text" font-size="17" text-anchor="middle" x="63.0" y="130">71</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="37" y="142"></rect><text class="f-text" font-size="17" text-anchor="middle" x="63.0" y="164">56</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="37" y="176"></rect><text class="f-text" font-size="17" text-anchor="middle" x="63.0" y="198">5</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="37" y="210"></rect><text class="f-text" font-size="17" text-anchor="middle" x="63.0" y="232">10</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="37" y="244"></rect><text class="f-text" font-size="17" text-anchor="middle" x="63.0" y="266">19</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="37" y="278"></rect><text class="f-text" font-size="17" text-anchor="middle" x="63.0" y="300">90</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="37" y="312"></rect><text class="f-text" font-size="17" text-anchor="middle" x="63.0" y="334">45</text>
+<text class="f-text" font-size="15" font-weight="700" text-anchor="middle" x="121.0" y="28">i = 2</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="95" y="40"></rect><text class="f-on" font-size="17" text-anchor="middle" x="121.0" y="62">5</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="95" y="74"></rect><text class="f-text" font-size="17" text-anchor="middle" x="121.0" y="96">52</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="95" y="108"></rect><text class="f-text" font-size="17" text-anchor="middle" x="121.0" y="130">12</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="95" y="142"></rect><text class="f-text" font-size="17" text-anchor="middle" x="121.0" y="164">71</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="95" y="176"></rect><text class="f-text" font-size="17" text-anchor="middle" x="121.0" y="198">56</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="95" y="210"></rect><text class="f-text" font-size="17" text-anchor="middle" x="121.0" y="232">10</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="95" y="244"></rect><text class="f-text" font-size="17" text-anchor="middle" x="121.0" y="266">19</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="95" y="278"></rect><text class="f-text" font-size="17" text-anchor="middle" x="121.0" y="300">45</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="95" y="312"></rect><text class="f-text" font-size="17" text-anchor="middle" x="121.0" y="334">90</text>
+<text class="f-text" font-size="15" font-weight="700" text-anchor="middle" x="179.0" y="28">i = 3</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="153" y="40"></rect><text class="f-on" font-size="17" text-anchor="middle" x="179.0" y="62">5</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="153" y="74"></rect><text class="f-on" font-size="17" text-anchor="middle" x="179.0" y="96">10</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="153" y="108"></rect><text class="f-text" font-size="17" text-anchor="middle" x="179.0" y="130">52</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="153" y="142"></rect><text class="f-text" font-size="17" text-anchor="middle" x="179.0" y="164">12</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="153" y="176"></rect><text class="f-text" font-size="17" text-anchor="middle" x="179.0" y="198">71</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="153" y="210"></rect><text class="f-text" font-size="17" text-anchor="middle" x="179.0" y="232">56</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="153" y="244"></rect><text class="f-text" font-size="17" text-anchor="middle" x="179.0" y="266">19</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="153" y="278"></rect><text class="f-text" font-size="17" text-anchor="middle" x="179.0" y="300">45</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="153" y="312"></rect><text class="f-text" font-size="17" text-anchor="middle" x="179.0" y="334">90</text>
+<text class="f-text" font-size="15" font-weight="700" text-anchor="middle" x="237.0" y="28">i = 4</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="211" y="40"></rect><text class="f-on" font-size="17" text-anchor="middle" x="237.0" y="62">5</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="211" y="74"></rect><text class="f-on" font-size="17" text-anchor="middle" x="237.0" y="96">10</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="211" y="108"></rect><text class="f-on" font-size="17" text-anchor="middle" x="237.0" y="130">12</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="211" y="142"></rect><text class="f-text" font-size="17" text-anchor="middle" x="237.0" y="164">52</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="211" y="176"></rect><text class="f-text" font-size="17" text-anchor="middle" x="237.0" y="198">19</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="211" y="210"></rect><text class="f-text" font-size="17" text-anchor="middle" x="237.0" y="232">71</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="211" y="244"></rect><text class="f-text" font-size="17" text-anchor="middle" x="237.0" y="266">56</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="211" y="278"></rect><text class="f-text" font-size="17" text-anchor="middle" x="237.0" y="300">45</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="211" y="312"></rect><text class="f-text" font-size="17" text-anchor="middle" x="237.0" y="334">90</text>
+<text class="f-text" font-size="15" font-weight="700" text-anchor="middle" x="295.0" y="28">i = 5</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="269" y="40"></rect><text class="f-on" font-size="17" text-anchor="middle" x="295.0" y="62">5</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="269" y="74"></rect><text class="f-on" font-size="17" text-anchor="middle" x="295.0" y="96">10</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="269" y="108"></rect><text class="f-on" font-size="17" text-anchor="middle" x="295.0" y="130">12</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="269" y="142"></rect><text class="f-on" font-size="17" text-anchor="middle" x="295.0" y="164">19</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="269" y="176"></rect><text class="f-text" font-size="17" text-anchor="middle" x="295.0" y="198">52</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="269" y="210"></rect><text class="f-text" font-size="17" text-anchor="middle" x="295.0" y="232">45</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="269" y="244"></rect><text class="f-text" font-size="17" text-anchor="middle" x="295.0" y="266">71</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="269" y="278"></rect><text class="f-text" font-size="17" text-anchor="middle" x="295.0" y="300">56</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="269" y="312"></rect><text class="f-text" font-size="17" text-anchor="middle" x="295.0" y="334">90</text>
+<text class="f-text" font-size="15" font-weight="700" text-anchor="middle" x="353.0" y="28">i = 6</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="327" y="40"></rect><text class="f-on" font-size="17" text-anchor="middle" x="353.0" y="62">5</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="327" y="74"></rect><text class="f-on" font-size="17" text-anchor="middle" x="353.0" y="96">10</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="327" y="108"></rect><text class="f-on" font-size="17" text-anchor="middle" x="353.0" y="130">12</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="327" y="142"></rect><text class="f-on" font-size="17" text-anchor="middle" x="353.0" y="164">19</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="327" y="176"></rect><text class="f-on" font-size="17" text-anchor="middle" x="353.0" y="198">45</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="327" y="210"></rect><text class="f-text" font-size="17" text-anchor="middle" x="353.0" y="232">52</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="327" y="244"></rect><text class="f-text" font-size="17" text-anchor="middle" x="353.0" y="266">56</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="327" y="278"></rect><text class="f-text" font-size="17" text-anchor="middle" x="353.0" y="300">71</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="327" y="312"></rect><text class="f-text" font-size="17" text-anchor="middle" x="353.0" y="334">90</text>
+<text class="f-text" font-size="15" font-weight="700" text-anchor="middle" x="411.0" y="28">i = 7</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="385" y="40"></rect><text class="f-on" font-size="17" text-anchor="middle" x="411.0" y="62">5</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="385" y="74"></rect><text class="f-on" font-size="17" text-anchor="middle" x="411.0" y="96">10</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="385" y="108"></rect><text class="f-on" font-size="17" text-anchor="middle" x="411.0" y="130">12</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="385" y="142"></rect><text class="f-on" font-size="17" text-anchor="middle" x="411.0" y="164">19</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="385" y="176"></rect><text class="f-on" font-size="17" text-anchor="middle" x="411.0" y="198">45</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="385" y="210"></rect><text class="f-on" font-size="17" text-anchor="middle" x="411.0" y="232">52</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="385" y="244"></rect><text class="f-text" font-size="17" text-anchor="middle" x="411.0" y="266">56</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="385" y="278"></rect><text class="f-text" font-size="17" text-anchor="middle" x="411.0" y="300">71</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="385" y="312"></rect><text class="f-text" font-size="17" text-anchor="middle" x="411.0" y="334">90</text>
+<text class="f-text" font-size="15" font-weight="700" text-anchor="middle" x="469.0" y="28">i = 8</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="443" y="40"></rect><text class="f-on" font-size="17" text-anchor="middle" x="469.0" y="62">5</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="443" y="74"></rect><text class="f-on" font-size="17" text-anchor="middle" x="469.0" y="96">10</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="443" y="108"></rect><text class="f-on" font-size="17" text-anchor="middle" x="469.0" y="130">12</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="443" y="142"></rect><text class="f-on" font-size="17" text-anchor="middle" x="469.0" y="164">19</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="443" y="176"></rect><text class="f-on" font-size="17" text-anchor="middle" x="469.0" y="198">45</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="443" y="210"></rect><text class="f-on" font-size="17" text-anchor="middle" x="469.0" y="232">52</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="443" y="244"></rect><text class="f-on" font-size="17" text-anchor="middle" x="469.0" y="266">56</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="443" y="278"></rect><text class="f-text" font-size="17" text-anchor="middle" x="469.0" y="300">71</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="443" y="312"></rect><text class="f-text" font-size="17" text-anchor="middle" x="469.0" y="334">90</text>
+<text class="f-text" font-size="15" font-weight="700" text-anchor="middle" x="527.0" y="28">i = 9</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="501" y="40"></rect><text class="f-on" font-size="17" text-anchor="middle" x="527.0" y="62">5</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="501" y="74"></rect><text class="f-on" font-size="17" text-anchor="middle" x="527.0" y="96">10</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="501" y="108"></rect><text class="f-on" font-size="17" text-anchor="middle" x="527.0" y="130">12</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="501" y="142"></rect><text class="f-on" font-size="17" text-anchor="middle" x="527.0" y="164">19</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="501" y="176"></rect><text class="f-on" font-size="17" text-anchor="middle" x="527.0" y="198">45</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="501" y="210"></rect><text class="f-on" font-size="17" text-anchor="middle" x="527.0" y="232">52</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="501" y="244"></rect><text class="f-on" font-size="17" text-anchor="middle" x="527.0" y="266">56</text>
+<rect class="f-teal st-ink" height="30" stroke-width="1.3" width="52" x="501" y="278"></rect><text class="f-on" font-size="17" text-anchor="middle" x="527.0" y="300">71</text>
+<rect class="f-paper st-ink" height="30" stroke-width="1.3" width="52" x="501" y="312"></rect><text class="f-text" font-size="17" text-anchor="middle" x="527.0" y="334">90</text>
+<text class="f-muted" font-size="15" x="34" y="366">Χρωματιστό: το τμήμα που έχει ήδη ταξινομηθεί (θέσεις 1 έως i − 1).</text>
+</svg>
+</div>
+<p class="small">Κάθε στήλη δείχνει τον πίνακα μετά από ένα πέρασμα (μία τιμή του i). Σε κάθε πέρασμα το μικρότερο από τα αταξινόμητα «ανεβαίνει» σαν φυσαλίδα στη θέση <span class="nw">i − 1.</span> Από το <span class="nw">i = 6</span> και μετά ο πίνακας είναι ήδη ταξινομημένος, αλλά ο αλγόριθμος του βιβλίου συνεχίζει μέχρι το τέλος.</p>
+</div>
+<div class="sec" id="s-3-7"><span class="num">3.7</span><h2>Τι είναι ταξινόμηση</h2><span class="ref">Βιβλίο σελ. 65</span></div>
+<div class="box def"><span aria-hidden="true" class="sos-av sa"></span>
+<div class="tag">Από το βιβλίο · απομνημόνευση</div>
+<p>Η τακτοποίηση των κόμβων μίας δομής με μία ιδιαίτερη σειρά είναι μία πολύ σημαντική λειτουργία που ονομάζεται <b>ταξινόμηση</b> (sorting) ή <b>διάταξη</b> (ordering). Συνήθως η σειρά αυτή είναι η αύξουσα τάξη (ascending sequence) της τιμής των μεγεθών προς ταξινόμηση. […] Σκοπός της ταξινόμησης είναι να διευκολυνθεί στη συνέχεια η αναζήτηση των στοιχείων του ταξινομημένου πίνακα.</p>
+<p><b>Ορισμός.</b> Δοθέντων των στοιχείων a1, a2, ..., an η ταξινόμηση συνίσταται στη μετάθεση (permutation) της θέσης των στοιχείων, ώστε να τοποθετηθούν σε μία σειρά ak1, ak2, ..., akn έτσι ώστε, δοθείσης μίας συνάρτησης διάταξης (ordering function), f, να ισχύει: f(ak1) &lt;= f(ak2) &lt;= ... &lt;= f(akn).</p>
+<p>Η συνάρτηση διάταξης μπορεί να τροποποιηθεί ώστε να καλύπτει και την ταξινόμηση με <b>φθίνουσα</b> τάξη (descending sequence).</p>
+<p class="src">Σχολικό βιβλίο, §3.7 (το σύμβολο «μικρότερο ή ίσο» γραμμένο όπως στη ΓΛΩΣΣΑ)</p>
+</div>
+<p>Η χρησιμότητα, κατά το βιβλίο, φαίνεται «σε βιβλιοθηκονομικά συστήματα, λεξικά, τηλεφωνικούς καταλόγους, καταλόγους φόρου εισοδήματος και γενικά παντού όπου γίνεται αναζήτηση αποθηκευμένων αντικειμένων». Θυμήσου από το Μάθημα 19: στην ταξινόμηση πίνακα δεν μετακινούνται οι «θέσεις» αλλά αλλάζει το <b>περιεχόμενό</b> τους.</p>
+<div class="sec" id="s-1"><span class="num">○</span><h2>Η φυσαλίδα</h2><span class="ref">Βιβλίο σελ. 66–67</span></div>
+<div class="box def"><span aria-hidden="true" class="sos-av sb"></span>
+<div class="tag">Από το βιβλίο</div>
+<p>Η μέθοδος της ταξινόμησης <b>ευθείας ανταλλαγής</b> (straight exchange sort) βασίζεται στην αρχή της σύγκρισης και ανταλλαγής ζευγών γειτονικών στοιχείων, μέχρις ότου διαταχθούν όλα τα στοιχεία. Σύμφωνα με τη μέθοδο αυτή κάθε φορά γίνονται διαδοχικές προσπελάσεις στον πίνακα και μετακινείται το μικρότερο κλειδί της ακολουθίας προς το αριστερό άκρο του πίνακα. […] Η μέθοδος είναι γνωστή ως <b>ταξινόμηση φυσαλίδας</b> (bubblesort).</p>
+<p class="src">Σχολικό βιβλίο, §3.7</p>
+</div>
+<div class="grid g2" style="align-items:start">
+<div><p class="small" style="text-align:center"><b>Ο αλγόριθμος του βιβλίου</b></p>
+<pre class="code">Αλγόριθμος Φυσαλίδα
+Δεδομένα // table, n //
+Για i από 2 μέχρι n
+  Για j από n μέχρι i με_βήμα -1
+    Αν table[j - 1] &gt; table[j] τότε
+      αντιμετάθεσε table[j - 1], table[j]
+    Τέλος_αν
+  Τέλος_επανάληψης
+Τέλος_επανάληψης
+Αποτελέσματα // table //
+Τέλος Φυσαλίδα</pre>
+<p class="small">Το τρέξαμε με τα 9 κλειδιά 52, 12, 71, 56, 5, 10, 19, 90, 45: αποτέλεσμα 5, 10, 12, 19, 45, 52, 56, 71, 90.</p></div>
+<div class="box plain" style="margin:0"><div class="tag">Πώς διαβάζεται</div>
+<p><b>Ο εξωτερικός βρόχος (i από 2 μέχρι n)</b> μετρά τα περάσματα: <span class="nw">n − 1.</span> Μετά το πέρασμα i, οι θέσεις 1 έως <span class="nw">i − 1</span> έχουν τα <span class="nw">i − 1</span> μικρότερα στοιχεία, στη σωστή σειρά.</p>
+<p><b>Ο εσωτερικός βρόχος (j από n μέχρι i, προς τα πίσω)</b> συγκρίνει τα ζεύγη <span class="nw">(j − 1,</span> j) από το τέλος προς την αρχή. Σταματά στο i, γιατί πιο πάνω είναι το ταξινομημένο κομμάτι.</p>
+<p><b>Η σύγκριση</b> <code>table[j - 1] &gt; table[j]</code>: αν το πάνω είναι μεγαλύτερο, ανταλλάσσονται. Για φθίνουσα σειρά αλλάζει μόνο σε &lt;.</p>
+<p><b>Συγκρίσεις:</b> <span class="nw">(n − 1) + (n − 2)</span> + … + <span class="nw">1 = n · (n − 1) / 2,</span> όποιος κι αν είναι ο πίνακας. Για 9 στοιχεία, 36.</p></div>
+</div>
+<div class="box trap"><span aria-hidden="true" class="sos-av sa"></span>
+<div class="tag">Αντιμετάθεσε: μόνο στην ψευδογλώσσα</div>
+<p>Η εντολή «αντιμετάθεσε» υπάρχει στην ψευδογλώσσα του βιβλίου. Στη ΓΛΩΣΣΑ η ανταλλαγή γίνεται, όπως λέει και το βιβλίο, «με τη βοήθεια μίας βοηθητικής θέσης», με τρεις εντολές:</p>
+<pre class="code">temp ← table[j - 1]
+table[j - 1] ← table[j]
+table[j] ← temp</pre>
+<p>Με δύο εντολές χωρίς τη temp (<code>table[j - 1] ← table[j]</code> και <code>table[j] ← table[j - 1]</code>) η πρώτη τιμή χάνεται και τα δύο στοιχεία γίνονται ίσα (Άσκηση 10).</p>
+</div>
+<p>Το πρόγραμμα σε ΓΛΩΣΣΑ των Οδηγιών Μελέτης για 100 ακέραιους (Περίπτωση 1η):</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ταξινόμηση1
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Α[100], i, j, K
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 100
+    ΔΙΑΒΑΣΕ Α[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 100
+    ΓΙΑ j ΑΠΟ 100 ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1
+      ΑΝ Α[j - 1] &gt; Α[j] ΤΟΤΕ
+        K &lt;- Α[j - 1]
+        Α[j - 1] &lt;- Α[j]
+        Α[j] &lt;- K
+      ΤΕΛΟΣ_ΑΝ
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 100
+    ΓΡΑΨΕ Α[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ταξινόμηση1</pre>
+<p class="small">Δοκιμάστηκε με 100 τυχαίους ακέραιους: η έξοδος είναι σε αύξουσα σειρά. Για <b>φθίνουσα</b> σειρά «το μόνο που αλλάζει είναι η σύγκριση των στοιχείων του πίνακα», δηλαδή <code>ΑΝ Α[j - 1] &lt; Α[j] ΤΟΤΕ</code> (Οδηγίες Μελέτης).</p>
+<div class="sec" id="s-2"><span class="num">⚑</span><h2>Φυσαλίδα με σημαία</h2><span class="ref">Οδηγίες Μελέτης §4.3.1, Περίπτωση 2η</span></div>
+<p>Στο σχήμα, από το <span class="nw">i = 6</span> και μετά κανένα πέρασμα δεν άλλαξε τίποτα. Αν σε ένα πέρασμα δεν γίνει <b>καμία</b> ανταλλαγή, όλα τα γειτονικά ζεύγη είναι στη σωστή σειρά: ο πίνακας είναι ταξινομημένος και μπορούμε να σταματήσουμε. Αυτό κάνει η «καλύτερη και εξυπνότερη» εκδοχή των Οδηγιών Μελέτης, με μια σημαία, όπως η done της αναζήτησης:</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ταξινόμηση2
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Α[100], i, j, K
+  ΛΟΓΙΚΕΣ: Flag
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 100
+    ΔΙΑΒΑΣΕ Α[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  Flag &lt;- ΑΛΗΘΗΣ
+  i &lt;- 2
+  ΟΣΟ i &lt;= 100 ΚΑΙ Flag = ΑΛΗΘΗΣ ΕΠΑΝΑΛΑΒΕ
+    Flag &lt;- ΨΕΥΔΗΣ
+    ΓΙΑ j ΑΠΟ 100 ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1
+      ΑΝ Α[j - 1] &gt; Α[j] ΤΟΤΕ
+        K &lt;- Α[j - 1]
+        Α[j - 1] &lt;- Α[j]
+        Α[j] &lt;- K
+        Flag &lt;- ΑΛΗΘΗΣ
+      ΤΕΛΟΣ_ΑΝ
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+    i &lt;- i + 1
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 100
+    ΓΡΑΨΕ Α[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ταξινόμηση2</pre>
+<div class="grid g2" style="align-items:start">
+<div class="box plain" style="margin:0"><div class="tag">Πώς δουλεύει η Flag</div><p>Πριν από κάθε πέρασμα γίνεται ΨΕΥΔΗΣ («καμία ανταλλαγή ακόμα»). Μία ανταλλαγή αρκεί για να γίνει ΑΛΗΘΗΣ. Αν μείνει ΨΕΥΔΗΣ στο τέλος του περάσματος, το ΟΣΟ σταματά. Το i αυξάνεται «με το χέρι», αφού είναι ΟΣΟ και όχι ΓΙΑ.</p></div>
+<div class="box plain" style="margin:0"><div class="tag">Πόσο κερδίζουμε;</div><p>Ήδη ταξινομημένος πίνακας: <b>1</b> πέρασμα αντί για <span class="nw">n − 1.</span> Ανάποδος: κανένα κέρδος <span class="nw">(n − 1</span> περάσματα). Ένα μικρό στοιχείο στο τέλος «ανεβαίνει» μονομιάς (2 περάσματα). Ένα μεγάλο στην αρχή «κατεβαίνει» μία θέση ανά πέρασμα <span class="nw">(n − 1</span> περάσματα). Το βλέπουμε στο Λυμένο 3.</p></div>
+</div>
+<div class="sec" id="s-3"><span class="num">∥</span><h2>Παράλληλοι πίνακες</h2><span class="ref">Το πιο συχνό θέμα εξετάσεων</span></div>
+<p>Αν ταξινομήσουμε τους βαθμούς ΒΑΘ αλλά όχι τα ονόματα ΟΝ, κάθε βαθμός θα «ξεκολλήσει» από τον μαθητή του. Όταν ανταλλάσσονται δύο στοιχεία του πίνακα-κλειδιού, ανταλλάσσονται και τα αντίστοιχα στοιχεία <b>όλων</b> των παράλληλων πινάκων, με δική τους βοηθητική μεταβλητή, του σωστού τύπου:</p>
+<pre class="code">ΑΝ ΒΑΘ[j - 1] &lt; ΒΑΘ[j] ΤΟΤΕ
+  τβ ← ΒΑΘ[j - 1]
+  ΒΑΘ[j - 1] ← ΒΑΘ[j]
+  ΒΑΘ[j] ← τβ
+  το ← ΟΝ[j - 1]
+  ΟΝ[j - 1] ← ΟΝ[j]
+  ΟΝ[j] ← το
+ΤΕΛΟΣ_ΑΝ</pre>
+<p><b>Δύο κριτήρια</b> (π.χ. φθίνουσα κατά βαθμό και, σε ισοβαθμία, αλφαβητικά): η συνθήκη ανταλλαγής λέει πότε το ζεύγος είναι σε <b>λάθος</b> σειρά: <code>ΒΑΘ[j - 1] &lt; ΒΑΘ[j] Η (ΒΑΘ[j - 1] = ΒΑΘ[j] ΚΑΙ ΟΝ[j - 1] &gt; ΟΝ[j])</code> (Λυμένο 2).</p>
+<div class="sec" id="s-4"><span class="num">↧</span><h2>Ταξινόμηση με επιλογή</h2><span class="ref">Οδηγίες διδασκαλίας, ενότητα 25</span></div>
+<p>Οι οδηγίες ζητούν να επισημανθεί ότι υπάρχουν πολλοί αλγόριθμοι ταξινόμησης και να δοθούν κάποιοι «με μορφή ασκήσεων, στις οποίες περιγράφεται ο αλγόριθμος και ζητείται η υλοποίησή του σε πρόγραμμα». Πρώτος, η ταξινόμηση με επιλογή:</p>
+<div class="box def"><span aria-hidden="true" class="sos-av sb"></span>
+<div class="tag">Από τις οδηγίες διδασκαλίας</div>
+<p>Η ταξινόμηση με επιλογή (selection sort), αποτελεί βασικό τρόπο ταξινόμησης, που υλοποιείται σε έναν μονοδιάστατο πίνακα σε τρία βήματα:</p>
+<p>1. Επιλογή του ελάχιστου στοιχείου<br/>2. Ανταλλαγή του ελάχιστου με το πρώτο στοιχείο<br/>3. Επανάληψη των βημάτων 1 και 2 για τα υπόλοιπα στοιχεία του πίνακα</p>
+<p class="src">Οδηγίες διδασκαλίας 2024–25, ενότητα 25</p>
+</div>
+<div class="grid g2" style="align-items:start">
+<div><p class="small" style="text-align:center"><b>Ο αλγόριθμος των οδηγιών</b></p>
+<pre class="code">Αλγόριθμος Selection_Sort
+Δεδομένα // table, n //
+Για i από 1 μέχρι n - 1
+  k ← i
+  x ← table[i]
+  Για j από i + 1 μέχρι n
+    Αν x &gt; table[j] τότε
+      k ← j
+      x ← table[j]
+    Τέλος_αν
+  Τέλος_επανάληψης
+  table[k] ← table[i]
+  table[i] ← x
+Τέλος_επανάληψης
+Αποτελέσματα // table //
+Τέλος Selection_Sort</pre></div>
+<div class="box plain" style="margin:0"><div class="tag">Πώς διαβάζεται</div>
+<p>Για κάθε θέση i: ο εσωτερικός βρόχος είναι το μοτίβο <b>ελάχιστο με θέση</b> (Α10 του Μαθήματος 20) στο κομμάτι i έως n: x είναι η τιμή, k η θέση.</p>
+<p>Οι δύο εντολές μετά τον βρόχο κάνουν την <b>ανταλλαγή</b>: το table[i] πάει εκεί που ήταν το ελάχιστο, και το ελάχιστο (που το κρατά η x) στη θέση i. Η x παίζει τον ρόλο της βοηθητικής μεταβλητής.</p>
+<p>Συγκρίσεις: πάλι <span class="nw">n · (n − 1) / 2.</span> Ανταλλαγές όμως το πολύ <b><span class="nw">n − 1</span></b>, μία ανά πέρασμα, ενώ η φυσαλίδα μπορεί να κάνει <span class="nw">n · (n − 1) / 2.</span></p>
+<p class="small">Τρέξαμε το παράδειγμα των οδηγιών 46, 55, 12, 42, 94, 18, 06, 67. Αποτέλεσμα: 6, 12, 18, 42, 46, 55, 67, 94 (Λυμένο 4).</p></div>
+</div>
+<p>Και το πρόγραμμα των οδηγιών, με «ένα τμήμα για το γέμισμα του πίνακα με στοιχεία και ένα τμήμα για την εκτύπωση του ταξινομημένου πίνακα»:</p>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Selection_Sort
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: A[20], k, x, i, j
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 20
+    ΓΡΑΨΕ 'Δώσε το ', i, ' στοιχείο του πίνακα'
+    ΔΙΑΒΑΣΕ A[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 19
+    k &lt;- i
+    x &lt;- A[i]
+    ΓΙΑ j ΑΠΟ i + 1 ΜΕΧΡΙ 20
+      ΑΝ x &gt; A[j] ΤΟΤΕ
+        k &lt;- j
+        x &lt;- A[j]
+      ΤΕΛΟΣ_ΑΝ
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+    A[k] &lt;- A[i]
+    A[i] &lt;- x
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ 'Εκτύπωση με ταξινομημένα τα στοιχεία'
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 20
+    ΓΡΑΨΕ A[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre>
+<div class="box def"><span aria-hidden="true" class="sos-av sa"></span>
+<div class="tag">Από το βιβλίο · στο περιθώριο</div>
+<p>«Για την ταξινόμηση δεδομένων έχουν εκπονηθεί πάρα πολλοί αλγόριθμοι. Άλλοι σχετικά απλοί αλγόριθμοι είναι η ταξινόμηση με επιλογή και η ταξινόμηση με παρεμβολή. Ο πιο γρήγορος αλγόριθμος ταξινόμησης είναι η "γρήγορη ταξινόμηση" (quicksort). Η ταξινόμηση φυσαλίδας είναι ο πιο απλός και ταυτόχρονα ο πιο αργός αλγόριθμος ταξινόμησης.»</p>
+<p class="src">Σχολικό βιβλίο, §3.7</p>
+</div>
+<p>Την <b>παρεμβολή</b> (insertion sort) τη δουλεύουμε στο Λυμένο 6: κάθε νέο στοιχείο «παρεμβάλλεται» στη σωστή θέση ανάμεσα στα ήδη ταξινομημένα, όπως τακτοποιούμε τα χαρτιά στο χέρι μας.</p>
+<div class="grid g2" style="align-items:start">
+<div class="box trivia" style="margin:0">
+<div class="tag">Ήξερες ότι;</div>
+<p>Το 2007, όταν ο Barack Obama, τότε υποψήφιος για την προεδρία των ΗΠΑ, επισκέφθηκε τη Google, ο διευθύνων σύμβουλος Eric Schmidt του έκανε στα αστεία μια ερώτηση από συνέντευξη πρόσληψης: «Ποιος είναι ο πιο αποδοτικός τρόπος να ταξινομήσεις ένα εκατομμύριο ακέραιους 32 bit;». Η απάντηση: «Νομίζω ότι η ταξινόμηση φυσαλίδας θα ήταν ο λάθος δρόμος».</p>
+<p class="small"><span class="ln"><b>1΄ συζήτηση:</b></span><span class="ln li">Πόσες συγκρίσεις θα έκανε η φυσαλίδα για ένα εκατομμύριο στοιχεία; (n</span><span class="ln li"><span class="nw">(n − 1) / 2</span>: περίπου μισό τρισεκατομμύριο.)</span></p>
+</div>
+<div class="box trivia" style="margin:0">
+<div class="tag">Ήξερες ότι;</div>
+<p>Τη «γρήγορη ταξινόμηση» (quicksort), που αναφέρει το βιβλίο, την επινόησε ο Βρετανός Tony Hoare στα τέλη της δεκαετίας του 1950, όταν δούλευε σε ένα πρόγραμμα αυτόματης μετάφρασης από τα ρωσικά στα αγγλικά: ήθελε να ταξινομεί τις λέξεις κάθε πρότασης, για να τις αναζητά πιο γρήγορα στο λεξικό, που ήταν αποθηκευμένο σε μαγνητική ταινία. Τη δημοσίευσε το 1961. Είναι «διαίρει και βασίλευε»: χωρίζει τον πίνακα σε «μικρά» και «μεγάλα» και ταξινομεί το καθένα χωριστά.</p>
+<p class="small"><b>1΄ συζήτηση:</b> Ταξινόμηση και αναζήτηση: γιατί ο Hoare ταξινομούσε πρώτα τις λέξεις, αντί να τις ψάχνει με τη σειρά που ήταν στην πρόταση;</p>
+</div>
+</div>
+<div class="sec" id="s-tools"><span class="num">⚙</span><h2>Η εργαλειοθήκη της ταξινόμησης</h2><span class="ref">Τ1–Τ7</span></div>
+<div class="tablewrap"><table class="t"><tbody>
+<tr><th>Μοτίβο</th><th>Σκελετός</th><th>Πρόσεξε</th></tr>
+<tr><td><b>Τ1.</b> Φυσαλίδα (αύξουσα)</td><td><span class="ln li"><code>ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ Ν</code></span><span class="ln li"><code>ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1</code></span><span class="ln li">ΑΝ <span class="nw">Α[j − 1] &gt; Α[j],</span> ανταλλαγή</span></td><td>ο εσωτερικός πάει <b>ανάποδα</b> και σταματά στο i</td></tr>
+<tr><td><b>Τ2.</b> Φθίνουσα</td><td>όπως Τ1, με <code>Α[j - 1] &lt; Α[j]</code></td><td>αλλάζει μόνο η σύγκριση</td></tr>
+<tr><td><b>Τ3.</b> Ανταλλαγή στη ΓΛΩΣΣΑ</td><td><span class="kvs"><span class="kv"><code>Κ ← Α[j - 1]</code></span><span class="kv"><code>Α[j - 1] ← Α[j]</code></span><span class="kv"><code>Α[j] ← Κ</code></span></span></td><td>η Κ ίδιου τύπου με τον πίνακα. «Αντιμετάθεσε» μόνο σε ψευδογλώσσα</td></tr>
+<tr><td><b>Τ4.</b> Παράλληλοι πίνακες</td><td>σύγκριση στον πίνακα-κλειδί, ανταλλαγή σε <b>όλους</b></td><td>μία βοηθητική ανά τύπο</td></tr>
+<tr><td><b>Τ5.</b> Δύο κριτήρια</td><td>ΑΝ (κύριο σε λάθος σειρά) Η (κύριο ίσο ΚΑΙ δευτερεύον σε λάθος σειρά)</td><td>παρενθέσεις γύρω από το ΚΑΙ</td></tr>
+<tr><td><b>Τ6.</b> Με σημαία</td><td><span class="ln cd"><code>ΟΣΟ i &lt;= Ν ΚΑΙ Flag = ΑΛΗΘΗΣ</code></span><span class="ln cd"><span class="nw">Flag ← ΨΕΥΔΗΣ</span> πριν από το πέρασμα</span><span class="ln cd">ΑΛΗΘΗΣ σε κάθε ανταλλαγή</span><span class="ln cd"><span class="nw">i ← i + 1</span></span></td><td>σταματά μόλις ένα πέρασμα δεν αλλάξει τίποτα</td></tr>
+<tr><td><b>Τ7.</b> Επιλογή</td><td><span class="ln cd">για i από 1 έως <span class="nw">Ν − 1</span>: ελάχιστο με θέση (x, k) στο i..Ν</span><span class="ln cd"><code>Α[k] ← Α[i]</code></span><span class="ln cd"><code>Α[i] ← x</code></span></td><td>μία ανταλλαγή ανά πέρασμα</td></tr>
+</tbody></table></div>
+<div class="box trap"><span aria-hidden="true" class="sos-av sb"></span>
+<div class="tag">Παγίδες που κοστίζουν μονάδες</div>
+<ul class="tight">
+<li>Ανταλλαγή χωρίς βοηθητική μεταβλητή: χάνεται μία τιμή.</li>
+<li>Εσωτερικός βρόχος <code>ΓΙΑ j ΑΠΟ i ΜΕΧΡΙ Ν</code> (προς τα εμπρός) με σύγκριση <span class="nw">Α[j − 1],</span> Α[j]: δεν ανεβάζει το μικρότερο στην αρχή.</li>
+<li>Εσωτερικός βρόχος μέχρι το 1 αντί για το i: ζητείται το Α[0] (εκτός ορίων).</li>
+<li>Ταξινόμηση μόνο του ενός από τους παράλληλους πίνακες: τα ονόματα «ξεκολλάνε» από τους βαθμούς.</li>
+<li>Βοηθητική μεταβλητή λάθος τύπου (π.χ. ακέραια για ονόματα).</li>
+<li>Ταξινόμηση πίνακα με <span class="nw">Ν &lt; μέγεθος</span> (μεταβλητό πλήθος): οι βρόχοι πάνε μέχρι το Ν, όχι μέχρι το μέγεθος της δήλωσης.</li>
+</ul>
+</div>
+<div class="box def"><span aria-hidden="true" class="sos-av sa"></span>
+<div class="tag">Σύνοψη</div>
+<p><b>Ταξινόμηση:</b> τακτοποίηση των στοιχείων σε αύξουσα (ή φθίνουσα) σειρά. Διευκολύνει την αναζήτηση.</p>
+<p><b>Φυσαλίδα (ευθεία ανταλλαγή):</b> σύγκριση και ανταλλαγή γειτονικών, από το τέλος προς την αρχή. Το μικρότερο ανεβαίνει σε κάθε πέρασμα. <span class="nw">N · (n − 1) / 2</span> συγκρίσεις.</p>
+<p><b>Με σημαία:</b> σταματά όταν ένα πέρασμα δεν κάνει καμία ανταλλαγή.</p>
+<p><b>Επιλογή:</b> το ελάχιστο του υπόλοιπου πίνακα στη θέση i. Μία ανταλλαγή ανά πέρασμα.</p>
+<p><b>Παράλληλοι πίνακες:</b> σύγκριση στο κλειδί, ανταλλαγή σε όλους.</p>
+</div>
+
+<section class="solved-wrap">
+<div class="sec" id="s-solved"><span class="num">✔</span><h2>Λυμένα παραδείγματα βήμα-βήμα</h2></div>
+<div class="box solved" id="sol-1">
+<div class="tag">Λυμένο 1 · Το πρώτο πέρασμα της φυσαλίδας, σύγκριση-σύγκριση</div>
+<p>Για τα 9 κλειδιά 52, 12, 71, 56, 5, 10, 19, 90, 45 να γίνει πίνακας τιμών του εσωτερικού βρόχου για <span class="nw">i = 2</span> και να εξηγηθεί γιατί στο τέλος του το 5 βρίσκεται στη θέση 1.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Για <span class="nw">i = 2</span> ο εσωτερικός βρόχος παίρνει τιμές <span class="nw">j = 9,</span> 8, …, 2: συγκρίνει τα ζεύγη (8, 9), (7, 8), …, (1, 2), από το τέλος προς την αρχή.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Για κάθε j: τα <span class="nw">table[j − 1],</span> table[j], αν <code>table[j - 1] &gt; table[j]</code>, και ο πίνακας μετά.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<div class="tablewrap"><table class="t"><tbody><tr><th>j</th><th><span class="nw">table[j − 1]</span></th><th>table[j]</th><th>&gt;</th><th>Πίνακας μετά</th></tr>
+<tr><td>9</td><td>90</td><td>45</td><td>Α</td><td>52, 12, 71, 56, 5, 10, 19, <b>45, 90</b></td></tr>
+<tr><td>8</td><td>19</td><td>45</td><td>Ψ</td><td>χωρίς αλλαγή</td></tr>
+<tr><td>7</td><td>10</td><td>19</td><td>Ψ</td><td>χωρίς αλλαγή</td></tr>
+<tr><td>6</td><td>5</td><td>10</td><td>Ψ</td><td>χωρίς αλλαγή</td></tr>
+<tr><td>5</td><td>56</td><td>5</td><td>Α</td><td>52, 12, 71, <b>5, 56</b>, 10, 19, 45, 90</td></tr>
+<tr><td>4</td><td>71</td><td>5</td><td>Α</td><td>52, 12, <b>5, 71</b>, 56, 10, 19, 45, 90</td></tr>
+<tr><td>3</td><td>12</td><td>5</td><td>Α</td><td>52, <b>5, 12</b>, 71, 56, 10, 19, 45, 90</td></tr>
+<tr><td>2</td><td>52</td><td>5</td><td>Α</td><td><b>5, 52</b>, 12, 71, 56, 10, 19, 45, 90</td></tr>
+</tbody></table></div></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> 8 συγκρίσεις, 5 ανταλλαγές. Μόλις ο βρόχος «συναντήσει» το 5 (στο <span class="nw">j = 6</span> είναι το μικρότερο του ζεύγους), το παίρνει μαζί του σε κάθε επόμενη ανταλλαγή μέχρι την κορυφή: αυτή είναι η φυσαλίδα. Το αποτέλεσμα είναι ακριβώς η στήλη «<span class="nw">i = 2</span>» του σχήματος.</div></div>
+</div>
+</div>
+<div class="box solved" id="sol-2">
+<div class="tag">Λυμένο 2 · Η κατάταξη του διαγωνισμού: παράλληλοι πίνακες και δύο κριτήρια</div>
+<p>Σε έναν μαθητικό διαγωνισμό διαγωνίζονται 8 μαθητές. Να γραφτεί πρόγραμμα που διαβάζει τα ονόματα και τους βαθμούς τους και εμφανίζει την κατάταξη: με φθίνουσα σειρά βαθμού και, σε ισοβαθμία, αλφαβητικά.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Ταξινόμηση με κλειδί τον βαθμό (φθίνουσα, Τ2) και δεύτερο κλειδί το όνομα (αύξουσα, Τ5). Τα ονόματα πρέπει να ακολουθούν τους βαθμούς (Τ4).</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Πότε το ζεύγος <span class="nw">(j − 1,</span> j) είναι σε λάθος σειρά; Όταν ο πάνω έχει <b>μικρότερο</b> βαθμό, ή <b>ίσο</b> βαθμό και όνομα που είναι αλφαβητικά <b>μετά</b>. Τότε ανταλλάσσουμε και τους δύο πίνακες, με τβ (πραγματική) και το (χαρακτήρες).</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Κατάταξη_διαγωνισμού
+ΣΤΑΘΕΡΕΣ
+  Ν = 8
+ΜΕΤΑΒΛΗΤΕΣ
+  ΧΑΡΑΚΤΗΡΕΣ: ΟΝ[Ν], το
+  ΠΡΑΓΜΑΤΙΚΕΣ: ΒΑΘ[Ν], τβ
+  ΑΚΕΡΑΙΕΣ: i, j
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΔΙΑΒΑΣΕ ΟΝ[i], ΒΑΘ[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ! φθίνουσα κατά βαθμό· σε ισοβαθμία, αλφαβητικά
+  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ Ν
+    ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1
+      ΑΝ ΒΑΘ[j - 1] &lt; ΒΑΘ[j] Η (ΒΑΘ[j - 1] = ΒΑΘ[j] ΚΑΙ ΟΝ[j - 1] &gt; ΟΝ[j]) ΤΟΤΕ
+        τβ &lt;- ΒΑΘ[j - 1]
+        ΒΑΘ[j - 1] &lt;- ΒΑΘ[j]
+        ΒΑΘ[j] &lt;- τβ
+        το &lt;- ΟΝ[j - 1]
+        ΟΝ[j - 1] &lt;- ΟΝ[j]
+        ΟΝ[j] &lt;- το
+      ΤΕΛΟΣ_ΑΝ
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΓΡΑΨΕ i, ΟΝ[i], ΒΑΘ[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> Είσοδος Νίκος 17.5, Άννα 19, Ελένη 17.5, Βασίλης 12, Δανάη 19, Φώτης 8.5, Γιώργος 17.5, Ζωή 14. Κατάταξη:</span><span class="ln li">1 Άννα 19, 2 Δανάη 19</span><span class="ln li">3 Γιώργος 17.5, 4 Ελένη 17.5, 5 Νίκος 17.5</span><span class="ln li">6 Ζωή 14, 7 Βασίλης 12, 8 Φώτης 8.5</span><span class="ln">Οι τρεις με 17.5 βγαίνουν αλφαβητικά. Χωρίς τις παρενθέσεις γύρω από το ΚΑΙ η συνθήκη διαβάζεται ίδια (το ΚΑΙ υπολογίζεται πριν από το Η), αλλά τις γράφουμε για να είναι σαφής.</span></div></div>
+</div>
+</div>
+<div class="box solved" id="sol-3">
+<div class="tag">Λυμένο 3 · Πόσα περάσματα χρειάζονται πραγματικά;</div>
+<p>Να γραφτεί πρόγραμμα που ταξινομεί 10 ακέραιους με φυσαλίδα με σημαία (Τ6) και μετρά περάσματα, συγκρίσεις και ανταλλαγές. Να δοκιμαστεί με διάφορους πίνακες και να εξηγηθούν τα αποτελέσματα.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Το πρόγραμμα των Οδηγιών Μελέτης (Περίπτωση 2η) με τρεις μετρητές: ένα <span class="nw">πέρασμα = μία</span> εκτέλεση του σώματος του ΟΣΟ.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> περ αυξάνεται σε κάθε πέρασμα, συγκρ σε κάθε επανάληψη του εσωτερικού ΓΙΑ, ανταλ μέσα στο ΑΝ.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Πόσα_περάσματα
+ΣΤΑΘΕΡΕΣ
+  Ν = 10
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Α[Ν], i, j, K, περ, ανταλ, συγκρ
+  ΛΟΓΙΚΕΣ: Flag
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΔΙΑΒΑΣΕ Α[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  περ &lt;- 0
+  ανταλ &lt;- 0
+  συγκρ &lt;- 0
+  Flag &lt;- ΑΛΗΘΗΣ
+  i &lt;- 2
+  ΟΣΟ i &lt;= Ν ΚΑΙ Flag = ΑΛΗΘΗΣ ΕΠΑΝΑΛΑΒΕ
+    Flag &lt;- ΨΕΥΔΗΣ
+    περ &lt;- περ + 1
+    ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1
+      συγκρ &lt;- συγκρ + 1
+      ΑΝ Α[j - 1] &gt; Α[j] ΤΟΤΕ
+        K &lt;- Α[j - 1]
+        Α[j - 1] &lt;- Α[j]
+        Α[j] &lt;- K
+        Flag &lt;- ΑΛΗΘΗΣ
+        ανταλ &lt;- ανταλ + 1
+      ΤΕΛΟΣ_ΑΝ
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+    i &lt;- i + 1
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ 'Περάσματα:', περ, ' Συγκρίσεις:', συγκρ, ' Ανταλλαγές:', ανταλ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b>
+<div class="tablewrap"><table class="t"><tbody><tr><th>Πίνακας</th><th>Περάσματα</th><th>Συγκρίσεις</th><th>Ανταλλαγές</th></tr>
+<tr><td>1, 2, …, 10 (ταξινομημένος)</td><td>1</td><td>9</td><td>0</td></tr>
+<tr><td>3, 1, 2, 4, …, 10</td><td>3</td><td>24</td><td>2</td></tr>
+<tr><td>2, 3, …, 10, 1 (το 1 στο τέλος)</td><td>2</td><td>17</td><td>9</td></tr>
+<tr><td>10, 1, 2, …, 9 (το 10 στην αρχή)</td><td>9</td><td>45</td><td>9</td></tr>
+<tr><td>10, 9, …, 1 (ανάποδα)</td><td>9</td><td>45</td><td>45</td></tr>
+</tbody></table></div>
+Το μικρό στοιχείο στο τέλος «ανεβαίνει» ολόκληρο σε ένα πέρασμα. Χρειάζεται και ένα δεύτερο, χωρίς ανταλλαγές, για να «δει» ο αλγόριθμος ότι τελείωσε. Το μεγάλο στοιχείο στην αρχή «κατεβαίνει» μόνο μία θέση ανά πέρασμα: καμία οικονομία. Ο ανάποδος πίνακας είναι η χειρότερη περίπτωση: κάθε σύγκριση γίνεται ανταλλαγή.</div></div>
+</div>
+</div>
+<div class="box solved" id="sol-4">
+<div class="tag">Λυμένο 4 · Ταξινόμηση με επιλογή: το παράδειγμα των οδηγιών</div>
+<p>Να εκτελεστεί ο αλγόριθμος Selection_Sort για τον πίνακα 46, 55, 12, 42, 94, 18, 06, 67 <span class="nw">(n = 8),</span> γράφοντας για κάθε i τη θέση k και την τιμή x του ελάχιστου και τον πίνακα μετά την ανταλλαγή.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Για κάθε i από 1 έως 7: το ελάχιστο του κομματιού i..8 μπαίνει στη θέση i.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Για κάθε i βρίσκουμε (με το μάτι, ή με πίνακα τιμών του εσωτερικού βρόχου) το ελάχιστο και τη θέση του, και κάνουμε <code>table[k] ← table[i]</code>, <code>table[i] ← x</code>.</div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<div class="tablewrap"><table class="t"><tbody><tr><th>i</th><th>k</th><th>x</th><th>Πίνακας μετά</th></tr>
+<tr><td>1</td><td>7</td><td>6</td><td><b>6</b>, 55, 12, 42, 94, 18, 46, 67</td></tr>
+<tr><td>2</td><td>3</td><td>12</td><td>6, <b>12</b>, 55, 42, 94, 18, 46, 67</td></tr>
+<tr><td>3</td><td>6</td><td>18</td><td>6, 12, <b>18</b>, 42, 94, 55, 46, 67</td></tr>
+<tr><td>4</td><td>4</td><td>42</td><td>χωρίς αλλαγή <span class="nw">(k = i)</span></td></tr>
+<tr><td>5</td><td>7</td><td>46</td><td>6, 12, 18, 42, <b>46</b>, 55, 94, 67</td></tr>
+<tr><td>6</td><td>6</td><td>55</td><td>χωρίς αλλαγή</td></tr>
+<tr><td>7</td><td>8</td><td>67</td><td>6, 12, 18, 42, 46, 55, <b>67</b>, 94</td></tr>
+</tbody></table></div></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Αποτέλεσμα <b>6, 12, 18, 42, 46, 55, 67, 94</b> ✓ (ο διερμηνευτής δίνει το ίδιο). Όταν <span class="nw">k = i</span> οι δύο εντολές γράφουν το στοιχείο πάνω στον εαυτό του: δεν χαλάει τίποτα. Το 94, το τελευταίο, μπαίνει μόνο του στη θέση 8: γι' αυτό ο βρόχος πάει μέχρι <span class="nw">n − 1.</span></div></div>
+</div>
+</div>
+<div class="box solved" id="sol-5">
+<div class="tag">Λυμένο 5 · Μέση τιμή και διάμεσος</div>
+<p>Να γραφτεί πρόγραμμα που διαβάζει Ν πραγματικούς (1 έως 100) και εμφανίζει τη μέση τιμή, τη διάμεσο, το ελάχιστο και το μέγιστο. Διάμεσος είναι η τιμή για την οποία οι μισοί αριθμοί είναι μικρότεροι και οι άλλοι μισοί μεγαλύτεροι: αν το πλήθος είναι περιττό, ο μεσαίος. Αν είναι άρτιο, το ημιάθροισμα των δύο μεσαίων.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Η διάμεσος θέλει τους αριθμούς <b>ταξινομημένους</b>. Μετά, ελάχιστο και μέγιστο είναι δωρεάν: Χ[1] και Χ[Ν].</div></div>
+<div class="step"><span class="stepn">2</span><div><span class="ln li"><b>Αναλύω.</b> Α9 (μεταβλητό πλήθος)</span><span class="ln li">άθροισμα στην ανάγνωση</span><span class="ln li">φυσαλίδα <b>μέχρι το Ν</b> (όχι μέχρι το 100)</span><span class="ln li">αν Ν περιττό, μεσαίος στη θέση <span class="nw">Ν div 2 + 1.</span> Αν άρτιο, οι θέσεις <span class="nw">Ν div 2</span> και <span class="nw">Ν div 2 + 1.</span></span></div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Διάμεσος
+ΜΕΤΑΒΛΗΤΕΣ
+  ΠΡΑΓΜΑΤΙΚΕΣ: Χ[100], σ, Κ, μο, δμ
+  ΑΚΕΡΑΙΕΣ: Ν, i, j
+ΑΡΧΗ
+  ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ
+    ΓΡΑΨΕ 'Πλήθος (1-100):'
+    ΔΙΑΒΑΣΕ Ν
+  ΜΕΧΡΙΣ_ΟΤΟΥ Ν &gt;= 1 ΚΑΙ Ν &lt;= 100
+  σ &lt;- 0
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΔΙΑΒΑΣΕ Χ[i]
+    σ &lt;- σ + Χ[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  μο &lt;- σ / Ν
+  ! ταξινόμηση ευθείας ανταλλαγής για τα Ν πρώτα στοιχεία
+  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ Ν
+    ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1
+      ΑΝ Χ[j - 1] &gt; Χ[j] ΤΟΤΕ
+        Κ &lt;- Χ[j - 1]
+        Χ[j - 1] &lt;- Χ[j]
+        Χ[j] &lt;- Κ
+      ΤΕΛΟΣ_ΑΝ
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΑΝ Ν mod 2 = 1 ΤΟΤΕ
+    δμ &lt;- Χ[Ν div 2 + 1]
+  ΑΛΛΙΩΣ
+    δμ &lt;- (Χ[Ν div 2] + Χ[Ν div 2 + 1]) / 2
+  ΤΕΛΟΣ_ΑΝ
+  ΓΡΑΨΕ 'Μέση τιμή:', μο, ' Διάμεσος:', δμ
+  ΓΡΑΨΕ 'Ελάχιστο:', Χ[1], ' Μέγιστο:', Χ[Ν]
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> Ν: 0 (απορρίπτεται), 7. Αριθμοί 12, 5, 9, 20, 7, 3, 15.</span><span class="ln li">Ταξινομημένοι: 3, 5, 7, <b>9</b>, 12, 15, 20.</span><span class="ln li">Μέση <span class="nw">71 / 7</span> ≈ <b>10.14</b>, διάμεσος <b>9</b> (θέση <span class="nw">7 div 2 + 1 = 4),</span> ελάχιστο 3, μέγιστο 20.</span><span class="ln"><span class="nw">Ν = 6</span> με 4, 8, 1, 9, 3, 7: ταξινομημένοι 1, 3, <b>4, 7</b>, 8, 9, διάμεσος <span class="nw">(4 + 7) / 2</span> = <b>5.5</b>. Η μέση τιμή υπολογίζεται πριν από την ταξινόμηση (δεν αλλάζει από αυτή).</span></div></div>
+</div>
+</div>
+<div class="box solved" id="sol-6">
+<div class="tag">Λυμένο 6 · Ταξινόμηση με παρεμβολή, από την περιγραφή</div>
+<p>Η ταξινόμηση με παρεμβολή (insertion sort), που αναφέρει το βιβλίο, δουλεύει όπως τακτοποιούμε τα χαρτιά της τράπουλας στο χέρι: τα στοιχεία <span class="nw">1..i − 1</span> είναι ήδη ταξινομημένα. Παίρνουμε το Α[i], μετακινούμε μία θέση δεξιά όσα από τα προηγούμενα είναι μεγαλύτερα από αυτό, και το βάζουμε στο κενό που μένει. Να υλοποιηθεί σε ΓΛΩΣΣΑ για 8 ακέραιους.</p>
+<div class="steps">
+<div class="step"><span class="stepn">1</span><div><b>Κατανοώ.</b> Η άσκηση είναι του τύπου που ζητούν οι οδηγίες: «περιγράφεται ο αλγόριθμος και ζητείται η υλοποίησή του». Το Α[1] μόνο του είναι ήδη «ταξινομημένο», άρα i από 2 έως 8.</div></div>
+<div class="step"><span class="stepn">2</span><div><b>Αναλύω.</b> Κρατάμε το Α[i] σε x (γιατί θα «πατηθεί» από τη μετακίνηση). Με j από <span class="nw">i − 1</span> προς τα πίσω: όσο <span class="nw">Α[j] &gt; x,</span> <span class="nw">Α[j + 1] ← Α[j].</span> Είναι σειριακή αναζήτηση της θέσης, με <b>σημαία</b> και όχι με <code>ΟΣΟ j &gt;= 1 ΚΑΙ Α[j] &gt; x</code>, που θα ζητούσε Α[0] (Μάθημα 21). Στο τέλος, <span class="nw">Α[j + 1] ← x.</span></div></div>
+<div class="step"><span class="stepn">3</span><div><b>Γράφω.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Παρεμβολή
+ΣΤΑΘΕΡΕΣ
+  Ν = 8
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Α[Ν], i, j, x
+  ΛΟΓΙΚΕΣ: θέση_βρέθηκε
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΔΙΑΒΑΣΕ Α[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ! τα Α[1..i-1] είναι ήδη ταξινομημένα· παρεμβάλλουμε το Α[i]
+  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ Ν
+    x &lt;- Α[i]
+    j &lt;- i - 1
+    θέση_βρέθηκε &lt;- ΨΕΥΔΗΣ
+    ΟΣΟ j &gt;= 1 ΚΑΙ θέση_βρέθηκε = ΨΕΥΔΗΣ ΕΠΑΝΑΛΑΒΕ
+      ΑΝ Α[j] &gt; x ΤΟΤΕ
+        ! μετακίνηση μία θέση δεξιά
+        Α[j + 1] &lt;- Α[j]
+        j &lt;- j - 1
+      ΑΛΛΙΩΣ
+        θέση_βρέθηκε &lt;- ΑΛΗΘΗΣ
+      ΤΕΛΟΣ_ΑΝ
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+    Α[j + 1] &lt;- x
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΓΡΑΨΕ Α[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre></div></div>
+<div class="step"><span class="stepn">4</span><div><b>Ελέγχω.</b> Το 46, 55, 12, 42, 94, 18, 6, 67 γίνεται <b>6, 12, 18, 42, 46, 55, 67, 94</b>. Για <span class="nw">i = 3</span> <span class="nw">(x = 12)</span>: το 55 και το 46 μετακινούνται δεξιά, το j γίνεται 0, ο βρόχος σταματά από το <code>j &gt;= 1</code> και το 12 μπαίνει στη θέση 1. Σε ήδη ταξινομημένο πίνακα κάθε στοιχείο μένει εκεί που είναι μετά από μία σύγκριση.</div></div>
+</div>
+</div>
+</section>
+
+<section class="cards" id="s-cards">
+<div class="sec"><span class="num">⟲</span><h2>Κάρτες επανάληψης</h2></div>
+<p class="small">Διάβασε τον όρο, πες τον ορισμό από μέσα σου και πάτα την κάρτα για να τον δεις.</p>
+<div class="deck">
+<button aria-live="polite" class="card" id="card" type="button">
+<span class="face front"><span class="ck">Όρος</span><span class="term" id="c-term"></span><span class="tap">Πάτα για τον ορισμό</span></span>
+<span class="face back"><span class="ck">Ορισμός</span><span class="cdef" id="c-def"></span><span class="tap" id="c-ref"></span></span>
+</button>
+<div class="deckbar">
+<button aria-label="Προηγούμενη κάρτα" class="btn" id="c-prev" type="button">←</button>
+<span class="count" id="c-count"></span>
+<button aria-label="Επόμενη κάρτα" class="btn" id="c-next" type="button">→</button>
+<button class="btn" id="c-shuf" type="button">Ανακάτεμα</button>
+</div>
+</div>
+</section><section class="exercises">
+<div class="sec" id="s-ask"><span class="num">✎</span><h2>Ασκήσεις</h2></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div>
+<div class="q" id="q-1"><span class="qn">1</span><b>Σωστό ή Λάθος;</b> Πάτα την απάντησή σου.
+<div class="quiz" data-q="1"><div class="qi" data-ans="Σ" data-why="Η ταξινόμηση γίνεται για να βρίσκουμε πιο εύκολα τα δεδομένα."><p class="qs">α. Σκοπός της ταξινόμησης είναι να διευκολυνθεί η αναζήτηση.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Η ταξινόμηση γίνεται και σε φθίνουσα σειρά."><p class="qs">β. Η ταξινόμηση γίνεται μόνο σε αύξουσα σειρά.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Η φυσαλίδα συγκρίνει γειτονικά στοιχεία και τα ανταλλάσσει αν δεν είναι στη σειρά."><p class="qs">γ. Η ταξινόμηση ευθείας ανταλλαγής συγκρίνει και ανταλλάσσει γειτονικά στοιχεία.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Σε κάθε πέρασμα το μικρότερο ανεβαίνει στη θέση i − 1."><p class="qs">δ. Στον αλγόριθμο Φυσαλίδα της θεωρίας, σε κάθε πέρασμα το μεγαλύτερο στοιχείο μετακινείται στην πρώτη θέση.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Έτσι τη χαρακτηρίζει η θεωρία: η πιο απλή αλλά και η πιο αργή."><p class="qs">ε. Η ταξινόμηση φυσαλίδας είναι ο πιο απλός και ο πιο αργός αλγόριθμος ταξινόμησης.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Το «αντιμετάθεσε» υπάρχει μόνο στην ψευδογλώσσα. Στη ΓΛΩΣΣΑ γράφουμε ανταλλαγή με βοηθητική μεταβλητή."><p class="qs">στ. Η εντολή «αντιμετάθεσε» μπορεί να χρησιμοποιηθεί σε πρόγραμμα ΓΛΩΣΣΑΣ.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Οι δύο ΓΙΑ εκτελούνται πάντα πλήρως, άρα ίδιες συγκρίσεις σε κάθε περίπτωση."><p class="qs">ζ. Ο αλγόριθμος Φυσαλίδα της θεωρίας κάνει τον ίδιο αριθμό συγκρίσεων είτε ο πίνακας είναι ταξινομημένος είτε όχι.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Κατά τη θεωρία η quicksort είναι η πιο γρήγορη."><p class="qs">η. Ο πιο γρήγορος αλγόριθμος ταξινόμησης, κατά τη θεωρία, είναι η γρήγορη ταξινόμηση (quicksort).</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Βρίσκουμε το μικρότερο του υπόλοιπου πίνακα και κάνουμε μία ανταλλαγή."><p class="qs">θ. Στην ταξινόμηση με επιλογή γίνεται το πολύ μία ανταλλαγή σε κάθε πέρασμα.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Ο ίδιος αλγόριθμος δουλεύει, γιατί τα αλφαριθμητικά συγκρίνονται αλφαβητικά."><p class="qs">ι. Για να ταξινομηθούν αλφαριθμητικά δεδομένα χρειάζεται διαφορετικός αλγόριθμος από αυτόν των αριθμών.</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="score" hidden=""></div></div></div>
+
+<div class="q" id="q-3"><span class="qn">3</span><b>Πόσες συγκρίσεις;</b> Συμπλήρωσε για τον αλγόριθμο Φυσαλίδα της θεωρίας (χωρίς σημαία) και για την ταξινόμηση με επιλογή.
+<div class="tablewrap"><table class="t"><tbody><tr><th>n</th><th>Περάσματα</th><th>Συγκρίσεις</th><th>Μέγιστες ανταλλαγές φυσαλίδας</th><th>Μέγιστες ανταλλαγές επιλογής</th></tr>
+<tr><td>5</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>10</td><td></td><td></td><td></td><td></td></tr>
+<tr><td>100</td><td></td><td></td><td></td><td></td></tr>
+</tbody></table></div><p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><div class="tablewrap"><table class="t"><tbody><tr><th>n</th><th>Περάσματα</th><th>Συγκρίσεις</th><th>Ανταλλαγές φυσαλίδας</th><th>Ανταλλαγές επιλογής</th></tr>
+<tr><td>5</td><td>4</td><td>10</td><td>10</td><td>4</td></tr>
+<tr><td>10</td><td>9</td><td>45</td><td>45</td><td>9</td></tr>
+<tr><td>100</td><td>99</td><td>4950</td><td>4950</td><td>99</td></tr>
+</tbody></table></div></div></details></div>
+<div class="q" id="q-4"><span class="qn">4</span><b>Σωστό ή λάθος τμήμα;</b> Ο πίνακας Α[Ν] ακεραίων πρέπει να ταξινομηθεί σε αύξουσα σειρά. Κάθε τμήμα αλλάζει <b>ένα</b> σημείο της φυσαλίδας (Τ1, Τ3). Γράψε Σ αν ταξινομεί σωστά πάντα, Λ αν όχι, και για τα λάθος γράψε τι συμβαίνει.
+<div class="quiz" data-q="4"><div class="qi" data-ans="Σ" data-why="Ταξινομεί σωστά, αλλά συγκρίνει ξανά το ήδη ταξινομημένο κομμάτι."><p class="qs">α. ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ 2 ΜΕ_ΒΗΜΑ -1 (σε κάθε πέρασμα)</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Για j = 1 ζητείται το Α[0], έξω από τα όρια."><p class="qs">β. ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ 1 ΜΕ_ΒΗΜΑ -1</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Είναι το ίδιο με τη φυσαλίδα, με μετατοπισμένο i."><p class="qs">γ. ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν - 1 και ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ i + 1 ΜΕ_ΒΗΜΑ -1</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Χάνεται η τιμή του Α[j], γιατί δεν υπάρχει βοηθητική μεταβλητή."><p class="qs">δ. Η ανταλλαγή: Α[j] ← Α[j - 1] Α[j - 1] ← Α[j]</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Σωστή ανταλλαγή, απλώς με άλλη σειρά."><p class="qs">ε. Η ανταλλαγή: Κ ← Α[j] Α[j] ← Α[j - 1] Α[j - 1] ← Κ</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Σ" data-why="Ταξινομεί σωστά, με περιττές ανταλλαγές ίσων στοιχείων."><p class="qs">στ. ΑΝ Α[j - 1] &gt;= Α[j] ΤΟΤΕ (ανταλλαγή και στα ίσα)</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Ταξινομεί σε φθίνουσα σειρά."><p class="qs">ζ. ΑΝ Α[j - 1] &lt; Α[j] ΤΟΤΕ</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="qi" data-ans="Λ" data-why="Τα όρια του βρόχου του j εξαρτώνται από το i, που δεν έχει ακόμα τιμή."><p class="qs">η. Οι δύο ΓΙΑ ανταλλάσσουν σειρά (ο εσωτερικός γίνεται εξωτερικός).</p><div aria-label="Απάντηση" class="qb" role="group"><button data-v="Σ" type="button">Σωστό</button><button data-v="Λ" type="button">Λάθος</button></div></div><div class="score" hidden=""></div></div>
+<div class="lines" style="--h:84px"></div></div>
+<div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div>
+<div class="q" id="q-5"><span class="qn">5</span><b>Πέρασμα-πέρασμα.</b> Χωρίς υπολογιστή: τι εμφανίζει το πρόγραμμα; Γράψε τον πίνακα μετά από κάθε πέρασμα και πόσες ανταλλαγές έγιναν σε καθένα.
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Φυσαλίδα_5
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Α[5], i, j, Κ, αντ
+ΑΡΧΗ
+  Α[1] &lt;- 8
+  Α[2] &lt;- 3
+  Α[3] &lt;- 6
+  Α[4] &lt;- 1
+  Α[5] &lt;- 5
+  αντ &lt;- 0
+  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 5
+    ΓΙΑ j ΑΠΟ 5 ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1
+      ΑΝ Α[j - 1] &gt; Α[j] ΤΟΤΕ
+        Κ &lt;- Α[j - 1]
+        Α[j - 1] &lt;- Α[j]
+        Α[j] &lt;- Κ
+        αντ &lt;- αντ + 1
+      ΤΕΛΟΣ_ΑΝ
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+    ΓΡΑΨΕ 'i =', i, ':', Α[1], Α[2], Α[3], Α[4], Α[5]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΡΑΨΕ 'Ανταλλαγές:', αντ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre>
+<p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><p><span class="ln"><span class="nw">i = 2</span>:</span><span class="ln li"><b>1 8 3 6 5</b> (3 ανταλλαγές)</span><span class="ln li"><span class="nw">i = 3</span>: <b>1 3 8 5 6</b> (2)</span><span class="ln li"><span class="nw">i = 4</span>: <b>1 3 5 8 6</b> (1)</span><span class="ln li"><span class="nw">i = 5</span>: <b>1 3 5 6 8</b> (1)</span><span class="ln li"><b>Ανταλλαγές: 7</b>.</span></p></div></details></div>
+
+
+
+
+
+
+
+
+
+
+
+
+</section><section class="test" id="s-test">
+<div class="sec" id="s-test"><span class="num">◎</span><h2>Σύντομο Τεστ Μαθήματος</h2></div>
+<div class="tresult" hidden="" id="t-last">
+<span class="big" id="t-lastscore"></span>
+<span id="t-lastnote"></span>
+<a class="tlink" href="#progress" id="t-grade">Βαθμός κατανόησης</a>
+</div>
+<div class="tstart">
+<button class="btn primary" id="t-start" type="button">Έναρξη τεστ</button>
+</div>
+<p class="small" hidden="" id="t-wait"></p>
+<div hidden="" id="t-body"></div>
+</section><section class="exercises hwsec"><div class="sec" id="s-hw"><span class="num">✍</span><h2>Για το σπίτι</h2></div><div class="exhead"><span class="lvl"><i class="on"></i><i></i><i></i></span><h3>Επίπεδο 1 · Ξέρω τη θεωρία</h3></div><div class="q hw" id="q-2"><span class="qn">2</span><b>Θεωρία (Θέμα Α).</b>
+<p>α) Τι είναι ταξινόμηση; Πού είναι χρήσιμη;<br/>β) Να περιγράψετε τη μέθοδο της ταξινόμησης ευθείας ανταλλαγής. Γιατί ονομάζεται και ταξινόμηση φυσαλίδας;<br/>γ) Πώς γίνεται η αντιμετάθεση δύο στοιχείων χωρίς την εντολή «αντιμετάθεσε»;<br/>δ) Ποια τα τρία βήματα της ταξινόμησης με επιλογή;<br/>ε) Ποιους άλλους αλγόριθμους ταξινόμησης αναφέρει η θεωρία; Ποιος είναι ο πιο γρήγορος και ποιος ο πιο αργός;</p>
+</div><div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Το εφαρμόζω</h3></div><div class="q hw" id="q-6"><span class="qn">6</span><b>Το βάθρο.</b><span class="theme">Αθλητισμός</span>
+<p>Σε έναν αγώνα ενόργανης γυμναστικής 10 αθλητές παίρνουν βαθμό (πραγματικό). Να γραφτεί πρόγραμμα που διαβάζει τους βαθμούς, τους ταξινομεί σε φθίνουσα σειρά με φυσαλίδα και εμφανίζει όλους τους βαθμούς και τους τρεις του βάθρου. Έλεγχος: 9.6, 8.75, 9.8, 9.1, 8.9, 9.8, 7.5, 9.35, 8.6, 9.05.</p>
+</div><div class="q hw" id="q-7"><span class="qn">7</span><b>Αλφαβητικά.</b> Να γραφτεί πρόγραμμα που διαβάζει 6 επώνυμα και τα εμφανίζει σε αλφαβητική σειρά. Τι τύπου πρέπει να είναι η βοηθητική μεταβλητή; Έλεγχος: Παπαδόπουλος, Αντωνίου, Ζαχαρίου, Γεωργίου, Βασιλείου, Αλεξίου.
+</div><div class="q hw" id="q-8"><span class="qn">8</span><b>Επιλογή με το χέρι.</b> Να εκτελέσετε τον αλγόριθμο Selection_Sort για τον πίνακα 29, 10, 14, 37, 13 <span class="nw">(n = 5),</span> γράφοντας για κάθε i τα k, x και τον πίνακα μετά την ανταλλαγή. Σε ποια περάσματα η ανταλλαγή δεν αλλάζει τίποτα;
+</div><div class="q hw" id="q-9"><span class="ln li"><span class="qn">9</span><b>Η σημαία.</b> Για τη φυσαλίδα με σημαία (Τ6), πόσα περάσματα γίνονται για καθέναν από τους πίνακες <span class="nw">(n = 6)</span>: α) 1, 2, 3, 4, 5, 6</span><span class="ln li">β) 2, 1, 3, 4, 5, 6</span><span class="ln li">γ) 2, 3, 4, 5, 6, 1</span><span class="ln li">δ) 6, 1, 2, 3, 4, 5; Να εξηγήσετε τη διαφορά ανάμεσα στο γ και το δ.</span>
+</div><div class="q hw" id="q-10"><span class="qn">10</span><b>Βρες τα δύο λάθη.</b>
+<pre class="code">ΠΡΟΓΡΑΜΜΑ Ταξινόμηση_με_λάθη
+ΣΤΑΘΕΡΕΣ
+  Ν = 5
+ΜΕΤΑΒΛΗΤΕΣ
+  ΑΚΕΡΑΙΕΣ: Α[Ν], i, j
+ΑΡΧΗ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΔΙΑΒΑΣΕ Α[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ Ν
+    ΓΙΑ j ΑΠΟ i ΜΕΧΡΙ Ν
+      ΑΝ Α[j - 1] &gt; Α[j] ΤΟΤΕ
+        Α[j - 1] &lt;- Α[j]
+        Α[j] &lt;- Α[j - 1]
+      ΤΕΛΟΣ_ΑΝ
+    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν
+    ΓΡΑΨΕ Α[i]
+  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
+ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ</pre>
+<p><span class="ln">α) Να εκτελέσετε το πρόγραμμα με είσοδο 2, 3, 1, 5, 4. Τι εμφανίζει;</span><span class="ln">β) Ποια δύο λάθη υπάρχουν; Ποιο από τα δύο κάνει να «χάνονται» τιμές και ποιο να μη φτάνει το μικρότερο στην αρχή;</span><span class="ln">γ) Να τα διορθώσετε.</span></p>
+</div><div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i></span><h3>Επίπεδο 3 · Το λύνω μόνος</h3></div><div class="q hw" id="q-11"><span class="qn">11</span><b>Πρώτα ταξινομώ, μετά ψάχνω δυαδικά.</b> Δύο παράλληλοι πίνακες έχουν 8 αγγλικές λέξεις, με <b>οποιαδήποτε</b> σειρά, και τη μετάφρασή τους. Να γραφτεί πρόγραμμα που ταξινομεί τους πίνακες αλφαβητικά κατά την αγγλική λέξη και μετά απαντά σε επαναλαμβανόμενες αναζητήσεις με δυαδική αναζήτηση, μέχρι τη λέξη END (σύνδεση με το Μάθημα 22, Άσκηση 8).
+</div><div class="q hw" id="q-12"><span class="qn">12</span><b>Διάμεσος και επικρατούσα τιμή.</b> Να γραφτεί πρόγραμμα που διαβάζει τους βαθμούς (ακέραιους από 0 έως 20, με έλεγχο) 15 μαθητών, τους ταξινομεί και εμφανίζει τη διάμεσο και την <b>επικρατούσα τιμή</b> (τον βαθμό που εμφανίζεται τις περισσότερες φορές. Σε ισοπαλία, τον μικρότερο). Υπόδειξη: μετά την ταξινόμηση, οι ίσοι βαθμοί είναι διαδοχικοί. Έλεγχος: 14, 18, 12, 14, 9, 20, 14, 16, 12, 18, 14, 11, 12, 17, 15.
+</div><div class="q hw" id="q-13"><span class="qn">13</span><b>Ο τελικός των 100 μ. ελεύθερο.</b><span class="theme">Θέμα Γ</span>
+<p>Στον τελικό κολύμβησης συμμετέχουν 8 κολυμβητές. Να γραφτεί πρόγραμμα που:</p>
+<p>Γ1. Διαβάζει το όνομα και τον χρόνο (θετικός, σε δευτερόλεπτα) κάθε κολυμβητή και το ρεκόρ των αγώνων (θετικό).<br/>Γ2. Ταξινομεί τους κολυμβητές κατά αύξουσα σειρά χρόνου.<br/>Γ3. Εμφανίζει την κατάταξη (θέση, όνομα, χρόνος).<br/>Γ4. Εμφανίζει τους τρεις μεταλλιούχους.<br/>Γ5. Αν καταρρίφθηκε το ρεκόρ, εμφανίζει τον νέο χρόνο, τον κολυμβητή και πόσοι κολύμπησαν κάτω από το παλιό ρεκόρ. Αλλιώς κατάλληλο μήνυμα.</p>
+</div><div class="q hw" id="q-14"><span class="qn">14</span><b>Η εισαγωγή σε ένα τμήμα.</b><span class="theme">Θέμα Δ</span>
+<p>Ένα πανεπιστημιακό τμήμα έχει Θ θέσεις και Ν υποψήφιους (Ν έως 50). Να γραφτεί πρόγραμμα που:</p>
+<p>Δ1. Περιέχει τμήμα δηλώσεων.<br/>Δ2. Διαβάζει τα Ν και Θ <span class="nw">(1 &lt;= Ν &lt;= 50,</span> <span class="nw">1 &lt;= Θ &lt;= Ν)</span> και για κάθε υποψήφιο το όνομα και τα μόριά του (ακέραιος από 0 έως 20000).<br/>Δ3. Ταξινομεί τους υποψήφιους κατά φθίνουσα σειρά μορίων και, σε ισοβαθμία, αλφαβητικά.<br/>Δ4. Η «βάση» είναι τα μόρια του Θ-οστού στην κατάταξη. Εισάγονται όλοι όσοι έχουν μόρια τουλάχιστον ίσα με τη βάση (άρα και οι ισοβαθμούντες με τον τελευταίο). Να εμφανίζονται οι εισακτέοι με αριθμό σειράς.<br/>Δ5. Να εμφανίζονται η βάση, το πλήθος των εισακτέων και, αν είναι περισσότεροι από Θ, πόσοι είναι υπεράριθμοι.</p>
+</div><div class="q hw" id="q-15"><span class="qn">15</span><b>Ταξινόμηση χωρίς συγκρίσεις.</b> Όταν οι τιμές είναι λίγες και γνωστές (π.χ. βαθμοί 0 έως 20), υπάρχει ταξινόμηση <b>χωρίς</b> να συγκρίνουμε στοιχεία: μετράμε πόσες φορές εμφανίζεται κάθε βαθμός (Α5 του Μαθήματος 19) και μετά ξαναγράφουμε τον πίνακα, κάθε βαθμό τόσες φορές όσες μετρήθηκε. Να υλοποιηθεί για 12 βαθμούς. Γιατί ο πίνακας-μετρητής έχει 21 θέσεις και πώς αντιστοιχεί ο βαθμός 0; Έλεγχος: 14, 8, 20, 14, 0, 11, 17, 9, 14, 20, 5, 11.
+</div><div class="q hw" id="q-16"><span class="qn">16</span><b>Ο αναδευτήρας.</b><span class="theme">Πρόκληση</span>
+<p>Στη φυσαλίδα, ένα μεγάλο στοιχείο στην αρχή κατεβαίνει μόνο μία θέση ανά πέρασμα (Λυμένο 3). Η παραλλαγή «αναδευτήρας» (cocktail sort) εναλλάσσει τα περάσματα: ένα από το τέλος προς την αρχή (ανεβάζει το μικρότερο) και ένα από την αρχή προς το τέλος (κατεβάζει το μεγαλύτερο). Με δύο δείκτες αρ και δε για το αταξινόμητο κομμάτι και μια σημαία, να γραφτεί το πρόγραμμα για 10 ακέραιους και να μετρά τα περάσματα. Πόσα περάσματα κάνει για 10, 1, 2, …, 9 και πόσα η φυσαλίδα με σημαία;</p>
+</div></section>
+
+<div aria-labelledby="pg-h" aria-modal="true" class="pg" hidden="" id="progress" role="dialog">
+<div class="pgin">
+<div class="pghead"><h2 id="pg-h"><a href="progress.html" id="pg-alllink">Η πρόοδός μου</a></h2><button class="btn" id="pg-close" type="button">Κλείσιμο</button></div>
+<div class="pgcard">
+<p class="pgl" id="pg-l"></p>
+<p class="pgt" id="pg-t"></p>
+<div class="pgbig"><span class="small">Βαθμός κατανόησης</span><span class="big" id="pg-score">–</span><span class="small" id="pg-note"></span></div>
+<p class="tstats" id="t-stats"></p>
+<div class="pgchart" hidden="" id="pg-chart"></div>
+<div class="pgscroll"><table class="pgtab" id="pg-tab"><thead><tr><th>Ημερομηνία</th><th>Ώρα</th><th>Βαθμός</th><th>Μονάδες</th></tr></thead><tbody id="pg-list"></tbody></table></div>
+<a class="btn primary" href="#test-start" id="pg-again">Νέα προσπάθεια</a>
+<p class="small" hidden="" id="pg-wait"></p>
+</div>
+<div class="pginfo">
+<p><b>Πώς δουλεύει το τεστ.</b> Πέντε μέρη: Σωστό ή Λάθος, συμπλήρωση κενών, πολλαπλής επιλογής, αντιστοίχιση και πίνακας τιμών από τα λυμένα παραδείγματα. Κάθε προσπάθεια έχει άλλες ερωτήσεις.</p>
+<p>Μετά την υποβολή βλέπεις τον βαθμό και, για κάθε λάθος, το σημείο των σημειώσεων που πρέπει να ξαναδιαβάσεις. Για να κάνεις «Νέα προσπάθεια» πρέπει να περάσουν τουλάχιστον <b id="pg-cd">5 λεπτά</b>. Αξιοποίησέ τα ξαναδιαβάζοντας.</p>
+<p>Στο <b>«Βαθμός κατανόησης»</b> βλέπεις την πιο πρόσφατη προσπάθειά σου και από κάτω, αναλυτικά, την πορεία των υπόλοιπων. Για να καταλάβεις καλύτερα το μάθημα, σου προτείνουμε ένθερμα να κάνεις όσες περισσότερες προσπάθειες μπορείς.</p>
+</div>
+<figure class="pgquote" id="pg-quote"><blockquote id="pg-q"></blockquote><figcaption id="pg-qa"></figcaption></figure>
+<p class="small" hidden="" id="pg-allnote">Η συνολική πρόοδος, με όλα τα μαθήματα, ανοίγει στο sinapsi.gr.</p>
+</div>
+</div></main><div class="syn-foot"><div class="syn-nav"><a href="22.html"><small>&#8592; Μάθημα 22</small>Δυαδική αναζήτηση</a><a class="next" href="index.html"><small>Μάθημα 24 &#8594;</small>Ανοίγει σύντομα</a></div><p class="syn-note">Οι σημειώσεις είναι συμπληρωματικές. Σε περίπτωση διαφωνίας ισχύει το σχολικό βιβλίο.</p><p class="syn-copy">© 2026 ΣΥΝΑΨΗ εκπαιδευτική ομάδα · Κωνσταντίνος Θεοφίλου, MSc in ICT. Απαγορεύεται η αναδημοσίευση ή χρήση του υλικού χωρίς γραπτή συμφωνία (Ν. 2121/1993).</p></div>
+<script>
+(function(){
+  var CARDS = [{"term": "ταξινόμηση", "def": "Η τακτοποίηση των κόμβων μίας δομής με μία ιδιαίτερη σειρά είναι μία πολύ σημαντική λειτουργία που ονομάζεται ταξινόμηση (sorting) ή διάταξη (ordering). Συνήθως η σειρά αυτή είναι η αύξουσα τάξη (ascending sequence) της τιμής των μεγεθών προς ταξινόμηση. […] Σκοπός της ταξινόμησης είναι να διευκολυνθεί στη συνέχεια η αναζήτηση των στοιχείων του ταξινομημένου πίνακα.", "ref": "Σχολικό βιβλίο, §3.7 (το σύμβολο «μικρότερο ή ίσο» γραμμένο όπως στη ΓΛΩΣΣΑ)"}, {"term": "Ορισμός.", "def": "Ορισμός. Δοθέντων των στοιχείων a1, a2, ..., an η ταξινόμηση συνίσταται στη μετάθεση (permutation) της θέσης των στοιχείων, ώστε να τοποθετηθούν σε μία σειρά ak1, ak2, ..., akn έτσι ώστε, δοθείσης μίας συνάρτησης διάταξης (ordering function), f, να ισχύει: f(ak1) <= f(ak2) <= ... <= f(akn).", "ref": "Σχολικό βιβλίο, §3.7 (το σύμβολο «μικρότερο ή ίσο» γραμμένο όπως στη ΓΛΩΣΣΑ)"}, {"term": "φθίνουσα", "def": "Η συνάρτηση διάταξης μπορεί να τροποποιηθεί ώστε να καλύπτει και την ταξινόμηση με φθίνουσα τάξη (descending sequence).", "ref": "Σχολικό βιβλίο, §3.7 (το σύμβολο «μικρότερο ή ίσο» γραμμένο όπως στη ΓΛΩΣΣΑ)"}, {"term": "Ταξινόμηση:", "def": "Ταξινόμηση: τακτοποίηση των στοιχείων σε αύξουσα (ή φθίνουσα) σειρά. Διευκολύνει την αναζήτηση.", "ref": "Σύνοψη"}, {"term": "Φυσαλίδα (ευθεία ανταλλαγή):", "def": "Φυσαλίδα (ευθεία ανταλλαγή): σύγκριση και ανταλλαγή γειτονικών, από το τέλος προς την αρχή. Το μικρότερο ανεβαίνει σε κάθε πέρασμα. N · (n − 1) / 2 συγκρίσεις.", "ref": "Σύνοψη"}, {"term": "Με σημαία:", "def": "Με σημαία: σταματά όταν ένα πέρασμα δεν κάνει καμία ανταλλαγή.", "ref": "Σύνοψη"}, {"term": "Επιλογή:", "def": "Επιλογή: το ελάχιστο του υπόλοιπου πίνακα στη θέση i. Μία ανταλλαγή ανά πέρασμα.", "ref": "Σύνοψη"}, {"term": "Παράλληλοι πίνακες:", "def": "Παράλληλοι πίνακες: σύγκριση στο κλειδί, ανταλλαγή σε όλους.", "ref": "Σύνοψη"}, {"term": "Ταξινόμηση (ορισμός)", "def": "Η τακτοποίηση των κόμβων μιας δομής με μια ιδιαίτερη σειρά (συνήθως αύξουσα). Σκοπός, να διευκολυνθεί η αναζήτηση.", "ref": "§3.7"}, {"term": "Ταξινόμηση ευθείας ανταλλαγής", "def": "Σύγκριση και ανταλλαγή ζευγών γειτονικών στοιχείων. Το μικρότερο κλειδί μετακινείται προς το αριστερό άκρο (φυσαλίδα).", "ref": "§3.7"}, {"term": "Φυσαλίδα: οι βρόχοι", "def": "Για i από 2 μέχρι n Για j από n μέχρι i με_βήμα −1 Αν table[j − 1] > table[j] τότε αντιμετάθεσε.", "ref": "Τ1"}, {"term": "Συγκρίσεις φυσαλίδας", "def": "n · (n − 1) / 2, για κάθε πίνακα (χωρίς σημαία).", "ref": "§3.7"}, {"term": "Ταξινόμηση με επιλογή", "def": "Επιλογή του ελάχιστου ανταλλαγή με το πρώτο επανάληψη για τα υπόλοιπα.", "ref": "ενότητα 25"}, {"term": "Ανταλλαγή στη ΓΛΩΣΣΑ", "def": "temp ← Α[j − 1] Α[j − 1] ← Α[j] Α[j] ← temp", "ref": "Τ3"}];
+  // ---- quiz ----
+  document.querySelectorAll('.quiz').forEach(function(quiz){
+    var items = quiz.querySelectorAll('.qi');
+    var score = quiz.querySelector('.score');
+    function update(){
+      var done = quiz.querySelectorAll('.qi.ok, .qi.no').length;
+      if (done < items.length){ score.hidden = true; return; }
+      var ok = quiz.querySelectorAll('.qi.ok').length;
+      score.hidden = false;
+      score.innerHTML = '';
+      var t = document.createElement('span');
+      t.textContent = 'Σκορ: ' + ok + ' / ' + items.length + (ok === items.length ? '. Τέλεια!' : ok >= items.length * 0.7 ? '. Πολύ καλά.' : '. Ξαναδιάβασε τη θεωρία.');
+      var r = document.createElement('button'); r.type = 'button'; r.className = 'btn'; r.textContent = 'Ξανά από την αρχή';
+      r.onclick = function(){ items.forEach(function(it){ it.classList.remove('ok','no'); it.querySelectorAll('button').forEach(function(b){ b.classList.remove('pick','right'); b.disabled = false; }); var f = it.querySelector('.fb'); if (f) f.remove(); var w = it.querySelector('.qwhy'); if (w) w.remove(); }); update(); };
+      score.append(t, r);
+    }
+    items.forEach(function(it){
+      var ans = it.getAttribute('data-ans');
+      it.querySelectorAll('.qb button').forEach(function(b){
+        b.addEventListener('click', function(){
+          var v = b.getAttribute('data-v');
+          it.querySelectorAll('.qb button').forEach(function(x){ x.disabled = true; if (x.getAttribute('data-v') === ans) x.classList.add('right'); });
+          b.classList.add('pick');
+          it.classList.add(v === ans ? 'ok' : 'no');
+          var f = document.createElement('span'); f.className = 'fb';
+          f.textContent = v === ans ? '✓ Σωστά' : '✗ Η σωστή απάντηση είναι: ' + (it.querySelector('.qb button[data-v="' + ans + '"]') || {}).textContent;
+          it.appendChild(f);
+          if (v !== ans && it.getAttribute('data-why')){ var w = document.createElement('p'); w.className = 'qwhy'; w.textContent = it.getAttribute('data-why'); it.appendChild(w); }
+          update();
+        });
+      });
+    });
+  });
+  // ---- flashcards ----
+  var order = CARDS.map(function(_, i){ return i; }), pos = 0;
+  var card = document.getElementById('card');
+  if (!card || !CARDS.length) return;
+  function show(){
+    var c = CARDS[order[pos]];
+    card.classList.remove('flipped');
+    document.getElementById('c-term').textContent = c.term;
+    document.getElementById('c-def').textContent = c.def;
+    document.getElementById('c-ref').textContent = c.ref;
+    document.getElementById('c-count').textContent = (pos + 1) + ' / ' + CARDS.length;
+  }
+  card.addEventListener('click', function(){ card.classList.toggle('flipped'); });
+  document.getElementById('c-next').onclick = function(){ pos = (pos + 1) % CARDS.length; show(); };
+  document.getElementById('c-prev').onclick = function(){ pos = (pos - 1 + CARDS.length) % CARDS.length; show(); };
+  document.getElementById('c-shuf').onclick = function(){
+    for (var i = order.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+    pos = 0; show();
+  };
+  show();
+})();
+</script>
+<script>
+(function(){
+  var BANK = {"lesson": 23, "draw": {"tf_practiced": 5, "tf_new": 5, "fill": 2, "mc": 2, "mc_algo": 2, "match": 1, "match_items": 5, "num": 2}, "tf_new": [{"s": "Σκοπός της ταξινόμησης είναι να διευκολυνθεί η αναζήτηση των στοιχείων.", "a": "Σ", "see": ["#s-3-7", "Τι είναι ταξινόμηση"]}, {"s": "Η ταξινόμηση μπορεί να γίνει σε αύξουσα ή σε φθίνουσα σειρά.", "a": "Σ", "see": ["#s-3-7", "Τι είναι ταξινόμηση"]}, {"s": "Η ταξινόμηση ευθείας ανταλλαγής (φυσαλίδα) συγκρίνει γειτονικά στοιχεία και τα ανταλλάσσει αν δεν είναι στη σωστή σειρά.", "a": "Σ", "see": ["#s-1", "Η φυσαλίδα"]}, {"s": "Στη φυσαλίδα του βιβλίου, μετά το πρώτο πέρασμα το μικρότερο στοιχείο βρίσκεται στην πρώτη θέση.", "a": "Σ", "see": ["#s-1", "Η φυσαλίδα"]}, {"s": "Η φυσαλίδα είναι ο πιο γρήγορος αλγόριθμος ταξινόμησης.", "a": "Λ", "see": ["#s-1", "Η φυσαλίδα"]}, {"s": "Στη ΓΛΩΣΣΑ η ανταλλαγή δύο στοιχείων γίνεται με τρεις εκχωρήσεις και μια βοηθητική μεταβλητή.", "a": "Σ", "see": ["#s-1", "Η φυσαλίδα"]}, {"s": "Η φυσαλίδα με σημαία σταματά όταν σε ένα πέρασμα δεν γίνει καμία ανταλλαγή.", "a": "Σ", "see": ["#s-2", "Φυσαλίδα με σημαία"]}, {"s": "Σε έναν ήδη ταξινομημένο πίνακα, η φυσαλίδα με σημαία κάνει ένα μόνο πέρασμα.", "a": "Σ", "see": ["#s-2", "Φυσαλίδα με σημαία"]}, {"s": "Όταν ταξινομούμε παράλληλους πίνακες, ανταλλάσσουμε τα στοιχεία και των δύο στις ίδιες θέσεις.", "a": "Σ", "see": ["#s-3", "Παράλληλοι πίνακες"]}, {"s": "Στην ταξινόμηση με επιλογή, σε κάθε πέρασμα βρίσκεται το μικρότερο από τα υπόλοιπα στοιχεία και μπαίνει στη θέση του.", "a": "Σ", "see": ["#s-4", "Ταξινόμηση με επιλογή"]}, {"s": "Στην ταξινόμηση με επιλογή γίνονται πολλές ανταλλαγές σε κάθε πέρασμα.", "a": "Λ", "see": ["#s-4", "Ταξινόμηση με επιλογή"]}, {"s": "Η διάμεσος βρίσκεται εύκολα αφού ταξινομηθούν τα στοιχεία.", "a": "Σ", "see": ["#sol-5", "Λυμένο 5"]}], "fill": [{"t": "Η ταξινόμηση ευθείας ανταλλαγής βασίζεται στη [σύγκριση|πρόσθεση|αναζήτηση] και [ανταλλαγή|διαγραφή|εισαγωγή] ζευγών [γειτονικών|τυχαίων|πρώτων] στοιχείων, μέχρι να ταξινομηθούν όλα.", "see": ["#s-1", "Η φυσαλίδα"]}, {"t": "Στην ταξινόμηση με επιλογή, σε κάθε πέρασμα βρίσκεται το [μικρότερο|μεγαλύτερο|πρώτο] από τα στοιχεία που απομένουν και [ανταλλάσσεται|διαγράφεται|προστίθεται] με το στοιχείο της θέσης i.", "see": ["#s-4", "Ταξινόμηση με επιλογή"]}, {"t": "Η φυσαλίδα με σημαία σταματά όταν σε ένα πέρασμα [δεν γίνει καμία ανταλλαγή|γίνει μία ανταλλαγή|ελεγχθεί το πρώτο στοιχείο]. Η σημαία είναι [λογική|ακέραια|πραγματική] μεταβλητή.", "see": ["#s-2", "Φυσαλίδα με σημαία"]}], "mc": [{"q": "Ποια είναι η σωστή ανταλλαγή των Α[j - 1] και Α[j] στη ΓΛΩΣΣΑ;", "opts": ["Κ ← Α[j - 1], Α[j - 1] ← Α[j], Α[j] ← Κ", "Α[j - 1] ← Α[j], Α[j] ← Α[j - 1]", "ΑΝΤΙΜΕΤΑΘΕΣΕ Α[j - 1], Α[j]", "Κ ← Α[j - 1], Α[j] ← Κ, Α[j - 1] ← Α[j]"], "a": 0, "see": ["#s-1", "Η φυσαλίδα"]}, {"q": "Ποια αλλαγή κάνει τη φυσαλίδα να ταξινομεί σε φθίνουσα σειρά;", "opts": ["ΑΝ Α[j - 1] < Α[j] ΤΟΤΕ", "ΓΙΑ j ΑΠΟ 1 ΜΕΧΡΙ Ν", "ΓΙΑ i ΑΠΟ Ν ΜΕΧΡΙ 2", "Κ ← Α[j]"], "a": 0, "see": ["#s-tools", "Η εργαλειοθήκη της ταξινόμησης"]}, {"q": "Γιατί το ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ 1 ΜΕ_ΒΗΜΑ -1 είναι λάθος στη φυσαλίδα;", "opts": ["Για j = 1 ζητείται το Α[0], έξω από τα όρια.", "Γιατί ταξινομεί σε φθίνουσα.", "Γιατί κάνει λιγότερες συγκρίσεις.", "Δεν είναι λάθος."], "a": 0, "see": ["#s-1", "Η φυσαλίδα"]}, {"q": "Πόσα περάσματα κάνει η φυσαλίδα με σημαία σε ήδη ταξινομημένο πίνακα;", "opts": ["1", "0", "Ν - 1", "Ν"], "a": 0, "see": ["#s-2", "Φυσαλίδα με σημαία"]}, {"q": "Ποια είναι η διάμεσος των 7, 2, 9, 4, 5;", "opts": ["5", "9", "4", "5.4"], "a": 0, "see": ["#sol-5", "Λυμένο 5"]}, {"q": "Σε κατάταξη με δύο κριτήρια (βαθμός και, σε ισοβαθμία, όνομα), πότε γίνεται ανταλλαγή;", "opts": ["όταν ο προηγούμενος έχει μικρότερο βαθμό, ή ίσο βαθμό και «μεγαλύτερο» όνομα", "μόνο όταν ο προηγούμενος έχει μικρότερο βαθμό", "μόνο όταν τα ονόματα δεν είναι στη σειρά", "πάντα"], "a": 0, "see": ["#sol-2", "Λυμένο 2"]}], "mc_algo": [{"q": "Η φυσαλίδα του βιβλίου (8 στοιχεία). Ποιο πρόγραμμα ταξινομεί σωστά σε αύξουσα σειρά;", "code": true, "opts": ["ΠΡΟΓΡΑΜΜΑ Ταξινόμηση1\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[8], i, j, K\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 8\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 8\n    ΓΙΑ j ΑΠΟ 8 ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1\n      ΑΝ Α[j - 1] > Α[j] ΤΟΤΕ\n        K <- Α[j - 1]\n        Α[j - 1] <- Α[j]\n        Α[j] <- K\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 8\n    ΓΡΑΨΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ταξινόμηση1", "ΠΡΟΓΡΑΜΜΑ Ταξινόμηση1\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[8], i, j, K\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 8\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 8\n    ΓΙΑ j ΑΠΟ 8 ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1\n      ΑΝ Α[j - 1] < Α[j] ΤΟΤΕ\n        K <- Α[j - 1]\n        Α[j - 1] <- Α[j]\n        Α[j] <- K\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 8\n    ΓΡΑΨΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ταξινόμηση1", "ΠΡΟΓΡΑΜΜΑ Ταξινόμηση1\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[8], i, j, K\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 8\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 8\n    ΓΙΑ j ΑΠΟ 8 ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1\n      ΑΝ Α[j - 1] > Α[j] ΤΟΤΕ\n        Α[j - 1] <- Α[j]\n        Α[j] <- Α[j - 1]\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 8\n    ΓΡΑΨΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ταξινόμηση1", "ΠΡΟΓΡΑΜΜΑ Ταξινόμηση1\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[8], i, j, K\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 8\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ 4\n    ΓΙΑ j ΑΠΟ 8 ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1\n      ΑΝ Α[j - 1] > Α[j] ΤΟΤΕ\n        K <- Α[j - 1]\n        Α[j - 1] <- Α[j]\n        Α[j] <- K\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 8\n    ΓΡΑΨΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Ταξινόμηση1"], "a": 0, "why": "Για αύξουσα σειρά ανταλλάσσουμε όταν Α[j - 1] > Α[j], με βοηθητική μεταβλητή. Χρειάζονται Ν - 1 περάσματα (i από 2 έως Ν).", "see": ["#sol-1", "Λυμένο 1"]}, {"q": "Λυμένο 4 (Selection_Sort, 8 στοιχεία). Ποιο πρόγραμμα ταξινομεί σωστά;", "code": true, "opts": ["ΠΡΟΓΡΑΜΜΑ Selection_Sort\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: A[8], k, x, i, j\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 8\n    ΔΙΑΒΑΣΕ A[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 7\n    k <- i\n    x <- A[i]\n    ΓΙΑ j ΑΠΟ i + 1 ΜΕΧΡΙ 8\n      ΑΝ x > A[j] ΤΟΤΕ\n        k <- j\n        x <- A[j]\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n    A[k] <- A[i]\n    A[i] <- x\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 8\n    ΓΡΑΨΕ A[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ Selection_Sort\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: A[8], k, x, i, j\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 8\n    ΔΙΑΒΑΣΕ A[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 7\n    k <- i\n    x <- A[i]\n    ΓΙΑ j ΑΠΟ i + 1 ΜΕΧΡΙ 8\n      ΑΝ x > A[j] ΤΟΤΕ\n        k <- j\n        x <- A[j]\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n    A[i] <- x\n    A[k] <- A[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 8\n    ΓΡΑΨΕ A[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ Selection_Sort\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: A[8], k, x, i, j\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 8\n    ΔΙΑΒΑΣΕ A[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 7\n    k <- i\n    x <- A[i]\n    ΓΙΑ j ΑΠΟ i + 1 ΜΕΧΡΙ 7\n      ΑΝ x > A[j] ΤΟΤΕ\n        k <- j\n        x <- A[j]\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n    A[k] <- A[i]\n    A[i] <- x\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 8\n    ΓΡΑΨΕ A[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "ΠΡΟΓΡΑΜΜΑ Selection_Sort\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: A[8], k, x, i, j\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 8\n    ΔΙΑΒΑΣΕ A[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 7\n    k <- i\n    x <- A[i]\n    ΓΙΑ j ΑΠΟ i + 1 ΜΕΧΡΙ 8\n      ΑΝ x > A[j] ΤΟΤΕ\n        x <- A[j]\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n    A[k] <- A[i]\n    A[i] <- x\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ 8\n    ΓΡΑΨΕ A[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ"], "a": 0, "why": "Σε κάθε πέρασμα κρατάμε την τιμή (x) και τη θέση (k) του μικρότερου ως το τέλος του πίνακα. Μετά το Α[i] πάει στη θέση k και το x στη θέση i, με αυτή τη σειρά.", "see": ["#sol-4", "Λυμένο 4"]}], "match": [{"q": "Ταξινομεί σωστά σε αύξουσα σειρά κάθε αλλαγή στη φυσαλίδα;", "opts": ["σωστό", "λάθος"], "code": true, "see": ["#s-1", "Η φυσαλίδα"], "items": [["ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ 2 ΜΕ_ΒΗΜΑ -1 σε κάθε πέρασμα", "σωστό"], ["ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ 1 ΜΕ_ΒΗΜΑ -1", "λάθος"], ["ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν - 1 και ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ i + 1 ΜΕ_ΒΗΜΑ -1", "σωστό"], ["ανταλλαγή: Α[j] ← Α[j - 1], Α[j - 1] ← Α[j]", "λάθος"], ["ανταλλαγή: Κ ← Α[j], Α[j] ← Α[j - 1], Α[j - 1] ← Κ", "σωστό"], ["ΑΝ Α[j - 1] >= Α[j] ΤΟΤΕ (ανταλλαγή και στα ίσα)", "σωστό"], ["ΑΝ Α[j - 1] < Α[j] ΤΟΤΕ", "λάθος"]]}], "num": [{"variants": [{"v": {"S": "1, 2, 3, 4, 5, 6, 7, 8, 9, 10"}, "code": "ΠΡΟΓΡΑΜΜΑ Πόσα_περάσματα\nΣΤΑΘΕΡΕΣ\n  Ν = 10\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[Ν], i, j, K, περ, ανταλ, συγκρ\n  ΛΟΓΙΚΕΣ: Flag\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  περ <- 0\n  ανταλ <- 0\n  συγκρ <- 0\n  Flag <- ΑΛΗΘΗΣ\n  i <- 2\n  ΟΣΟ i <= Ν ΚΑΙ Flag = ΑΛΗΘΗΣ ΕΠΑΝΑΛΑΒΕ\n    Flag <- ΨΕΥΔΗΣ\n    περ <- περ + 1\n    ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1\n      συγκρ <- συγκρ + 1\n      ΑΝ Α[j - 1] > Α[j] ΤΟΤΕ\n        K <- Α[j - 1]\n        Α[j - 1] <- Α[j]\n        Α[j] <- K\n        Flag <- ΑΛΗΘΗΣ\n        ανταλ <- ανταλ + 1\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n    i <- i + 1\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Περάσματα:', περ, ' Συγκρίσεις:', συγκρ, ' Ανταλλαγές:', ανταλ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "1", "q": "Η φυσαλίδα με σημαία ταξινομεί τους 1, 2, 3, 4, 5, 6, 7, 8, 9, 10. Πόσα περάσματα εμφανίζει;"}, {"v": {"S": "2, 1, 3, 4, 5, 6, 7, 8, 9, 10"}, "code": "ΠΡΟΓΡΑΜΜΑ Πόσα_περάσματα\nΣΤΑΘΕΡΕΣ\n  Ν = 10\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[Ν], i, j, K, περ, ανταλ, συγκρ\n  ΛΟΓΙΚΕΣ: Flag\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  περ <- 0\n  ανταλ <- 0\n  συγκρ <- 0\n  Flag <- ΑΛΗΘΗΣ\n  i <- 2\n  ΟΣΟ i <= Ν ΚΑΙ Flag = ΑΛΗΘΗΣ ΕΠΑΝΑΛΑΒΕ\n    Flag <- ΨΕΥΔΗΣ\n    περ <- περ + 1\n    ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1\n      συγκρ <- συγκρ + 1\n      ΑΝ Α[j - 1] > Α[j] ΤΟΤΕ\n        K <- Α[j - 1]\n        Α[j - 1] <- Α[j]\n        Α[j] <- K\n        Flag <- ΑΛΗΘΗΣ\n        ανταλ <- ανταλ + 1\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n    i <- i + 1\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Περάσματα:', περ, ' Συγκρίσεις:', συγκρ, ' Ανταλλαγές:', ανταλ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "2", "q": "Η φυσαλίδα με σημαία ταξινομεί τους 2, 1, 3, 4, 5, 6, 7, 8, 9, 10. Πόσα περάσματα εμφανίζει;"}, {"v": {"S": "1, 2, 3, 4, 5, 6, 7, 8, 10, 9"}, "code": "ΠΡΟΓΡΑΜΜΑ Πόσα_περάσματα\nΣΤΑΘΕΡΕΣ\n  Ν = 10\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[Ν], i, j, K, περ, ανταλ, συγκρ\n  ΛΟΓΙΚΕΣ: Flag\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  περ <- 0\n  ανταλ <- 0\n  συγκρ <- 0\n  Flag <- ΑΛΗΘΗΣ\n  i <- 2\n  ΟΣΟ i <= Ν ΚΑΙ Flag = ΑΛΗΘΗΣ ΕΠΑΝΑΛΑΒΕ\n    Flag <- ΨΕΥΔΗΣ\n    περ <- περ + 1\n    ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1\n      συγκρ <- συγκρ + 1\n      ΑΝ Α[j - 1] > Α[j] ΤΟΤΕ\n        K <- Α[j - 1]\n        Α[j - 1] <- Α[j]\n        Α[j] <- K\n        Flag <- ΑΛΗΘΗΣ\n        ανταλ <- ανταλ + 1\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n    i <- i + 1\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Περάσματα:', περ, ' Συγκρίσεις:', συγκρ, ' Ανταλλαγές:', ανταλ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "2", "q": "Η φυσαλίδα με σημαία ταξινομεί τους 1, 2, 3, 4, 5, 6, 7, 8, 10, 9. Πόσα περάσματα εμφανίζει;"}, {"v": {"S": "10, 9, 8, 7, 6, 5, 4, 3, 2, 1"}, "code": "ΠΡΟΓΡΑΜΜΑ Πόσα_περάσματα\nΣΤΑΘΕΡΕΣ\n  Ν = 10\nΜΕΤΑΒΛΗΤΕΣ\n  ΑΚΕΡΑΙΕΣ: Α[Ν], i, j, K, περ, ανταλ, συγκρ\n  ΛΟΓΙΚΕΣ: Flag\nΑΡΧΗ\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Α[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  περ <- 0\n  ανταλ <- 0\n  συγκρ <- 0\n  Flag <- ΑΛΗΘΗΣ\n  i <- 2\n  ΟΣΟ i <= Ν ΚΑΙ Flag = ΑΛΗΘΗΣ ΕΠΑΝΑΛΑΒΕ\n    Flag <- ΨΕΥΔΗΣ\n    περ <- περ + 1\n    ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1\n      συγκρ <- συγκρ + 1\n      ΑΝ Α[j - 1] > Α[j] ΤΟΤΕ\n        K <- Α[j - 1]\n        Α[j - 1] <- Α[j]\n        Α[j] <- K\n        Flag <- ΑΛΗΘΗΣ\n        ανταλ <- ανταλ + 1\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n    i <- i + 1\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΓΡΑΨΕ 'Περάσματα:', περ, ' Συγκρίσεις:', συγκρ, ' Ανταλλαγές:', ανταλ\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "9", "q": "Η φυσαλίδα με σημαία ταξινομεί τους 10, 9, 8, 7, 6, 5, 4, 3, 2, 1. Πόσα περάσματα εμφανίζει;"}], "q": "Λυμένο 3 (πόσα περάσματα).", "see": ["#sol-3", "Λυμένο 3"]}, {"variants": [{"v": {"S": "7, 2, 9, 4, 5"}, "code": "ΠΡΟΓΡΑΜΜΑ Διάμεσος\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: Χ[100], σ, Κ, μο, δμ\n  ΑΚΕΡΑΙΕΣ: Ν, i, j\nΑΡΧΗ\n  ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ\n    ΔΙΑΒΑΣΕ Ν\n  ΜΕΧΡΙΣ_ΟΤΟΥ Ν >= 1 ΚΑΙ Ν <= 100\n  σ <- 0\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Χ[i]\n    σ <- σ + Χ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  μο <- σ / Ν\n  ! ταξινόμηση ευθείας ανταλλαγής για τα Ν πρώτα στοιχεία\n  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ Ν\n    ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1\n      ΑΝ Χ[j - 1] > Χ[j] ΤΟΤΕ\n        Κ <- Χ[j - 1]\n        Χ[j - 1] <- Χ[j]\n        Χ[j] <- Κ\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΑΝ Ν mod 2 = 1 ΤΟΤΕ\n    δμ <- Χ[Ν div 2 + 1]\n  ΑΛΛΙΩΣ\n    δμ <- (Χ[Ν div 2] + Χ[Ν div 2 + 1]) / 2\n  ΤΕΛΟΣ_ΑΝ\n  ΓΡΑΨΕ 'Μέση τιμή:', μο, ' Διάμεσος:', δμ\n  ΓΡΑΨΕ 'Ελάχιστο:', Χ[1], ' Μέγιστο:', Χ[Ν]\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "5", "q": "Το πρόγραμμα διαβάζει τις τιμές 7, 2, 9, 4, 5. Ποια διάμεσο εμφανίζει;"}, {"v": {"S": "8, 1, 6, 3"}, "code": "ΠΡΟΓΡΑΜΜΑ Διάμεσος\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: Χ[100], σ, Κ, μο, δμ\n  ΑΚΕΡΑΙΕΣ: Ν, i, j\nΑΡΧΗ\n  ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ\n    ΔΙΑΒΑΣΕ Ν\n  ΜΕΧΡΙΣ_ΟΤΟΥ Ν >= 1 ΚΑΙ Ν <= 100\n  σ <- 0\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Χ[i]\n    σ <- σ + Χ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  μο <- σ / Ν\n  ! ταξινόμηση ευθείας ανταλλαγής για τα Ν πρώτα στοιχεία\n  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ Ν\n    ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1\n      ΑΝ Χ[j - 1] > Χ[j] ΤΟΤΕ\n        Κ <- Χ[j - 1]\n        Χ[j - 1] <- Χ[j]\n        Χ[j] <- Κ\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΑΝ Ν mod 2 = 1 ΤΟΤΕ\n    δμ <- Χ[Ν div 2 + 1]\n  ΑΛΛΙΩΣ\n    δμ <- (Χ[Ν div 2] + Χ[Ν div 2 + 1]) / 2\n  ΤΕΛΟΣ_ΑΝ\n  ΓΡΑΨΕ 'Μέση τιμή:', μο, ' Διάμεσος:', δμ\n  ΓΡΑΨΕ 'Ελάχιστο:', Χ[1], ' Μέγιστο:', Χ[Ν]\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "4.5", "q": "Το πρόγραμμα διαβάζει τις τιμές 8, 1, 6, 3. Ποια διάμεσο εμφανίζει;"}, {"v": {"S": "10, 20, 30, 40, 50, 60"}, "code": "ΠΡΟΓΡΑΜΜΑ Διάμεσος\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: Χ[100], σ, Κ, μο, δμ\n  ΑΚΕΡΑΙΕΣ: Ν, i, j\nΑΡΧΗ\n  ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ\n    ΔΙΑΒΑΣΕ Ν\n  ΜΕΧΡΙΣ_ΟΤΟΥ Ν >= 1 ΚΑΙ Ν <= 100\n  σ <- 0\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Χ[i]\n    σ <- σ + Χ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  μο <- σ / Ν\n  ! ταξινόμηση ευθείας ανταλλαγής για τα Ν πρώτα στοιχεία\n  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ Ν\n    ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1\n      ΑΝ Χ[j - 1] > Χ[j] ΤΟΤΕ\n        Κ <- Χ[j - 1]\n        Χ[j - 1] <- Χ[j]\n        Χ[j] <- Κ\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΑΝ Ν mod 2 = 1 ΤΟΤΕ\n    δμ <- Χ[Ν div 2 + 1]\n  ΑΛΛΙΩΣ\n    δμ <- (Χ[Ν div 2] + Χ[Ν div 2 + 1]) / 2\n  ΤΕΛΟΣ_ΑΝ\n  ΓΡΑΨΕ 'Μέση τιμή:', μο, ' Διάμεσος:', δμ\n  ΓΡΑΨΕ 'Ελάχιστο:', Χ[1], ' Μέγιστο:', Χ[Ν]\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "35", "q": "Το πρόγραμμα διαβάζει τις τιμές 10, 20, 30, 40, 50, 60. Ποια διάμεσο εμφανίζει;"}, {"v": {"S": "3, 3, 9"}, "code": "ΠΡΟΓΡΑΜΜΑ Διάμεσος\nΜΕΤΑΒΛΗΤΕΣ\n  ΠΡΑΓΜΑΤΙΚΕΣ: Χ[100], σ, Κ, μο, δμ\n  ΑΚΕΡΑΙΕΣ: Ν, i, j\nΑΡΧΗ\n  ΑΡΧΗ_ΕΠΑΝΑΛΗΨΗΣ\n    ΔΙΑΒΑΣΕ Ν\n  ΜΕΧΡΙΣ_ΟΤΟΥ Ν >= 1 ΚΑΙ Ν <= 100\n  σ <- 0\n  ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν\n    ΔΙΑΒΑΣΕ Χ[i]\n    σ <- σ + Χ[i]\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  μο <- σ / Ν\n  ! ταξινόμηση ευθείας ανταλλαγής για τα Ν πρώτα στοιχεία\n  ΓΙΑ i ΑΠΟ 2 ΜΕΧΡΙ Ν\n    ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ i ΜΕ_ΒΗΜΑ -1\n      ΑΝ Χ[j - 1] > Χ[j] ΤΟΤΕ\n        Κ <- Χ[j - 1]\n        Χ[j - 1] <- Χ[j]\n        Χ[j] <- Κ\n      ΤΕΛΟΣ_ΑΝ\n    ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ\n  ΑΝ Ν mod 2 = 1 ΤΟΤΕ\n    δμ <- Χ[Ν div 2 + 1]\n  ΑΛΛΙΩΣ\n    δμ <- (Χ[Ν div 2] + Χ[Ν div 2 + 1]) / 2\n  ΤΕΛΟΣ_ΑΝ\n  ΓΡΑΨΕ 'Μέση τιμή:', μο, ' Διάμεσος:', δμ\n  ΓΡΑΨΕ 'Ελάχιστο:', Χ[1], ' Μέγιστο:', Χ[Ν]\nΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ", "a": "3", "q": "Το πρόγραμμα διαβάζει τις τιμές 3, 3, 9. Ποια διάμεσο εμφανίζει;"}], "q": "Λυμένο 5 (διάμεσος).", "see": ["#sol-5", "Λυμένο 5"]}], "tf_practiced": [{"s": "Σκοπός της ταξινόμησης είναι να διευκολυνθεί η αναζήτηση.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η ταξινόμηση γίνεται μόνο σε αύξουσα σειρά.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η ταξινόμηση ευθείας ανταλλαγής συγκρίνει και ανταλλάσσει γειτονικά στοιχεία.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Στον αλγόριθμο Φυσαλίδα της θεωρίας, σε κάθε πέρασμα το μεγαλύτερο στοιχείο μετακινείται στην πρώτη θέση.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η ταξινόμηση φυσαλίδας είναι ο πιο απλός και ο πιο αργός αλγόριθμος ταξινόμησης.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Η εντολή «αντιμετάθεσε» μπορεί να χρησιμοποιηθεί σε πρόγραμμα ΓΛΩΣΣΑΣ.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Ο αλγόριθμος Φυσαλίδα της θεωρίας κάνει τον ίδιο αριθμό συγκρίσεων είτε ο πίνακας είναι ταξινομημένος είτε όχι.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Ο πιο γρήγορος αλγόριθμος ταξινόμησης, κατά τη θεωρία, είναι η γρήγορη ταξινόμηση (quicksort).", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Στην ταξινόμηση με επιλογή γίνεται το πολύ μία ανταλλαγή σε κάθε πέρασμα.", "a": "Σ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "Για να ταξινομηθούν αλφαριθμητικά δεδομένα χρειάζεται διαφορετικός αλγόριθμος από αυτόν των αριθμών.", "a": "Λ", "see": ["#q-1", "Άσκηση 1"]}, {"s": "ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ 2 ΜΕ_ΒΗΜΑ -1 (σε κάθε πέρασμα)", "a": "Σ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ 1 ΜΕ_ΒΗΜΑ -1", "a": "Λ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "ΓΙΑ i ΑΠΟ 1 ΜΕΧΡΙ Ν - 1 και ΓΙΑ j ΑΠΟ Ν ΜΕΧΡΙ i + 1 ΜΕ_ΒΗΜΑ -1", "a": "Σ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "Η ανταλλαγή: Α[j] ← Α[j - 1] Α[j - 1] ← Α[j]", "a": "Λ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "Η ανταλλαγή: Κ ← Α[j] Α[j] ← Α[j - 1] Α[j - 1] ← Κ", "a": "Σ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "ΑΝ Α[j - 1] >= Α[j] ΤΟΤΕ (ανταλλαγή και στα ίσα)", "a": "Σ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "ΑΝ Α[j - 1] < Α[j] ΤΟΤΕ", "a": "Λ", "see": ["#q-4", "Άσκηση 4"]}, {"s": "Οι δύο ΓΙΑ ανταλλάσσουν σειρά (ο εσωτερικός γίνεται εξωτερικός).", "a": "Λ", "see": ["#q-4", "Άσκηση 4"]}], "title": "Ταξινόμηση"};
+  // Ρυθμίσεις: στην τελική εφαρμογή θα τις ορίζει ο καθηγητής.
+  var CONFIG = { cooldownMin: 5, timeLimitMin: 0, lockHomework: false, revealAnswers: false };
+  var KEY = 'synapsi.test.L' + BANK.lesson;
+  var $ = function(id){ return document.getElementById(id); };
+  function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || { attempts: [] }; } catch(e){ return { attempts: [] }; } }
+  function save(st){ try { localStorage.setItem(KEY, JSON.stringify(st)); } catch(e){} }
+  var state = load();
+  function shuffle(a){ a = a.slice(); for (var i = a.length - 1; i > 0; i--){ var j = Math.floor(Math.random() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+  function pick(a, n){ return shuffle(a || []).slice(0, Math.min(n, (a || []).length)); }
+  function el(tag, cls, text){ var e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+  function code(txt){ var p = el('pre', 'code'); p.textContent = txt; return p; }
+  function fmt(x){ return (Math.round(x * 10) / 10).toFixed(1).replace('.', ','); }
+  function seeLink(see){ var a = el('a', '', see[1]); a.href = see[0]; return a; }
+  var LET = ['α', 'β', 'γ', 'δ', 'ε', 'στ'];
+  var running = false, items = [], timerId = null, tick = null;
+
+  // ---------- homework lock (parameter) ----------
+  function applyLock(){
+    var hw = document.querySelector('.hwsec');
+    if (!hw || !CONFIG.lockHomework) return;
+    var done = state.attempts.some(function(a){ return a.score != null; });
+    hw.querySelectorAll(':scope > .q, :scope > .exhead').forEach(function(q){ q.hidden = !done; });
+    var note = hw.querySelector('.hwlock');
+    if (!done && !note){ note = el('p', 'hwlock', 'Οι ασκήσεις για το σπίτι ανοίγουν μόλις κάνεις το Σύντομο Τεστ Μαθήματος.'); hw.appendChild(note); }
+    if (done && note) note.remove();
+  }
+
+  // ---------- «Η πρόοδός μου» ----------
+  function progress(){
+    $('pg-l').textContent = 'Μάθημα ' + BANK.lesson;
+    $('pg-t').textContent = BANK.title || '';
+    $('pg-cd').textContent = CONFIG.cooldownMin + ' λεπτά';
+    var done = state.attempts.filter(function(a){ return a.score != null; });
+    var box = $('t-stats'); box.innerHTML = '';
+    if (!done.length){
+      $('pg-score').textContent = '–';
+      $('pg-note').textContent = 'Δεν έχεις κάνει ακόμα το τεστ.';
+    } else {
+      var best = Math.max.apply(null, done.map(function(a){ return a.score; }));
+      var last = done[done.length - 1];
+      $('pg-score').textContent = fmt(last.score) + ' / 10';
+      $('pg-note').textContent = '';
+      [['Καλύτερη', fmt(best) + '/10'], ['Τελευταία', fmt(last.score) + '/10'], ['Προσπάθειες', String(state.attempts.length)]].forEach(function(r, i){
+        if (i) box.appendChild(el('span', 'sep', '|'));
+        box.append(r[0] + ': '); box.appendChild(el('b', '', r[1]));
+      });
+    }
+    chart(done);
+    var tb = $('pg-list'); tb.innerHTML = '';
+    $('pg-tab').parentNode.hidden = !state.attempts.length;
+    state.attempts.slice().reverse().forEach(function(a){
+      var d = new Date(a.start), tr = el('tr');
+      tr.appendChild(el('td', '', d.getDate() + '/' + (d.getMonth() + 1)));
+      tr.appendChild(el('td', '', d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes()));
+      if (a.score != null){ tr.appendChild(el('td', '', fmt(a.score) + '/10')); tr.appendChild(el('td', '', a.got + ' από ' + a.tot)); }
+      else { var td = el('td', 'na', 'δεν υποβλήθηκε'); td.colSpan = 2; tr.appendChild(td); }
+      tb.appendChild(tr);
+    });
+    $('pg-again').textContent = state.attempts.length ? 'Νέα προσπάθεια' : 'Έναρξη τεστ';
+  }
+  function chart(done){
+    var box = $('pg-chart'); box.innerHTML = ''; box.hidden = !done.length;
+    if (!done.length) return;
+    var W = 320, H = 160, L = 26, R = 14, T = 14, B = 26, NS = 'http://www.w3.org/2000/svg';
+    function mk(t, a, p){ var e = document.createElementNS(NS, t); for (var k in a) e.setAttribute(k, a[k]); (p || svg).appendChild(e); return e; }
+    var svg = document.createElementNS(NS, 'svg'); svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H); svg.setAttribute('role', 'img');
+    svg.setAttribute('aria-label', 'Βαθμός ανά προσπάθεια: ' + done.map(function(a){ return fmt(a.score); }).join(', '));
+    var x = function(i){ return done.length === 1 ? L + (W - L - R) / 2 : L + i * (W - L - R) / (done.length - 1); };
+    var y = function(v){ return T + (10 - v) * (H - T - B) / 10; };
+    var g = mk('g', { 'class': 'grid' }), ax = mk('g', { 'class': 'ax' });
+    [0, 5].forEach(function(v){ mk('line', { x1: L, x2: W - R, y1: y(v), y2: y(v) }, g); var t = mk('text', { x: L - 6, y: y(v) + 4, 'text-anchor': 'end' }, ax); t.textContent = v; });
+    mk('line', { 'class': 'goal', x1: L, x2: W - R, y1: y(10), y2: y(10) });
+    var gt = mk('text', { 'class': 'goalt', x: L - 6, y: y(10) + 4, 'text-anchor': 'end' }); gt.textContent = '10';
+    var prevDay = '', lastX = -99;
+    done.forEach(function(a, i){
+      var d = new Date(a.start), day = d.getDate() + '/' + (d.getMonth() + 1);
+      if (day === prevDay || x(i) - lastX < 34) return;
+      prevDay = day; lastX = x(i);
+      var t = mk('text', { x: x(i), y: H - 8, 'text-anchor': 'middle' }, ax); t.textContent = day;
+    });
+    if (done.length > 1) mk('polyline', { 'class': 'ln', points: done.map(function(a, i){ return x(i) + ',' + y(a.score); }).join(' ') });
+    done.forEach(function(a, i){
+      mk('circle', { 'class': 'pt', cx: x(i), cy: y(a.score), r: 4.5 });
+      var h = mk('circle', { 'class': 'hit', cx: x(i), cy: y(a.score), r: 14, tabindex: 0 });
+      var d = new Date(a.start), txt = d.getDate() + '/' + (d.getMonth() + 1) + ', ' + d.getHours() + ':' + (d.getMinutes() < 10 ? '0' : '') + d.getMinutes() + ': ' + fmt(a.score) + '/10 (' + a.got + ' από ' + a.tot + ')';
+      var tt = document.createElementNS(NS, 'title'); tt.textContent = txt; h.appendChild(tt);
+    });
+    var la = done[done.length - 1], lt = mk('text', { 'class': 'lbl', x: x(done.length - 1), y: y(la.score) - 10, 'text-anchor': done.length === 1 ? 'middle' : 'end' }); lt.textContent = fmt(la.score);
+    box.appendChild(svg);
+  }
+  function lastCard(){
+    var done = state.attempts.filter(function(a){ return a.score != null; });
+    var c = $('t-last'); c.hidden = !done.length; if (!done.length) return;
+    var a = done[done.length - 1];
+    $('t-lastscore').textContent = fmt(a.score) + ' / 10';
+    $('t-lastnote').textContent = a.got + ' από ' + a.tot + ' μονάδες. ' + (a.score >= 10 ? 'Τέλεια!' : a.score >= 8 ? 'Πολύ καλά. Δες τα λάθη σου και ξαναδοκίμασε για το 10.' : 'Ξαναδιάβασε τις σημειώσεις και δοκίμασε πάλι.');
+  }
+  var QUOTES = [{"q": "Επανάληψις μήτηρ πάσης μαθήσεως.", "a": "Αρχαίο ρητό"}, {"q": "Είμαστε αυτό που κάνουμε κατ’ επανάληψη. Η αριστεία, λοιπόν, δεν είναι πράξη, αλλά συνήθεια.", "a": "Will Durant, πάνω σε ιδέα του Αριστοτέλη"}, {"q": "Η σταγόνα τρυπά την πέτρα.", "a": "Οβίδιος"}, {"q": "Η επανάληψη είναι ο πατέρας της μάθησης, η μητέρα της μνήμης και ο οδηγός της ολοκλήρωσης.", "a": "Zig Ziglar"}, {"q": "Η ικανότητα αποκτάται με την επανάληψη.", "a": "Shinichi Suzuki"}, {"q": "Δεν φοβάμαι αυτόν που έχει εξασκηθεί σε 10.000 κλοτσιές μία φορά, αλλά αυτόν που έχει εξασκηθεί σε μία κλοτσιά 10.000 φορές.", "a": "Bruce Lee"}, {"q": "Η εξάσκηση δεν σε κάνει τέλειο. Η τέλεια εξάσκηση σε κάνει τέλειο.", "a": "Vince Lombardi"}, {"q": "Η μεγαλύτερη δόξα μας δεν είναι ότι δεν πέφτουμε ποτέ, αλλά ότι σηκωνόμαστε κάθε φορά που πέφτουμε.", "a": "Αποδίδεται στον Κομφούκιο"}, {"q": "Δεν έχει σημασία πόσο αργά πηγαίνεις, αρκεί να μη σταματήσεις.", "a": "Αποδίδεται στον Κομφούκιο"}, {"q": "Δοκίμασε ξανά. Απότυχε ξανά. Απότυχε καλύτερα.", "a": "Samuel Beckett"}, {"q": "Μην υποχωρείς ποτέ, ποτέ, ποτέ.", "a": "Winston Churchill"}, {"q": "Δεν είναι ότι είμαι τόσο έξυπνος. Απλώς μένω με τα προβλήματα περισσότερο.", "a": "Αποδίδεται στον Albert Einstein"}, {"q": "Η ενέργεια και η επιμονή κατακτούν τα πάντα.", "a": "Benjamin Franklin"}, {"q": "Τα μεγάλα έργα δεν γίνονται με τη δύναμη, αλλά με την επιμονή.", "a": "Samuel Johnson"}, {"q": "Δεν απέτυχα. Απλώς βρήκα 10.000 τρόπους που δεν λειτουργούν.", "a": "Αποδίδεται στον Thomas Edison"}, {"q": "Χάνεις το 100% των βολών που δεν επιχειρείς.", "a": "Wayne Gretzky"}, {"q": "Έχω αποτύχει ξανά και ξανά και ξανά στη ζωή μου. Και γι’ αυτό πετυχαίνω.", "a": "Michael Jordan"}, {"q": "Η αποτυχία είναι απλώς η ευκαιρία να ξεκινήσεις ξανά, αυτή τη φορά πιο έξυπνα.", "a": "Henry Ford"}, {"q": "Ένα ταξίδι χιλίων μιλίων αρχίζει με ένα βήμα.", "a": "Λάο Τσε"}, {"q": "Αν δεν μπορείς να πετάξεις, τρέξε. Αν δεν μπορείς να τρέξεις, περπάτα. Αν δεν μπορείς να περπατήσεις, σύρσου. Ό,τι κι αν κάνεις, συνέχισε να προχωράς μπροστά.", "a": "Martin Luther King Jr."}, {"q": "Η επιτυχία είναι το άθροισμα μικρών προσπαθειών που επαναλαμβάνονται μέρα με τη μέρα.", "a": "Robert Collier"}, {"q": "Το θάρρος δεν βρυχάται πάντα. Μερικές φορές είναι η ήσυχη φωνή στο τέλος της ημέρας που λέει: «Θα προσπαθήσω ξανά αύριο».", "a": "Mary Anne Radmacher"}, {"q": "Η θέληση για νίκη δεν είναι τίποτα χωρίς τη θέληση για προετοιμασία.", "a": "Juma Ikangaa"}, {"q": "Η υπομονή και η επιμονή έχουν μαγική δύναμη: μπροστά τους οι δυσκολίες εξαφανίζονται και τα εμπόδια χάνονται.", "a": "Αποδίδεται στον John Quincy Adams"}];
+  function quote(){
+    if (!QUOTES.length){ $('pg-quote').hidden = true; return; }
+    var k = Math.floor(Math.random() * QUOTES.length);
+    $('pg-q').textContent = '«' + QUOTES[k].q + '»'; $('pg-qa').textContent = QUOTES[k].a;
+  }
+  function showProgress(on){
+    $('progress').hidden = !on; document.body.classList.toggle('pg-open', on);
+    if (on){ progress(); quote(); refreshStart(); $('pg-close').focus(); }
+  }
+  $('pg-close').addEventListener('click', function(){ showProgress(false); if (location.hash === '#progress') location.hash = 's-test'; });
+  function route(){
+    var h = location.hash;
+    if (h === '#progress'){ showProgress(true); return; }
+    if (!$('progress').hidden) showProgress(false);
+    if (h === '#test-start'){
+      var sec = $('s-test'); if (sec) sec.scrollIntoView({ block: 'start' });
+      if (!running && nextAllowed() <= Date.now()) start();
+    }
+  }
+  window.addEventListener('hashchange', route);
+  $('pg-alllink').addEventListener('click', function(e){
+    if (/sinapsi\.gr$|github\.io$/.test(location.hostname)) return;
+    e.preventDefault(); $('pg-allnote').hidden = false;
+  });
+  $('pg-again').addEventListener('click', function(e){
+    e.preventDefault(); if ($('pg-again').classList.contains('off')) return;
+    if (location.hash === '#test-start') route(); else location.hash = 'test-start';
+  });
+
+  // ---------- start button and cooldown ----------
+  function nextAllowed(){
+    var a = state.attempts[state.attempts.length - 1];
+    if (!a) return 0;
+    return (a.end || a.start) + CONFIG.cooldownMin * 60000;
+  }
+  function refreshStart(){
+    var btn = $('t-start'), w = $('t-wait'), again = $('pg-again'), pw = $('pg-wait');
+    var left = nextAllowed() - Date.now();
+    var label = state.attempts.length ? 'Νέα προσπάθεια' : 'Έναρξη τεστ';
+    btn.textContent = label;
+    if (running){ btn.hidden = true; w.hidden = true; again.classList.add('off'); return; }
+    btn.hidden = false;
+    if (left > 0){
+      var m = Math.floor(left / 60000), s = Math.ceil(left % 60000 / 1000); if (s === 60){ m++; s = 0; }
+      var txt = 'Νέα προσπάθεια σε ' + m + ':' + (s < 10 ? '0' : '') + s + '. Στο μεταξύ ξαναδές τις κάρτες και τα λυμένα.';
+      btn.disabled = true; w.hidden = false; w.textContent = txt;
+      again.classList.add('off'); again.setAttribute('aria-disabled', 'true'); pw.hidden = false; pw.textContent = txt;
+      if (!tick) tick = setInterval(refreshStart, 1000);
+    } else {
+      btn.disabled = false; w.hidden = true;
+      again.classList.remove('off'); again.removeAttribute('aria-disabled'); pw.hidden = true;
+      if (tick){ clearInterval(tick); tick = null; }
+    }
+  }
+
+  // ---------- building a test ----------
+  function addPart(body, title, note){ var h = el('h3', 'tpart', title); if (note) h.appendChild(el('small', '', note)); body.appendChild(h); }
+  function choiceBlock(q, options, correct, two){
+    var wrap = el('div', 'topts' + (two ? ' two' : ''));
+    var it = { pts: 1, box: q, val: null, check: function(){
+      var ok = it.val === correct;
+      wrap.querySelectorAll('button').forEach(function(b, i){
+        if (i === it.val) b.classList.add(ok ? 'right' : 'wrong');
+        else if (i === correct && CONFIG.revealAnswers) b.classList.add('right');
+      });
+      return { got: ok ? 1 : 0, right: options[correct].text ? 'Σωστή απάντηση: ' + options[correct].text : 'Σωστή είναι η ' + options[correct].letter + '.' };
+    }, answered: function(){ return it.val != null; } };
+    options.forEach(function(o, i){
+      var b = el('button'); b.type = 'button'; b.setAttribute('aria-pressed', 'false');
+      if (o.letter) b.appendChild(el('span', 'ol', o.letter + '.'));
+      if (o.code) b.appendChild(code(o.code)); else b.appendChild(el('span', '', o.text));
+      b.addEventListener('click', function(){ if (!running) return; it.val = i; wrap.querySelectorAll('button').forEach(function(x){ x.classList.toggle('sel', x === b); x.setAttribute('aria-pressed', String(x === b)); }); });
+      wrap.appendChild(b);
+    });
+    q.appendChild(wrap);
+    return it;
+  }
+  function newQ(body, n, text){ var q = el('div', 'tq'); q.appendChild(el('span', 'tn', 'Ερώτηση ' + n)); if (text) q.appendChild(el('p', '', text)); body.appendChild(q); return q; }
+  function build(){
+    var D = BANK.draw, body = $('t-body'); body.innerHTML = ''; items = [];
+    var n = 0;
+    if (CONFIG.timeLimitMin > 0){ var tm = el('div', 'ttimer'); tm.id = 't-timer'; body.appendChild(tm); }
+    // Α. Σωστό ή Λάθος
+    var tf = shuffle(pick(BANK.tf_practiced, D.tf_practiced).concat(pick(BANK.tf_new, D.tf_new)));
+    if (tf.length){
+      addPart(body, 'Α. Σωστό ή Λάθος', tf.length + (tf.length === 1 ? ' μονάδα' : ' μονάδες'));
+      tf.forEach(function(t){
+        var q = newQ(body, ++n, t.s);
+        var it = choiceBlock(q, [{ text: 'Σωστό' }, { text: 'Λάθος' }], t.a === 'Σ' ? 0 : 1, true);
+        it.see = t.see; items.push(it);
+      });
+    }
+    // Β. Συμπλήρωση κενών
+    var fills = pick(BANK.fill, D.fill);
+    if (fills.length){
+      var blanks = fills.reduce(function(s, f){ return s + (f.t.match(/\[/g) || []).length; }, 0);
+      addPart(body, 'Β. Συμπλήρωση κενών', blanks + (blanks === 1 ? ' μονάδα' : ' μονάδες'));
+      fills.forEach(function(f){
+        var q = newQ(body, ++n, null); q.firstChild.textContent += ': διάλεξε τη σωστή λέξη σε κάθε κενό.';
+        var p = el('p', 'tfill'); var sels = [];
+        f.t.split(/(\[[^\]]+\])/).forEach(function(part){
+          if (part.charAt(0) !== '['){ p.append(part); return; }
+          var opts = part.slice(1, -1).split('|');
+          var s = el('select'); s.setAttribute('aria-label', 'Κενό');
+          var o0 = el('option', '', '…'); o0.value = ''; s.appendChild(o0);
+          shuffle(opts).forEach(function(o){ var x = el('option', '', o); x.value = o; s.appendChild(x); });
+          s._right = opts[0]; sels.push(s); p.appendChild(s);
+        });
+        q.appendChild(p);
+        items.push({ pts: sels.length, box: q, see: f.see, check: function(){
+          var g = 0, miss = [];
+          sels.forEach(function(s){ var ok = s.value === s._right; s.classList.add(ok ? 'right' : 'wrong'); s.disabled = true; if (ok) g++; else miss.push(s._right); });
+          return { got: g, right: 'Σωστά: ' + miss.join(', ') };
+        }, answered: function(){ return sels.every(function(s){ return s.value; }); } });
+      });
+    }
+    // Γ. Πολλαπλής επιλογής
+    var mcs = pick(BANK.mc, D.mc).concat(pick(BANK.mc_algo, D.mc_algo));
+    if (mcs.length){
+      addPart(body, 'Γ. Πολλαπλής επιλογής', mcs.length + (mcs.length === 1 ? ' μονάδα' : ' μονάδες'));
+      mcs.forEach(function(m){
+        var q = newQ(body, ++n, m.q);
+        var order = shuffle(m.opts.map(function(_, i){ return i; }));
+        var options = order.map(function(i, k){ return m.code ? { letter: LET[k], code: m.opts[i] } : { letter: LET[k], text: m.opts[i] }; });
+        var it = choiceBlock(q, options, order.indexOf(m.a));
+        it.see = m.see; it.why = m.why; items.push(it);
+      });
+    }
+    // Δ. Αντιστοίχιση
+    pick(BANK.match, D.match).forEach(function(m){
+      var rows = pick(m.items, D.match_items);
+      addPart(body, 'Δ. Αντιστοίχιση', rows.length + (rows.length === 1 ? ' μονάδα' : ' μονάδες'));
+      var q = newQ(body, ++n, m.q);
+      var sels = [];
+      rows.forEach(function(r){
+        var row = el('div', 'tmrow');
+        row.appendChild(m.code ? el('code', '', r[0]) : el('span', '', r[0]));
+        var s = el('select'); s.setAttribute('aria-label', 'Απάντηση');
+        var o0 = el('option', '', 'Διάλεξε…'); o0.value = ''; s.appendChild(o0);
+        m.opts.forEach(function(o){ var x = el('option', '', o); x.value = o; s.appendChild(x); });
+        s._right = r[1]; sels.push(s); row.appendChild(s); q.appendChild(row);
+      });
+      items.push({ pts: sels.length, box: q, see: m.see, check: function(){
+        var g = 0, miss = [];
+        sels.forEach(function(s, i){ var ok = s.value === s._right; s.classList.add(ok ? 'right' : 'wrong'); s.disabled = true; if (ok) g++; else miss.push((i + 1) + 'η: ' + s._right); });
+        return { got: g, right: 'Σωστά: ' + miss.join(', ') };
+      }, answered: function(){ return sels.every(function(s){ return s.value; }); } });
+    });
+    // Ε. Πίνακας τιμών
+    var nums = pick(BANK.num, D.num);
+    if (nums.length){
+      addPart(body, 'Ε. Πίνακας τιμών', nums.length + (nums.length === 1 ? ' μονάδα' : ' μονάδες'));
+      nums.forEach(function(x){
+        var v = x.variants[Math.floor(Math.random() * x.variants.length)];
+        var q = newQ(body, ++n, x.q);
+        q.appendChild(code(v.code)); q.appendChild(el('p', '', v.q));
+        var inp = el('input'); inp.type = 'text'; inp.setAttribute('inputmode', 'decimal'); inp.setAttribute('aria-label', 'Η απάντησή σου'); inp.autocomplete = 'off';
+        q.appendChild(inp);
+        items.push({ pts: 1, box: q, see: x.see, check: function(){
+          var a = inp.value.trim().replace(',', '.'), r = String(v.a);
+          var ok = a !== '' && (isFinite(a) && isFinite(r) ? Math.abs(parseFloat(a) - parseFloat(r)) < 1e-9 : a === r);
+          inp.classList.add(ok ? 'right' : 'wrong'); inp.disabled = true;
+          return { got: ok ? 1 : 0, right: 'Σωστή απάντηση: ' + r.replace('.', ',') };
+        }, answered: function(){ return inp.value.trim() !== ''; } });
+      });
+    }
+    var bar = el('div', 'tbar'); var sb = el('button', 'btn primary', 'Υποβολή'); sb.type = 'button'; sb.id = 't-submit';
+    var msg = el('span', 'tmsg'); bar.append(sb, msg); body.appendChild(bar);
+    var warned = false;
+    sb.addEventListener('click', function(){
+      var empty = items.filter(function(it){ return !it.answered(); }).length;
+      if (empty && !warned){ warned = true; msg.textContent = 'Έχεις ' + empty + (empty === 1 ? ' αναπάντητη ερώτηση' : ' αναπάντητες ερωτήσεις') + '. Πάτα ξανά «Υποβολή» για να τελειώσεις.'; return; }
+      finish();
+    });
+  }
+  function finish(){
+    if (!running) return;
+    running = false; if (timerId){ clearInterval(timerId); timerId = null; }
+    var got = 0, tot = 0;
+    items.forEach(function(it){
+      var r = it.check(); got += r.got; tot += it.pts;
+      var full = r.got === it.pts;
+      it.box.classList.add('done', full ? 'ok' : 'no');
+      var fb = el('p', 'tfb');
+      if (full) fb.textContent = '✓ Σωστά';
+      else {
+        fb.append((it.pts > 1 ? '✗ ' + r.got + ' από ' + it.pts + '. ' : '✗ Λάθος. ') + (CONFIG.revealAnswers ? r.right + ' ' : ''));
+        if (it.see){ fb.append('Ξαναδιάβασε: '); fb.appendChild(seeLink(it.see)); }
+        if (CONFIG.revealAnswers && it.why) fb.appendChild(el('span', 'why', it.why));
+      }
+      it.box.appendChild(fb);
+    });
+    var score = tot ? Math.round(got / tot * 100) / 10 : 0;
+    var a = state.attempts[state.attempts.length - 1]; a.end = Date.now(); a.score = score; a.got = got; a.tot = tot; save(state);
+    $('t-submit').parentNode.remove();
+    lastCard();
+    var tm = $('t-timer'); if (tm) tm.remove();
+    refreshStart(); applyLock();
+    $('t-last').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  function start(){
+    if (running || nextAllowed() > Date.now()) return;
+    running = true;
+    state.attempts.push({ start: Date.now() }); save(state);
+    build(); $('t-body').hidden = false; refreshStart();
+    if (CONFIG.timeLimitMin > 0){
+      var endAt = Date.now() + CONFIG.timeLimitMin * 60000, t = $('t-timer');
+      var upd = function(){ var l = Math.max(0, endAt - Date.now()); var m = Math.floor(l / 60000), s = Math.floor(l % 60000 / 1000); t.textContent = '⏱ ' + m + ':' + (s < 10 ? '0' : '') + s; if (!l) finish(); };
+      upd(); timerId = setInterval(upd, 1000);
+    }
+    $('t-body').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+  $('t-start').addEventListener('click', start);
+  lastCard(); refreshStart(); applyLock(); route();
+})();
+</script>
+<style id="kitcss">/*KIT>*//* ==== kit: θέμα, προβολή, «Δείξε λύση» ==== */
+body{font-size:16px}
+.kit-btn{font:600 13px/1 var(--body);border:1px solid var(--line);background:var(--paper);color:var(--ink);padding:8px 12px;border-radius:999px;cursor:pointer}
+.kit-btn[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.kit-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#kitfloat{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:30;display:flex;gap:6px;padding:5px;border-radius:999px;background:var(--ground);border:1px solid var(--line);box-shadow:0 4px 16px rgba(10,20,40,.12)}
+.rt-ans{margin:-2px 0 14px}
+.rt-show{font:600 13.5px/1 var(--body);border:1.5px solid var(--s-teal);background:var(--teal-bg);color:var(--teal);padding:9px 14px;border-radius:999px;cursor:pointer}
+.rt-show:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.rt-body{display:none;margin-top:10px;border-left:4px solid var(--s-teal);background:var(--soft);border-radius:0 10px 10px 0;padding:12px 16px}
+.rt-body .q{margin:0;border:0;padding:0;background:none}
+.rt-open > .rt-body, body.rt-all .rt-body{display:block}
+.rt-open > .rt-show{background:var(--paper)}
+body:not(.rt-all):not(.editing) .solved:not(.rt-open) .rt-hide{display:none}
+body.rt-all .rt-showstep{display:none}
+.solved.rt-open .rt-showstep{display:none}
+.rt-showstep{margin:4px 0 6px}
+body.student .rt-ans{display:none}
+body.editing .rt, body.editing .rt-showstep{display:none}
+/* Λειτουργία προβολής */
+body.proj #bar,body.proj #nav{zoom:1.25}
+body.proj{--muted:#3a4254;--line:#b5bfd2}
+:root[data-theme="dark"] body.proj{--muted:#b9c1d4;--line:#3b465e}
+@media print{#kitfloat,.rt,.rt-showstep,.kit-btn{display:none!important}.rt-hide{display:grid!important}}
+/* Καθαρές γραμμές */
+body{font-size:17px;line-height:1.68}
+.ln{display:block;margin:.22em 0}
+.ln.li{position:relative;padding-left:1.25em}
+.ln.li::before{content:"•";position:absolute;left:.35em;color:var(--muted)}
+.kvs{display:inline-flex;flex-wrap:wrap;gap:.2em 1.2em;vertical-align:top}
+.kv,.nw{white-space:nowrap}
+p,li,td{text-wrap:pretty}
+.ln.cd{font-family:var(--mono);font-size:.92em}
+.cdcols{display:inline-flex;flex-wrap:wrap;gap:4px 28px;vertical-align:top}
+.cdcol{display:inline-block;padding-left:10px;border-left:2px solid var(--line)}/*<KIT*/</style>
+<script id="kitjs">/*KITJS>*/(function(){
+  /* kit: θέμα (φωτεινό/σκοτεινό), προβολή, «Δείξε λύση» */
+  var root = document.documentElement, body = document.body, doc = document.getElementById('doc');
+  if (!doc || body.getAttribute('data-kit')) return;
+  body.setAttribute('data-kit', '1');
+  function get(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  function put(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+  var theme = get('synapsi-theme') || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  var proj = get('aepp-proj') === '1';
+  function mk(id, txt){ var b = document.createElement('button'); b.type = 'button'; b.id = id; b.className = 'kit-btn'; b.textContent = txt; return b; }
+  var bTheme = mk('k-theme', ''), bProj = mk('k-proj', 'Προβολή'), bAll = null;
+  function applyTheme(){ root.setAttribute('data-theme', theme); bTheme.textContent = theme === 'dark' ? '☀ Φωτεινό' : '☾ Σκοτεινό'; bTheme.setAttribute('aria-label', theme === 'dark' ? 'Φωτεινό θέμα' : 'Σκοτεινό θέμα'); }
+  function fit(){
+    if (!proj){ doc.style.zoom = ''; doc.style.maxWidth = ''; return; }
+    var W = window.innerWidth, z = W < 700 ? 1.12 : 1.38;
+    doc.style.zoom = z; doc.style.maxWidth = Math.max(300, Math.min(900, (W - 36) / z)) + 'px';
+  }
+  function applyProj(){ body.classList.toggle('proj', proj); bProj.setAttribute('aria-pressed', String(proj)); fit(); }
+  window.addEventListener('resize', fit);
+  bTheme.onclick = function(){ theme = theme === 'dark' ? 'light' : 'dark'; put('synapsi-theme', theme); applyTheme(); };
+  bProj.onclick = function(){ proj = !proj; put('aepp-proj', proj ? '1' : '0'); applyProj(); };
+  applyTheme(); applyProj();
+
+  var bar = document.getElementById('bar');
+  var teacherSec = doc.querySelector('section.teacher');
+  if (bar){
+    var anchor = document.getElementById('status') || null;
+    if (teacherSec){ bAll = mk('k-all', 'Όλες οι λύσεις'); bar.insertBefore(bAll, anchor); }
+    bar.insertBefore(bProj, anchor); bar.insertBefore(bTheme, anchor);
+  } else {
+    var f = document.createElement('div'); f.id = 'kitfloat';
+    f.appendChild(bTheme); body.appendChild(f); proj = false; applyProj();
+  }
+  if (bAll){
+    bAll.onclick = function(){ var on = !body.classList.contains('rt-all'); body.classList.toggle('rt-all', on); bAll.setAttribute('aria-pressed', String(on)); };
+  }
+
+  /* λυμένα: φαίνεται η εκφώνηση και το «Κατανοώ», τα υπόλοιπα με κουμπί */
+  doc.querySelectorAll('.box.solved').forEach(function(box){
+    var steps = box.querySelector('.steps');
+    if (!steps) return;
+    var st = steps.querySelectorAll(':scope > .step');
+    if (st.length < 2) return;
+    box.classList.add('rt-closed');
+    for (var i = 1; i < st.length; i++) st[i].classList.add('rt-hide');
+    var w = document.createElement('div'); w.className = 'rt-showstep'; w.contentEditable = 'false';
+    var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε τη λύση';
+    b.onclick = function(){ box.classList.add('rt-open'); };
+    w.appendChild(b); st[0].after(w);
+  });
+
+  /* ασκήσεις: η απάντηση από τη σελίδα καθηγητή, κρυμμένη κάτω από την εκφώνηση */
+  if (teacherSec){
+    var ans = {};
+    teacherSec.querySelectorAll('.ans .q').forEach(function(q){ var n = q.querySelector('.qn'); if (n) ans[n.textContent.trim()] = q; });
+    doc.querySelectorAll('.exercises .q').forEach(function(q){
+      var n = q.querySelector(':scope > .qn'); if (!n) return;
+      var a = ans[n.textContent.trim()]; if (!a) return;
+      var w = document.createElement('div'); w.className = 'rt rt-ans'; w.contentEditable = 'false';
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'rt-show'; b.textContent = 'Δείξε λύση';
+      var bodyEl = document.createElement('div'); bodyEl.className = 'rt-body ans';
+      var c = a.cloneNode(true); var qn = c.querySelector('.qn'); if (qn) qn.remove();
+      bodyEl.appendChild(c);
+      b.onclick = function(){ var on = !w.classList.contains('rt-open'); w.classList.toggle('rt-open', on); b.textContent = on ? 'Κρύψε λύση' : 'Δείξε λύση'; };
+      w.appendChild(b); w.appendChild(bodyEl);
+      q.after(w);
+    });
+  }
+})();/*<KITJS*/</script>
+
+</body></html>
