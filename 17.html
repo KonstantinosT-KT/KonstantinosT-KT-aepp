@@ -233,6 +233,20 @@ details.reveal .rv{padding:0 14px 12px}
 .btn.primary{background:var(--s-blue);border-color:var(--s-blue);color:var(--on-solid,#fff);font-size:15px;padding:12px 18px;text-decoration:none;display:inline-block}
 .btn.primary:disabled,.btn.primary.off{opacity:.45;cursor:not-allowed;pointer-events:none}
 .tstart{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin:12px 0}
+.tstart #t-start{flex:1 1 100%;width:100%;font:800 18px/1.2 var(--display);padding:18px 20px;border-radius:14px;box-shadow:0 4px 14px rgba(0,0,0,.12)}
+.tintro{margin:6px 0 0;color:var(--muted)}
+/* το τεστ ανοίγει σε δική του σελίδα πάνω από το μάθημα */
+.tpop{position:fixed;inset:0;z-index:55;background:var(--ground);overflow-y:auto;overscroll-behavior:contain;padding-bottom:calc(env(safe-area-inset-bottom,0px) + 84px)}
+.tpop-bar{position:sticky;top:0;z-index:2;background:var(--ground);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.tpop-barin{max-width:760px;margin:0 auto;padding:10px 16px;display:flex;align-items:center;gap:12px}
+.tpop-barin b{font:800 17px/1.2 var(--display)}
+.tpop-x{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border-radius:999px;border:0;background:var(--hero,#2B3722);color:#fff;font:600 14px/1 var(--display);cursor:pointer}
+.tpop-x:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.tpop-in{max-width:760px;margin:0 auto;padding:12px 16px}
+.tpop-end{margin:18px 0}
+.tpop-end .btn{width:100%;padding:16px;font-size:16px;border-radius:14px}
+body.tp-open{overflow:hidden}
+body.tp-open #kitfloat{z-index:60}
 .tlink{font:700 14px var(--body);color:var(--blue);text-decoration:underline;text-underline-offset:3px}
 .tlink:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 .tstats{margin:0;font-size:14px;line-height:1.7}
@@ -345,7 +359,7 @@ body.pg-open{overflow:hidden}
 .syn-copy{font-size:12px;color:var(--muted)}
 </style>
 <script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
-<div class="syn-sticky"><div class="syn-bar"><a href="index.html">&#8592; Διαδρομή</a><span>Μάθημα 17 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-test" class="navtest">Σύντομο Τεστ</a><a href="#s-0">Η μέθοδος</a><a href="#s-tools">Εργαλειοθήκη</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a><a href="#s-hw">Για το σπίτι</a></div></nav></div>
+<div class="syn-sticky"><div class="syn-bar"><a href="index.html">&#8592; Διαδρομή</a><span>Μάθημα 17 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#test-start" class="navtest">Σύντομο Τεστ</a><a href="#s-0">Η μέθοδος</a><a href="#s-tools">Εργαλειοθήκη</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a><a href="#s-hw">Για το σπίτι</a></div></nav></div>
 <main id="doc" lang="el">
 <section class="hero">
 <svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
@@ -892,11 +906,16 @@ body.pg-open{overflow:hidden}
 <span id="t-lastnote"></span>
 <a class="tlink" href="#progress" id="t-grade">Βαθμός κατανόησης</a>
 </div>
+<p class="tintro">Το τεστ ανοίγει σε δική του σελίδα, πάνω από το μάθημα. Όταν τελειώσεις, γυρνάς εδώ με το «← Μάθημα».</p>
 <div class="tstart">
 <button class="btn primary" id="t-start" type="button">Έναρξη τεστ</button>
 </div>
 <p class="small" hidden="" id="t-wait"></p>
-<div hidden="" id="t-body"></div>
+<div aria-labelledby="t-pop-h" aria-modal="true" class="tpop" hidden="" id="t-pop" role="dialog">
+<div class="tpop-bar"><div class="tpop-barin"><button aria-label="Κλείσιμο τεστ" class="tpop-x" id="t-pop-close" type="button">← Μάθημα</button><b id="t-pop-h">Σύντομο Τεστ</b></div></div>
+<div class="tpop-in"><div class="tresult" hidden="" id="t-pop-score"></div><div hidden="" id="t-body"></div>
+<div class="tpop-end" hidden="" id="t-pop-end"><button class="btn primary" id="t-pop-done" type="button">Επιστροφή στο μάθημα</button></div></div>
+</div>
 </section><section class="exercises hwsec"><div class="sec" id="s-hw"><span class="num">✍</span><h2>Για το σπίτι</h2></div><div class="exhead"><span class="lvl"><i class="on"></i><i class="on"></i><i></i></span><h3>Επίπεδο 2 · Συνδυάζω</h3></div><div class="q hw" id="q-17-6"><span class="qn">17.6</span><b>Η ανατομία ενός αριθμού.</b>
 <p>Να γραφτεί πρόγραμμα που διαβάζει θετικούς ακεραίους μέχρι να δοθεί 0 (αρνητικοί απορρίπτονται με μήνυμα). Για κάθε αριθμό εμφανίζει πόσα ψηφία του είναι άρτια, πόσα περιττά και ποιο είναι το μεγαλύτερο ψηφίο του. Στο τέλος εμφανίζει πόσα ψηφία δόθηκαν συνολικά. Ποια δομή επανάληψης ταιριάζει για τα ψηφία, και γιατί; Έλεγχος: 2026, −5, 7, 90817, 0.</p>
 </div><div class="q hw" id="q-17-7"><span class="qn">17.7</span><b>Ανοιχτό ή κλειστό;</b><span class="theme">Γειτονιά</span>
@@ -1154,7 +1173,7 @@ body.pg-open{overflow:hidden}
     if (!$('progress').hidden) showProgress(false);
     if (h === '#test-start'){
       var sec = $('s-test'); if (sec) sec.scrollIntoView({ block: 'start' });
-      if (!running && nextAllowed() <= Date.now()) start();
+      if (running || nextAllowed() <= Date.now()) start();
     }
   }
   window.addEventListener('hashchange', route);
@@ -1178,7 +1197,7 @@ body.pg-open{overflow:hidden}
     var left = nextAllowed() - Date.now();
     var label = state.attempts.length ? 'Νέα προσπάθεια' : 'Έναρξη τεστ';
     btn.textContent = label;
-    if (running){ btn.hidden = true; w.hidden = true; again.classList.add('off'); return; }
+    if (running){ btn.hidden = false; btn.textContent = 'Συνέχεια τεστ'; w.hidden = true; again.classList.add('off'); return; }
     btn.hidden = false;
     if (left > 0){
       var m = Math.floor(left / 60000), s = Math.ceil(left % 60000 / 1000); if (s === 60){ m++; s = 0; }
@@ -1336,19 +1355,34 @@ body.pg-open{overflow:hidden}
     lastCard();
     var tm = $('t-timer'); if (tm) tm.remove();
     refreshStart(); applyLock();
-    $('t-last').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    var sc = $('t-pop-score'); sc.hidden = false; sc.innerHTML = '';
+    sc.appendChild(el('span', 'big', fmt(score) + ' / 10')); sc.appendChild(el('span', '', got + ' από ' + tot + ' μονάδες. Από κάτω βλέπεις τι έκανες σωστά και τι όχι.'));
+    $('t-pop-end').hidden = false;
+    $('t-pop').scrollTo({ top: 0, behavior: 'smooth' });
   }
+  function openPop(){ var p = $('t-pop'); p.hidden = false; document.body.classList.add('tp-open'); $('t-pop-close').focus(); }
+  function closePop(){ $('t-pop').hidden = true; document.body.classList.remove('tp-open');
+    if (location.hash === '#test-start') history.replaceState(null, '', '#s-test');
+    var sec = $('s-test'); if (sec) sec.scrollIntoView({ block: 'start' }); }
+  $('t-pop-close').addEventListener('click', closePop);
+  $('t-pop-done').addEventListener('click', closePop);
+  document.addEventListener('keydown', function(e){ if (e.key === 'Escape' && !$('t-pop').hidden) closePop(); });
+  $('t-pop').addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a[href^="#"]');
+    if (a && a.getAttribute('href') !== '#test-start' && a.getAttribute('href') !== '#progress'){ $('t-pop').hidden = true; document.body.classList.remove('tp-open'); }
+  });
   function start(){
-    if (running || nextAllowed() > Date.now()) return;
+    if (running){ openPop(); return; }
+    if (nextAllowed() > Date.now()) return;
     running = true;
     state.attempts.push({ start: Date.now() }); save(state);
-    build(); $('t-body').hidden = false; refreshStart();
+    build(); $('t-body').hidden = false; $('t-pop-score').hidden = true; $('t-pop-end').hidden = true; refreshStart(); openPop();
     if (CONFIG.timeLimitMin > 0){
       var endAt = Date.now() + CONFIG.timeLimitMin * 60000, t = $('t-timer');
       var upd = function(){ var l = Math.max(0, endAt - Date.now()); var m = Math.floor(l / 60000), s = Math.floor(l % 60000 / 1000); t.textContent = '⏱ ' + m + ':' + (s < 10 ? '0' : '') + s; if (!l) finish(); };
       upd(); timerId = setInterval(upd, 1000);
     }
-    $('t-body').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    $('t-pop').scrollTo({ top: 0 });
   }
   $('t-start').addEventListener('click', start);
   lastCard(); refreshStart(); applyLock(); route();
