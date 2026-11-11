@@ -319,7 +319,10 @@ body.pg-open{overflow:hidden}
 :root[data-theme="dark"]{--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}
 </style>
 <style id="synapsi-site">
-.syn-bar{max-width:860px;margin:0 auto;padding-top:12px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
+.syn-sticky{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ground)}
+.syn-sticky #nav{position:static}
+.sec,[id]{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 116px)}
+.syn-bar{max-width:860px;margin:0 auto;padding-top:10px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
 .syn-bar a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--hero);color:#fff;text-decoration:none}
 .syn-bar span{color:var(--muted)}
 .syn-foot{max-width:860px;margin:18px auto 0;display:flex;flex-direction:column;gap:12px}
@@ -332,7 +335,7 @@ body.pg-open{overflow:hidden}
 .syn-copy{font-size:12px;color:var(--muted)}
 </style>
 <script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
-<div class="syn-bar"><a href="index.html">&#8592; Διαδρομή</a><span>Μάθημα 6 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-test" class="navtest">Σύντομο Τεστ</a><a href="#s-6-3">6.3</a><a href="#s-6-7">6.7</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a><a href="#s-hw">Για το σπίτι</a></div></nav>
+<div class="syn-sticky"><div class="syn-bar"><a href="index.html">&#8592; Διαδρομή</a><span>Μάθημα 6 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-test" class="navtest">Σύντομο Τεστ</a><a href="#s-6-3">6.3</a><a href="#s-6-7">6.7</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a><a href="#s-hw">Για το σπίτι</a></div></nav></div>
 <main id="doc" lang="el">
 <section class="hero">
 <svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
@@ -425,7 +428,7 @@ body.pg-open{overflow:hidden}
 <tr><td><b>Μειονέκτημα</b></td><td>πριν χρησιμοποιηθεί, πρέπει να περάσει από μεταγλώττιση και σύνδεση</td><td>πιο <b>αργή</b> εκτέλεση, σημαντικά μερικές φορές</td></tr>
 <tr><td><b>Σαν…</b></td><td>τον μεταφραστή που μεταφράζει ολόκληρο ένα βιβλίο, και μετά το διαβάζει όποιος θέλει, όσες φορές θέλει</td><td>τον διερμηνέα σε μια συνέντευξη, που μεταφράζει φράση-φράση την ώρα που μιλάει ο ομιλητής</td></tr>
 </tbody></table></div>
-<p>Τα σύγχρονα περιβάλλοντα έχουν συνήθως <b>μεικτές υλοποιήσεις</b>: <b>διερμηνευτή</b> όσο γράφουμε το πρόγραμμα, για να βλέπουμε αμέσως τι κάνει, και <b>μεταγλωττιστή</b> για την τελική έκδοση, για να τρέχει γρήγορα. Το κουμπί «Εκτέλεση» στις σελίδες αυτού του βοηθήματος θα είναι κι αυτό ένας μικρός διερμηνευτής.</p>
+<p>Τα σύγχρονα περιβάλλοντα έχουν συνήθως <b>μεικτές υλοποιήσεις</b>: <b>διερμηνευτή</b> όσο γράφουμε το πρόγραμμα, για να βλέπουμε αμέσως τι κάνει, και <b>μεταγλωττιστή</b> για την τελική έκδοση, για να τρέχει γρήγορα.</p>
 <p class="cap">Μεταγλώττιση και σύνδεση</p>
 <div class="figure">
 <svg aria-label="Συντάκτης, πηγαίο πρόγραμμα, μεταγλωττιστής, αντικείμενο πρόγραμμα, συνδέτης-φορτωτής με βιβλιοθήκες, εκτελέσιμο πρόγραμμα. Τα συντακτικά λάθη επιστρέφουν στον συντάκτη για διόρθωση." font-size="10.5" role="img" viewbox="0 0 640 196">

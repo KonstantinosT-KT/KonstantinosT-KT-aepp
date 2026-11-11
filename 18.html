@@ -329,7 +329,10 @@ body.pg-open{overflow:hidden}
 :root[data-theme="dark"]{--ground:#141810;--paper:#1E2317;--ink:#EEEDE4;--muted:#B5B6A6;--line:#353B2A;--soft:#232A1B;--blue:#B5C78A;--blue-bg:#283019;--s-blue:#647A3E;--s-ink:#EEEDE4;--hero:#2B3722;--hero-sub:#D9C7AE;--hero-kick:#C9AD8D}
 </style>
 <style id="synapsi-site">
-.syn-bar{max-width:860px;margin:0 auto;padding-top:12px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
+.syn-sticky{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--ground)}
+.syn-sticky #nav{position:static}
+.sec,[id]{scroll-margin-top:calc(env(safe-area-inset-top,0px) + 116px)}
+.syn-bar{max-width:860px;margin:0 auto;padding-top:10px;display:flex;align-items:center;gap:10px;font:600 14px/1 var(--display)}
 .syn-bar a{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0 14px;border-radius:999px;background:var(--hero);color:#fff;text-decoration:none}
 .syn-bar span{color:var(--muted)}
 .syn-foot{max-width:860px;margin:18px auto 0;display:flex;flex-direction:column;gap:12px}
@@ -342,7 +345,7 @@ body.pg-open{overflow:hidden}
 .syn-copy{font-size:12px;color:var(--muted)}
 </style>
 <script>try{var t=localStorage.getItem('synapsi-theme');if(t)document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
-<div class="syn-bar"><a href="index.html">&#8592; Διαδρομή</a><span>Μάθημα 18 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-test" class="navtest">Σύντομο Τεστ</a><a href="#s-2-1">2.1</a><a href="#s-1">Δυαδική αναζήτηση</a><a href="#s-tools">Εργαλειοθήκη</a><a href="#s-2-4-5">2.4.5</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a><a href="#s-hw">Για το σπίτι</a></div></nav>
+<div class="syn-sticky"><div class="syn-bar"><a href="index.html">&#8592; Διαδρομή</a><span>Μάθημα 18 από 41</span></div><nav id="nav" aria-label="Ενότητες"><div class="navin"><a href="#s-test" class="navtest">Σύντομο Τεστ</a><a href="#s-2-1">2.1</a><a href="#s-1">Δυαδική αναζήτηση</a><a href="#s-tools">Εργαλειοθήκη</a><a href="#s-2-4-5">2.4.5</a><a href="#s-solved">Λυμένα</a><a href="#s-cards">Κάρτες</a><a href="#s-ask">Ασκήσεις</a><a href="#s-hw">Για το σπίτι</a></div></nav></div>
 <main id="doc" lang="el">
 <section class="hero">
 <svg aria-hidden="true" class="deco" fill="none" stroke-width="2" viewbox="0 0 220 160">
@@ -810,7 +813,7 @@ P ← 0
   ΤΕΛΟΣ_ΕΠΑΝΑΛΗΨΗΣ
   ΓΡΑΨΕ α, ' x ', β, ' = ', P, ' σε ', βήματα, ' βήματα'
 ΤΕΛΟΣ_ΠΡΟΓΡΑΜΜΑΤΟΣ Αλά_ρωσικά</pre></div></div>
-<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> Πίνακας τιμών για 37 και 12 (glossa.py):</span><div class="tablewrap"><table class="t" style="min-width:0"><tbody><tr><th>Μ1</th><th>Μ2</th><th><span class="nw">Μ2 mod 2</span></th><th>P</th></tr><tr><td>37</td><td>12</td><td>0</td><td>0</td></tr><tr><td>74</td><td>6</td><td>0</td><td>0</td></tr><tr><td>148</td><td>3</td><td>1</td><td>148</td></tr><tr><td>296</td><td>1</td><td>1</td><td>444</td></tr><tr><td>592</td><td>0</td><td></td><td>444</td></tr></tbody></table></div><span class="ln">Εμφανίζει 444 σε 4 βήματα. Ειδικές περιπτώσεις: 5 και 0 δίνουν 0 σε 0 βήματα (ο βρόχος δεν εκτελείται). 23 και 13 δίνουν 299 σε 4 βήματα, ενώ 13 και 23 σε 5: λιγότερα βήματα όταν μισεί ο μικρότερος.</span></div></div>
+<div class="step"><span class="stepn">4</span><div><span class="ln"><b>Ελέγχω.</b> Πίνακας τιμών για 37 και 12:</span><div class="tablewrap"><table class="t" style="min-width:0"><tbody><tr><th>Μ1</th><th>Μ2</th><th><span class="nw">Μ2 mod 2</span></th><th>P</th></tr><tr><td>37</td><td>12</td><td>0</td><td>0</td></tr><tr><td>74</td><td>6</td><td>0</td><td>0</td></tr><tr><td>148</td><td>3</td><td>1</td><td>148</td></tr><tr><td>296</td><td>1</td><td>1</td><td>444</td></tr><tr><td>592</td><td>0</td><td></td><td>444</td></tr></tbody></table></div><span class="ln">Εμφανίζει 444 σε 4 βήματα. Ειδικές περιπτώσεις: 5 και 0 δίνουν 0 σε 0 βήματα (ο βρόχος δεν εκτελείται). 23 και 13 δίνουν 299 σε 4 βήματα, ενώ 13 και 23 σε 5: λιγότερα βήματα όταν μισεί ο μικρότερος.</span></div></div>
 </div>
 </div>
 </section>
@@ -878,7 +881,7 @@ P ← 0
 <div class="q" id="q-18-7"><span class="qn">18.7</span><b>Αλά ρωσικά με πίνακα τιμών.</b>
 <p><span class="ln">α) Να κάνετε πίνακα τιμών (Μ1, Μ2, <span class="nw">Μ2 mod 2,</span> P) για το πρόγραμμα του Λυμένου 7 με είσοδο 23 και 13. Τι εμφανίζεται;</span><span class="ln">β) Πόσα βήματα χρειάζονται για είσοδο 13 και 23; Τι συμπέρασμα βγάζεις για τη σειρά των αριθμών;</span></p>
 <p class="small">Γράψε την απάντησή σου στο τετράδιο και μετά σύγκρινε.</p><details class="reveal"><summary>Δες ενδεικτική απάντηση</summary><div class="rv"><div class="tablewrap"><table class="t" style="min-width:0"><tbody><tr><th>Μ1</th><th>Μ2</th><th><span class="nw">Μ2 mod 2</span></th><th>P</th></tr><tr><td>23</td><td>13</td><td>1</td><td>23</td></tr><tr><td>46</td><td>6</td><td>0</td><td>23</td></tr><tr><td>92</td><td>3</td><td>1</td><td>115</td></tr><tr><td>184</td><td>1</td><td>1</td><td>299</td></tr><tr><td>368</td><td>0</td><td></td><td>299</td></tr></tbody></table></div>
-<p><span class="ln">α) Εμφανίζει <b>23 x 13 = 299 σε 4 βήματα</b>.</span><span class="ln">β) Με 13 και 23: το Μ2 = 23 γίνεται 11, 5, 2, 1, 0, άρα <b>5</b> βήματα. Ίδιο αποτέλεσμα, αλλά λιγότερα βήματα όταν στη θέση που μισεί βάζουμε τον μικρότερο. Ελεγμένο με το glossa.py.</span></p></div></details></div>
+<p><span class="ln">α) Εμφανίζει <b>23 x 13 = 299 σε 4 βήματα</b>.</span><span class="ln">β) Με 13 και 23: το Μ2 = 23 γίνεται 11, 5, 2, 1, 0, άρα <b>5</b> βήματα. Ίδιο αποτέλεσμα, αλλά λιγότερα βήματα όταν στη θέση που μισεί βάζουμε τον μικρότερο.</span></p></div></details></div>
 
 
 

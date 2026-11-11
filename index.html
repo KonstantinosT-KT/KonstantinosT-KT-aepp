@@ -42,6 +42,12 @@ button{font:inherit;color:inherit}
 .top{background:var(--header);color:var(--on-header)}
 .top .wrap{padding-block:16px 22px;display:flex;flex-direction:column;gap:16px}
 .bar{display:flex;justify-content:space-between;align-items:center}
+/* μικρή μπάρα που εμφανίζεται πάνω όταν η κεφαλίδα φύγει με την κύλιση (μενού και θέμα πάντα διαθέσιμα) */
+.minibar{position:fixed;left:0;right:0;top:0;z-index:8;background:var(--header);color:var(--on-header);padding-top:env(safe-area-inset-top,0px);transform:translateY(-110%);transition:transform .18s ease-out;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.minibar.show{transform:none}
+.minibar .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-block:8px}
+.mb-t{font:800 16px/1.2 var(--display);text-align:center}
+@media (prefers-reduced-motion:reduce){.minibar{transition:none}}
 .ibtn{width:44px;height:44px;border-radius:12px;border:0;background:var(--header-2);color:var(--on-header);display:flex;align-items:center;justify-content:center;cursor:pointer}
 .logo{width:220px;max-width:100%;height:auto;display:block}
 .course{font:800 23px/1.2 var(--display);letter-spacing:-.01em}
@@ -427,7 +433,9 @@ function home(){
     <span class="d">Θέματα Πανελλαδικών προηγούμενων ετών και επαναληπτικά διαγωνίσματα σε όλη την ύλη, με αναλυτική επεξήγηση κάθε λύσης.</span>
     <span class="tags"><span>Πανελλαδικές</span><span>Επαναληπτικά</span><span>Λύσεις με επεξήγηση</span></span></span></a></section>`;
   const dark = curTheme()==='dark';
-  return `<header class="top"><div class="wrap">
+  return `<div class="minibar" id="minibar" inert><div class="wrap"><button class="ibtn" data-act="menu" aria-label="Μενού">${I.menu}</button><span class="mb-t">Πληροφορική Γ' Λυκείου</span>
+    <button class="ibtn" data-act="theme" aria-label="${dark?'Φωτεινό θέμα':'Σκοτεινό θέμα'}">${dark?I.sun:I.moon}</button></div></div>
+  <header class="top"><div class="wrap">
     <div class="bar"><button class="ibtn" data-act="menu" aria-label="Μενού">${I.menu}</button>
       <button class="ibtn" data-act="theme" aria-label="${dark?'Φωτεινό θέμα':'Σκοτεινό θέμα'}">${dark?I.sun:I.moon}</button></div>
     <img class="logo" src="logo.png" alt="ΣΥΝΑΨΗ εκπαιδευτική ομάδα">
@@ -502,8 +510,8 @@ function teacher(){
     logo:`<span class="mono" style="background:${b.accent};color:${b.bg}">ΜΠ</span><span class="mono-t">Φροντιστήριο<br>Παπαδοπούλου</span>`});
   const sw=BRANDS.map((x,i)=>`<button class="sw" data-brand="${i}" aria-pressed="${i===brand}" aria-label="${x.name}" style="background:${x.bg}"><i style="background:${x.accent}"></i></button>`).join('');
   const feats=[
-    {k:'fmt',t:'PDF και διαφάνειες για την τάξη',d:'Κάθε μάθημα προσφέρεται σε πολλές μορφές, για κάθε ανάγκη του διδάσκοντα: σημειώσεις για διανομή ή προβολή στην τάξη.',
-     v:`<ul class="fmts">${['Σημειώσεις PDF για διανομή','Διαφάνειες για προβολή στην τάξη','Φύλλο ασκήσεων','Online στο κινητό'].map(x=>`<li>${x}</li>`).join('')}<li class="deluxe">Deluxe εκτύπωση</li></ul>`},
+    {k:'fmt',t:'Παρουσιάσεις και pdf για την τάξη',d:'Κάθε μάθημα προσφέρεται σε πολλές μορφές, για κάθε ανάγκη του διδάσκοντα: σημειώσεις για διανομή ή προβολή στην τάξη.',
+     v:`<ul class="fmts">${['Σημειώσεις PDF για διανομή','Κάθε μάθημα σε μορφή παρουσίασης για προβολή στην τάξη','Φύλλο ασκήσεων','Online στο κινητό'].map(x=>`<li>${x}</li>`).join('')}</ul>`},
     {k:'test',t:'Έτοιμα διαγωνίσματα με λύσεις',d:'Μετά από κάθε ενότητα, σε διαβαθμισμένη δυσκολία. Επιλέγεις ένα έτοιμο ή φτιάχνεις αυτό που σου ταιριάζει με λίγα κλικ.',
      v:`<div class="lvls" role="group" aria-label="Δυσκολία">${TESTS.map((x,i)=>`<button data-test="${i}" aria-pressed="${i===testLvl}">${x[0]}</button>`).join('')}</div>
         <div class="mini-doc row"><span class="md-t"><b>Διαγώνισμα · Δομές επανάληψης · ${TESTS[testLvl][0]}</b><small>${TESTS[testLvl][1]}</small></span>
@@ -602,11 +610,11 @@ function drawer(){
       <a class="di cur" href="#">${I.pc}Πληροφορική<span class="r" style="font-size:12px;color:var(--accent)">${OPEN_UP_TO}/${LESSONS.length}</span></a>
       <div class="di off">${I.book}Νεοελληνική Γλώσσα<span class="r">${I.lock}</span></div><div class="di off">${I.sigma}Μαθηματικά<span class="r">${I.lock}</span></div><div class="di off">${I.trend}Οικονομία<span class="r">${I.lock}</span></div></div>
     <div class="dl"><span class="dh">Διαθέσιμα</span>
+      <a class="di" href="progress.html">${I.chart}Η πρόοδός μου</a>
       <a class="di" href="#guidance">${I.chat}Επιπλέον καθοδήγηση</a>
-      <a class="di" href="#teacher">${I.cap}Είσαι καθηγητής;</a>
       <a class="di" href="#about">${I.people}Ποιοι είμαστε</a>
-      <button class="di" data-act="theme">${dark?I.sun:I.moon}${dark?'Φωτεινό θέμα':'Σκοτεινό θέμα'}</button></div>
-    <div class="dl"><a class="di" href="progress.html">${I.chart}Η πρόοδός μου</a></div>
+      <button class="di" data-act="theme">${dark?I.sun:I.moon}${dark?'Φωτεινό θέμα':'Σκοτεινό θέμα'}</button>
+      <a class="di" href="#teacher">${I.cap}Είσαι καθηγητής;</a></div>
     <div class="dl"><span class="badge soon" style="margin:0 0 4px 8px">ΣΥΝΤΟΜΑ</span>
       <a class="di" href="#teacher-board">${I.board}Πίνακας καθηγητή</a>
       <a class="di" href="#join">${I.key}Σύνδεση</a></div>
@@ -680,7 +688,15 @@ function render(){
   const h=location.hash.replace('#','');
   const app=document.getElementById('app');
   app.innerHTML=(ROUTES[h]||home)();
+  minibar();
 }
+function minibar(){
+  const m=document.getElementById('minibar'), bar=document.querySelector('.top .bar');
+  if(!m||!bar) return;
+  const on=bar.getBoundingClientRect().bottom<0;
+  m.classList.toggle('show',on); m.inert=!on;
+}
+addEventListener('scroll',minibar,{passive:true});
 function layer(html){ document.getElementById('layer').innerHTML=html; }
 function toast(msg){ const t=document.createElement('div'); t.className='toast'; t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),2200); }
 function copy(text, ok){ const done=()=>toast(ok||'Αντιγράφηκε');
